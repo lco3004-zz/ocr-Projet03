@@ -3,7 +3,7 @@ package mastermind.partieMastermind;
 import mastermind.constantesMastermind.CouleursMastermind;
 import mastermind.constantesMastermind.ValeursConstantes;
 import mastermind.exceptionMastermind.ExceptionMastermind;
-import mastermind.logMastermind.TracesLog;
+
 import mastermind.messagesTexteMastermind.ErreurMessages;
 import mastermind.parametrageMastermind.GestionDesParametres;
 import mastermind.parametrageMastermind.NomsDesParametresApplicatif;
@@ -75,7 +75,6 @@ public class ChoixCodeSecret  {
             //pas assez de positions remplies - le random n'a pas marché
             if (codeSecret.size() < nombreDePositions) {
                 errMsg = ErreurMessages.ChoixRandomNonComplet;
-                tracesLog.LogaMoi(errMsg.getMessageDuCodeErreur());
 
                 CouleursMastermind[] couleursMastermind = CouleursMastermind.values();
                 codeSecret.clear();

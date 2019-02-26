@@ -2,7 +2,6 @@ package mastermind.parametrageMastermind;
 
 
 import mastermind.constantesMastermind.ValeursConstantes;
-
 import mastermind.messagesTexteMastermind.ErreurMessages;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -10,6 +9,7 @@ import org.apache.logging.log4j.Logger;
 import java.util.EnumMap;
 
 import static mastermind.parametrageMastermind.NomsDesParametresApplicatif.*;
+
 
 /**
  * uniquement vue de ce package
