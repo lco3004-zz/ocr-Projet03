@@ -1,32 +1,37 @@
 package mastermind.exceptionMastermind;
 
 import mastermind.messagesTexteMastermind.ErreurMessages;
-import mastermind.logMastermind.TracesLog;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class ExceptionMastermind extends Exception {
 
+    private static Logger LOGGER = LogManager.getLogger(ExceptionMastermind.class.getName());
+
     public ExceptionMastermind(IOException e) {
         ErreurMessages errMsg = ErreurMessages.ErreurGeneric;
-        TracesLog.getInstance().LogaMoi(errMsg.getMessageDuCodeErreur());
+        LOGGER.error(errMsg.getMessageDuCodeErreur());
+
     }
 
     public ExceptionMastermind(ErreurMessages err) {
         ErreurMessages errMsg = ErreurMessages.ErreurGeneric;
-        TracesLog.getInstance().LogaMoi(errMsg.getMessageDuCodeErreur());
+        LOGGER.error(errMsg.getMessageDuCodeErreur());
     }
 
     public ExceptionMastermind(FileNotFoundException err) {
         ErreurMessages errMsg = ErreurMessages.ErreurGeneric;
-        TracesLog.getInstance().LogaMoi(errMsg.getMessageDuCodeErreur());
+        LOGGER.error(errMsg.getMessageDuCodeErreur());
     }
 
 
     public ExceptionMastermind(Exception e) {
         ErreurMessages errMsg = ErreurMessages.ErreurGeneric;
-        TracesLog.getInstance().LogaMoi(errMsg.getMessageDuCodeErreur());
+        LOGGER.error(errMsg.getMessageDuCodeErreur());
 
     }
 
