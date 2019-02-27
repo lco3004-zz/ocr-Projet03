@@ -7,18 +7,12 @@ public enum ErreurMessages {
     ModeIOInconnu ("mode IO inconnu ou incompatible avec constructeur"),
     ErreurGeneric("Ne doit pas etre utulisee");
 
-    /**
-     *
-     */
-    private String messageDuCodeErreur;
+    private String CodeErreur;
     ErreurMessages(String s) {
-        messageDuCodeErreur=s;
+        CodeErreur=s;
     }
 
-    /**
-     *
-     */
-    public String getMessageDuCodeErreur() {
-        return messageDuCodeErreur;
+    public String getMessageErreur() {
+        return CodeErreur;
     }
 }

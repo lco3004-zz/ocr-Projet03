@@ -1,5 +1,0 @@
-package mastermind.logMastermind;
-
-
-
-

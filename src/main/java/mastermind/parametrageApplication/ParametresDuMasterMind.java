@@ -1,6 +1,6 @@
-package mastermind.parametrageMastermind;
+package mastermind.parametrageApplication;
 
-public enum NomsDesParametresApplicatif {
+public enum ParametresDuMasterMind {
         NbDePositions,
         NbCouleurs,
         DoublonAutorise,

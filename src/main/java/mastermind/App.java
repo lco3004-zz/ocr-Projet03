@@ -2,12 +2,15 @@ package mastermind;
 
 import mastermind.constantesMastermind.CouleursMastermind;
 import mastermind.exceptionMastermind.ExceptionMastermind;
+import mastermind.messagesTexteMastermind.InfosMessages;
+
+import mastermind.messagesTexteMastermind.InfosMessages;
 import mastermind.partieMastermind.ChoixCodeSecret;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 
+import static mastermind.logMastermind.logApplicatif.getInstance;
+import static mastermind.logMastermind.logApplicatif.logger;
 
 /**
  * Hello world!
@@ -16,49 +19,27 @@ import java.util.ArrayList;
 
 public class App 
 {
-
-
-    private static Logger logger = LogManager.getLogger(App.class.getName());
-
     public static void main( String[] args )
     {
         try {
+            //Creation du Singleton qui gere les logs (log4j2)
+            //renseigne le nom de la classe appelante , ici App.
+            getInstance(App.class.getSimpleName());
+
+            logger.info(InfosMessages.Lancement_Application);
+
             ChoixCodeSecret choixCodeSecret = new ChoixCodeSecret();
+            CouleursMastermind [] toutes = CouleursMastermind.values();
 
             ArrayList <Byte> arrayList = choixCodeSecret.getCodeSecret();
             CouleursMastermind[] ligneATrouver  = choixCodeSecret.getLigneSecrete();
 
-            System.out.println();
-            System.out.println();
-            System.out.println("********************************");
-            System.out.println();
-            System.out.print("** Ligne Secrete = ");
-            for (CouleursMastermind v: ligneATrouver) {
-                System.out.print(" "+v.toString());
-            }
-            System.out.println();
-            System.out.println();
-            System.out.println("********************************");
-            System.out.println();
-            System.out.print("**Toutes les Couleurs du Jeu = ");
-            CouleursMastermind [] toutes = CouleursMastermind.values();
-            for (CouleursMastermind v: toutes) {
-                System.out.print(" "+v.toString());
-            }
-            System.out.println();
-            System.out.println("********************************");
-            System.out.println();
-            logger.debug("Debug Message Logged !!!");
-            logger.info("Info Message Logged !!!");
-            logger.error("Error Message Logged !!!", new NullPointerException("NullError"));
-            if (logger.isDebugEnabled()) {
-               logger.debug("Logging in user {} with birthday {}", "moi", "30/04/1959");
-            }
 
-
+            logger.info(InfosMessages.FinNormale_Applicaiton);
         }
         catch (ExceptionMastermind e) {
-            System.exit(1);
+            logger.fatal(e);
+            System.exit(-1);
         }
     }
 }
