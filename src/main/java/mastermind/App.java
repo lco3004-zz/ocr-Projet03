@@ -18,7 +18,7 @@ public class App
 {
 
 
-    private static Logger LOGGER = LogManager.getLogger(App.class.getName());
+    private static Logger logger = LogManager.getLogger(App.class.getName());
 
     public static void main( String[] args )
     {
@@ -48,9 +48,12 @@ public class App
             System.out.println();
             System.out.println("********************************");
             System.out.println();
-            LOGGER.debug("Debug Message Logged !!!");
-            LOGGER.info("Info Message Logged !!!");
-            LOGGER.error("Error Message Logged !!!", new NullPointerException("NullError"));
+            logger.debug("Debug Message Logged !!!");
+            logger.info("Info Message Logged !!!");
+            logger.error("Error Message Logged !!!", new NullPointerException("NullError"));
+            if (logger.isDebugEnabled()) {
+               logger.debug("Logging in user {} with birthday {}", "moi", "30/04/1959");
+            }
 
 
         }
