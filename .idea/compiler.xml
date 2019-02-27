@@ -9,11 +9,5 @@
         <module name="ocr-Projet03" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel target="11">
-      <module name="ocr-Projet03" target="8" />
-    </bytecodeTargetLevel>
-  </component>
-  <component name="RmicSettings">
-    <option name="IS_EANABLED" value="true" />
   </component>
 </project>
