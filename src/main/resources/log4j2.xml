@@ -14,8 +14,8 @@
         </Console>
         <RollingFile name="RollingFile-Appender"
                      fileName="${log-path}/ocr_Projet03.log"
-                     filePattern="${archive}/ocr_Projet03.log.%d{yyyy-MM-dd-hh-mm}.gz">
-            <PatternLayout pattern="[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n"/>
+                     filePattern="${archive}/ocr_Projet03.log.%d{yyyy-MM-dd-hh}.gz">
+            <PatternLayout pattern="[%-5level] %d{yyyy-MM-dd HH} [%t] %c{1} - %msg%n"/>
             <Policies>
                 <TimeBasedTriggeringPolicy/>
                 <SizeBasedTriggeringPolicy size="30 MB"/>
