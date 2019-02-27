@@ -3,6 +3,7 @@ package mastermind.parametrageMastermind;
 
 import mastermind.constantesMastermind.ValeursConstantes;
 import mastermind.messagesTexteMastermind.ErreurMessages;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -85,7 +86,7 @@ import static mastermind.parametrageMastermind.NomsDesParametresApplicatif.*;
 
     /**
      *
-     * @return
+     * @return EnumMap<NomsDesParametresApplicatif, StructureDesParametreApplicatif>
      */
     EnumMap<NomsDesParametresApplicatif, StructureDesParametreApplicatif> getParams() {
         if (!RecupererParametres())
