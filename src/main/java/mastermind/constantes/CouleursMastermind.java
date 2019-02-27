@@ -1,4 +1,4 @@
-package mastermind.constantesMastermind;
+package mastermind.constantes;
 
 /**
  *

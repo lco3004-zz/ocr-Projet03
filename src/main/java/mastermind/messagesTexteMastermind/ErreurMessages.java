@@ -5,14 +5,16 @@ public enum ErreurMessages {
     TypeParamIncorrect("Type de Parametre inconnu"),
     ChoixRandomNonComplet(" Random ne rend pas assez de COuleru au hazard - Choix du secretpar defaut - Allo houston on a un pb"),
     ModeIOInconnu ("mode IO inconnu ou incompatible avec constructeur"),
-    ErreurGeneric("Ne doit pas etre utulisee");
+    ParametrageIllisible("Impossible de lire le fichier parametre (parametres par defaut) - "),
+    EcritureParametresImpossible("Ecriture dans fichier Parametre impossible - "),
+    ErreurGeneric("Ne doit pas etre utilisée!");
 
-    private String CodeErreur;
+    private String MessageErreur;
     ErreurMessages(String s) {
-        CodeErreur=s;
+        MessageErreur=s;
     }
 
     public String getMessageErreur() {
-        return CodeErreur;
+        return MessageErreur;
     }
 }

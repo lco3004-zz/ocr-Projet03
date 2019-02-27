@@ -1,24 +1,5 @@
-[INFO ] 2019-02-27 18 [main] App - Lancement_Application
-[INFO ] 2019-02-27 18 [main] App - Lancement_GestionDesParametres
-[INFO ] 2019-02-27 18 [main] App - FinNormale_GestionDesParametres
-[INFO ] 2019-02-27 18 [main] App - Lancement_GestionDesParametres
-[INFO ] 2019-02-27 18 [main] App - FinNormale_GestionDesParametres
-[INFO ] 2019-02-27 18 [main] App - Lancement_GestionDesParametres
-[INFO ] 2019-02-27 18 [main] App - FinNormale_GestionDesParametres
-[INFO ] 2019-02-27 18 [main] App - FinNormale_Applicaiton
-[INFO ] 2019-02-27 18 [main] App - Lancement_Application
-[INFO ] 2019-02-27 18 [main] App - Lancement_GestionDesParametres
-[INFO ] 2019-02-27 18 [main] App - FinNormale_GestionDesParametres
-[INFO ] 2019-02-27 18 [main] App - Lancement_GestionDesParametres
-[INFO ] 2019-02-27 18 [main] App - FinNormale_GestionDesParametres
-[INFO ] 2019-02-27 18 [main] App - Lancement_GestionDesParametres
-[INFO ] 2019-02-27 18 [main] App - FinNormale_GestionDesParametres
-[INFO ] 2019-02-27 18 [main] App - FinNormale_Applicaiton
-[INFO ] 2019-02-27 [main] App - Lancement_Application
-[INFO ] 2019-02-27 [main] App - Lancement_GestionDesParametres
-[INFO ] 2019-02-27 [main] App - FinNormale_GestionDesParametres
-[INFO ] 2019-02-27 [main] App - Lancement_GestionDesParametres
-[INFO ] 2019-02-27 [main] App - FinNormale_GestionDesParametres
-[INFO ] 2019-02-27 [main] App - Lancement_GestionDesParametres
-[INFO ] 2019-02-27 [main] App - FinNormale_GestionDesParametres
-[INFO ] 2019-02-27 [main] App - FinNormale_Applicaiton
+[INFO ] 2019-02-28 [App.java 27] App - Lancement_Application
+[INFO ] 2019-02-28 [Parametrage.java 32] App - CreationFichierParametre ./target/classes/paramMasterMind.properties
+[INFO ] 2019-02-28 [App.java 35] App - Toutes le couleurs = AUBERGINE, JAUNE, VERT, ROUGE, BLEU, ORANGE, VIOLET, ROSE, INDIGO, ABRICOT
+[INFO ] 2019-02-28 [App.java 44] App - Combinaison secrete = ORANGE, AUBERGINE, VERT, ROSE
+[INFO ] 2019-02-28 [App.java 47] App - FinNormale_Applicaiton

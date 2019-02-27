@@ -1,8 +1,10 @@
 package mastermind.parametrageApplication;
 
 import mastermind.App;
+import mastermind.constantes.NomFichiersParametres;
 import mastermind.messagesTexteMastermind.InfosMessages;
 
+import static mastermind.constantes.NomFichiersParametres.FichierParamMasterMind;
 import static mastermind.logMastermind.logApplicatif.getInstance;
 import static mastermind.logMastermind.logApplicatif.logger;
 import static mastermind.parametrageApplication.ParametresDuMasterMind.*;
@@ -10,10 +12,8 @@ import static mastermind.parametrageApplication.ParametresDuMasterMind.*;
 public final class GestionDesParametres {
 
     public static Object getParam(ParametresDuMasterMind x) {
-        //renseigne le nom de la classe appelante , ici GestionDesParametres.
-        getInstance(GestionDesParametres.class.getName());
 
-        logger.info(InfosMessages.Lancement_GestionDesParametres);
+        logger.debug(InfosMessages.Lancement_GestionDesParametres);
         Object retVal= new Object();
         switch (x) {
             case NbDePositions:
@@ -29,8 +29,12 @@ public final class GestionDesParametres {
                 retVal = false;
                 break;
         }
+        //
+        ParametrageMasterMind parametrageMasterMind=new ParametrageMasterMind(FichierParamMasterMind.getNomFichier());
+        parametrageMasterMind.lireParametre();
 
-        logger.info(InfosMessages.FinNormale_GestionDesParametres);
+        //
+        logger.debug(InfosMessages.FinNormale_GestionDesParametres);
 
         return  retVal;
     }

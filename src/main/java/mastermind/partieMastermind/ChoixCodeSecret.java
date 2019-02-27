@@ -1,8 +1,6 @@
 package mastermind.partieMastermind;
 
-import mastermind.App;
-import mastermind.constantesMastermind.CouleursMastermind;
-import mastermind.constantesMastermind.ValeursConstantes;
+import mastermind.constantes.CouleursMastermind;
 import mastermind.exceptionMastermind.ExceptionMastermind;
 
 import mastermind.messagesTexteMastermind.ErreurMessages;
@@ -12,7 +10,6 @@ import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
-import static mastermind.logMastermind.logApplicatif.getInstance;
 import static mastermind.parametrageApplication.GestionDesParametres.getParam;
 
 /**
@@ -28,15 +25,11 @@ public class ChoixCodeSecret  {
     private ArrayList<Byte> codeSecret ;
     private CouleursMastermind [] ligneSecrete ;
 
-
     /**
      *
      * @throws ExceptionMastermind
      */
     public ChoixCodeSecret() throws ExceptionMastermind {
-
-        //renseigne le nom de la classe appelante , ici App.
-        getInstance(ChoixCodeSecret.class.getName());
 
         Object tmpRetour;
         Byte valeurAleatoire;
@@ -67,8 +60,8 @@ public class ChoixCodeSecret  {
 
         else
             throw new ExceptionMastermind(ErreurMessages.TypeParamIncorrect);
-
-        for (int placeOccupee =0,  nbreDeBoucles=0; placeOccupee< this.nombreDePositions && nbreDeBoucles < ValeursConstantes.nombreMaxDeBoucleCherhceCodeSecret  ; nbreDeBoucles++) {
+        int nbBoucleMax = ParametresDuMasterMind.NbreMaxDeBoucleCherhceCodeSecret.getaInteger();
+        for (int placeOccupee = 0, nbreDeBoucles = 0; (placeOccupee < this.nombreDePositions) && (nbreDeBoucles <nbBoucleMax); nbreDeBoucles++) {
             valeurAleatoire = (byte)(Byte.parseByte(df.format(Math.random()*100)) % nombreDeCouleurs );
 
             if (!doublonAutorise) {

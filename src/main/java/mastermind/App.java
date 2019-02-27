@@ -1,10 +1,9 @@
 package mastermind;
 
-import mastermind.constantesMastermind.CouleursMastermind;
+import mastermind.constantes.CouleursMastermind;
 import mastermind.exceptionMastermind.ExceptionMastermind;
 import mastermind.messagesTexteMastermind.InfosMessages;
 
-import mastermind.messagesTexteMastermind.InfosMessages;
 import mastermind.partieMastermind.ChoixCodeSecret;
 
 import java.util.ArrayList;
@@ -23,16 +22,26 @@ public class App
     {
         try {
             //Creation du Singleton qui gere les logs (log4j2)
-            //renseigne le nom de la classe appelante , ici App.
             getInstance(App.class.getSimpleName());
 
             logger.info(InfosMessages.Lancement_Application);
 
             ChoixCodeSecret choixCodeSecret = new ChoixCodeSecret();
             CouleursMastermind [] toutes = CouleursMastermind.values();
+            String s = "";
+            for (CouleursMastermind x: toutes) {
+                s += x.toString() +", ";
+            }
+            logger.info("Toutes le couleurs = "+ s.substring(0,s.lastIndexOf(',')));
 
             ArrayList <Byte> arrayList = choixCodeSecret.getCodeSecret();
             CouleursMastermind[] ligneATrouver  = choixCodeSecret.getLigneSecrete();
+
+             s = "";
+            for (CouleursMastermind x: ligneATrouver) {
+                s += x.toString() +", ";
+            }
+            logger.info("Combinaison secrete = "+s.substring(0,s.lastIndexOf(',')));
 
 
             logger.info(InfosMessages.FinNormale_Applicaiton);

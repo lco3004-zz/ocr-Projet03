@@ -1,9 +1,10 @@
-package algo.tri;
+package mastermind.algorithmesMastermind;
 
 
  public class QuickSort<T extends  Number>  implements Comparable<Number>{
 
     public <T extends  Number> QuickSort(T [] ts) {
+
         triRapideGenerics ( ts,0,ts.length-1);
     }
     private int fctPartition (Number [] ts , int imin, int imax ) {
@@ -42,7 +43,8 @@ package algo.tri;
 
      @Override
      public int compareTo(Number o) {
-         return 0;
+
+        return 0;
      }
      private   <T extends Number> void triRapideGenerics( Number T [] , int imin, int imax ) {
          int  i ;
