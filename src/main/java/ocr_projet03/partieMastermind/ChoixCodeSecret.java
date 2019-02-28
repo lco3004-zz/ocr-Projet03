@@ -1,16 +1,16 @@
 package ocr_projet03.partieMastermind;
 
-import ocr_projet03.constantes.CouleursMastermind;
-import ocr_projet03.exceptionMastermind.ExceptionMastermind;
+import ocr_projet03.paramsOcr_Projet03.paramsMM.CouleursMastermind;
+import ocr_projet03.exceptionOcr_Projet03.ExceptionMastermind;
 
-import ocr_projet03.messagesTexteMastermind.ErreurMessages;
-import ocr_projet03.parametrageApplication.ParametresDuMasterMind;
+import ocr_projet03.messagesTexteOcr_Projet03.ErreurMessages;
+import ocr_projet03.paramsOcr_Projet03.paramsMM.GroupParamsMM;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
-import static ocr_projet03.parametrageApplication.GestionDesParametres.getParam;
+import static ocr_projet03.paramsOcr_Projet03.FournisseurParams.getParam;
 
 /**
  * Création du Code Secret comprenant X positions , X étant égal au paramètre "nombreDePositions"
@@ -40,27 +40,29 @@ public class ChoixCodeSecret  {
         df.setRoundingMode(RoundingMode.HALF_UP);
 
         nombreDePositions = 0;
-        tmpRetour=getParam(ParametresDuMasterMind.NbDePositions);
-        if ( tmpRetour instanceof Short)
-            nombreDePositions = (Short)tmpRetour;
+        tmpRetour=getParam(GroupParamsMM.NbDePositions);
+        if ( tmpRetour instanceof Integer)
+            nombreDePositions = (Integer) tmpRetour;
         else
             throw new ExceptionMastermind(ErreurMessages.TypeParamIncorrect);
 
 
         nombreDeCouleurs =  0;
-        tmpRetour=getParam(ParametresDuMasterMind.NbCouleurs);
-        if ( tmpRetour instanceof Short)
-            nombreDeCouleurs = (Short)tmpRetour;
+        tmpRetour=getParam(GroupParamsMM.NbCouleurs);
+        if ( tmpRetour instanceof Integer)
+            nombreDeCouleurs = (Integer)tmpRetour;
         else
             throw new ExceptionMastermind(ErreurMessages.TypeParamIncorrect);
 
-        tmpRetour = getParam(ParametresDuMasterMind.DoublonAutorise);
+        tmpRetour = getParam(GroupParamsMM.DoublonAutorise);
         if ( tmpRetour instanceof Boolean)
             doublonAutorise = (Boolean) tmpRetour;
 
         else
             throw new ExceptionMastermind(ErreurMessages.TypeParamIncorrect);
-        int nbBoucleMax = ParametresDuMasterMind.NbreMaxDeBoucleCherhceCodeSecret.getaInteger();
+
+        Integer nbBoucleMax = (Integer) getParam(GroupParamsMM.NbreMaxDeBoucleChercheCodeSecret);
+
         for (int placeOccupee = 0, nbreDeBoucles = 0; (placeOccupee < this.nombreDePositions) && (nbreDeBoucles <nbBoucleMax); nbreDeBoucles++) {
             valeurAleatoire = (byte)(Byte.parseByte(df.format(Math.random()*100)) % nombreDeCouleurs );
 

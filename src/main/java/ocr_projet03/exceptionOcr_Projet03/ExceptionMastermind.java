@@ -1,7 +1,7 @@
-package ocr_projet03.exceptionMastermind;
+package ocr_projet03.exceptionOcr_Projet03;
 
-import ocr_projet03.messagesTexteMastermind.ErreurMessages;
-import static ocr_projet03.logMastermind.logApplicatif.logger;
+import ocr_projet03.messagesTexteOcr_Projet03.ErreurMessages;
+import static ocr_projet03.logsOcr_Projet03.logApplicatif.logger;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;

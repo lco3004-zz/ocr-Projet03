@@ -1,4 +1,4 @@
-package ocr_projet03.constantes;
+package ocr_projet03.paramsOcr_Projet03.paramsMM;
 
 /**
  *

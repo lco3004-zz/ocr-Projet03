@@ -1,15 +1,15 @@
 package ocr_projet03;
 
-import ocr_projet03.constantes.CouleursMastermind;
-import ocr_projet03.exceptionMastermind.ExceptionMastermind;
-import ocr_projet03.messagesTexteMastermind.InfosMessages;
+import ocr_projet03.paramsOcr_Projet03.paramsMM.CouleursMastermind;
+import ocr_projet03.exceptionOcr_Projet03.ExceptionMastermind;
+import ocr_projet03.messagesTexteOcr_Projet03.InfosMessages;
 
 import ocr_projet03.partieMastermind.ChoixCodeSecret;
 
 import java.util.ArrayList;
 
-import static ocr_projet03.logMastermind.logApplicatif.getInstance;
-import static ocr_projet03.logMastermind.logApplicatif.logger;
+import static ocr_projet03.logsOcr_Projet03.logApplicatif.getInstance;
+import static ocr_projet03.logsOcr_Projet03.logApplicatif.logger;
 
 /**
  * Hello world!

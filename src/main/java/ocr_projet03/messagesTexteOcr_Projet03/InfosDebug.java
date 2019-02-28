@@ -1,4 +1,4 @@
-package ocr_projet03.messagesTexteMastermind;
+package ocr_projet03.messagesTexteOcr_Projet03;
 
 public enum InfosDebug {
     X("");

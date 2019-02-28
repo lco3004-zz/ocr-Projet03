@@ -1,4 +1,4 @@
-package ocr_projet03.constantes;
+package ocr_projet03.constantesOcr_Projet03;
 
 public enum NomFichiersParametres {
     FichierParamMasterMind("./params/paramMasterMind.properties");

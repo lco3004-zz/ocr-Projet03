@@ -1,4 +1,4 @@
-package ocr_projet03.logMastermind;
+package ocr_projet03.logsOcr_Projet03;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
