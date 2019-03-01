@@ -1,9 +1,9 @@
 package ocr_projet03;
 
 
-import ocr_projet03.modeConsole.LibellesMenu_PM;
-import ocr_projet03.modeConsole.LibellesMenu_Principal;
-import ocr_projet03.modeConsole.LibellesMenu_MM;
+import ocr_projet03.modeConsole.LibellesJeux;
+import ocr_projet03.modeConsole.Menu_Principal;
+import ocr_projet03.modeConsole.Menu_Secondaire;
 import ocr_projet03.paramsOcr_Projet03.paramsMM.CouleursMastermind;
 import ocr_projet03.exceptionOcr_Projet03.ExceptionMastermind;
 
@@ -31,17 +31,13 @@ public class oc_Projer03
 
             logger.info(Lancement_Application.getMessageInfos());
 
-            for (LibellesMenu_Principal v : LibellesMenu_Principal.values()) {
-                System.out.println(v.getLibelle());
-            }
+            Menu_Principal menu_principal = new Menu_Principal();
+            Menu_Secondaire menu_secondaireMM = new Menu_Secondaire(LibellesJeux.MASTERMIND.toString());
+            Menu_Secondaire menu_secondairePM = new Menu_Secondaire(LibellesJeux.PLUSMOINS.toString());
+            menu_principal.RunMenuPrincipal();
+            menu_secondaireMM.RunMenuSecondaire();
+            menu_secondairePM.RunMenuSecondaire();
 
-            for (LibellesMenu_MM t : LibellesMenu_MM.values()) {
-                System.out.println(t.getLibelle());
-            }
-
-            for (LibellesMenu_PM t : LibellesMenu_PM.values()) {
-                System.out.println(t.getLibelle());
-            }
 
             ChoixCodeSecret choixCodeSecret = new ChoixCodeSecret();
             CouleursMastermind [] toutes = CouleursMastermind.values();
