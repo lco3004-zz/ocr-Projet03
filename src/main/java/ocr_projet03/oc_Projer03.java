@@ -1,8 +1,11 @@
 package ocr_projet03;
 
+
+import ocr_projet03.modeConsole.LibellesMenu_PM;
+import ocr_projet03.modeConsole.LibellesMenu_Principal;
+import ocr_projet03.modeConsole.LibellesMenu_MM;
 import ocr_projet03.paramsOcr_Projet03.paramsMM.CouleursMastermind;
 import ocr_projet03.exceptionOcr_Projet03.ExceptionMastermind;
-import ocr_projet03.messagesTexteOcr_Projet03.InfosMessages;
 
 import ocr_projet03.partieMastermind.ChoixCodeSecret;
 
@@ -27,6 +30,18 @@ public class oc_Projer03
             getInstance(oc_Projer03.class.getSimpleName());
 
             logger.info(Lancement_Application.getMessageInfos());
+
+            for (LibellesMenu_Principal v : LibellesMenu_Principal.values()) {
+                System.out.println(v.getLibelle());
+            }
+
+            for (LibellesMenu_MM t : LibellesMenu_MM.values()) {
+                System.out.println(t.getLibelle());
+            }
+
+            for (LibellesMenu_PM t : LibellesMenu_PM.values()) {
+                System.out.println(t.getLibelle());
+            }
 
             ChoixCodeSecret choixCodeSecret = new ChoixCodeSecret();
             CouleursMastermind [] toutes = CouleursMastermind.values();

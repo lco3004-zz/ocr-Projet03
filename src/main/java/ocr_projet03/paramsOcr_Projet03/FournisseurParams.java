@@ -41,10 +41,13 @@ public final class FournisseurParams {
             }
             else if (groupParamsMM.getUnParam().getTypeParam() == Boolean.class.getSimpleName()) {
                 String valLue = parametreMasterMindLu.getProperty(groupParamsMM.name());
-                valLue = valLue.toUpperCase(Locale.forLanguageTag("fr")).trim();
+
+                //valLue = valLue.toUpperCase(Locale.forLanguageTag("fr")).trim();
+
                 String valeurVraie = String.format("%b",true).toUpperCase(Locale.forLanguageTag("fr"));
                 String valeurFausse = String.format("%b",false).toUpperCase(Locale.forLanguageTag("fr"));
-                if (valLue.equals(valeurFausse) || valLue.equals(valeurVraie)) {
+
+                if (valLue.equalsIgnoreCase(valeurFausse) || valLue.equalsIgnoreCase(valeurVraie)) {
                     retVal = Boolean.valueOf(parametreMasterMindLu.getProperty(groupParamsMM.name()));
                 }
                 else {
