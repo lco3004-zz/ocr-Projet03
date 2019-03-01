@@ -21,7 +21,7 @@ public class ChoixCodeSecret  {
     /**
      *
      */
-    private int nombreDePositions, nombreDeCouleurs, nombreDebBoucleMax;
+    private Integer nombreDePositions, nombreDeCouleurs, nombreDebBoucleMax;
     private ArrayList<Byte> codeSecret ;
     private CouleursMastermind [] ligneSecrete ;
 
@@ -41,32 +41,35 @@ public class ChoixCodeSecret  {
 
         nombreDePositions = 0;
         tmpRetour=getParam(GroupParamsMM.NbDePositions);
-        if ( tmpRetour instanceof Integer)
+        if ( tmpRetour instanceof Integer) {
             nombreDePositions = (Integer) tmpRetour;
-        else
+        } else {
             throw new ExceptionMastermind(ErreurMessages.TypeParamIncorrect);
+        }
 
 
         nombreDeCouleurs =  0;
         tmpRetour=getParam(GroupParamsMM.NbCouleurs);
-        if ( tmpRetour instanceof Integer)
+        if ( tmpRetour instanceof Integer) {
             nombreDeCouleurs = (Integer)tmpRetour;
-        else
+        } else {
             throw new ExceptionMastermind(ErreurMessages.TypeParamIncorrect);
+        }
 
         tmpRetour = getParam(GroupParamsMM.DoublonAutorise);
-        if ( tmpRetour instanceof Boolean)
+        if ( tmpRetour instanceof Boolean) {
             doublonAutorise = (Boolean) tmpRetour;
-
-        else
+        } else {
             throw new ExceptionMastermind(ErreurMessages.TypeParamIncorrect);
+        }
 
         nombreDebBoucleMax =0;
         tmpRetour=getParam(GroupParamsMM.NbreMaxDeBoucleChercheCodeSecret);
-        if ( tmpRetour instanceof Integer)
+        if ( tmpRetour instanceof Integer) {
             nombreDebBoucleMax = (Integer)tmpRetour;
-        else
+        } else {
             throw new ExceptionMastermind(ErreurMessages.TypeParamIncorrect);
+        }
 
         for (int placeOccupee = 0, nbreDeBoucles = 0; (placeOccupee < this.nombreDePositions) && (nbreDeBoucles < nombreDebBoucleMax); nbreDeBoucles++) {
             valeurAleatoire = (byte)(Byte.parseByte(df.format(Math.random()*100)) % nombreDeCouleurs );
