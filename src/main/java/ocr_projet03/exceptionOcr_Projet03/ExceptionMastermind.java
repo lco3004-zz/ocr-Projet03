@@ -9,27 +9,20 @@ import java.io.IOException;
 public class ExceptionMastermind extends Exception {
 
     public ExceptionMastermind(IOException e) {
-        ErreurMessages errMsg = ErreurMessages.ErreurGeneric;
-        logger.error(errMsg.getMessageErreur());
-
+        logger.error(e.getMessage());
     }
 
     public ExceptionMastermind(ErreurMessages err) {
-        ErreurMessages errMsg = ErreurMessages.ErreurGeneric;
-        logger.error(errMsg.getMessageErreur());
+        logger.error(err.getMessageErreur());
     }
 
-    public ExceptionMastermind(FileNotFoundException err) {
-        ErreurMessages errMsg = ErreurMessages.ErreurGeneric;
-        logger.error(errMsg.getMessageErreur());
+    public ExceptionMastermind(FileNotFoundException e) {
+        logger.error(e.getMessage());
     }
 
 
     public ExceptionMastermind(Exception e) {
-        ErreurMessages errMsg = ErreurMessages.ErreurGeneric;
-        logger.error(errMsg.getMessageErreur());
-
+        logger.error(e.getMessage());
     }
-
 
 }

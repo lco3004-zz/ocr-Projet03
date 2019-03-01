@@ -10,6 +10,8 @@ import java.util.ArrayList;
 
 import static ocr_projet03.logsOcr_Projet03.logApplicatif.getInstance;
 import static ocr_projet03.logsOcr_Projet03.logApplicatif.logger;
+import static ocr_projet03.messagesTexteOcr_Projet03.InfosMessages.FinNormale_Application;
+import static ocr_projet03.messagesTexteOcr_Projet03.InfosMessages.Lancement_Application;
 
 /**
  * Hello world!
@@ -24,7 +26,7 @@ public class oc_Projer03
             //Creation du Singleton qui gere les logs (log4j2)
             getInstance(oc_Projer03.class.getSimpleName());
 
-            logger.info(InfosMessages.Lancement_Application);
+            logger.info(Lancement_Application.getMessageInfos());
 
             ChoixCodeSecret choixCodeSecret = new ChoixCodeSecret();
             CouleursMastermind [] toutes = CouleursMastermind.values();
@@ -44,7 +46,7 @@ public class oc_Projer03
             logger.info("Combinaison secrete = "+s.substring(0,s.lastIndexOf(',')));
 
 
-            logger.info(InfosMessages.FinNormale_Applicaiton);
+            logger.info(FinNormale_Application.getMessageInfos());
         }
         catch (ExceptionMastermind e) {
             logger.fatal(e);

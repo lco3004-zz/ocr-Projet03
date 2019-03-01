@@ -21,7 +21,7 @@ public class ChoixCodeSecret  {
     /**
      *
      */
-    private int nombreDePositions, nombreDeCouleurs;
+    private int nombreDePositions, nombreDeCouleurs, nombreDebBoucleMax;
     private ArrayList<Byte> codeSecret ;
     private CouleursMastermind [] ligneSecrete ;
 
@@ -61,9 +61,14 @@ public class ChoixCodeSecret  {
         else
             throw new ExceptionMastermind(ErreurMessages.TypeParamIncorrect);
 
-        Integer nbBoucleMax = (Integer) getParam(GroupParamsMM.NbreMaxDeBoucleChercheCodeSecret);
+        nombreDebBoucleMax =0;
+        tmpRetour=getParam(GroupParamsMM.NbreMaxDeBoucleChercheCodeSecret);
+        if ( tmpRetour instanceof Integer)
+            nombreDebBoucleMax = (Integer)tmpRetour;
+        else
+            throw new ExceptionMastermind(ErreurMessages.TypeParamIncorrect);
 
-        for (int placeOccupee = 0, nbreDeBoucles = 0; (placeOccupee < this.nombreDePositions) && (nbreDeBoucles <nbBoucleMax); nbreDeBoucles++) {
+        for (int placeOccupee = 0, nbreDeBoucles = 0; (placeOccupee < this.nombreDePositions) && (nbreDeBoucles < nombreDebBoucleMax); nbreDeBoucles++) {
             valeurAleatoire = (byte)(Byte.parseByte(df.format(Math.random()*100)) % nombreDeCouleurs );
 
             if (!doublonAutorise) {

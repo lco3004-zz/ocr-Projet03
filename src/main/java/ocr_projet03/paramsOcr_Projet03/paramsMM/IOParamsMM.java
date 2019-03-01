@@ -6,10 +6,7 @@
 package ocr_projet03.paramsOcr_Projet03.paramsMM;
 
 import java.util.Properties;
-import ocr_projet03.messagesTexteOcr_Projet03.ErreurMessages;
 import ocr_projet03.paramsOcr_Projet03.IOParams;
-import static ocr_projet03.logsOcr_Projet03.logApplicatif.logger;
-
 
 public class IOParamsMM extends IOParams {
 

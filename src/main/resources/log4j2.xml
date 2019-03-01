@@ -8,7 +8,7 @@
         <Console name="Console-Appender" target="SYSTEM_OUT">
             <PatternLayout>
                 <pattern>
-                    [%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n
+                    [%-5level] %d{yyyy-MM-dd} [%F %L] %c{1} - %msg%n
                 </pattern>>
             </PatternLayout>
         </Console>
@@ -24,12 +24,12 @@
         </RollingFile>
     </Appenders>
     <Loggers>
-        <Logger name="ocr_Projet03" level="info" additivity="false">
+        <Logger name="ocr_Projet03" level="debug" additivity="false">
             <AppenderRef ref="RollingFile-Appender" level="info"/>
-            <AppenderRef ref="Console-Appender" level="trace"/>
+            <AppenderRef ref="Console-Appender" level="info"/>
         </Logger>
         <Root level="info">
-            <AppenderRef ref="RollingFile-Appender"/>
+            <AppenderRef ref="Console-Appender"/>
         </Root>
     </Loggers>
 </Configuration>

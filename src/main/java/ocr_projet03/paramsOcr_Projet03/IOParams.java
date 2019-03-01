@@ -49,11 +49,11 @@ import static ocr_projet03.messagesTexteOcr_Projet03.InfosMessages.CreationFichi
             try {
                 listeParams.load(fileInputStream);
             }catch (Exception e1){
-                logger.error(ParametrageIllisible +" "+ nomFichierParams);
+                logger.error(ParametrageIllisible.getMessageErreur() +" "+ nomFichierParams);
                 getParamDefaut(listeParams);
             }
         }catch (IOException e2) {
-            logger.info(CreationFichierParametre +" "+ nomFichierParams);
+            logger.info(CreationFichierParametre.getMessageInfos() +" "+ nomFichierParams);
             getParamDefaut(listeParams);
             ecrireParametre();
         }
@@ -66,14 +66,14 @@ import static ocr_projet03.messagesTexteOcr_Projet03.InfosMessages.CreationFichi
      *
      * @return objet IOParams
      */
-    protected IOParams ecrireParametre () {
+     IOParams ecrireParametre () {
         try {
             FileOutputStream fileOutputStream= new FileOutputStream(nomFichierParams);
 
                 listeParams.store(fileOutputStream,nomFichierParams);
 
         }catch (IOException e2) {
-            logger.error(EcritureParametresImpossible + " "+nomFichierParams );
+            logger.error(EcritureParametresImpossible.getMessageErreur() + " "+nomFichierParams );
         }
         return this;
     }
@@ -90,7 +90,7 @@ import static ocr_projet03.messagesTexteOcr_Projet03.InfosMessages.CreationFichi
      * getter
      * @return Properties , collection de type properties , listeParams
      */
-    protected Properties getListeParams() {
+     Properties getListeParams() {
         return listeParams;
     }
 }
