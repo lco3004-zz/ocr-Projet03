@@ -12,6 +12,7 @@ public class LigneMenu <T extends Enum>{
     public   LigneMenu (T  x, String s) {
         libelleLigne =s;
         referenceLibelle = x;
+        selecteur='0';
     }
     public   LigneMenu (  T  x, String s,Character c) {
         libelleLigne =s;

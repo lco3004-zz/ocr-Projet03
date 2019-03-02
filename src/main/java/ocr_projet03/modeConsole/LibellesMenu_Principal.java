@@ -5,7 +5,6 @@ public enum LibellesMenu_Principal {
     Titre,
     Choisir_Mastermind,
     Choisir_PlusMoins,
-    Quitter
-
+    Quitter;
 }
 

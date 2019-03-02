@@ -6,6 +6,6 @@ public enum LibellesMenu_Secondaire {
     Jouer,
     Retour,
     VoirParametres,
-    Quitter
+    Quoitter
 }
 

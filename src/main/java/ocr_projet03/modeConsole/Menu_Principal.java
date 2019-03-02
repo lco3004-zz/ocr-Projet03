@@ -12,16 +12,15 @@ import static ocr_projet03.messagesTexteOcr_Projet03.ErreurMessages.ErreurGeneri
 import static ocr_projet03.messagesTexteOcr_Projet03.ErreurMessages.ParamInconnu;
 import static ocr_projet03.modeConsole.LibellesMenu_Principal.*;
 
-public class Menu_Principal {
-    private Locale FRENCH = Locale.forLanguageTag("fr");
-    private Scanner scanner ;
-    private Pattern patternChoix ;
+public class Menu_Principal extends Menu<LibellesMenu_Principal> {
+
     private String pattern_MenuPrincipal = "[1-2 Q q]";
 
     private ArrayList<LigneMenu> lignesMenuPrincipal = new ArrayList<>(LibellesMenu_Principal.values().length);
 
     public Menu_Principal(Scanner sc) {
-        scanner =sc;
+        super(sc);
+
         Character c;
         for (LibellesMenu_Principal libellesMenu_principal: LibellesMenu_Principal.values()) {
             switch (libellesMenu_principal) {
@@ -45,48 +44,14 @@ public class Menu_Principal {
                     logger.error(ParamInconnu.getMessageErreur());
             }
         }
+
+        initSuperClasseMenu(LibellesMenu_Principal.values());
     }
-
-    public String getPattern_MenuPrincipal() {
-        return pattern_MenuPrincipal;
+    private  void initSuperClasseMenu(LibellesMenu_Principal [] t) {
+        super.InitialiseMenu(t,pattern_MenuPrincipal,lignesMenuPrincipal);
     }
-    private void affiche() {
-        for (LigneMenu ligneMenu: lignesMenuPrincipal) {
-            System.out.println(ligneMenu.getLibelle_Ligne());
-        }
-    }
-    private Character acquiert() throws IOException, InterruptedException {
-        patternChoix = Pattern.compile(pattern_MenuPrincipal);
-        String choix="";
-        ClearScreen.cls();
-        affiche();
-        while ( choix.equals("") && scanner.hasNext()) {
-
-            try {
-                choix = scanner.next(patternChoix).toUpperCase();
-            }catch (InputMismatchException e1) {
-                String tmp =scanner.next();
-                ClearScreen.cls();
-                affiche();
-            }
-        }
-         return choix.toUpperCase().charAt(0);
-    }
-
-
-    public LibellesMenu_Principal RunMenu () {
-        LibellesMenu_Principal libellesMenu_principal =null;
-        try {
-            Character codeRet = acquiert();
-            for ( LigneMenu ligneMenu :lignesMenuPrincipal) {
-                if (ligneMenu.getSelecteur() ==codeRet)
-                    libellesMenu_principal = (LibellesMenu_Principal)ligneMenu.getReferenceLibelle();
-            }
-        }
-        catch (Exception e) {
-            logger.error(ErreurGeneric);
-        }
-        return libellesMenu_principal;
-
+    @Override
+    public LibellesMenu_Principal RunMenu() {
+        return  (LibellesMenu_Principal) super.RunMenu();
     }
 }
