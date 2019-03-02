@@ -5,7 +5,7 @@ public enum LibellesMenu_Secondaire {
     TITRE,
     Jouer,
     Retour,
-    VoiParametre,
+    VoirParametres,
     Quitter
 }
 

@@ -5,13 +5,20 @@ import java.util.HashMap;
 public class LigneMenu <T extends Enum>{
     private String libelleLigne;
     private T referenceLibelle;
+    private Character selecteur;
 
 
-    public   LigneMenu (  T  x, String s) {
+
+    public   LigneMenu (T  x, String s) {
         libelleLigne =s;
         referenceLibelle = x;
     }
+    public   LigneMenu (  T  x, String s,Character c) {
+        libelleLigne =s;
+        referenceLibelle = x;
+        selecteur=c;
 
+    }
     public String getLibelle_Ligne() {
         return libelleLigne;
     }
@@ -19,4 +26,5 @@ public class LigneMenu <T extends Enum>{
     public T getReferenceLibelle() {
         return referenceLibelle;
     }
+    public Character getSelecteur() { return selecteur; }
 }
