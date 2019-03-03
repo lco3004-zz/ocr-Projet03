@@ -1,4 +1,6 @@
 # Projet : ocr-Projet03 (OpenClassRooms)
+ ## JDK
+   fait avec JDK 11 - prochaines versions avec jdk8 comme demandé
  ## Incident
   - retrait maven cause classpath hs
   - donc il faut supprimer out puis faire un rebuild pour etre sur
