@@ -1,6 +1,7 @@
 package ocr_projet03;
 
 
+import ocr_projet03.constantesOcr_Projet03.VersionPGM;
 import ocr_projet03.exceptionOcr_Projet03.ExceptionMastermind;
 import ocr_projet03.messagesTexteOcr_Projet03.ErreurMessages;
 import ocr_projet03.modeConsole.LibellesMenu_Principal;
@@ -28,17 +29,21 @@ import static ocr_projet03.paramsOcr_Projet03.FournisseurParams.getParam;
 
 
 /**
- * Hello world!
+ * OCR Projet 03
  *
  */
 
 public class oc_Projer03
 {
+
+
+
     public static void main( String[] args ) throws ExceptionMastermind {
         //Creation du Singleton qui gere les logs (log4j2)
         getInstance(oc_Projer03.class.getSimpleName());
-        logger.info(Lancement_Application.getMessageInfos());
+        logger.info(String.format("%s Version= %s",Lancement_Application.getMessageInfos(), VersionPGM.VERSION_PGM.getVersion()));
         Scanner scanner = new Scanner(System.in);
+
 
 
         Menu_Principal menu_principal = new Menu_Principal(scanner);
@@ -78,6 +83,9 @@ public class oc_Projer03
                             case MODE_CHALLENGER:
                             case MODE_DEFENSEUR:
                             case MODE_DUEL:
+                                if (ch_Sup == Choisir_Mastermind) {
+                                    VoirInfoCodeSecret();
+                                }
                                 logger.info(String.format("%s du jeu %s",ch_Sec.toString(), ch_Sup.toString()));
                                 menu_secondaire.majLigneEtat(String.format("%s du jeu %s",ch_Sec.toString(), ch_Sup.toString()));
                                 break;
@@ -137,7 +145,7 @@ public class oc_Projer03
 
         }
     }
-    void VoirInfoCodeSecret() throws ExceptionMastermind {
+    private static void VoirInfoCodeSecret() throws ExceptionMastermind {
 
         ChoixCodeSecret choixCodeSecret = new ChoixCodeSecret();
         CouleursMastermind[] toutes = CouleursMastermind.values();

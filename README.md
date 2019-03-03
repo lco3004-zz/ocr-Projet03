@@ -1,6 +1,17 @@
 # Projet : ocr-Projet03 (OpenClassRooms)
- ### 4 mars
-
-  -retrait maven cause classpath hs
+ ## Incident
+  - retrait maven cause classpath hs
+  - donc il faut supprimer out puis faire un rebuild pour etre sur
+    que les ressources soient à jour.
+ ## Fonctions 4mars
+  - tirage aléatoire des couleurs du Mastermind
+  - le resultat du tirage est loggé lors du choix du jeu Mastermind
+  - paramètres du jeu Mastermind est dans paramsMM.properties (qui doit être dans le rep. params)
+  - Junit existe mais ne fait rien (version n+2 ou n+3)
+ ## versions suivante
+   - implementer mode challenger
+   - si aidé, remettre maven pour deployer un jar qui focntionne
+   - faire une classe de test
+  
 
  
