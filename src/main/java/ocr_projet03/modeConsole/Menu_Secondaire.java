@@ -9,7 +9,7 @@ import static ocr_projet03.modeConsole.LibellesMenu_Secondaire.*;
 
 public class Menu_Secondaire extends Menu {
 
-    private String pattern_MenuSecondaire = "[1-3 R r P p Q q]";
+    private String pattern_MenuSecondaire = "[1-3 R r V v Q q]";
     private ArrayList<LigneMenu> lignesMenuSecondaire = new ArrayList<>(LibellesMenu_Secondaire.values().length);
     private String statusbar;
 
@@ -48,9 +48,9 @@ public class Menu_Secondaire extends Menu {
                     c = 'R';
                     lignesMenuSecondaire.add(new LigneMenu(RETOUR,String.format("    %c -> RETOUR Menu Principal",c),c));
                     break;
-                case VoirParametres:
+                case LOGGER_PARAMETRES:
                     c = 'V';
-                    lignesMenuSecondaire.add(new LigneMenu(VoirParametres,String.format("    %c -> VOIR Paramètres",c),c));
+                    lignesMenuSecondaire.add(new LigneMenu(LOGGER_PARAMETRES,String.format("    %c -> LOGGER les Paramètres",c),c));
                     break;
                 case QUITTER:
                     c = 'Q';

@@ -9,7 +9,7 @@ public enum LibellesMenu_Secondaire {
     MODE_DEFENSEUR,
     MODE_DUEL,
     RETOUR,
-    VoirParametres,
+    LOGGER_PARAMETRES,
     QUITTER,
     SAISIR_CHOIX
 }

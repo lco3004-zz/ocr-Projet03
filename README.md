@@ -5,8 +5,8 @@
     que les ressources soient à jour.
  ## Fonctions 4mars
   - tirage aléatoire des couleurs du Mastermind
-  - le resultat du tirage est loggé lors du choix du jeu Mastermind
-  - paramètres du jeu Mastermind est dans paramsMM.properties (qui doit être dans le rep. params)
+  - le resultat du tirage est loggé lors du choix du jeu Mastermind si mode defensuer est chois
+  - paramètres du jeu Mastermind est dans paramsMM.properties (qui doit être dans le rep. out/production/main/resources)
   - Junit existe mais ne fait rien (version n+2 ou n+3)
  ## versions suivante
    - implementer mode challenger

@@ -80,32 +80,33 @@ public class oc_Projer03
                         switch (ch_Sec) {
                             case TITRE:
                                 break;
-                            case MODE_CHALLENGER:
                             case MODE_DEFENSEUR:
-                            case MODE_DUEL:
+                                logger.info(String.format("%s du jeu %s",ch_Sec.toString(), ch_Sup.toString()));
                                 if (ch_Sup == Choisir_Mastermind) {
-                                    VoirInfoCodeSecret();
+                                    menu_secondaire.majLigneEtat(String.format("%s - %s",ch_Sup.toString(),VoirInfoCodeSecret()));
                                 }
+                                else {
+                                    menu_secondaire.majLigneEtat(String.format("%s du jeu %s",ch_Sec.toString(), ch_Sup.toString()));
+                                }
+                                break;
+                            case MODE_CHALLENGER:
+                            case MODE_DUEL:
                                 logger.info(String.format("%s du jeu %s",ch_Sec.toString(), ch_Sup.toString()));
                                 menu_secondaire.majLigneEtat(String.format("%s du jeu %s",ch_Sec.toString(), ch_Sup.toString()));
                                 break;
                             case RETOUR:
-                                logger.info("vous revenez au menu principal");
+                                logger.info(String.format("%s du jeu %s",ch_Sec.toString(), ch_Sup.toString()));
                                 boucleSecondaire =false;
                                 break;
-                            case VoirParametres:
+                            case LOGGER_PARAMETRES:
+                                logger.info(String.format("%s du jeu %s",ch_Sec.toString(), ch_Sup.toString()));
+                                menu_secondaire.majLigneEtat(String.format("%s du jeu %s",ch_Sec.toString(), ch_Sup.toString()));
                                 if (ch_Sup == Choisir_Mastermind) {
-                                    logger.info(String.format("Vous voyez les paramètres du jeu : %s",MASTERMIND.toString()));
-                                    voirParamtreMM();
+                                    logParamtreMM();
                                 }
-                                else if ((ch_Sup == Choisir_PlusMoins)){
-                                    logger.info(String.format("Vous voyez les paramètres du jeu : %s",PLUSMOINS.toString()));
-                                }
-                                else
-                                    logger.error(ParamInconnu);
                                 break;
                             case QUITTER:
-                                logger.info("vous quittez le menu secondaire");
+                                logger.info(String.format("%s du jeu %s",ch_Sec.toString(), ch_Sup.toString()));
                                 boucleSecondaire =false;
                                 bouclePrincipale = false;
                                 break;
@@ -129,7 +130,7 @@ public class oc_Projer03
         scanner.close();
         logger.info(FinNormale_Application.getMessageInfos());
     }
-    private static void voirParamtreMM() throws ExceptionMastermind {
+    private static void logParamtreMM() throws ExceptionMastermind {
         Object tmpRetour;
         for (GroupParamsMM x : GroupParamsMM.values()) {
             tmpRetour = getParam(x);
@@ -145,7 +146,7 @@ public class oc_Projer03
 
         }
     }
-    private static void VoirInfoCodeSecret() throws ExceptionMastermind {
+    private static String VoirInfoCodeSecret() throws ExceptionMastermind {
 
         ChoixCodeSecret choixCodeSecret = new ChoixCodeSecret();
         CouleursMastermind[] toutes = CouleursMastermind.values();
@@ -162,7 +163,8 @@ public class oc_Projer03
         for (CouleursMastermind x: ligneATrouver) {
             s += x.toString() +", ";
         }
+        String valRet =String.format("%s %s","Combinaison secrete = ",s.substring(0,s.lastIndexOf(',')));
         logger.info("Combinaison secrete = "+s.substring(0,s.lastIndexOf(',')));
-
+        return  valRet;
     }
 }
