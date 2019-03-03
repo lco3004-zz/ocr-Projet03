@@ -1,7 +1,5 @@
 package ocr_projet03.modeConsole;
 
-import java.util.HashMap;
-
 public class LigneMenu <T extends Enum>{
     private String libelleLigne;
     private T referenceLibelle;
@@ -12,7 +10,7 @@ public class LigneMenu <T extends Enum>{
     public   LigneMenu (T  x, String s) {
         libelleLigne =s;
         referenceLibelle = x;
-        selecteur='0';
+        selecteur=null;
     }
     public   LigneMenu (  T  x, String s,Character c) {
         libelleLigne =s;
@@ -28,4 +26,8 @@ public class LigneMenu <T extends Enum>{
         return referenceLibelle;
     }
     public Character getSelecteur() { return selecteur; }
+
+    public void setLibelleLigne(String libelleLigne) {
+        this.libelleLigne = libelleLigne;
+    }
 }

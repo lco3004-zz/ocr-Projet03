@@ -16,40 +16,23 @@ public abstract class Menu <T extends Enum> {
     private Scanner scanner ;
     private Pattern patternChoix ;
     private String pattern_Menu  ;
+    private LigneMenu <T> statusBar;
 
 
-    public  Menu ( Scanner sc) {
 
+
+    Menu ( Scanner sc) {
         scanner =sc;
     }
-    public  void InitialiseMenu(T [] x, String pattern, ArrayList<LigneMenu> m ) {
+    void InitialiseMenu(T [] x, String pattern, ArrayList<LigneMenu> m ,T refStatusBar) {
         libellesMenu = x;
         pattern_Menu = pattern;
         ligneMenus =m;
+
+        statusBar = setStatusBar(refStatusBar);
     }
-    public T RunMenu () {
 
-        T z = null;
-        try {
-            Character codeRet = LectureClavier();
-            for ( LigneMenu ligneMenu :ligneMenus) {
-                if (ligneMenu.getSelecteur() ==codeRet) {
-                    for (T q :libellesMenu) {
-                        if (q == ligneMenu.getReferenceLibelle()) {
-                            z = q;
-                        }
-                    }
-
-                }
-            }
-        }
-        catch (Exception e) {
-            logger.error(ErreurGeneric);
-        }
-        return z;
-
-    }
-    public Character LectureClavier () throws IOException, InterruptedException{
+    Character LectureClavier () throws IOException, InterruptedException{
         patternChoix = Pattern.compile(pattern_Menu);
         String choix="";
         ClearScreen.cls();
@@ -67,10 +50,53 @@ public abstract class Menu <T extends Enum> {
         return choix.toUpperCase().charAt(0);
     }
 
-    public void DisplayMenu () {
+    LigneMenu <T> setStatusBar(T refStatusBar) {
+        LigneMenu <T> valRet =null;
+        for (LigneMenu cetteligne: ligneMenus) {
+            if (cetteligne.getReferenceLibelle() == refStatusBar) {
+                valRet= cetteligne;
+                break;
+            }
+        }
+        return valRet;
+    }
+
+    void DisplayMenu () {
         int j =0;
         for (LigneMenu ligneMenu: ligneMenus) {
-            System.out.println(ligneMenu.getLibelle_Ligne());
+            if (ligneMenus.get(ligneMenus.size()-1) == ligneMenu) {
+                System.out.print(ligneMenu.getLibelle_Ligne());
+            }else {
+                System.out.println(ligneMenu.getLibelle_Ligne());
+            }
         }
+    }
+
+    public T RunMenu () {
+
+        T z = null;
+        try {
+            Character codeRet = LectureClavier();
+            for ( LigneMenu ligneMenu :ligneMenus) {
+                if ((ligneMenu.getSelecteur() != null) && (ligneMenu.getSelecteur() ==codeRet)) {
+                    for (T q :libellesMenu) {
+                        if (q == ligneMenu.getReferenceLibelle()) {
+                            z = q;
+                        }
+                    }
+                }
+            }
+        }
+        catch (Exception e) {
+            logger.error(ErreurGeneric);
+        }
+        return z;
+
+    }
+
+    public void majLigneEtat(String s) {
+        String modelStatusBar = "[-- "+s+" --]";
+        statusBar.setLibelleLigne(modelStatusBar);
+        DisplayMenu();
     }
 }

@@ -3,7 +3,10 @@ package ocr_projet03;
 
 import ocr_projet03.exceptionOcr_Projet03.ExceptionMastermind;
 import ocr_projet03.messagesTexteOcr_Projet03.ErreurMessages;
-import ocr_projet03.modeConsole.*;
+import ocr_projet03.modeConsole.LibellesMenu_Principal;
+import ocr_projet03.modeConsole.LibellesMenu_Secondaire;
+import ocr_projet03.modeConsole.Menu_Principal;
+import ocr_projet03.modeConsole.Menu_Secondaire;
 import ocr_projet03.paramsOcr_Projet03.paramsMM.CouleursMastermind;
 import ocr_projet03.paramsOcr_Projet03.paramsMM.GroupParamsMM;
 import ocr_projet03.partieMastermind.ChoixCodeSecret;
@@ -48,17 +51,19 @@ public class oc_Projer03
             boolean boucleSecondaire;
              ch_Sup = menu_principal.RunMenu();
             switch (ch_Sup) {
-                case Titre:
+                case TITRE:
                     break;
                 case Choisir_Mastermind:
                 case Choisir_PlusMoins:
                     boucleSecondaire =true;
 
                     if (ch_Sup == Choisir_Mastermind) {
-                         menu_secondaire = new Menu_Secondaire(MASTERMIND.toString(),scanner);
+                        logger.info(String.format("choix du jeux : %s",MASTERMIND.toString()));
+                        menu_secondaire = new Menu_Secondaire(MASTERMIND.toString(),scanner);
                     }
                     else if ((ch_Sup == Choisir_PlusMoins)) {
-                         menu_secondaire = new Menu_Secondaire(PLUSMOINS.toString(), scanner);
+                        logger.info(String.format("choix du jeux : %s",PLUSMOINS.toString()));
+                        menu_secondaire = new Menu_Secondaire(PLUSMOINS.toString(), scanner);
                     }
                     else {
                         throw new ExceptionMastermind(ErreurGeneric);
@@ -66,22 +71,17 @@ public class oc_Projer03
 
                     while (boucleSecondaire) {
                         ch_Sec= menu_secondaire.RunMenu();
+
                         switch (ch_Sec) {
                             case TITRE:
                                 break;
-                            case Jouer:
-                                if (ch_Sup == Choisir_Mastermind) {
-                                    logger.info(String.format("choix du jeux : %s",MASTERMIND.toString()));
-                                    logger.info(String.format("vous avez demarrer le jeu %s",MASTERMIND.toString()));
-                                }
-                                else if ((ch_Sup == Choisir_PlusMoins)){
-                                    logger.info(String.format("choix du jeux : %s",PLUSMOINS.toString()));
-                                    logger.info(String.format("vous avez demarrer le jeu %s",PLUSMOINS.toString()));
-                                }
-                                else
-                                    logger.error(ParamInconnu);
+                            case MODE_CHALLENGER:
+                            case MODE_DEFENSEUR:
+                            case MODE_DUEL:
+                                logger.info(String.format("%s du jeu %s",ch_Sec.toString(), ch_Sup.toString()));
+                                menu_secondaire.majLigneEtat(String.format("%s du jeu %s",ch_Sec.toString(), ch_Sup.toString()));
                                 break;
-                            case Retour:
+                            case RETOUR:
                                 logger.info("vous revenez au menu principal");
                                 boucleSecondaire =false;
                                 break;
@@ -96,20 +96,22 @@ public class oc_Projer03
                                 else
                                     logger.error(ParamInconnu);
                                 break;
-                            case Quoitter:
+                            case QUITTER:
                                 logger.info("vous quittez le menu secondaire");
                                 boucleSecondaire =false;
                                 bouclePrincipale = false;
                                 break;
-                             default:
+                            case LIGNE_ETAT:
+                                break;
+                            default:
                                 logger.error(ParamInconnu);
 
                         }
                     }
                     break;
 
-                case Quitter:
-                    logger.info("Quitter application");
+                case QUITTER:
+                    logger.info("QUITTER application");
                     bouclePrincipale = false;
                     break;
                     default:

@@ -3,9 +3,14 @@ package ocr_projet03.modeConsole;
 public enum LibellesMenu_Secondaire {
 
     TITRE,
-    Jouer,
-    Retour,
+    LIGNE_ETAT,
+    JEUX,
+    MODE_CHALLENGER,
+    MODE_DEFENSEUR,
+    MODE_DUEL,
+    RETOUR,
     VoirParametres,
-    Quoitter
+    QUITTER,
+    SAISIR_CHOIX
 }
 

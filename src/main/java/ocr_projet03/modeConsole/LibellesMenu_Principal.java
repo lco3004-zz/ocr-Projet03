@@ -2,9 +2,11 @@ package ocr_projet03.modeConsole;
 
 
 public enum LibellesMenu_Principal {
-    Titre,
+    TITRE,
+    LIGNE_ETAT,
     Choisir_Mastermind,
     Choisir_PlusMoins,
-    Quitter;
+    QUITTER,
+    SAISIR_CHOIX
 }
 
