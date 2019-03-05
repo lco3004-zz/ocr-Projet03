@@ -1,7 +1,8 @@
 package ocr_projet03.logsOcr_Projet03;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 public class logApplicatif {
     private static logApplicatif ourInstance = null;

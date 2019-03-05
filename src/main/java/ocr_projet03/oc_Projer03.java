@@ -44,8 +44,6 @@ public class oc_Projer03
         logger.info(String.format("%s Version= %s",Lancement_Application.getMessageInfos(), VersionPGM.VERSION_PGM.getVersion()));
         Scanner scanner = new Scanner(System.in);
 
-
-
         Menu_Principal menu_principal = new Menu_Principal(scanner);
         boolean bouclePrincipale= true;
         LibellesMenu_Secondaire ch_Sec;
