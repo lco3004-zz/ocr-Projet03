@@ -33,14 +33,14 @@ import static ocr_projet03.paramsOcr_Projet03.FournisseurParams.getParam;
  *
  */
 
-public class oc_Projer03
+public class oc_Projet03
 {
 
 
 
     public static void main( String[] args ) throws ExceptionMastermind {
         //Creation du Singleton qui gere les logs (log4j2)
-        getInstance(oc_Projer03.class.getSimpleName());
+        getInstance(oc_Projet03.class.getSimpleName());
         logger.info(String.format("%s Version= %s",Lancement_Application.getMessageInfos(), VersionPGM.VERSION_PGM.getVersion()));
         Scanner scanner = new Scanner(System.in);
 
@@ -133,11 +133,9 @@ public class oc_Projer03
         for (GroupParamsMM x : GroupParamsMM.values()) {
             tmpRetour = getParam(x);
             if (tmpRetour instanceof Integer) {
-                logger.info(String.format("%s = %d", x.toString(), (Integer) tmpRetour));
-                ;
+                logger.info(String.format("%s = %d", x.toString(), tmpRetour));
             } else if (tmpRetour instanceof Boolean) {
-                logger.info(String.format("%s = %b", x.toString(), (Boolean) tmpRetour));
-                ;
+                logger.info(String.format("%s = %b", x.toString(), tmpRetour));
             } else {
                 throw new ExceptionMastermind(ErreurMessages.TypeParamIncorrect);
             }

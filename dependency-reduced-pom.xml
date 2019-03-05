@@ -21,7 +21,7 @@
           <transformers>
             <transformer>
               <manifestEntries>
-                <Main-Class>ocr_projet03.oc_Projer03</Main-Class>
+                <Main-Class>ocr_projet03.oc_Projet03</Main-Class>
                 <Build-Number>1.0</Build-Number>
               </manifestEntries>
             </transformer>
