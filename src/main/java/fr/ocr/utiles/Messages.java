@@ -22,6 +22,7 @@ public enum Messages {
         MODE_IO_INCONNU("mode IO inconnu ou incompatible avec constructeur"),
         PARAMETRAGE_ILLISIBLE("Impossible de lire le fichier parametre (parametres par defaut) - "),
         ECRITURE_PARAMETRES_IMPOSSIBLE("Ecriture dans fichier Parametre impossible - "),
+        SORTIE_PGM_SUR_ERREURNONGEREE ("Exception inattendue - fin pgm"),
         ERREUR_GENERIC("Ne doit pas etre utilisée!");
 
         private String messageErreur;
@@ -40,6 +41,7 @@ public enum Messages {
         LANCEMENT_GESTION_DES_PARAMETRES("Lancement FournisseurParams"),
         CREATION_FICHIER_PARAMETRE("Creation du fichier Parametres - "),
         FIN_NORMALE_GESTION_DES_PARAMETRES("Fin Normale FournisseurParams"),
+        CTRL_C("interuption programme par CTRL-C"),
         REMPLACEMENT_PAR_VALEUR_DEFAUT("Remplacement par la valeur par défaut =  ");
 
         private String messageInformation;

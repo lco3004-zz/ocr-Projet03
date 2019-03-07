@@ -1,8 +1,8 @@
 package fr.ocr;
 
 import fr.ocr.mastermind.CombinaisonSecrete;
-import fr.ocr.modeconsole.Libelles.LibellesMenu_Principal;
-import fr.ocr.modeconsole.Libelles.LibellesMenu_Secondaire;
+import fr.ocr.modeconsole.Libelles.LibellesMenuPrincipal;
+import fr.ocr.modeconsole.Libelles.LibellesMenuSecondaire;
 import fr.ocr.modeconsole.Menu_Principal;
 import fr.ocr.modeconsole.Menu_Secondaire;
 import fr.ocr.params.mastermind.CouleursMastermind;
@@ -14,8 +14,8 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import static fr.ocr.modeconsole.Libelles.LibellesJeux;
-import static fr.ocr.modeconsole.Libelles.LibellesMenu_Principal.CHOISIR_MASTERMIND;
-import static fr.ocr.modeconsole.Libelles.LibellesMenu_Principal.CHOISIR_PLUS_MOINS;
+import static fr.ocr.modeconsole.Libelles.LibellesMenuPrincipal.CHOISIR_MASTERMIND;
+import static fr.ocr.modeconsole.Libelles.LibellesMenuPrincipal.CHOISIR_PLUS_MOINS;
 import static fr.ocr.params.FournisseurParams.getParam;
 import static fr.ocr.utiles.Logs.getInstance;
 import static fr.ocr.utiles.Logs.logger;
@@ -43,8 +43,8 @@ public class App
 
         Menu_Principal menu_principal = new Menu_Principal(scanner);
         boolean bouclePrincipale= true;
-        LibellesMenu_Secondaire ch_Sec;
-        LibellesMenu_Principal ch_Sup;
+        LibellesMenuSecondaire ch_Sec;
+        LibellesMenuPrincipal ch_Sup;
         Menu_Secondaire menu_secondaire;
 
         while (bouclePrincipale) {

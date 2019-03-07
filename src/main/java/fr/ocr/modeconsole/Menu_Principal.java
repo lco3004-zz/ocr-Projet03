@@ -1,20 +1,21 @@
 package fr.ocr.modeconsole;
 
-import fr.ocr.modeconsole.Libelles.LibellesMenu_Principal;
+import fr.ocr.modeconsole.Libelles.LibellesMenuPrincipal;
+import fr.ocr.utiles.ApplicationExceptions;
 
 import java.util.Scanner;
 
-import static fr.ocr.modeconsole.Libelles.LibellesMenu_Principal.*;
+import static fr.ocr.modeconsole.Libelles.LibellesMenuPrincipal.*;
 import static fr.ocr.utiles.Logs.logger;
 import static fr.ocr.utiles.Messages.ErreurMessages.PARAM_INCONNU;
 
 
-public class Menu_Principal extends Menu<LibellesMenu_Principal> {
+public class Menu_Principal extends Menu<LibellesMenuPrincipal> {
 
     public Menu_Principal(Scanner sc) {
-        super(LibellesMenu_Principal.values(),"[1-2 Q q]",LIGNE_ETAT,sc);
+        super(LibellesMenuPrincipal.values(),"[1-2 Q q]",LIGNE_ETAT,sc);
         Character c;
-        for (LibellesMenu_Principal libellesMenu_principal: LibellesMenu_Principal.values()) {
+        for (LibellesMenuPrincipal libellesMenu_principal: LibellesMenuPrincipal.values()) {
             switch (libellesMenu_principal) {
                 case TITRE:
                     addLigneMenu(TITRE,"OCR-Projet03 - Menu Principal");
@@ -28,7 +29,7 @@ public class Menu_Principal extends Menu<LibellesMenu_Principal> {
                     addLigneMenu(CHOISIR_PLUS_MOINS,String.format("    %c -> JOUER au PLUSMOINS",c),c);
                     break;
                 case QUITTER:
-                    c = 'Q';
+                    c = Libelles.CharactersEscape.Q.toString().charAt(0);
                     addLigneMenu(QUITTER,String.format("    %c -> QUITTER",c),c);
                     break;
                 case LIGNE_ETAT:
@@ -45,7 +46,7 @@ public class Menu_Principal extends Menu<LibellesMenu_Principal> {
     }
 
     @Override
-    public LibellesMenu_Principal RunMenu() {
+    public LibellesMenuPrincipal RunMenu() throws ApplicationExceptions {
         return   super.RunMenu();
     }
 }

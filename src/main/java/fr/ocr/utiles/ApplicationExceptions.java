@@ -4,6 +4,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import static fr.ocr.utiles.Logs.logger;
+import static fr.ocr.utiles.Messages.ErreurMessages.ERREUR_GENERIC;
+import static fr.ocr.utiles.Messages.ErreurMessages.SORTIE_PGM_SUR_ERREURNONGEREE;
 
 public class ApplicationExceptions extends Exception {
 
@@ -13,6 +15,9 @@ public class ApplicationExceptions extends Exception {
 
     public ApplicationExceptions(Messages.ErreurMessages err) {
         logger.error(err.getMessageErreur());
+        if (err.equals(ERREUR_GENERIC)) {
+            logger.error(SORTIE_PGM_SUR_ERREURNONGEREE.toString());
+        }
     }
 
     public ApplicationExceptions(FileNotFoundException e) {
