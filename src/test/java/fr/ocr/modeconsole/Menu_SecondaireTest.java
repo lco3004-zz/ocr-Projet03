@@ -1,12 +1,10 @@
-package fr.ocr.modeConsole;
+package fr.ocr.modeconsole;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-class Menu_PrincipalTest {
+class Menu_SecondaireTest {
 
     @BeforeEach
     void setUp() {

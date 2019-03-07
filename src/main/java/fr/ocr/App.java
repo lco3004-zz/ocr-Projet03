@@ -1,30 +1,27 @@
 package fr.ocr;
 
+import fr.ocr.mastermind.ChoixCodeSecret;
+import fr.ocr.modeconsole.Libelles.LibellesMenu_Principal;
+import fr.ocr.modeconsole.Libelles.LibellesMenu_Secondaire;
+import fr.ocr.modeconsole.Menu_Principal;
+import fr.ocr.modeconsole.Menu_Secondaire;
+import fr.ocr.params.mastermind.CouleursMastermind;
+import fr.ocr.params.mastermind.GroupParamsMM;
+import fr.ocr.utiles.Constantes.VersionPGM;
+import fr.ocr.utiles.Exceptions;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
-
-import fr.ocr.utiles.ExceptionsApplicatives;
-import fr.ocr.utiles.ConstantesApplicatives.VersionPGM;
-import fr.ocr.modeConsole.Menu_Principal;
-import fr.ocr.modeConsole.Menu_Secondaire;
-import fr.ocr.params.paramsMM.CouleursMastermind;
-import fr.ocr.params.paramsMM.GroupParamsMM;
-import fr.ocr.mastermind.ChoixCodeSecret;
-
-
-import static fr.ocr.utiles.Messages.ErreurMessages.*;
-
-import static fr.ocr.utiles.LogApplicatifs.*;
-import static fr.ocr.utiles.Messages.InfosMessages.*;
-
+import static fr.ocr.modeconsole.Libelles.LibellesJeux;
+import static fr.ocr.modeconsole.Libelles.LibellesMenu_Principal.CHOISIR_MASTERMIND;
+import static fr.ocr.modeconsole.Libelles.LibellesMenu_Principal.CHOISIR_PLUS_MOINS;
 import static fr.ocr.params.FournisseurParams.getParam;
-
-import fr.ocr.modeConsole.Libelles.LibellesMenu_Secondaire;
-import fr.ocr.modeConsole.Libelles.LibellesMenu_Principal;
-import static  fr.ocr.modeConsole.Libelles.LibellesMenu_Principal.*;
-
-import static fr.ocr.modeConsole.Libelles.LibellesJeux;
+import static fr.ocr.utiles.Logs.getInstance;
+import static fr.ocr.utiles.Logs.logger;
+import static fr.ocr.utiles.Messages.ErreurMessages.*;
+import static fr.ocr.utiles.Messages.InfosMessages.FIN_NORMALE_APPLICATION;
+import static fr.ocr.utiles.Messages.InfosMessages.LANCEMENT_APPLICATION;
 
 
 
@@ -38,10 +35,10 @@ public class App
 
 
 
-    public static void main( String[] args ) throws ExceptionsApplicatives {
+    public static void main( String[] args ) throws Exceptions {
         //Creation du Singleton qui gere les logsapplicatifs (log4j2)
         getInstance(App.class.getSimpleName());
-        logger.info(String.format("%s Version= %s",Lancement_Application.getMessageInfos(), VersionPGM.VERSION_PGM.getVersion()));
+        logger.info(String.format("%s Version= %s", LANCEMENT_APPLICATION.getMessageInfos(), VersionPGM.VERSION_APPLICATION.getVersion()));
         Scanner scanner = new Scanner(System.in);
 
         Menu_Principal menu_principal = new Menu_Principal(scanner);
@@ -56,20 +53,20 @@ public class App
             switch (ch_Sup) {
                 case TITRE:
                     break;
-                case Choisir_Mastermind:
-                case Choisir_PlusMoins:
+                case CHOISIR_MASTERMIND:
+                case CHOISIR_PLUS_MOINS:
                     boucleSecondaire =true;
 
-                    if (ch_Sup == Choisir_Mastermind) {
+                    if (ch_Sup == CHOISIR_MASTERMIND) {
                         logger.info(String.format("choix du jeux : %s", LibellesJeux.MASTERMIND.toString()));
                         menu_secondaire = new Menu_Secondaire(LibellesJeux.MASTERMIND.toString(),scanner);
                     }
-                    else if ((ch_Sup == Choisir_PlusMoins)) {
+                    else if ((ch_Sup == CHOISIR_PLUS_MOINS)) {
                         logger.info(String.format("choix du jeux : %s", LibellesJeux.PLUSMOINS.toString()));
                         menu_secondaire = new Menu_Secondaire(LibellesJeux.PLUSMOINS.toString(), scanner);
                     }
                     else {
-                        throw new ExceptionsApplicatives(ErreurGeneric);
+                        throw new Exceptions(ERREUR_GENERIC);
                     }
 
                     while (boucleSecondaire) {
@@ -80,7 +77,7 @@ public class App
                                 break;
                             case MODE_DEFENSEUR:
                                 logger.info(String.format("%s du jeu %s",ch_Sec.toString(), ch_Sup.toString()));
-                                if (ch_Sup == Choisir_Mastermind) {
+                                if (ch_Sup == CHOISIR_MASTERMIND) {
                                     menu_secondaire.majLigneEtat(String.format("%s - %s",ch_Sup.toString(),VoirInfoCodeSecret()));
                                 }
                                 else {
@@ -99,7 +96,7 @@ public class App
                             case LOGGER_PARAMETRES:
                                 logger.info(String.format("%s du jeu %s",ch_Sec.toString(), ch_Sup.toString()));
                                 menu_secondaire.majLigneEtat(String.format("%s du jeu %s",ch_Sec.toString(), ch_Sup.toString()));
-                                if (ch_Sup == Choisir_Mastermind) {
+                                if (ch_Sup == CHOISIR_MASTERMIND) {
                                     logParamtreMM();
                                 }
                                 break;
@@ -111,7 +108,7 @@ public class App
                             case LIGNE_ETAT:
                                 break;
                             default:
-                                logger.error(ParamInconnu);
+                                logger.error(PARAM_INCONNU);
                         }
                     }
                     break;
@@ -121,13 +118,13 @@ public class App
                     bouclePrincipale = false;
                     break;
                     default:
-                        logger.error(ParamInconnu);
+                        logger.error(PARAM_INCONNU);
             }
         }
         scanner.close();
-        logger.info(FinNormale_Application.getMessageInfos());
+        logger.info(FIN_NORMALE_APPLICATION.getMessageInfos());
     }
-    private static void logParamtreMM() throws ExceptionsApplicatives {
+    private static void logParamtreMM() throws Exceptions {
         Object tmpRetour;
         for (GroupParamsMM x : GroupParamsMM.values()) {
             tmpRetour = getParam(x);
@@ -136,12 +133,12 @@ public class App
             } else if (tmpRetour instanceof Boolean) {
                 logger.info(String.format("%s = %b", x.toString(), tmpRetour));
             } else {
-                throw new ExceptionsApplicatives(TypeParamIncorrect);
+                throw new Exceptions(TYPE_PARAM_INCORRECT);
             }
 
         }
     }
-    private static String VoirInfoCodeSecret() throws ExceptionsApplicatives {
+    private static String VoirInfoCodeSecret() throws Exceptions {
 
         ChoixCodeSecret choixCodeSecret = new ChoixCodeSecret();
         CouleursMastermind[] toutes = CouleursMastermind.values();

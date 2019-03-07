@@ -1,4 +1,4 @@
-package fr.ocr.params.paramsMM;
+package fr.ocr.params.mastermind;
 
 /**
  *

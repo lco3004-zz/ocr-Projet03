@@ -8,14 +8,15 @@
  */
 package fr.ocr.params;
 
-import static fr.ocr.utiles.LogApplicatifs.logger;
-import static fr.ocr.utiles.Messages.ErreurMessages.*;
-import static fr.ocr.utiles.Messages.InfosMessages.*;
-
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
+
+import static fr.ocr.utiles.Logs.logger;
+import static fr.ocr.utiles.Messages.ErreurMessages.ECRITURE_PARAMETRES_IMPOSSIBLE;
+import static fr.ocr.utiles.Messages.ErreurMessages.PARAMETRAGE_ILLISIBLE;
+import static fr.ocr.utiles.Messages.InfosMessages.CREATION_FICHIER_PARAMETRE;
 
 /**
  *
@@ -48,11 +49,11 @@ import java.util.Properties;
             try {
                 listeParams.load(fileInputStream);
             }catch (Exception e1){
-                logger.error(ParametrageIllisible.getMessageErreur() +" "+ nomFichierParams);
+                logger.error(PARAMETRAGE_ILLISIBLE.getMessageErreur() +" "+ nomFichierParams);
                 getParamDefaut(listeParams);
             }
         }catch (IOException e2) {
-            logger.info(CreationFichierParametre.getMessageInfos() +" "+ nomFichierParams);
+            logger.info(CREATION_FICHIER_PARAMETRE.getMessageInfos() +" "+ nomFichierParams);
             getParamDefaut(listeParams);
             ecrireParametre();
         }
@@ -72,7 +73,7 @@ import java.util.Properties;
                 listeParams.store(fileOutputStream,nomFichierParams);
 
         }catch (IOException e2) {
-            logger.error(EcritureParametresImpossible.getMessageErreur() + " "+nomFichierParams );
+            logger.error(ECRITURE_PARAMETRES_IMPOSSIBLE.getMessageErreur() + " "+nomFichierParams );
         }
         return this;
     }

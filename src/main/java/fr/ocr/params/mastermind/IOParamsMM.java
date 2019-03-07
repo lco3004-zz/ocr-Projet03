@@ -3,11 +3,11 @@
  * Si le fichier n'existe pas, il est créé avec les valeurs par défaut des parametres.
  * IOParamsMM traite les parametres du jeu MasterMind
  */
-package fr.ocr.params.paramsMM;
-
-import java.util.Properties;
+package fr.ocr.params.mastermind;
 
 import fr.ocr.params.IOParams;
+
+import java.util.Properties;
 
 public class IOParamsMM extends IOParams {
 

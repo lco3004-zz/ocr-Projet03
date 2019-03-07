@@ -4,51 +4,51 @@ public enum Messages {
     ;
     public enum DebugMessages {
         X("");
-        private String MessageDebug;
+        private String messageDebug;
         DebugMessages(String s) {
-            MessageDebug =s;
+            messageDebug =s;
         }
 
         public String getMessageDebug() {
-            return MessageDebug;
+            return messageDebug;
         }
     }
 
     public enum ErreurMessages {
-        ParamInconnu("Nom de Parametre Inconnu"),
-        TypeParamIncorrect("Type de Parametre inconnu"),
-        ValeurParamIncorrect("Parametre hors plage tolérance"),
-        ChoixRandomNonComplet(" Random ne rend pas assez de COuleru au hazard - Choix du secretpar defaut - Allo houston on a un pb"),
-        ModeIOInconnu ("mode IO inconnu ou incompatible avec constructeur"),
-        ParametrageIllisible("Impossible de lire le fichier parametre (parametres par defaut) - "),
-        EcritureParametresImpossible("Ecriture dans fichier Parametre impossible - "),
-        ErreurGeneric("Ne doit pas etre utilisée!");
+        PARAM_INCONNU("Nom de Parametre Inconnu"),
+        TYPE_PARAM_INCORRECT("Type de Parametre inconnu"),
+        VALEUR_PARAM_INCORRECT("Parametre hors plage tolérance"),
+        CHOIX_RANDOM_NON_COMPLET(" Random ne rend pas assez de COuleru au hazard - Choix du secretpar defaut - Allo houston on a un pb"),
+        MODE_IO_INCONNU("mode IO inconnu ou incompatible avec constructeur"),
+        PARAMETRAGE_ILLISIBLE("Impossible de lire le fichier parametre (parametres par defaut) - "),
+        ECRITURE_PARAMETRES_IMPOSSIBLE("Ecriture dans fichier Parametre impossible - "),
+        ERREUR_GENERIC("Ne doit pas etre utilisée!");
 
-        private String MessageErreur;
+        private String messageErreur;
         ErreurMessages(String s) {
-            MessageErreur=s;
+            messageErreur =s;
         }
 
         public String getMessageErreur() {
-            return MessageErreur;
+            return messageErreur;
         }
     }
 
     public enum InfosMessages {
-        Lancement_Application("Lancement Application "),
-        FinNormale_Application("Fin normale Application"),
-        Lancement_GestionDesParametres("Lancement FournisseurParams"),
-        CreationFichierParametre("Creation du fichier Parametres - "),
-        FinNormale_GestionDesParametres("Fin Normale FournisseurParams"),
-        RemplacementParValeurDefaut("Remplacement par la valeur par défaut =  ");
+        LANCEMENT_APPLICATION("Lancement Application "),
+        FIN_NORMALE_APPLICATION("Fin normale Application"),
+        LANCEMENT_GESTION_DES_PARAMETRES("Lancement FournisseurParams"),
+        CREATION_FICHIER_PARAMETRE("Creation du fichier Parametres - "),
+        FIN_NORMALE_GESTION_DES_PARAMETRES("Fin Normale FournisseurParams"),
+        REMPLACEMENT_PAR_VALEUR_DEFAUT("Remplacement par la valeur par défaut =  ");
 
-        private String MessageInformation;
+        private String messageInformation;
         InfosMessages(String s) {
-            MessageInformation =s;
+            messageInformation =s;
         }
 
         public String getMessageInfos() {
-            return MessageInformation;
+            return messageInformation;
         }
     }
 }

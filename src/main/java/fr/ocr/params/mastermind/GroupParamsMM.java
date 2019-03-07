@@ -1,14 +1,14 @@
-package fr.ocr.params.paramsMM;
+package fr.ocr.params.mastermind;
 
 import fr.ocr.params.UnParam;
 
 public enum GroupParamsMM {
-        NbDePositions( 4,3,6),
-        NbCouleurs(CouleursMastermind.values().length,6,CouleursMastermind.values().length),
-        NbreMaxDeBoucleChercheCodeSecret(100,10,500),
-        NbreEssais(12,8,12),
-        DoublonAutorise(false),
-        CaseVideAUtorise (false);
+        NOMBRE_DE_POSITIONS( 4,3,6),
+        NOMBRE_DE_COULEURS(CouleursMastermind.values().length,6,CouleursMastermind.values().length),
+        NOMBRE_MAXI_DE_BOUCLES_RANDOMIZE(100,10,500),
+        NOMBRE_D_ESSAIS(12,8,12),
+        DOUBLON_AUTORISE(false),
+        CASE_VIDE_AUTORISE(false);
 
 
         private UnParam unParam;

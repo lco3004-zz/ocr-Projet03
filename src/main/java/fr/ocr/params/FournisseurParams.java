@@ -1,25 +1,25 @@
 package fr.ocr.params;
 
-import static fr.ocr.utiles.ConstantesApplicatives.NomFichiersParametres.FichierParamMasterMind;
-import fr.ocr.utiles.ExceptionsApplicatives;
-import static fr.ocr.utiles.LogApplicatifs.logger;
-
-import fr.ocr.params.paramsMM.GroupParamsMM;
-import fr.ocr.params.paramsMM.IOParamsMM;
-
-import static fr.ocr.utiles.Messages.InfosMessages.*;
-import static fr.ocr.utiles.Messages.ErreurMessages.*;
+import fr.ocr.params.mastermind.GroupParamsMM;
+import fr.ocr.params.mastermind.IOParamsMM;
+import fr.ocr.utiles.Exceptions;
 
 import java.util.Locale;
 import java.util.Properties;
+
+import static fr.ocr.utiles.Constantes.NomFichiersParametres.FICHIER_PARAM_MASTER_MIND;
+import static fr.ocr.utiles.Logs.logger;
+import static fr.ocr.utiles.Messages.ErreurMessages.TYPE_PARAM_INCORRECT;
+import static fr.ocr.utiles.Messages.ErreurMessages.VALEUR_PARAM_INCORRECT;
+import static fr.ocr.utiles.Messages.InfosMessages.*;
 
 public final class FournisseurParams {
 
     public static Object getParam(GroupParamsMM nomDuParamtreARecuperer) {
 
-        logger.debug(Lancement_GestionDesParametres.getMessageInfos());
+        logger.debug(LANCEMENT_GESTION_DES_PARAMETRES.getMessageInfos());
 
-        IOParamsMM parametrageMasterMind=new IOParamsMM(FichierParamMasterMind.getNomFichier());
+        IOParamsMM parametrageMasterMind=new IOParamsMM(FICHIER_PARAM_MASTER_MIND.getNomFichier());
         Properties parametreMasterMindLu= parametrageMasterMind.lireParametre().getListeParams();
 
 
@@ -35,7 +35,7 @@ public final class FournisseurParams {
                     retVal = valLue;
                 }
                 else {
-                    throw new ExceptionsApplicatives(ValeurParamIncorrect);
+                    throw new Exceptions(VALEUR_PARAM_INCORRECT);
                 }
             }
             else if (groupParamsMM.getUnParam().getTypeParam().equals( Boolean.class.getSimpleName())) {
@@ -50,27 +50,27 @@ public final class FournisseurParams {
                     retVal = Boolean.valueOf(parametreMasterMindLu.getProperty(groupParamsMM.name()));
                 }
                 else {
-                    throw new ExceptionsApplicatives(ValeurParamIncorrect);
+                    throw new Exceptions(VALEUR_PARAM_INCORRECT);
                 }
             }
             else {
-                logger.error(TypeParamIncorrect.getMessageErreur());
+                logger.error(TYPE_PARAM_INCORRECT.getMessageErreur());
                 retVal =null;
             }
         }catch ( Exception e) {
             retVal = groupParamsMM.getUnParam().getValeurDefaut();
             if  (groupParamsMM.getUnParam().getTypeParam().equals(Boolean.class.getSimpleName())) {
-                logger.error(RemplacementParValeurDefaut.getMessageInfos()+ ((Boolean) retVal).toString());
+                logger.error(REMPLACEMENT_PAR_VALEUR_DEFAUT.getMessageInfos()+ ((Boolean) retVal).toString());
             }
             else if (groupParamsMM.getUnParam().getTypeParam().equals(Integer.class.getSimpleName()) ) {
-                logger.error(RemplacementParValeurDefaut.getMessageInfos()+ ((Integer) retVal).toString());
+                logger.error(REMPLACEMENT_PAR_VALEUR_DEFAUT.getMessageInfos()+ ((Integer) retVal).toString());
             }
             else  {
-                logger.error(RemplacementParValeurDefaut.getMessageInfos()+ ValeurParamIncorrect.getMessageErreur());
+                logger.error(REMPLACEMENT_PAR_VALEUR_DEFAUT.getMessageInfos()+ VALEUR_PARAM_INCORRECT.getMessageErreur());
             }
         }
 
-        logger.debug(FinNormale_GestionDesParametres.getMessageInfos());
+        logger.debug(FIN_NORMALE_GESTION_DES_PARAMETRES.getMessageInfos());
 
         return  retVal;
     }

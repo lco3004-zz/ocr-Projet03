@@ -1,4 +1,4 @@
-package fr.ocr.modeConsole;
+package fr.ocr.modeconsole;
 
 public enum Libelles {
     ;
@@ -10,8 +10,8 @@ public enum Libelles {
     public enum LibellesMenu_Principal {
         TITRE,
         LIGNE_ETAT,
-        Choisir_Mastermind,
-        Choisir_PlusMoins,
+        CHOISIR_MASTERMIND,
+        CHOISIR_PLUS_MOINS,
         QUITTER,
         SAISIR_CHOIX
     }

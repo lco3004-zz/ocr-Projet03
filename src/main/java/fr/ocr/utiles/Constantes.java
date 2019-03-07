@@ -1,9 +1,9 @@
 package fr.ocr.utiles;
 
-public enum ConstantesApplicatives {
+public enum Constantes {
     ;
     public enum VersionPGM {
-        VERSION_PGM ("V0.1");
+        VERSION_APPLICATION("V0.1");
         private String version;
         VersionPGM(String s) {
             version=s;
@@ -15,7 +15,7 @@ public enum ConstantesApplicatives {
     }
 
     public enum NomFichiersParametres {
-        FichierParamMasterMind("target/classes/params.properties");
+        FICHIER_PARAM_MASTER_MIND("target/classes/params.properties");
 
         private String nomFichier;
         NomFichiersParametres(String s) {
