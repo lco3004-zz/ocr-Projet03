@@ -1,6 +1,6 @@
 package fr.ocr;
 
-import fr.ocr.mastermind.ChoixCodeSecret;
+import fr.ocr.mastermind.CombinaisonSecrete;
 import fr.ocr.modeconsole.Libelles.LibellesMenu_Principal;
 import fr.ocr.modeconsole.Libelles.LibellesMenu_Secondaire;
 import fr.ocr.modeconsole.Menu_Principal;
@@ -141,7 +141,7 @@ public class App
     }
     private static String VoirInfoCodeSecret() throws ApplicationExceptions {
 
-        ChoixCodeSecret choixCodeSecret = new ChoixCodeSecret();
+        CombinaisonSecrete combinaisonSecrete = new CombinaisonSecrete();
         CouleursMastermind[] toutes = CouleursMastermind.values();
         StringBuilder s = new StringBuilder(4096);
         for (CouleursMastermind x: toutes) {
@@ -149,8 +149,8 @@ public class App
         }
         logger.info("Toutes le couleurs = "+ s.substring(0,s.lastIndexOf(",")));
 
-        ArrayList <Byte> arrayList = choixCodeSecret.getChiffresSecrets();
-        CouleursMastermind[] ligneATrouver  = choixCodeSecret.getCouleursSecretes();
+        ArrayList <Byte> arrayList = combinaisonSecrete.getChiffresSecrets();
+        CouleursMastermind[] ligneATrouver  = combinaisonSecrete.getCouleursSecretes();
 
          int tailleStringB = s.length();
         s.delete(0,tailleStringB-1);

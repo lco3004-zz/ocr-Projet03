@@ -15,9 +15,8 @@ import static fr.ocr.utiles.Messages.ErreurMessages.TYPE_PARAM_INCORRECT;
 
 
 /**
- * Création de la ligne secrète à découvrir
- * la ligne secrète contient des couleurs .
- * La composition de la ligne  est faite à partir  d'une liste prédéfinie de couleurs
+ * Création de la combinaison secrète de couleurs à découvrir
+ *   construite à partir  de la liste prédéfinie de couleurs "CouleursMastermind"
  *
  * Méthode :
  *  tirage aléatoire d'un nombre modulo  le nombre de couleurs prédéfinies
@@ -28,20 +27,19 @@ import static fr.ocr.utiles.Messages.ErreurMessages.TYPE_PARAM_INCORRECT;
  *
  *  il y a donc bijection entre le tableau chiffresSecrets et le tableau couleursSecretes.
  *
- *  Si le paramètre applicatif  DOUBLON_AUTORISE est vrai, il peut y avoir plusieurs couleurs identiques dans la ligne secrète (sinon, non)
+ *  Si le paramètre applicatif  DOUBLON_AUTORISE est vrai, il peut y avoir plusieurs couleurs identiques dans la combinaison (sinon, non)
  *  le paramètre applicatif  NOMBRE_DE_POSITIONS indique la taille des tableaux  chiffresSecrets et  couleursSecretes
  *  le parametre applicatif NOMBRE_MAXI_DE_BOUCLES_RANDOMIZE limite de le nombre de boucles effectuées dans la recherche
  *  d'un nombre aléatoire unique (cas ou DOUBLON_AUTORISE est faux car il faut alors une couleur/chiffre unique dans la ligne secrète)
  *
- * Jeu MasterMind : fabrication de la ligne de couleur à trouver
- * Utilisé lorsque le jeu se fait contre l'ordinateur
+ *   Classe utilisée lorsque le jeu se fait contre l'ordinateur
  */
-public class ChoixCodeSecret  {
+public class CombinaisonSecrete {
 
-    //
+    //tableau qui contient les chiffres tirés au hazard modulo le parametre NOMBRE_DE_POSITIONS
     private ArrayList<Byte> chiffresSecrets;
 
-    //
+    //tableau qui contient les couleurs prises dans CouleursMastermind couleursSecretes[i] =
     private CouleursMastermind [] couleursSecretes;
 
     /**
@@ -49,7 +47,7 @@ public class ChoixCodeSecret  {
      * @throws ApplicationExceptions . Exception levée sur erreur cohérence entre
      * le type de paramètre demandé et le type lu depuis la source des parametres (fichier paramètre)
      */
-    public ChoixCodeSecret() throws ApplicationExceptions {
+    public CombinaisonSecrete() throws ApplicationExceptions {
 
         Object tmpRetour;
 
