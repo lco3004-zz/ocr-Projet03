@@ -39,7 +39,10 @@ public class CombinaisonSecrete {
     //tableau qui contient les chiffres tirés au hazard modulo le parametre NOMBRE_DE_POSITIONS
     private ArrayList<Byte> chiffresSecrets;
 
-    //tableau qui contient les couleurs prises dans CouleursMastermind couleursSecretes[i] =
+    /**
+     *    tableau qui contient les couleurs prises dans CouleursMastermind :
+     *      couleursSecretes[ i ] =  CouleursMastermind[ chiffresSecret[ i ]]
+     */
     private CouleursMastermind [] couleursSecretes;
 
     /**
@@ -61,12 +64,7 @@ public class CombinaisonSecrete {
 
         Integer nombreDebBoucleMax;
 
-        chiffresSecrets = new ArrayList<>();
-
         DecimalFormat df = new DecimalFormat("#");
-
-        //
-        df.setRoundingMode(RoundingMode.HALF_UP);
 
         tmpRetour=getParam(GroupParamsMM.NOMBRE_DE_POSITIONS);
         if ( tmpRetour instanceof Integer) {
@@ -90,12 +88,17 @@ public class CombinaisonSecrete {
         }
 
         tmpRetour=getParam(GroupParamsMM.NOMBRE_MAXI_DE_BOUCLES_RANDOMIZE);
-        //
+
         if ( tmpRetour instanceof Integer) {
             nombreDebBoucleMax = (Integer)tmpRetour;
         } else {
             throw new ApplicationExceptions(TYPE_PARAM_INCORRECT);
         }
+
+        chiffresSecrets = new ArrayList<>();
+
+        // "graine" pour le random.
+        df.setRoundingMode(RoundingMode.HALF_UP);
 
         for (int placeOccupee = 0, nbreDeBoucles = 0; (placeOccupee < nombreDePositions) && (nbreDeBoucles < nombreDebBoucleMax); nbreDeBoucles++) {
             valeurAleatoire = (byte)(Byte.parseByte(df.format(Math.random()*100)) % nombreDeCouleurs);
@@ -130,7 +133,7 @@ public class CombinaisonSecrete {
 
     /**
      *
-     * @return ArrayList<Byte> Tableau des index des couleurs de la ligne secrète
+     * @return ArrayList<Byte> Tableau des chiffres de la combinaisons secrete
      */
     public ArrayList<Byte> getChiffresSecrets() {
 
@@ -139,7 +142,7 @@ public class CombinaisonSecrete {
 
     /**
      *
-     * @return  CouleursMastermind[] Tableau des couleurs de la ligne secrète
+     * @return  CouleursMastermind[] Tableau des couleurs de la combinaison secrete
      */
     public CouleursMastermind[] getCouleursSecretes() {
 
