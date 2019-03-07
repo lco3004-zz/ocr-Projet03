@@ -2,7 +2,7 @@ package fr.ocr.params;
 
 import fr.ocr.params.mastermind.GroupParamsMM;
 import fr.ocr.params.mastermind.IOParamsMM;
-import fr.ocr.utiles.Exceptions;
+import fr.ocr.utiles.ApplicationExceptions;
 
 import java.util.Locale;
 import java.util.Properties;
@@ -35,7 +35,7 @@ public final class FournisseurParams {
                     retVal = valLue;
                 }
                 else {
-                    throw new Exceptions(VALEUR_PARAM_INCORRECT);
+                    throw new ApplicationExceptions(VALEUR_PARAM_INCORRECT);
                 }
             }
             else if (groupParamsMM.getUnParam().getTypeParam().equals( Boolean.class.getSimpleName())) {
@@ -50,7 +50,7 @@ public final class FournisseurParams {
                     retVal = Boolean.valueOf(parametreMasterMindLu.getProperty(groupParamsMM.name()));
                 }
                 else {
-                    throw new Exceptions(VALEUR_PARAM_INCORRECT);
+                    throw new ApplicationExceptions(VALEUR_PARAM_INCORRECT);
                 }
             }
             else {

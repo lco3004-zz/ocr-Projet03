@@ -5,22 +5,22 @@ import java.io.IOException;
 
 import static fr.ocr.utiles.Logs.logger;
 
-public class Exceptions extends Exception {
+public class ApplicationExceptions extends Exception {
 
-    public Exceptions(IOException e) {
+    public ApplicationExceptions(IOException e) {
         logger.error(e.getMessage());
     }
 
-    public Exceptions(Messages.ErreurMessages err) {
+    public ApplicationExceptions(Messages.ErreurMessages err) {
         logger.error(err.getMessageErreur());
     }
 
-    public Exceptions(FileNotFoundException e) {
+    public ApplicationExceptions(FileNotFoundException e) {
         logger.error(e.getMessage());
     }
 
 
-    public Exceptions(Exception e) {
+    public ApplicationExceptions(Exception e) {
         logger.error(e.getMessage());
     }
 

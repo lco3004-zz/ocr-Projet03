@@ -7,8 +7,8 @@ import fr.ocr.modeconsole.Menu_Principal;
 import fr.ocr.modeconsole.Menu_Secondaire;
 import fr.ocr.params.mastermind.CouleursMastermind;
 import fr.ocr.params.mastermind.GroupParamsMM;
+import fr.ocr.utiles.ApplicationExceptions;
 import fr.ocr.utiles.Constantes.VersionPGM;
-import fr.ocr.utiles.Exceptions;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -35,7 +35,7 @@ public class App
 
 
 
-    public static void main( String[] args ) throws Exceptions {
+    public static void main( String[] args ) throws ApplicationExceptions {
         //Creation du Singleton qui gere les logsapplicatifs (log4j2)
         getInstance(App.class.getSimpleName());
         logger.info(String.format("%s Version= %s", LANCEMENT_APPLICATION.getMessageInfos(), VersionPGM.VERSION_APPLICATION.getVersion()));
@@ -66,7 +66,7 @@ public class App
                         menu_secondaire = new Menu_Secondaire(LibellesJeux.PLUSMOINS.toString(), scanner);
                     }
                     else {
-                        throw new Exceptions(ERREUR_GENERIC);
+                        throw new ApplicationExceptions(ERREUR_GENERIC);
                     }
 
                     while (boucleSecondaire) {
@@ -124,7 +124,7 @@ public class App
         scanner.close();
         logger.info(FIN_NORMALE_APPLICATION.getMessageInfos());
     }
-    private static void logParamtreMM() throws Exceptions {
+    private static void logParamtreMM() throws ApplicationExceptions {
         Object tmpRetour;
         for (GroupParamsMM x : GroupParamsMM.values()) {
             tmpRetour = getParam(x);
@@ -133,30 +133,32 @@ public class App
             } else if (tmpRetour instanceof Boolean) {
                 logger.info(String.format("%s = %b", x.toString(), tmpRetour));
             } else {
-                throw new Exceptions(TYPE_PARAM_INCORRECT);
+                throw new ApplicationExceptions(TYPE_PARAM_INCORRECT);
             }
 
         }
+
     }
-    private static String VoirInfoCodeSecret() throws Exceptions {
+    private static String VoirInfoCodeSecret() throws ApplicationExceptions {
 
         ChoixCodeSecret choixCodeSecret = new ChoixCodeSecret();
         CouleursMastermind[] toutes = CouleursMastermind.values();
-        String s = "";
+        StringBuilder s = new StringBuilder(4096);
         for (CouleursMastermind x: toutes) {
-            s += x.toString() +", ";
+            s.append(String.format("%s%s",x.toString(),", "));
         }
-        logger.info("Toutes le couleurs = "+ s.substring(0,s.lastIndexOf(',')));
+        logger.info("Toutes le couleurs = "+ s.substring(0,s.lastIndexOf(",")));
 
-        ArrayList <Byte> arrayList = choixCodeSecret.getCodeSecret();
-        CouleursMastermind[] ligneATrouver  = choixCodeSecret.getLigneSecrete();
+        ArrayList <Byte> arrayList = choixCodeSecret.getChiffresSecrets();
+        CouleursMastermind[] ligneATrouver  = choixCodeSecret.getCouleursSecretes();
 
-        s = "";
+         int tailleStringB = s.length();
+        s.delete(0,tailleStringB-1);
         for (CouleursMastermind x: ligneATrouver) {
-            s += x.toString() +", ";
+            s.append(String.format("%s%s",x.toString(),", "));
         }
-        String valRet =String.format("%s %s","Combinaison secrete = ",s.substring(0,s.lastIndexOf(',')));
-        logger.info("Combinaison secrete = "+s.substring(0,s.lastIndexOf(',')));
+        String valRet =String.format("%s %s","Combinaison secrete = ",s.substring(0,s.lastIndexOf(",")));
+        logger.info("Combinaison secrete = "+s.substring(0,s.lastIndexOf(",")));
         return  valRet;
     }
 }
