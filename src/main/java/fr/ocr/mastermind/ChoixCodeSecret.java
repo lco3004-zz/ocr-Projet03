@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import static fr.ocr.params.FournisseurParams.getParam;
 import static fr.ocr.utiles.Messages.ErreurMessages.TYPE_PARAM_INCORRECT;
 
+
+
 /**
  * Création de la ligne secrète à découvrir
  * la ligne secrète contient des couleurs .
