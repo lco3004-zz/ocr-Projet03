@@ -9,12 +9,26 @@ import static fr.ocr.modeconsole.Libelles.LibellesMenuPrincipal.*;
 import static fr.ocr.utiles.Logs.logger;
 import static fr.ocr.utiles.Messages.ErreurMessages.PARAM_INCONNU;
 
+/**
+ *  Menu principal de l'application - selection du jeux
+ *
+ *  hérite de la class Menu qui se charge du comportement d'un menu (afffichage, saisie)
+ */
+public class MenuPrincipal extends Menu<LibellesMenuPrincipal> {
 
-public class Menu_Principal extends Menu<LibellesMenuPrincipal> {
+    /**
+     * construit le menu principal en fournissant les chaines de caractères à afficher,
+     * le pattern de controle de saisie, la référence d'instance Enum LibellesMenuPrincipal qui
+     * est la ligne qui sert de stausbar 'LIGNE_ETAT et le scanner pour la saisie clavier
+     *
+     * @param sc scanner (lib java)
+     */
+    public MenuPrincipal(Scanner sc) {
 
-    public Menu_Principal(Scanner sc) {
         super(LibellesMenuPrincipal.values(),"[1-2 Q q]",LIGNE_ETAT,sc);
+
         Character c;
+
         for (LibellesMenuPrincipal libellesMenu_principal: LibellesMenuPrincipal.values()) {
             switch (libellesMenu_principal) {
                 case TITRE:
@@ -42,11 +56,16 @@ public class Menu_Principal extends Menu<LibellesMenuPrincipal> {
                     logger.error(PARAM_INCONNU.getMessageErreur());
             }
         }
-
     }
 
+    /**
+     *
+     * @return  instance d'une classe de LibellesMenuPrincipal qui correspond à  l'action à réaliser
+     *  'i.e : QUITTER, JOUER ...)
+     * @throws ApplicationExceptions : sur erreur non gérée
+     */
     @Override
     public LibellesMenuPrincipal RunMenu() throws ApplicationExceptions {
-        return   super.RunMenu();
+        return  super.RunMenu();
     }
 }

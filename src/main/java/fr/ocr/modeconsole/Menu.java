@@ -77,8 +77,10 @@ class LigneMenu <T extends Enum>{
     }
 
     String getLibelle_Ligne() {
+
         return libelleLigne;
     }
+
     T getReferenceEnumLibelle() {
         return referenceEnumLibelle;
     }
@@ -88,7 +90,7 @@ class LigneMenu <T extends Enum>{
     }
 }
 
-/**
+/*
  * efface l'afficage console . Clear ou Cls sont appellés selon le système
  * sur lequel le programme est exécuté
  */
@@ -117,7 +119,7 @@ final class ClearScreen {
 public  abstract class  Menu <T extends Enum>{
 
     // tableau des instances d'inner classe de l'Enum passé en paramètre
-    private T [] libellesMenu;
+    private T [] enumsLibellesMenu;
     // tabeleau d'instances de la classe LigneMenu (lignes du Menu )
     private ArrayList<LigneMenu> lignesMenu;
 
@@ -131,9 +133,12 @@ public  abstract class  Menu <T extends Enum>{
 
     // ligne de menu dont le contenu est variable qui contient les infos selon l'action en cours
     private LigneMenu <T> statusBar;
+
     // pour retrouver la statusbar dans le tableau des lignes de ligneMenu
     private T clefStatusBar;
+
     /**
+     * Constructeur Menu
      *
      * @param instancesLibelle : tableau des instances de l'Enum soit LibellesMenuPrincipal soit LibellesMenuSecondaire
      * @param pattern  : liste des caractères autorisés lors de la saisie
@@ -143,12 +148,14 @@ public  abstract class  Menu <T extends Enum>{
     Menu(T [] instancesLibelle , String pattern, T refStatusBar,Scanner sc) {
         scanner =sc;
         lignesMenu = new  ArrayList<>(256);
-        libellesMenu = instancesLibelle;
+        enumsLibellesMenu = instancesLibelle;
         pattern_Menu = pattern;
         clefStatusBar = refStatusBar;
     }
 
     /**
+     * ajout d'une ligne de menu qui est soit une ligne d'information, soit une ligne d'action de  saisie
+     * donc le selecteur est nul
      *
      * @param instanceLibelle instance de l'Enum à affecter à la ligne a ajouter au menu
      * @param chaineLibelle  libelle à affecter à la ligne a ajouter au menu
@@ -158,6 +165,7 @@ public  abstract class  Menu <T extends Enum>{
     }
 
     /**
+     * ajout d'une ligne de menu  (selecteur peut être null ou pas)
      *
      * @param instanceLibelle instance de l'Enum à affecter à la ligne a ajouter au menu
      * @param chaineLibelle libelle à affecter à la ligne a ajouter au menu
@@ -171,9 +179,10 @@ public  abstract class  Menu <T extends Enum>{
             statusBar =ligneMenu;
     }
 
-    /**
+    /*
+     * saisie clavier avec pattern
      *
-     * @return le caractère qui correspond à la saisie utilisateur (filtré par pattern )
+     * retourne le caractère qui correspond à la saisie utilisateur (filtré par pattern )
      */
     Character LectureClavier () {
         patternChoix = Pattern.compile(pattern_Menu);
@@ -194,51 +203,85 @@ public  abstract class  Menu <T extends Enum>{
         return choix.toUpperCase().charAt(0);
     }
 
+    /*
+     * affichage écran des lignes du menu
+     * la dernière ligne est affichée sans retour chariot pour que la saisie clavier soit en regard de la ligne
+     * de saisie du choix
+     */
     void DisplayMenu () {
-        int j =0;
-        for (LigneMenu ligneMenu: lignesMenu) {
-            if (lignesMenu.get(lignesMenu.size()-1) == ligneMenu) {
+        int j = 0;
+
+        for ( LigneMenu ligneMenu: lignesMenu ) {
+
+            //si c'est la dernière ligne du menu, pas de CR/LF pour que la saisie soit sur la même ligne que l'affichage
+            if (lignesMenu.get(lignesMenu.size()-1).equals(ligneMenu) ) {
                 System.out.print(ligneMenu.getLibelle_Ligne());
             }else {
                 System.out.println(ligneMenu.getLibelle_Ligne());
             }
         }
     }
+
+    /**
+     * Recherche l'instance de LigneMenu dont le selecteur est égal au parametre codeRet
+     *
+     * @param codeRet  : caractère saisi par l'utilisateur qui sert de clef
+     *                 pour retrouver la ligne LigneMenu qui a codeRet comme valeur de selecteur
+     * @return instance d'une classe d'un Enum (LibellesMenuSecondaire par exemple)
+     */
     private T retrouveLigneMenu(Character codeRet) {
-        T z = null;
+
+        T enumActionChoisie = null;
+
+        Character c;
+
         for ( LigneMenu ligneMenu : lignesMenu) {
-            if ((ligneMenu.getSelecteur() != null) && (ligneMenu.getSelecteur() ==codeRet)) {
-                for (T q :libellesMenu) {
-                    if (q == ligneMenu.getReferenceEnumLibelle()) {
-                        z = q;
-                    }
-                }
+
+            c = ligneMenu.getSelecteur();
+
+            if ((c != null) && (c.equals(codeRet))) {
+                enumActionChoisie = (T) ligneMenu.getReferenceEnumLibelle();
+
+                break;
             }
         }
-        return z;
+
+        return enumActionChoisie;
     }
 
+    /**
+     * Affiche le menu , attend la saisie clavier, renvoie le code de l'action choisie
+     * c.a.d l'instance d'une classe d'un Enum  (QUITTER, RETOUR ....)
+     *
+     * @return instance d'une classe d'un Enum (LibellesMenuSecondaire par exemple)
+     * @throws ApplicationExceptions sur erreur ou CTRL-C
+     */
     public T RunMenu () throws ApplicationExceptions {
-        T z = null;
+        T enumActionChoisie = null;
         try {
-            z= retrouveLigneMenu(LectureClavier());
+            enumActionChoisie= retrouveLigneMenu(LectureClavier());
         }
+        //le CRL-C , I Presume
         catch (StringIndexOutOfBoundsException e1) {
             logger.info(CTRL_C);
-            z= retrouveLigneMenu( Libelles.CharactersEscape.Q.toString().charAt(0));
+            enumActionChoisie= retrouveLigneMenu( Libelles.CharactersEscape.Q.toString().charAt(0));
         }
+        //plantage et erreur non géréé
         catch (Exception e) {
             logger.error(String.format ("%s %s ",ERREUR_GENERIC,e.getClass().getSimpleName()));
             throw new ApplicationExceptions(ERREUR_GENERIC);
         }
-        return z;
-
+        return enumActionChoisie;
     }
 
+    /**
+     * affichage d'une chaine dans la statusbar
+     *
+     * @param s message à placer dans la statusBar
+     */
     public void majLigneEtat(String s) {
         String modelStatusBar = "[-- "+s+" --]";
         statusBar.setLibelleLigne(modelStatusBar);
         DisplayMenu();
     }
-
  }

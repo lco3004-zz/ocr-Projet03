@@ -9,9 +9,9 @@ import static fr.ocr.modeconsole.Libelles.LibellesMenuSecondaire.*;
 import static fr.ocr.utiles.Logs.logger;
 import static fr.ocr.utiles.Messages.ErreurMessages.PARAM_INCONNU;
 
-public class Menu_Secondaire extends Menu {
+public class MenuSecondaire extends Menu<LibellesMenuSecondaire> {
 
-    public Menu_Secondaire(String titre, Scanner sc) {
+    public MenuSecondaire(String titre, Scanner sc) {
 
         super(LibellesMenuSecondaire.values(),"[1-3 R r V v Q q]",LIGNE_ETAT,sc);
 
@@ -64,8 +64,14 @@ public class Menu_Secondaire extends Menu {
         }
 
     }
+    /**
+     *
+     * @return  instance d'une classe de LibellesMenuPrincipal qui correspond à  l'action à réaliser
+     *  'i.e : QUITTER, JOUER ...)
+     * @throws ApplicationExceptions : sur erreur non gérée
+     */
     @Override
     public LibellesMenuSecondaire RunMenu() throws ApplicationExceptions {
-        return  (LibellesMenuSecondaire) super.RunMenu();
+        return   super.RunMenu();
     }
 }

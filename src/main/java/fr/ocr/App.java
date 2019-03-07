@@ -3,8 +3,8 @@ package fr.ocr;
 import fr.ocr.mastermind.CombinaisonSecrete;
 import fr.ocr.modeconsole.Libelles.LibellesMenuPrincipal;
 import fr.ocr.modeconsole.Libelles.LibellesMenuSecondaire;
-import fr.ocr.modeconsole.Menu_Principal;
-import fr.ocr.modeconsole.Menu_Secondaire;
+import fr.ocr.modeconsole.MenuPrincipal;
+import fr.ocr.modeconsole.MenuSecondaire;
 import fr.ocr.params.mastermind.CouleursMastermind;
 import fr.ocr.params.mastermind.GroupParamsMM;
 import fr.ocr.utiles.ApplicationExceptions;
@@ -41,11 +41,11 @@ public class App
         logger.info(String.format("%s Version= %s", LANCEMENT_APPLICATION.getMessageInfos(), VersionPGM.VERSION_APPLICATION.getVersion()));
         Scanner scanner = new Scanner(System.in);
 
-        Menu_Principal menu_principal = new Menu_Principal(scanner);
+        MenuPrincipal menu_principal = new MenuPrincipal(scanner);
         boolean bouclePrincipale= true;
         LibellesMenuSecondaire ch_Sec;
         LibellesMenuPrincipal ch_Sup;
-        Menu_Secondaire menu_secondaire;
+        MenuSecondaire menu_secondaire;
 
         while (bouclePrincipale) {
             boolean boucleSecondaire;
@@ -57,13 +57,13 @@ public class App
                 case CHOISIR_PLUS_MOINS:
                     boucleSecondaire =true;
 
-                    if (ch_Sup == CHOISIR_MASTERMIND) {
+                    if (ch_Sup.equals(CHOISIR_MASTERMIND)) {
                         logger.info(String.format("choix du jeux : %s", LibellesJeux.MASTERMIND.toString()));
-                        menu_secondaire = new Menu_Secondaire(LibellesJeux.MASTERMIND.toString(),scanner);
+                        menu_secondaire = new MenuSecondaire(LibellesJeux.MASTERMIND.toString(),scanner);
                     }
-                    else if ((ch_Sup == CHOISIR_PLUS_MOINS)) {
+                    else if ((ch_Sup.equals(CHOISIR_PLUS_MOINS))) {
                         logger.info(String.format("choix du jeux : %s", LibellesJeux.PLUSMOINS.toString()));
-                        menu_secondaire = new Menu_Secondaire(LibellesJeux.PLUSMOINS.toString(), scanner);
+                        menu_secondaire = new MenuSecondaire(LibellesJeux.PLUSMOINS.toString(), scanner);
                     }
                     else {
                         throw new ApplicationExceptions(ERREUR_GENERIC);
@@ -77,7 +77,7 @@ public class App
                                 break;
                             case MODE_DEFENSEUR:
                                 logger.info(String.format("%s du jeu %s",ch_Sec.toString(), ch_Sup.toString()));
-                                if (ch_Sup == CHOISIR_MASTERMIND) {
+                                if (ch_Sup.equals(CHOISIR_MASTERMIND)) {
                                     menu_secondaire.majLigneEtat(String.format("%s - %s",ch_Sup.toString(),VoirInfoCodeSecret()));
                                 }
                                 else {
@@ -96,7 +96,7 @@ public class App
                             case LOGGER_PARAMETRES:
                                 logger.info(String.format("%s du jeu %s",ch_Sec.toString(), ch_Sup.toString()));
                                 menu_secondaire.majLigneEtat(String.format("%s du jeu %s",ch_Sec.toString(), ch_Sup.toString()));
-                                if (ch_Sup == CHOISIR_MASTERMIND) {
+                                if (ch_Sup.equals(CHOISIR_MASTERMIND)) {
                                     logParamtreMM();
                                 }
                                 break;
