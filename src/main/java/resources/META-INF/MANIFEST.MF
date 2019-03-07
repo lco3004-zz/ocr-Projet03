@@ -1,3 +1,0 @@
-Manifest-Version: 1.0
-Main-Class: ocr_projet03.oc_Projet03
-
