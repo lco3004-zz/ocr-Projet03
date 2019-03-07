@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Configuration monitorInterval="60" >
+    <Properties>
+        <Property name="log-path">./logProjet03</Property>
+        <Property name="archive">${log-path}/archive</Property>
+    </Properties>
+    <Appenders>
+        <Console name="Console-Appender" target="SYSTEM_OUT">
+            <PatternLayout>
+                <pattern>
+                    [%-5level] %d{yyyy-MM-dd} [%F %L] %c{1} - %msg%n
+                </pattern>>
+            </PatternLayout>
+        </Console>
+        <RollingFile name="RollingFile-Appender"
+                     fileName="${log-path}/ocr_Projet03.log"
+                     filePattern="${archive}/projet03.log.%d{yyyy-MM-dd-hh}.gz">
+            <PatternLayout pattern="[%-5level] %d{yyyy-MM-dd} [%F %L] %c{1} - %msg%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy size="30 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="30"/>
+        </RollingFile>
+ 
+    </Appenders>
+    <Loggers>
+        <Logger name="ocr_Projet03" level="debug" additivity="false">
+            <AppenderRef ref="RollingFile-Appender" level="info"/>
+            <AppenderRef ref="Console-Appender" level="info"/>
+        </Logger>
+        <Root level="info">
+            <AppenderRef ref="RollingFile-Appender"/>
+        </Root>
+    </Loggers>
+</Configuration>
+
+
