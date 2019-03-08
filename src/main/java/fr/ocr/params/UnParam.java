@@ -1,6 +1,6 @@
 package fr.ocr.params;
 
-public class UnParam<T extends Object> {
+ public class UnParam<T extends Object> {
 
     private T valeurDefaut;
 
