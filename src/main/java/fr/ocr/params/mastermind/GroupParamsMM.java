@@ -1,7 +1,5 @@
 package fr.ocr.params.mastermind;
 
-import fr.ocr.params.UnParam;
-
 public enum GroupParamsMM {
     NOMBRE_DE_POSITIONS(4, 3, 6),
     NOMBRE_DE_COULEURS(CouleursMastermind.values().length, 6, CouleursMastermind.values().length),
@@ -21,9 +19,60 @@ public enum GroupParamsMM {
         unParam = new UnParam<>(valdef, Boolean.class.getSimpleName());
     }
 
-    public UnParam getUnParam() {
-        return unParam;
+    public String getTypeParam() {
+
+        return unParam.getTypeParam();
     }
 
+    public Number getValeurMax() {
 
+        return unParam.getValeurMax();
+    }
+
+    public Number getValeurMin() {
+
+        return unParam.getValeurMin();
+    }
+
+    public <T> Object getValeurDefaut() {
+        return unParam.getValeurDefaut();
+    }
+}
+
+class UnParam<T> {
+
+    private T valeurDefaut;
+    private String typeParam;
+    private Number valeurMin;
+    private Number valeurMax;
+
+    UnParam(T valdef, String type) {
+
+        typeParam = type;
+        valeurDefaut = valdef;
+    }
+
+    UnParam(T valdef, String type, Integer valMin, Integer valMax) {
+
+        typeParam = type;
+        valeurDefaut = valdef;
+        valeurMin = valMin;
+        valeurMax = valMax;
+    }
+
+    T getValeurDefaut() {
+        return valeurDefaut;
+    }
+
+    String getTypeParam() {
+        return typeParam;
+    }
+
+    Number getValeurMax() {
+        return valeurMax;
+    }
+
+    Number getValeurMin() {
+        return valeurMin;
+    }
 }

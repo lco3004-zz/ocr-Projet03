@@ -9,8 +9,20 @@ import static fr.ocr.modeconsole.Libelles.LibellesMenuSecondaire.*;
 import static fr.ocr.utiles.Logs.logger;
 import static fr.ocr.utiles.Messages.ErreurMessages.PARAM_INCONNU;
 
+/**
+ * Menu secondaire de l'application - menu de Mastermind ou de PlusMoins
+ * <p>
+ * hérite de la class Menu qui se charge du comportement d'un menu (afffichage, saisie)
+ */
 public class MenuSecondaire extends Menu<LibellesMenuSecondaire> {
 
+    /**
+     * construit le menu secondaire en fournissant les chaines de caractères à afficher,
+     * le pattern de controle de saisie, la référence d'instance Enum LibellesMenuSecondaire qui
+     * est la ligne qui sert de stausbar 'LIGNE_ETAT et le scanner pour la saisie clavier
+     *
+     * @param sc scanner (lib java)
+     */
     public MenuSecondaire(String titre, Scanner sc) {
 
         super(LibellesMenuSecondaire.values(), "[1-3 R r V v Q q]", LIGNE_ETAT, sc);
@@ -66,7 +78,7 @@ public class MenuSecondaire extends Menu<LibellesMenuSecondaire> {
     }
 
     /**
-     * @return instance d'une classe de LibellesMenuPrincipal qui correspond à  l'action à réaliser
+     * @return instance d'une classe de LibellesMenuPSecondaie qui correspond à  l'action à réaliser
      * 'i.e : QUITTER, JOUER ...)
      *
      * @throws AppExceptions : sur erreur non gérée

@@ -1,6 +1,11 @@
 package fr.ocr.utiles;
 
 
+/**
+ * Algo de tri rapide
+ *
+ * @param <T> type de nombre à trier qui doit hérité de Number
+ */
 public class QuickSort<T extends Number> implements Comparable<Number> {
 
     public QuickSort(T[] ts) {

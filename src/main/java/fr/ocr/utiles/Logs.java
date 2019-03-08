@@ -5,7 +5,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 /**
- * pour verificaiton commit github (a disparudu repo) 03/03/02019
+ * Singleton : pour tracer , il suffit d'écrire logger.{info|debug|erro} ( {chaine de caractère non null} ) ;
+ * l'istance doit être créer dans la méthode principale
  */
 public class Logs {
     public static Logger logger;

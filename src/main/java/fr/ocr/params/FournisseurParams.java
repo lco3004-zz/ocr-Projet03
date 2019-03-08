@@ -27,16 +27,16 @@ public final class FournisseurParams {
         GroupParamsMM groupParamsMM = GroupParamsMM.valueOf(nomDuParamtreARecuperer.toString());
         try {
             String leTypeIci = Integer.class.getSimpleName();
-            if (groupParamsMM.getUnParam().getTypeParam().equals(Integer.class.getSimpleName())) {
+            if (groupParamsMM.getTypeParam().equals(Integer.class.getSimpleName())) {
                 Integer valLue = Integer.valueOf(parametreMasterMindLu.getProperty(groupParamsMM.name()));
-                Integer borneMin = (Integer) groupParamsMM.getUnParam().getValeurMin();
-                Integer borneMax = (Integer) groupParamsMM.getUnParam().getValeurMax();
+                Integer borneMin = (Integer) groupParamsMM.getValeurMin();
+                Integer borneMax = (Integer) groupParamsMM.getValeurMax();
                 if (valLue >= borneMin && valLue <= borneMax) {
                     retVal = valLue;
                 } else {
                     throw new AppExceptions(VALEUR_PARAM_INCORRECT);
                 }
-            } else if (groupParamsMM.getUnParam().getTypeParam().equals(Boolean.class.getSimpleName())) {
+            } else if (groupParamsMM.getTypeParam().equals(Boolean.class.getSimpleName())) {
                 String valLue = parametreMasterMindLu.getProperty(groupParamsMM.name());
 
                 //valLue = valLue.toUpperCase(Locale.forLanguageTag("fr")).trim();
@@ -54,10 +54,10 @@ public final class FournisseurParams {
                 retVal = null;
             }
         } catch (Exception e) {
-            retVal = groupParamsMM.getUnParam().getValeurDefaut();
-            if (groupParamsMM.getUnParam().getTypeParam().equals(Boolean.class.getSimpleName())) {
+            retVal = groupParamsMM.getValeurDefaut();
+            if (groupParamsMM.getTypeParam().equals(Boolean.class.getSimpleName())) {
                 logger.error(REMPLACEMENT_PAR_VALEUR_DEFAUT.getMessageInfos() + ((Boolean) retVal).toString());
-            } else if (groupParamsMM.getUnParam().getTypeParam().equals(Integer.class.getSimpleName())) {
+            } else if (groupParamsMM.getTypeParam().equals(Integer.class.getSimpleName())) {
                 logger.error(REMPLACEMENT_PAR_VALEUR_DEFAUT.getMessageInfos() + ((Integer) retVal).toString());
             } else {
                 logger.error(REMPLACEMENT_PAR_VALEUR_DEFAUT.getMessageInfos() + VALEUR_PARAM_INCORRECT.getMessageErreur());

@@ -11,10 +11,10 @@ import static fr.ocr.utiles.Messages.ErreurMessages.PARAMETRAGE_ILLISIBLE;
 import static fr.ocr.utiles.Messages.InfosMessages.CREATION_FICHIER_PARAMETRE;
 
 /**
- * Lecture /ecriture d'un fichier Property dont le nom est passé en parametres du constructeur
- * Si le fichier n'existe pas, il est créé avec les valeurs par défaut des parametres.
+ * Lecture /ecriture d'un fichier Property dont le nom est pass&eacute; en parametres du constructeur
+ * Si le fichier n'existe pas, il est cr&eacute;&eacute; avec les valeurs par d&eacute;faut des parametres.
  * IOParams est abstraite car un fichier property se distingue par les properties
- * qu'il contient : l'implémentation de la méthode getParamDefaut dépend du jeu concerné (mastermind ou jeu
+ * qu'il contient : l'impl&eacute;mentation de la m&eacute;thode getParamDefaut d&eacute;pend du jeu concern&eacute; (mastermind ou jeu
  * plus/moins, mais aussi config des menus de l'applicaiton
  */
 public abstract class IOParams {

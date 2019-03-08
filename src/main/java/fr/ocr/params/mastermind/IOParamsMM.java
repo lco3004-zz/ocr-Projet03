@@ -28,7 +28,7 @@ public class IOParamsMM extends IOParams {
     @Override
     protected void getParamDefaut(Properties listeParam) {
         for (GroupParamsMM v : GroupParamsMM.values()) {
-            listeParam.setProperty(v.name(), String.valueOf(v.getUnParam().getValeurDefaut()));
+            listeParam.setProperty(v.name(), String.valueOf(v.getValeurDefaut()));
         }
     }
 }
