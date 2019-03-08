@@ -1,24 +1,27 @@
 package fr.ocr.params;
 
 public enum CouleursMastermind {
-    AUBERGINE((byte) 0),
-    JAUNE((byte) 1),
-    VERT((byte) 2),
-    ROUGE((byte) 3),
-    BLEU((byte) 4),
-    ORANGE((byte) 5),
-    VIOLET((byte) 6),
-    ROSE((byte) 7),
-    INDIGO((byte) 8),
-    ABRICOT((byte) 9);
+    AUBERGINE( 0,'A'),
+    JAUNE(1,'J'),
+    VERT( 2,'V'),
+    ROUGE( 3,'R'),
+    BLEU( 4,'B'),
+    ORANGE( 5,'O'),
+    TURQUOISE( 6,'T'),
+    MAUVE( 7,'M'),
+    INDIGO( 8,'I'),
+    CARMIN( 9,'C');
 
-    private Byte valeurFacialeDeLaCouleur;
+    private int valeurFacialeDeLaCouleur;
+    private char lettreInitiale;
 
-    CouleursMastermind(Byte i) {
+    CouleursMastermind(int i, char c) {
         valeurFacialeDeLaCouleur = i;
+        lettreInitiale = c;
     }
 
-    public Byte getValeurFacialeDeLaCouleur() {
+    public int getValeurFacialeDeLaCouleur() {
         return valeurFacialeDeLaCouleur;
     }
+    public char getLettreInitiale () {return lettreInitiale;}
 }

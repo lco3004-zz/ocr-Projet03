@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 import static fr.ocr.params.LireParametres.getParam;
 import static fr.ocr.params.Parametres.*;
-import static fr.ocr.utiles.Messages.ErreurMessages.TYPE_PARAM_INCORRECT;
+import static fr.ocr.utiles.Messages.ErreurMessages.ERREUR_GENERIC;
 
 
 /**
@@ -33,10 +33,18 @@ import static fr.ocr.utiles.Messages.ErreurMessages.TYPE_PARAM_INCORRECT;
  * <p>
  * Classe utilisée lorsque le jeu se fait contre l'ordinateur
  */
-public class CombinaisonSecrete {
+public class FabricationSecret {
 
     //tableau qui contient les chiffres tirés au hazard modulo le parametre NOMBRE_DE_POSITIONS
-    private ArrayList<Byte> chiffresSecrets;
+    private ArrayList<Integer> chiffresSecrets;
+
+    private Boolean doublonAutorise = (Boolean) getParam(DOUBLON_AUTORISE);
+
+    private Integer nombreDePositions = (Integer) getParam(NOMBRE_DE_POSITIONS);
+
+    private Integer nombreDeCouleurs = (Integer) getParam(NOMBRE_DE_COULEURS);
+
+    private Integer nombreDebBoucleMax = (Integer) getParam(NOMBRE_MAXI_DE_BOUCLES_RANDOMIZE);
 
     /**
      * tableau qui contient les couleurs prises dans CouleursMastermind :
@@ -45,53 +53,38 @@ public class CombinaisonSecrete {
     private CouleursMastermind[] couleursSecretes;
 
     /**
+     *
+     * @param chiffresSecretsFournis la table des chiffes secrets est fourni par utilisateur
+     *                               cas où c'est l'ordinateur qui doit trouver la ligne secrete
+     * @throws AppExceptions incohérence parametre ou tableau des chiffres passé en parametre
+     */
+    public FabricationSecret(ArrayList<Integer> chiffresSecretsFournis) throws AppExceptions {
+        Object tmpRetour;
+
+
+        if ((chiffresSecretsFournis == null) || chiffresSecretsFournis.size() > nombreDePositions)
+            throw new AppExceptions(ERREUR_GENERIC);
+
+        chiffresSecrets = chiffresSecretsFournis;
+
+        BijecterCouleurChiffres();
+    }
+
+    /**
+     * la table des chiffes secrets est à construire - cas où c'est l'odinateur qui propose la ligne secrete
+     * cas où c'est le joueur qui doit deviner la ligne secrete, ou bien en mode duel
+     *
      * @throws AppExceptions . Exception levée sur erreur cohérence entre
      *                       le type de paramètre demandé et le type lu depuis la source des parametres (fichier paramètre)
      */
-    public CombinaisonSecrete() throws AppExceptions {
+    public FabricationSecret() throws AppExceptions {
 
         Object tmpRetour;
 
-        Byte valeurAleatoire;
-
-        Boolean doublonAutorise;
-
-        Integer nombreDePositions;
-
-        Integer nombreDeCouleurs;
-
-        Integer nombreDebBoucleMax;
+        int valeurAleatoire;
 
         DecimalFormat df = new DecimalFormat("#");
 
-        tmpRetour = getParam(NOMBRE_DE_POSITIONS);
-        if (tmpRetour instanceof Integer) {
-            nombreDePositions = (Integer) tmpRetour;
-        } else {
-            throw new AppExceptions(TYPE_PARAM_INCORRECT);
-        }
-
-        tmpRetour = getParam(NOMBRE_DE_COULEURS);
-        if (tmpRetour instanceof Integer) {
-            nombreDeCouleurs = (Integer) tmpRetour;
-        } else {
-            throw new AppExceptions(TYPE_PARAM_INCORRECT);
-        }
-
-        tmpRetour = getParam(DOUBLON_AUTORISE);
-        if (tmpRetour instanceof Boolean) {
-            doublonAutorise = (Boolean) tmpRetour;
-        } else {
-            throw new AppExceptions(TYPE_PARAM_INCORRECT);
-        }
-
-        tmpRetour = getParam(NOMBRE_MAXI_DE_BOUCLES_RANDOMIZE);
-
-        if (tmpRetour instanceof Integer) {
-            nombreDebBoucleMax = (Integer) tmpRetour;
-        } else {
-            throw new AppExceptions(TYPE_PARAM_INCORRECT);
-        }
 
         chiffresSecrets = new ArrayList<>();
 
@@ -99,7 +92,7 @@ public class CombinaisonSecrete {
         df.setRoundingMode(RoundingMode.HALF_UP);
 
         for (int placeOccupee = 0, nbreDeBoucles = 0; (placeOccupee < nombreDePositions) && (nbreDeBoucles < nombreDebBoucleMax); nbreDeBoucles++) {
-            valeurAleatoire = (byte) (Byte.parseByte(df.format(Math.random() * 100)) % nombreDeCouleurs);
+            valeurAleatoire =  (Integer.parseInt(df.format(Math.random() * 100)) % nombreDeCouleurs);
 
             if (!doublonAutorise) {
                 if (!chiffresSecrets.contains(valeurAleatoire)) {
@@ -121,17 +114,23 @@ public class CombinaisonSecrete {
             }
         }
 
-        couleursSecretes = new CouleursMastermind[nombreDePositions];
-        int i = 0;
-        for (Byte v : chiffresSecrets) {
-            couleursSecretes[i++] = CouleursMastermind.values()[(int) v];
-        }
+        BijecterCouleurChiffres();
     }
 
     /**
+     * renseigne la ligne secrete des couleurs (bijection couleurs / chiffres)
+     */
+    private void BijecterCouleurChiffres() {
+         couleursSecretes = new CouleursMastermind[nombreDePositions];
+         int i = 0;
+         for (int v : chiffresSecrets) {
+             couleursSecretes[i++] = CouleursMastermind.values()[v];
+         }
+     }
+    /**
      * @return ArrayList<Byte> Tableau des chiffres de la combinaisons secrete
      */
-    public ArrayList<Byte> getChiffresSecrets() {
+    public ArrayList<Integer> getChiffresSecrets() {
 
         return chiffresSecrets;
     }
@@ -143,5 +142,6 @@ public class CombinaisonSecrete {
 
         return couleursSecretes;
     }
+
 }
 

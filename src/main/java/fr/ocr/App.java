@@ -1,6 +1,7 @@
 package fr.ocr;
 
-import fr.ocr.mastermind.CombinaisonSecrete;
+import fr.ocr.mastermind.FabricationSecret;
+import fr.ocr.mastermind.jeuMM;
 import fr.ocr.modeconsole.Libelles.LibellesMenuPrincipal;
 import fr.ocr.modeconsole.Libelles.LibellesMenuSecondaire;
 import fr.ocr.modeconsole.MenuPrincipal;
@@ -71,6 +72,7 @@ public class App {
                                 logger.info(String.format("%s du jeu %s", ch_Sec.toString(), ch_Sup.toString()));
                                 if (ch_Sup.equals(CHOISIR_MASTERMIND)) {
                                     menu_secondaire.majLigneEtat(String.format("%s - %s", ch_Sup.toString(), VoirInfoCodeSecret()));
+                                    jeuMM jeuMM= new jeuMM();
                                 } else {
                                     menu_secondaire.majLigneEtat(String.format("%s du jeu %s", ch_Sec.toString(), ch_Sup.toString()));
                                 }
@@ -134,7 +136,7 @@ public class App {
 
     private static String VoirInfoCodeSecret() throws AppExceptions {
 
-        CombinaisonSecrete combinaisonSecrete = new CombinaisonSecrete();
+        FabricationSecret fabricationSecret = new FabricationSecret();
         CouleursMastermind[] toutes = CouleursMastermind.values();
         StringBuilder s = new StringBuilder(4096);
         for (CouleursMastermind x : toutes) {
@@ -142,8 +144,8 @@ public class App {
         }
         logger.info("Toutes le couleurs = " + s.substring(0, s.lastIndexOf(",")));
 
-        ArrayList<Byte> arrayList = combinaisonSecrete.getChiffresSecrets();
-        CouleursMastermind[] ligneATrouver = combinaisonSecrete.getCouleursSecretes();
+        ArrayList<Integer> arrayList = fabricationSecret.getChiffresSecrets();
+        CouleursMastermind[] ligneATrouver = fabricationSecret.getCouleursSecretes();
 
         int tailleStringB = s.length();
         s.delete(0, tailleStringB - 1);
