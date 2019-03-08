@@ -27,6 +27,12 @@
     </repositories>
 	
   <dependencies>
+      <!-- https://mvnrepository.com/artifact/args4j/args4j -->
+      <dependency>
+          <groupId>args4j</groupId>
+          <artifactId>args4j</artifactId>
+          <version>2.33</version>
+      </dependency>
 
     <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
     <dependency>
