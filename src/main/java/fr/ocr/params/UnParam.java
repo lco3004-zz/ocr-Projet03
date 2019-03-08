@@ -1,44 +1,43 @@
 package fr.ocr.params;
 
- public class UnParam<T extends Object> {
+public class UnParam<T> {
 
     private T valeurDefaut;
+    private String typeParam;
+    private Number valeurMin;
+    private Number valeurMax;
+
+    public UnParam(T valdef, String type) {
+
+        typeParam = type;
+        valeurDefaut = valdef;
+    }
+
+    public UnParam(T valdef, String type, Integer valMin, Integer valMax) {
+
+        typeParam = type;
+        valeurDefaut = valdef;
+        valeurMin = valMin;
+        valeurMax = valMax;
+    }
 
     public T getValeurDefaut() {
         return valeurDefaut;
     }
 
-    private String typeParam;
-
-     String getTypeParam() {
+    String getTypeParam() {
         return typeParam;
     }
 
-    private Number valeurMin;
-
-     Number getValeurMax() {
+    Number getValeurMax() {
         return valeurMax;
     }
 
-    private  Number valeurMax;
-
-     Number getValeurMin() {
+    Number getValeurMin() {
         return valeurMin;
     }
 
-    public  UnParam  (T valdef, String type) {
-
-        typeParam = type;
-        valeurDefaut = valdef;
-    }
-    public  UnParam  (T valdef,String type, Integer valMin, Integer valMax) {
-
-        typeParam = type;
-        valeurDefaut = valdef;
-        valeurMin =valMin;
-        valeurMax = valMax;
-    }
-    public UnParam <T>  getUnParam () {
+    public UnParam<T> getUnParam() {
         return this;
     }
 }

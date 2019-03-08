@@ -1,7 +1,7 @@
 package fr.ocr.modeconsole;
 
 import fr.ocr.modeconsole.Libelles.LibellesMenuPrincipal;
-import fr.ocr.utiles.ApplicationExceptions;
+import fr.ocr.utiles.AppExceptions;
 
 import java.util.Scanner;
 
@@ -10,9 +10,9 @@ import static fr.ocr.utiles.Logs.logger;
 import static fr.ocr.utiles.Messages.ErreurMessages.PARAM_INCONNU;
 
 /**
- *  Menu principal de l'application - selection du jeux
- *
- *  hérite de la class Menu qui se charge du comportement d'un menu (afffichage, saisie)
+ * Menu principal de l'application - selection du jeux
+ * <p>
+ * hérite de la class Menu qui se charge du comportement d'un menu (afffichage, saisie)
  */
 public class MenuPrincipal extends Menu<LibellesMenuPrincipal> {
 
@@ -25,32 +25,32 @@ public class MenuPrincipal extends Menu<LibellesMenuPrincipal> {
      */
     public MenuPrincipal(Scanner sc) {
 
-        super(LibellesMenuPrincipal.values(),"[1-2 Q q]",LIGNE_ETAT,sc);
+        super(LibellesMenuPrincipal.values(), "[1-2 Q q]", LIGNE_ETAT, sc);
 
         Character c;
 
-        for (LibellesMenuPrincipal libellesMenu_principal: LibellesMenuPrincipal.values()) {
+        for (LibellesMenuPrincipal libellesMenu_principal : LibellesMenuPrincipal.values()) {
             switch (libellesMenu_principal) {
                 case TITRE:
-                    addLigneMenu(TITRE,"OCR-Projet03 - Menu Principal");
+                    addLigneMenu(TITRE, "OCR-Projet03 - Menu Principal");
                     break;
                 case CHOISIR_MASTERMIND:
                     c = '1';
-                    addLigneMenu(CHOISIR_MASTERMIND,String.format("    %c -> JOUER au MASTERMIND",c),c);
+                    addLigneMenu(CHOISIR_MASTERMIND, String.format("    %c -> JOUER au MASTERMIND", c), c);
                     break;
                 case CHOISIR_PLUS_MOINS:
                     c = '2';
-                    addLigneMenu(CHOISIR_PLUS_MOINS,String.format("    %c -> JOUER au PLUSMOINS",c),c);
+                    addLigneMenu(CHOISIR_PLUS_MOINS, String.format("    %c -> JOUER au PLUSMOINS", c), c);
                     break;
                 case QUITTER:
                     c = Libelles.CharactersEscape.Q.toString().charAt(0);
-                    addLigneMenu(QUITTER,String.format("    %c -> QUITTER",c),c);
+                    addLigneMenu(QUITTER, String.format("    %c -> QUITTER", c), c);
                     break;
                 case LIGNE_ETAT:
-                    addLigneMenu(LIGNE_ETAT,"[-- pgm prêt--]\n");
+                    addLigneMenu(LIGNE_ETAT, "[-- pgm prêt--]\n");
                     break;
                 case SAISIR_CHOIX:
-                    addLigneMenu(SAISIR_CHOIX,String.format("%s : ", "Votre Choix "));
+                    addLigneMenu(SAISIR_CHOIX, String.format("%s : ", "Votre Choix "));
                     break;
                 default:
                     logger.error(PARAM_INCONNU.getMessageErreur());
@@ -59,13 +59,13 @@ public class MenuPrincipal extends Menu<LibellesMenuPrincipal> {
     }
 
     /**
+     * @return instance d'une classe de LibellesMenuPrincipal qui correspond à  l'action à réaliser
+     * 'i.e : QUITTER, JOUER ...)
      *
-     * @return  instance d'une classe de LibellesMenuPrincipal qui correspond à  l'action à réaliser
-     *  'i.e : QUITTER, JOUER ...)
-     * @throws ApplicationExceptions : sur erreur non gérée
+     * @throws AppExceptions : sur erreur non gérée
      */
     @Override
-    public LibellesMenuPrincipal RunMenu() throws ApplicationExceptions {
-        return  super.RunMenu();
+    public LibellesMenuPrincipal RunMenu() throws AppExceptions {
+        return super.RunMenu();
     }
 }

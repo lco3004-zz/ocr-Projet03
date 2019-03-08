@@ -1,7 +1,7 @@
 package fr.ocr.modeconsole;
 
 import fr.ocr.modeconsole.Libelles.LibellesMenuSecondaire;
-import fr.ocr.utiles.ApplicationExceptions;
+import fr.ocr.utiles.AppExceptions;
 
 import java.util.Scanner;
 
@@ -13,50 +13,50 @@ public class MenuSecondaire extends Menu<LibellesMenuSecondaire> {
 
     public MenuSecondaire(String titre, Scanner sc) {
 
-        super(LibellesMenuSecondaire.values(),"[1-3 R r V v Q q]",LIGNE_ETAT,sc);
+        super(LibellesMenuSecondaire.values(), "[1-3 R r V v Q q]", LIGNE_ETAT, sc);
 
         Character c;
-        for (LibellesMenuSecondaire libellesMenu_secondaire: LibellesMenuSecondaire.values()) {
+        for (LibellesMenuSecondaire libellesMenu_secondaire : LibellesMenuSecondaire.values()) {
             switch (libellesMenu_secondaire) {
 
                 case TITRE:
-                    addLigneMenu(TITRE,titre);
+                    addLigneMenu(TITRE, titre);
                     break;
                 case JEUX:
-                    addLigneMenu(JEUX,String.format("    %s : ","MODE de JEUX "));
+                    addLigneMenu(JEUX, String.format("    %s : ", "MODE de JEUX "));
                     break;
                 case MODE_CHALLENGER:
                     c = '1';
-                    addLigneMenu(MODE_CHALLENGER,String.format("        %c -> MODE_CHALLENGER",c),c);
+                    addLigneMenu(MODE_CHALLENGER, String.format("        %c -> MODE_CHALLENGER", c), c);
 
                     break;
                 case MODE_DEFENSEUR:
                     c = '2';
-                    addLigneMenu(MODE_DEFENSEUR,String.format("        %c -> MODE_DEFENSEUR",c),c);
+                    addLigneMenu(MODE_DEFENSEUR, String.format("        %c -> MODE_DEFENSEUR", c), c);
 
                     break;
                 case MODE_DUEL:
                     c = '3';
-                    addLigneMenu(MODE_DUEL,String.format("        %c -> MODE_DUEL",c),c);
+                    addLigneMenu(MODE_DUEL, String.format("        %c -> MODE_DUEL", c), c);
 
                     break;
                 case RETOUR:
                     c = Libelles.CharactersEscape.R.toString().charAt(0);
-                    addLigneMenu(RETOUR,String.format("    %c -> RETOUR Menu Principal",c),c);
+                    addLigneMenu(RETOUR, String.format("    %c -> RETOUR Menu Principal", c), c);
                     break;
                 case LOGGER_PARAMETRES:
                     c = 'V';
-                    addLigneMenu(LOGGER_PARAMETRES,String.format("    %c -> LOGGER les Paramètres",c),c);
+                    addLigneMenu(LOGGER_PARAMETRES, String.format("    %c -> LOGGER les Paramètres", c), c);
                     break;
                 case QUITTER:
                     c = Libelles.CharactersEscape.Q.toString().charAt(0);
-                    addLigneMenu(QUITTER,String.format("    %c -> QUITTER",c),c);
+                    addLigneMenu(QUITTER, String.format("    %c -> QUITTER", c), c);
                     break;
                 case LIGNE_ETAT:
-                    addLigneMenu(LIGNE_ETAT,"[                 ]");
+                    addLigneMenu(LIGNE_ETAT, "[                 ]");
                     break;
                 case SAISIR_CHOIX:
-                    addLigneMenu(SAISIR_CHOIX,String.format("%s : ", "Votre Choix "));
+                    addLigneMenu(SAISIR_CHOIX, String.format("%s : ", "Votre Choix "));
                     break;
                 default:
                     logger.error(PARAM_INCONNU.getMessageErreur());
@@ -64,14 +64,15 @@ public class MenuSecondaire extends Menu<LibellesMenuSecondaire> {
         }
 
     }
+
     /**
+     * @return instance d'une classe de LibellesMenuPrincipal qui correspond à  l'action à réaliser
+     * 'i.e : QUITTER, JOUER ...)
      *
-     * @return  instance d'une classe de LibellesMenuPrincipal qui correspond à  l'action à réaliser
-     *  'i.e : QUITTER, JOUER ...)
-     * @throws ApplicationExceptions : sur erreur non gérée
+     * @throws AppExceptions : sur erreur non gérée
      */
     @Override
-    public LibellesMenuSecondaire RunMenu() throws ApplicationExceptions {
-        return   super.RunMenu();
+    public LibellesMenuSecondaire RunMenu() throws AppExceptions {
+        return super.RunMenu();
     }
 }

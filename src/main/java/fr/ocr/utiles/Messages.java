@@ -2,11 +2,13 @@ package fr.ocr.utiles;
 
 public enum Messages {
     ;
+
     public enum DebugMessages {
         X("");
         private String messageDebug;
+
         DebugMessages(String s) {
-            messageDebug =s;
+            messageDebug = s;
         }
 
         public String getMessageDebug() {
@@ -22,12 +24,13 @@ public enum Messages {
         MODE_IO_INCONNU("mode IO inconnu ou incompatible avec constructeur"),
         PARAMETRAGE_ILLISIBLE("Impossible de lire le fichier parametre (parametres par defaut) - "),
         ECRITURE_PARAMETRES_IMPOSSIBLE("Ecriture dans fichier Parametre impossible - "),
-        SORTIE_PGM_SUR_ERREURNONGEREE ("Exception inattendue - fin pgm"),
+        SORTIE_PGM_SUR_ERREURNONGEREE("Exception inattendue - fin pgm"),
         ERREUR_GENERIC("Ne doit pas etre utilisée!");
 
         private String messageErreur;
+
         ErreurMessages(String s) {
-            messageErreur =s;
+            messageErreur = s;
         }
 
         public String getMessageErreur() {
@@ -45,8 +48,9 @@ public enum Messages {
         REMPLACEMENT_PAR_VALEUR_DEFAUT("Remplacement par la valeur par défaut =  ");
 
         private String messageInformation;
+
         InfosMessages(String s) {
-            messageInformation =s;
+            messageInformation = s;
         }
 
         public String getMessageInfos() {

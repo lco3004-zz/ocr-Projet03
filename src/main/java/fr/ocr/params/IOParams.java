@@ -1,11 +1,3 @@
-
-/**
- * Lecture /ecriture d'un fichier Property dont le nom est passé en parametres du constructeur
- * Si le fichier n'existe pas, il est créé avec les valeurs par défaut des parametres.
- * IOParams est abstraite car un fichier property se distingue par les properties
- * qu'il contient : l'implémentation de la méthode getParamDefaut dépend du jeu concerné (mastermind ou jeu
- * plus/moins, mais aussi config des menus de l'applicaiton
- */
 package fr.ocr.params;
 
 import java.io.FileInputStream;
@@ -19,20 +11,23 @@ import static fr.ocr.utiles.Messages.ErreurMessages.PARAMETRAGE_ILLISIBLE;
 import static fr.ocr.utiles.Messages.InfosMessages.CREATION_FICHIER_PARAMETRE;
 
 /**
- *
+ * Lecture /ecriture d'un fichier Property dont le nom est passé en parametres du constructeur
+ * Si le fichier n'existe pas, il est créé avec les valeurs par défaut des parametres.
+ * IOParams est abstraite car un fichier property se distingue par les properties
+ * qu'il contient : l'implémentation de la méthode getParamDefaut dépend du jeu concerné (mastermind ou jeu
+ * plus/moins, mais aussi config des menus de l'applicaiton
  */
- public abstract  class IOParams {
+public abstract class IOParams {
 
     private Properties listeParams; //liste des propriétés lue/ecrite dans le fichier property
     private String nomFichierParams; // hemin/nom du fichier property
 
     /**
-     *
-     * @param  nomFichierParams , nom du fichier de type property
+     * @param nomFichierParams , nom du fichier de type property
      */
     protected IOParams(String nomFichierParams) {
         listeParams = new Properties();
-        this.nomFichierParams= nomFichierParams;
+        this.nomFichierParams = nomFichierParams;
     }
 
     /**
@@ -43,17 +38,17 @@ import static fr.ocr.utiles.Messages.InfosMessages.CREATION_FICHIER_PARAMETRE;
      *
      * @return objet IOParams
      */
-    protected IOParams lireParametre()  {
+    protected IOParams lireParametre() {
         try {
             FileInputStream fileInputStream = new FileInputStream(nomFichierParams);
             try {
                 listeParams.load(fileInputStream);
-            }catch (Exception e1){
-                logger.error(PARAMETRAGE_ILLISIBLE.getMessageErreur() +" "+ nomFichierParams);
+            } catch (Exception e1) {
+                logger.error(PARAMETRAGE_ILLISIBLE.getMessageErreur() + " " + nomFichierParams);
                 getParamDefaut(listeParams);
             }
-        }catch (IOException e2) {
-            logger.info(CREATION_FICHIER_PARAMETRE.getMessageInfos() +" "+ nomFichierParams);
+        } catch (IOException e2) {
+            logger.info(CREATION_FICHIER_PARAMETRE.getMessageInfos() + " " + nomFichierParams);
             getParamDefaut(listeParams);
             ecrireParametre();
         }
@@ -66,31 +61,32 @@ import static fr.ocr.utiles.Messages.InfosMessages.CREATION_FICHIER_PARAMETRE;
      *
      * @return objet IOParams
      */
-     IOParams ecrireParametre () {
+    private IOParams ecrireParametre() {
         try {
-            FileOutputStream fileOutputStream= new FileOutputStream(nomFichierParams);
+            FileOutputStream fileOutputStream = new FileOutputStream(nomFichierParams);
 
-                listeParams.store(fileOutputStream,nomFichierParams);
+            listeParams.store(fileOutputStream, nomFichierParams);
 
-        }catch (IOException e2) {
-            logger.error(ECRITURE_PARAMETRES_IMPOSSIBLE.getMessageErreur() + " "+nomFichierParams );
+        } catch (IOException e2) {
+            logger.error(ECRITURE_PARAMETRES_IMPOSSIBLE.getMessageErreur() + " " + nomFichierParams);
         }
         return this;
     }
 
     /**
-     *méthode abstraite car le jeu de paramètres concernés n'est pas connu ici
+     * méthode abstraite car le jeu de paramètres concernés n'est pas connu ici
      * peut être (e.g) :mastermind, jeux +/- , params du mode d'afficahge COnsole
      *
      * @param listeParams properties, charge la collection "Properties" avec valeur par défaut des paramètres
      */
-    protected abstract  void getParamDefaut(Properties listeParams) ;
+    protected abstract void getParamDefaut(Properties listeParams);
 
     /**
      * getter
+     *
      * @return Properties , collection de type properties , listeParams
      */
-     Properties getListeParams() {
+    Properties getListeParams() {
         return listeParams;
     }
 }

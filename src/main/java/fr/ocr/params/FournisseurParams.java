@@ -2,7 +2,7 @@ package fr.ocr.params;
 
 import fr.ocr.params.mastermind.GroupParamsMM;
 import fr.ocr.params.mastermind.IOParamsMM;
-import fr.ocr.utiles.ApplicationExceptions;
+import fr.ocr.utiles.AppExceptions;
 
 import java.util.Locale;
 import java.util.Properties;
@@ -19,59 +19,53 @@ public final class FournisseurParams {
 
         logger.debug(LANCEMENT_GESTION_DES_PARAMETRES.getMessageInfos());
 
-        IOParamsMM parametrageMasterMind=new IOParamsMM(FICHIER_PARAM_MASTER_MIND.getNomFichier());
-        Properties parametreMasterMindLu= parametrageMasterMind.lireParametre().getListeParams();
+        IOParamsMM parametrageMasterMind = new IOParamsMM(FICHIER_PARAM_MASTER_MIND.getNomFichier());
+        Properties parametreMasterMindLu = parametrageMasterMind.lireParametre().getListeParams();
 
 
         Object retVal;
         GroupParamsMM groupParamsMM = GroupParamsMM.valueOf(nomDuParamtreARecuperer.toString());
         try {
             String leTypeIci = Integer.class.getSimpleName();
-            if (groupParamsMM.getUnParam().getTypeParam().equals(Integer.class.getSimpleName())){
+            if (groupParamsMM.getUnParam().getTypeParam().equals(Integer.class.getSimpleName())) {
                 Integer valLue = Integer.valueOf(parametreMasterMindLu.getProperty(groupParamsMM.name()));
-                Integer borneMin =(Integer) groupParamsMM.getUnParam().getValeurMin();
-                Integer borneMax =(Integer) groupParamsMM.getUnParam().getValeurMax();
-                if ( valLue >= borneMin  && valLue <= borneMax) {
+                Integer borneMin = (Integer) groupParamsMM.getUnParam().getValeurMin();
+                Integer borneMax = (Integer) groupParamsMM.getUnParam().getValeurMax();
+                if (valLue >= borneMin && valLue <= borneMax) {
                     retVal = valLue;
+                } else {
+                    throw new AppExceptions(VALEUR_PARAM_INCORRECT);
                 }
-                else {
-                    throw new ApplicationExceptions(VALEUR_PARAM_INCORRECT);
-                }
-            }
-            else if (groupParamsMM.getUnParam().getTypeParam().equals( Boolean.class.getSimpleName())) {
+            } else if (groupParamsMM.getUnParam().getTypeParam().equals(Boolean.class.getSimpleName())) {
                 String valLue = parametreMasterMindLu.getProperty(groupParamsMM.name());
 
                 //valLue = valLue.toUpperCase(Locale.forLanguageTag("fr")).trim();
 
-                String valeurVraie = String.format("%b",true).toUpperCase(Locale.forLanguageTag("fr"));
-                String valeurFausse = String.format("%b",false).toUpperCase(Locale.forLanguageTag("fr"));
+                String valeurVraie = String.format("%b", true).toUpperCase(Locale.forLanguageTag("fr"));
+                String valeurFausse = String.format("%b", false).toUpperCase(Locale.forLanguageTag("fr"));
 
                 if (valLue.equalsIgnoreCase(valeurFausse) || valLue.equalsIgnoreCase(valeurVraie)) {
                     retVal = Boolean.valueOf(parametreMasterMindLu.getProperty(groupParamsMM.name()));
+                } else {
+                    throw new AppExceptions(VALEUR_PARAM_INCORRECT);
                 }
-                else {
-                    throw new ApplicationExceptions(VALEUR_PARAM_INCORRECT);
-                }
-            }
-            else {
+            } else {
                 logger.error(TYPE_PARAM_INCORRECT.getMessageErreur());
-                retVal =null;
+                retVal = null;
             }
-        }catch ( Exception e) {
+        } catch (Exception e) {
             retVal = groupParamsMM.getUnParam().getValeurDefaut();
-            if  (groupParamsMM.getUnParam().getTypeParam().equals(Boolean.class.getSimpleName())) {
-                logger.error(REMPLACEMENT_PAR_VALEUR_DEFAUT.getMessageInfos()+ ((Boolean) retVal).toString());
-            }
-            else if (groupParamsMM.getUnParam().getTypeParam().equals(Integer.class.getSimpleName()) ) {
-                logger.error(REMPLACEMENT_PAR_VALEUR_DEFAUT.getMessageInfos()+ ((Integer) retVal).toString());
-            }
-            else  {
-                logger.error(REMPLACEMENT_PAR_VALEUR_DEFAUT.getMessageInfos()+ VALEUR_PARAM_INCORRECT.getMessageErreur());
+            if (groupParamsMM.getUnParam().getTypeParam().equals(Boolean.class.getSimpleName())) {
+                logger.error(REMPLACEMENT_PAR_VALEUR_DEFAUT.getMessageInfos() + ((Boolean) retVal).toString());
+            } else if (groupParamsMM.getUnParam().getTypeParam().equals(Integer.class.getSimpleName())) {
+                logger.error(REMPLACEMENT_PAR_VALEUR_DEFAUT.getMessageInfos() + ((Integer) retVal).toString());
+            } else {
+                logger.error(REMPLACEMENT_PAR_VALEUR_DEFAUT.getMessageInfos() + VALEUR_PARAM_INCORRECT.getMessageErreur());
             }
         }
 
         logger.debug(FIN_NORMALE_GESTION_DES_PARAMETRES.getMessageInfos());
 
-        return  retVal;
+        return retVal;
     }
 }
