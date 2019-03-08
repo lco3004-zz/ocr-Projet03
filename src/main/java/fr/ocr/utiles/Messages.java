@@ -41,9 +41,9 @@ public enum Messages {
     public enum InfosMessages {
         LANCEMENT_APPLICATION("Lancement Application "),
         FIN_NORMALE_APPLICATION("Fin normale Application"),
-        LANCEMENT_GESTION_DES_PARAMETRES("Lancement FournisseurParams"),
+        LANCEMENT_GESTION_DES_PARAMETRES("Lancement LireParametres"),
         CREATION_FICHIER_PARAMETRE("Creation du fichier Parametres - "),
-        FIN_NORMALE_GESTION_DES_PARAMETRES("Fin Normale FournisseurParams"),
+        FIN_NORMALE_GESTION_DES_PARAMETRES("Fin Normale LireParametres"),
         CTRL_C("interuption programme par CTRL-C"),
         REMPLACEMENT_PAR_VALEUR_DEFAUT("Remplacement par la valeur par défaut =  ");
 

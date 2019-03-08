@@ -1,4 +1,4 @@
-package fr.ocr.params.mastermind;
+package fr.ocr.params;
 
 public enum CouleursMastermind {
     AUBERGINE((byte) 0),

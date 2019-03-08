@@ -1,21 +1,23 @@
-package fr.ocr.params.mastermind;
+package fr.ocr.params;
 
-public enum GroupParamsMM {
+
+public enum Parametres {
     NOMBRE_DE_POSITIONS(4, 3, 6),
     NOMBRE_DE_COULEURS(CouleursMastermind.values().length, 6, CouleursMastermind.values().length),
     NOMBRE_MAXI_DE_BOUCLES_RANDOMIZE(100, 10, 500),
     NOMBRE_D_ESSAIS(12, 8, 12),
     DOUBLON_AUTORISE(false),
-    CASE_VIDE_AUTORISE(false);
+    CASE_VIDE_AUTORISE(false),
+    MODE_DEBUG(false);
 
 
     private UnParam unParam;
 
-    GroupParamsMM(Integer valdef, Integer valmin, Integer valmax) {
+    Parametres(Integer valdef, Integer valmin, Integer valmax) {
         unParam = new UnParam<>(valdef, Integer.class.getSimpleName(), valmin, valmax);
     }
 
-    GroupParamsMM(Boolean valdef) {
+    Parametres(Boolean valdef) {
         unParam = new UnParam<>(valdef, Boolean.class.getSimpleName());
     }
 

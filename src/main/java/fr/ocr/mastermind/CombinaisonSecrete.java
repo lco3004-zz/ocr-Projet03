@@ -1,15 +1,15 @@
 package fr.ocr.mastermind;
 
 
-import fr.ocr.params.mastermind.CouleursMastermind;
-import fr.ocr.params.mastermind.GroupParamsMM;
+import fr.ocr.params.CouleursMastermind;
 import fr.ocr.utiles.AppExceptions;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
-import static fr.ocr.params.FournisseurParams.getParam;
+import static fr.ocr.params.LireParametres.getParam;
+import static fr.ocr.params.Parametres.*;
 import static fr.ocr.utiles.Messages.ErreurMessages.TYPE_PARAM_INCORRECT;
 
 
@@ -64,28 +64,28 @@ public class CombinaisonSecrete {
 
         DecimalFormat df = new DecimalFormat("#");
 
-        tmpRetour = getParam(GroupParamsMM.NOMBRE_DE_POSITIONS);
+        tmpRetour = getParam(NOMBRE_DE_POSITIONS);
         if (tmpRetour instanceof Integer) {
             nombreDePositions = (Integer) tmpRetour;
         } else {
             throw new AppExceptions(TYPE_PARAM_INCORRECT);
         }
 
-        tmpRetour = getParam(GroupParamsMM.NOMBRE_DE_COULEURS);
+        tmpRetour = getParam(NOMBRE_DE_COULEURS);
         if (tmpRetour instanceof Integer) {
             nombreDeCouleurs = (Integer) tmpRetour;
         } else {
             throw new AppExceptions(TYPE_PARAM_INCORRECT);
         }
 
-        tmpRetour = getParam(GroupParamsMM.DOUBLON_AUTORISE);
+        tmpRetour = getParam(DOUBLON_AUTORISE);
         if (tmpRetour instanceof Boolean) {
             doublonAutorise = (Boolean) tmpRetour;
         } else {
             throw new AppExceptions(TYPE_PARAM_INCORRECT);
         }
 
-        tmpRetour = getParam(GroupParamsMM.NOMBRE_MAXI_DE_BOUCLES_RANDOMIZE);
+        tmpRetour = getParam(NOMBRE_MAXI_DE_BOUCLES_RANDOMIZE);
 
         if (tmpRetour instanceof Integer) {
             nombreDebBoucleMax = (Integer) tmpRetour;

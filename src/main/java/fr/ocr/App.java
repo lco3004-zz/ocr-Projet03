@@ -5,8 +5,8 @@ import fr.ocr.modeconsole.Libelles.LibellesMenuPrincipal;
 import fr.ocr.modeconsole.Libelles.LibellesMenuSecondaire;
 import fr.ocr.modeconsole.MenuPrincipal;
 import fr.ocr.modeconsole.MenuSecondaire;
-import fr.ocr.params.mastermind.CouleursMastermind;
-import fr.ocr.params.mastermind.GroupParamsMM;
+import fr.ocr.params.CouleursMastermind;
+import fr.ocr.params.Parametres;
 import fr.ocr.utiles.AppExceptions;
 import fr.ocr.utiles.Constantes.VersionPGM;
 
@@ -15,7 +15,7 @@ import java.util.Scanner;
 
 import static fr.ocr.modeconsole.Libelles.LibellesJeux;
 import static fr.ocr.modeconsole.Libelles.LibellesMenuPrincipal.CHOISIR_MASTERMIND;
-import static fr.ocr.params.FournisseurParams.getParam;
+import static fr.ocr.params.LireParametres.getParam;
 import static fr.ocr.utiles.Logs.getInstance;
 import static fr.ocr.utiles.Logs.logger;
 import static fr.ocr.utiles.Messages.ErreurMessages.PARAM_INCONNU;
@@ -118,7 +118,7 @@ public class App {
 
     private static void logParamtreMM() throws AppExceptions {
         Object tmpRetour;
-        for (GroupParamsMM x : GroupParamsMM.values()) {
+        for (Parametres x : Parametres.values()) {
             tmpRetour = getParam(x);
             if (tmpRetour instanceof Integer) {
                 logger.info(String.format("%s = %d", x.toString(), tmpRetour));
