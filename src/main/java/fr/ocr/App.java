@@ -72,7 +72,6 @@ public class App {
                                 logger.info(String.format("%s du jeu %s", ch_Sec.toString(), ch_Sup.toString()));
                                 if (ch_Sup.equals(CHOISIR_MASTERMIND)) {
                                     menu_secondaire.majLigneEtat(String.format("%s - %s", ch_Sup.toString(), VoirInfoCodeSecret()));
-                                    jeuMM jeuMM= new jeuMM();
                                 } else {
                                     menu_secondaire.majLigneEtat(String.format("%s du jeu %s", ch_Sec.toString(), ch_Sup.toString()));
                                 }
@@ -134,8 +133,7 @@ public class App {
 
     }
 
-    private static String VoirInfoCodeSecret() throws AppExceptions {
-
+    private static String VoirInfoCodeSecret() {
         FabricationSecret fabricationSecret = new FabricationSecret();
         CouleursMastermind[] toutes = CouleursMastermind.values();
         StringBuilder s = new StringBuilder(4096);

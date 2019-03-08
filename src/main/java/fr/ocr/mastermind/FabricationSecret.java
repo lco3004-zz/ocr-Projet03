@@ -53,7 +53,6 @@ public class FabricationSecret {
     private CouleursMastermind[] couleursSecretes;
 
     /**
-     *
      * @param chiffresSecretsFournis la table des chiffes secrets est fourni par utilisateur
      *                               cas où c'est l'ordinateur qui doit trouver la ligne secrete
      * @throws AppExceptions incohérence parametre ou tableau des chiffres passé en parametre
@@ -74,10 +73,8 @@ public class FabricationSecret {
      * la table des chiffes secrets est à construire - cas où c'est l'odinateur qui propose la ligne secrete
      * cas où c'est le joueur qui doit deviner la ligne secrete, ou bien en mode duel
      *
-     * @throws AppExceptions . Exception levée sur erreur cohérence entre
-     *                       le type de paramètre demandé et le type lu depuis la source des parametres (fichier paramètre)
      */
-    public FabricationSecret() throws AppExceptions {
+    public FabricationSecret()  {
 
         Object tmpRetour;
 
@@ -92,7 +89,7 @@ public class FabricationSecret {
         df.setRoundingMode(RoundingMode.HALF_UP);
 
         for (int placeOccupee = 0, nbreDeBoucles = 0; (placeOccupee < nombreDePositions) && (nbreDeBoucles < nombreDebBoucleMax); nbreDeBoucles++) {
-            valeurAleatoire =  (Integer.parseInt(df.format(Math.random() * 100)) % nombreDeCouleurs);
+            valeurAleatoire = (Integer.parseInt(df.format(Math.random() * 100)) % nombreDeCouleurs);
 
             if (!doublonAutorise) {
                 if (!chiffresSecrets.contains(valeurAleatoire)) {
@@ -121,12 +118,13 @@ public class FabricationSecret {
      * renseigne la ligne secrete des couleurs (bijection couleurs / chiffres)
      */
     private void BijecterCouleurChiffres() {
-         couleursSecretes = new CouleursMastermind[nombreDePositions];
-         int i = 0;
-         for (int v : chiffresSecrets) {
-             couleursSecretes[i++] = CouleursMastermind.values()[v];
-         }
-     }
+        couleursSecretes = new CouleursMastermind[nombreDePositions];
+        int i = 0;
+        for (int v : chiffresSecrets) {
+            couleursSecretes[i++] = CouleursMastermind.values()[v];
+        }
+    }
+
     /**
      * @return ArrayList<Byte> Tableau des chiffres de la combinaisons secrete
      */
