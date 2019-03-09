@@ -1,4 +1,5 @@
-package fr.ocr.mastermind;
+package fr.ocr.modeconsole;
+
 
 import fr.ocr.params.CouleursMastermind;
 
@@ -7,8 +8,54 @@ import java.util.ArrayList;
 import static fr.ocr.params.LireParametres.getParam;
 import static fr.ocr.params.Parametres.*;
 
+/**
+ *
+ */
+public class IhmMasterMind implements ConstLignesMM {
 
-public class LigneJeu implements TypeDesLignes{
+
+    private Boolean doublonAutorise = (Boolean) getParam(DOUBLON_AUTORISE);
+    private Integer nombreDePositions = (Integer) getParam(NOMBRE_DE_POSITIONS);
+    private Integer nombreDeCouleurs = (Integer) getParam(NOMBRE_DE_COULEURS);
+    private Boolean modeDebug = (Boolean)getParam(MODE_DEBUG);
+    private Integer nombreDeEssais =(Integer)getParam(NOMBRE_D_ESSAIS);
+
+    private ArrayList<Integer> compositionChiffresSecrets;
+    private  CouleursMastermind[]  compositionCouleursSecretes;
+
+    // lignes MM affichees par l'ihm. +5 pour les lignes d'infos (titre, ...)
+    LigneJeuMM [] lignesJeuMM = new LigneJeuMM[nombreDeEssais + 5];
+    long indexLignesJeuMM = 0;
+
+    public IhmMasterMind(ArrayList<Integer> chiffresSecrets,
+                         CouleursMastermind[]  couleursSecretes) {
+
+        compositionCouleursSecretes = couleursSecretes;
+        compositionChiffresSecrets = chiffresSecrets;
+
+    }
+    public void runIhmMM() {
+
+    }
+}
+
+
+/**
+ *
+ */
+interface ConstLignesMM {
+    int TITRE =0;
+    int LIGNE_STATUS = 1;
+    int LIGNE_SECRETE = 2;
+    int LIGNE_PROPOSITION = 3;
+    int LIGNE_TOUTES_COULEURS = 4;
+    int LIGNE_DE_SAISIE = 5;
+}
+
+/**
+ *
+ */
+class LigneJeuMM implements ConstLignesMM {
 
     private ArrayList<Character> zoneProposition = new ArrayList(256);
     private ArrayList<Integer> ZoneEvaluation = new ArrayList(256);
@@ -28,7 +75,7 @@ public class LigneJeu implements TypeDesLignes{
     private Integer nombreDeCouleurs = (Integer) getParam(NOMBRE_DE_COULEURS);
 
 
-    public LigneJeu(CouleursMastermind[] secretCouleurs, ArrayList<Integer> secretChiffres, String rang, int typeligne) {
+    public LigneJeuMM(CouleursMastermind[] secretCouleurs, ArrayList<Integer> secretChiffres, String rang, int typeligne) {
         combinaisonChiffresSecrets = secretChiffres;
         combinaisonCouleursSecretes = secretCouleurs;
         rangDansTableJeu=rang;

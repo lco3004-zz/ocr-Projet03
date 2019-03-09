@@ -1,7 +1,6 @@
 package fr.ocr;
 
 import fr.ocr.mastermind.FabricationSecret;
-import fr.ocr.mastermind.jeuMM;
 import fr.ocr.modeconsole.Libelles.LibellesMenuPrincipal;
 import fr.ocr.modeconsole.Libelles.LibellesMenuSecondaire;
 import fr.ocr.modeconsole.MenuPrincipal;
