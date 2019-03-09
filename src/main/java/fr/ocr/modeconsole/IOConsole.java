@@ -55,7 +55,7 @@ public class IOConsole {
         affichage.Display();
 
         while (choix.equals("") && scanner.hasNext()) {
-
+            cRet = escapeChar;
             try {
                 try {
                     try {
