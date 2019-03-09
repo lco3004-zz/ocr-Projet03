@@ -2,7 +2,6 @@ package fr.ocr.modeconsole;
 
 import fr.ocr.utiles.AppExceptions;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -52,7 +51,7 @@ import static fr.ocr.utiles.Messages.InfosMessages.CTRL_C;
  * <p>
  * un objet LigneMenu qui correspond à une action de saisie ou une zone variable d'information a un selecteur null
  */
-class LigneMenu<T extends Enum> {
+class LigneMenu<T extends Enum>   {
     private String libelleLigne;
 
     private T referenceEnumLibelle;
@@ -87,28 +86,8 @@ class LigneMenu<T extends Enum> {
     void setLibelleLigne(String libelleLigne) {
         this.libelleLigne = libelleLigne;
     }
-}
 
-/*
- * efface l'afficage console . Clear ou Cls sont appellés selon le système
- * sur lequel le programme est exécuté
- */
-final class ClearScreen {
-    static void cls() {
-        try {
 
-            final String os = System.getProperty("os.name");
-
-            // la commande a exécuté par le shell windows "cmd qui appelle une autre cmd" est la seule
-            //qui fonctione (Windows 10 pro - insiders build 17134.523 27/08/2018
-            if (os.contains("Windows"))
-                new ProcessBuilder("cmd", "/c", "cmd.exe /c cls").inheritIO().start().waitFor();
-            else
-                Runtime.getRuntime().exec("clear");
-        } catch (InterruptedException | IOException e) {
-            System.out.println(e.getMessage());
-        }
-    }
 }
 
 /**
@@ -135,6 +114,8 @@ public abstract class Menu<T extends Enum> {
     // pour retrouver la statusbar dans le tableau des lignes de ligneMenu
     private T clefStatusBar;
 
+    private  DisplayMenu displayMenu ;
+
     /**
      * Constructeur Menu
      *
@@ -149,6 +130,7 @@ public abstract class Menu<T extends Enum> {
         enumsLibellesMenu = instancesLibelle;
         pattern_Menu = pattern;
         clefStatusBar = refStatusBar;
+        displayMenu = new DisplayMenu(lignesMenu);
     }
 
     /**
@@ -178,48 +160,6 @@ public abstract class Menu<T extends Enum> {
         }
     }
 
-    /*
-     * saisie clavier avec pattern
-     *
-     * retourne le caractère qui correspond à la saisie utilisateur (filtré par pattern )
-     */
-    private Character LectureClavier() {
-        patternChoix = Pattern.compile(pattern_Menu);
-        String choix = "";
-        ClearScreen.cls();
-        DisplayMenu();
-        while (choix.equals("") && scanner.hasNext()) {
-
-            try {
-                choix = scanner.next(patternChoix).toUpperCase();
-
-            } catch (InputMismatchException | StringIndexOutOfBoundsException e1) {
-                String tmp = scanner.next();
-                ClearScreen.cls();
-                DisplayMenu();
-            }
-        }
-        return choix.toUpperCase().charAt(0);
-    }
-
-    /*
-     * affichage écran des lignes du menu
-     * la dernière ligne est affichée sans retour chariot pour que la saisie clavier soit en regard de la ligne
-     * de saisie du choix
-     */
-    private void DisplayMenu() {
-        int j = 0;
-
-        for (LigneMenu<T> ligneMenu : lignesMenu) {
-
-            //si c'est la dernière ligne du menu, pas de CR/LF pour que la saisie soit sur la même ligne que l'affichage
-            if (lignesMenu.get(lignesMenu.size() - 1).equals(ligneMenu)) {
-                System.out.print(ligneMenu.getLibelle_Ligne());
-            } else {
-                System.out.println(ligneMenu.getLibelle_Ligne());
-            }
-        }
-    }
 
     /**
      * Recherche l'instance de LigneMenu dont le selecteur est égal au parametre codeRet
@@ -260,7 +200,7 @@ public abstract class Menu<T extends Enum> {
     public T RunMenu() throws AppExceptions {
         T enumActionChoisie;
         try {
-            enumActionChoisie = retrouveLigneMenu(LectureClavier());
+            enumActionChoisie = retrouveLigneMenu(IOConsole.LectureClavier(pattern_Menu,scanner,displayMenu));
         }
         //le CRL-C , I Presume
         catch (StringIndexOutOfBoundsException e1) {
@@ -283,6 +223,41 @@ public abstract class Menu<T extends Enum> {
     public void majLigneEtat(String s) {
         String modelStatusBar = "[-- " + s + " --]";
         statusBar.setLibelleLigne(modelStatusBar);
-        DisplayMenu();
+        displayMenu.Display();
+    }
+}
+
+/**
+ * affichage lignes du menus (une classe pour gestion du passage de methode en
+ * parametre
+ *
+ * @param <T> instances de Libelles....
+ */
+class DisplayMenu <T extends Enum> implements Affichage {
+
+    private ArrayList<LigneMenu<T>> lignesMenu;
+
+    public DisplayMenu(ArrayList<LigneMenu<T>> x) {
+        lignesMenu=x;
+    }
+
+    /*
+     * affichage écran des lignes du menu
+     * la dernière ligne est affichée sans retour chariot pour que la saisie clavier soit en regard de la ligne
+     * de saisie du choix
+     */
+    @Override
+    public void Display() {
+        int j = 0;
+
+        for (LigneMenu<T> ligneMenu : lignesMenu) {
+
+            //si c'est la dernière ligne du menu, pas de CR/LF pour que la saisie soit sur la même ligne que l'affichage
+            if (lignesMenu.get(lignesMenu.size() - 1).equals(ligneMenu)) {
+                System.out.print(ligneMenu.getLibelle_Ligne());
+            } else {
+                System.out.println(ligneMenu.getLibelle_Ligne());
+            }
+        }
     }
 }

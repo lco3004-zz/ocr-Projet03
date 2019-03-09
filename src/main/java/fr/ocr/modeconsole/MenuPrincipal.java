@@ -14,7 +14,7 @@ import static fr.ocr.utiles.Messages.ErreurMessages.PARAM_INCONNU;
  * <p>
  * hérite de la class Menu qui se charge du comportement d'un menu (afffichage, saisie)
  */
-public class MenuPrincipal extends Menu<LibellesMenuPrincipal> {
+public class MenuPrincipal extends Menu<LibellesMenuPrincipal>  {
 
     /**
      * construit le menu principal en fournissant les chaines de caractères à afficher,
@@ -68,4 +68,5 @@ public class MenuPrincipal extends Menu<LibellesMenuPrincipal> {
     public LibellesMenuPrincipal RunMenu() throws AppExceptions {
         return super.RunMenu();
     }
+
 }
