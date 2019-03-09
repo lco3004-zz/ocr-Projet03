@@ -7,6 +7,7 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
+import static fr.ocr.modeconsole.IOConsole.LectureClavier;
 import static fr.ocr.utiles.Logs.logger;
 import static fr.ocr.utiles.Messages.ErreurMessages.ERREUR_GENERIC;
 import static fr.ocr.utiles.Messages.InfosMessages.CTRL_C;
@@ -199,15 +200,12 @@ public abstract class Menu<T extends Enum> {
      */
     public T RunMenu() throws AppExceptions {
         T enumActionChoisie;
+
+        Character escapeChar = Libelles.CharactersEscape.Q.toString().charAt(0);
+
         try {
-            enumActionChoisie = retrouveLigneMenu(IOConsole.LectureClavier(pattern_Menu,scanner,displayMenu));
+            enumActionChoisie = retrouveLigneMenu(LectureClavier(pattern_Menu,scanner,displayMenu, escapeChar));
         }
-        //le CRL-C , I Presume
-        catch (StringIndexOutOfBoundsException e1) {
-            logger.info(CTRL_C);
-            enumActionChoisie = retrouveLigneMenu(Libelles.CharactersEscape.Q.toString().charAt(0));
-        }
-        //plantage et erreur non géréé
         catch (Exception e) {
             logger.error(String.format("%s %s ", ERREUR_GENERIC, e.getClass().getSimpleName()));
             throw new AppExceptions(ERREUR_GENERIC);

@@ -1,19 +1,25 @@
 package fr.ocr.modeconsole;
 
 import com.sun.org.apache.xpath.internal.functions.Function;
+import fr.ocr.utiles.AppExceptions;
 
 import java.io.IOException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
+import static fr.ocr.utiles.Logs.logger;
+import static fr.ocr.utiles.Messages.ErreurMessages.ERREUR_GENERIC;
+import static fr.ocr.utiles.Messages.InfosMessages.CTRL_C;
+
 public class IOConsole {
+
     /*
      * efface l'afficage console . Clear ou Cls sont appellés selon le système
      * sur lequel le programme est exécuté
      */
-    static final class ClearScreen {
-        static void cls() {
+    static public class ClearScreen {
+         public  static void cls() {
             try {
 
                 final String os = System.getProperty("os.name");
@@ -34,26 +40,43 @@ public class IOConsole {
      *
      * retourne le caractère qui correspond à la saisie utilisateur (filtré par pattern )
      */
-    static public Character LectureClavier(String pattern_Menu, Scanner scanner, Affichage affichage ) {
+     public static Character LectureClavier  (String pattern_Menu,
+                                             Scanner scanner,
+                                             Affichage affichage,
+                                             Character escapeChar) throws AppExceptions {
+
         Pattern patternChoix = Pattern.compile(pattern_Menu);
+
         String choix = "";
-        IOConsole.ClearScreen.cls();
+        Character cRet = escapeChar;
+
+         ClearScreen.cls();
 
         affichage.Display();
 
         while (choix.equals("") && scanner.hasNext()) {
 
             try {
-                choix = scanner.next(patternChoix).toUpperCase();
-
-            } catch (InputMismatchException | StringIndexOutOfBoundsException e1) {
-                String tmp = scanner.next();
-                IOConsole.ClearScreen.cls();
-                affichage.Display();
+                try {
+                    try {
+                        choix = scanner.next(patternChoix).toUpperCase();
+                        cRet =  choix.toUpperCase().charAt(0);
+                    }
+                    catch (InputMismatchException e1) {
+                        String tmp = scanner.next();
+                        ClearScreen.cls();
+                        affichage.Display();
+                    }
+                }
+                catch (StringIndexOutOfBoundsException e1) {
+                    logger.info(CTRL_C);
+                    choix = Character.toString(escapeChar);
+                }
+            } catch ( Exception e3) {
+                logger.error(String.format("%s %s ", ERREUR_GENERIC, e3.getClass().getSimpleName()));
+                throw new AppExceptions(ERREUR_GENERIC);
             }
         }
-        return choix.toUpperCase().charAt(0);
+        return cRet;
     }
-
-
 }
