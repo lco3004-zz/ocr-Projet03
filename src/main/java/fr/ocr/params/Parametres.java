@@ -1,6 +1,8 @@
 package fr.ocr.params;
 
 
+import fr.ocr.utiles.CouleursMastermind;
+
 public enum Parametres {
     NOMBRE_DE_POSITIONS(4, 3, 6),
     NOMBRE_DE_COULEURS(CouleursMastermind.values().length, 6, CouleursMastermind.values().length),

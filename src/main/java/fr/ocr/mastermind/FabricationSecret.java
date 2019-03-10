@@ -1,7 +1,7 @@
 package fr.ocr.mastermind;
 
 
-import fr.ocr.params.CouleursMastermind;
+import fr.ocr.utiles.CouleursMastermind;
 import fr.ocr.utiles.AppExceptions;
 
 import java.math.RoundingMode;
@@ -57,7 +57,7 @@ public class FabricationSecret {
      *                               cas où c'est l'ordinateur qui doit trouver la ligne secrete
      * @throws AppExceptions incohérence parametre ou tableau des chiffres passé en parametre
      */
-    public FabricationSecret(ArrayList<Integer> chiffresSecretsFournis) throws AppExceptions {
+    FabricationSecret(ArrayList<Integer> chiffresSecretsFournis) throws AppExceptions {
         Object tmpRetour;
 
 

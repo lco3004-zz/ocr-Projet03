@@ -1,21 +1,22 @@
 package fr.ocr.modeconsole;
 
+import java.util.ArrayList;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
+
 
 import fr.ocr.mastermind.ValidationPropale;
-import fr.ocr.params.CouleursMastermind;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Spliterator;
-import java.util.function.Consumer;
-
+import fr.ocr.utiles.CouleursMastermind;
 import static fr.ocr.params.LireParametres.getParam;
 import static fr.ocr.params.Parametres.*;
+import fr.ocr.modeconsole.Libelles.*;
+
 
 /**
  *
  */
-public class IhmMasterMind implements ConstLignesMM {
+public class IhmMasterMind implements ConstLignesMM, ConstEvalPropale {
 
 
     private Boolean doublonAutorise = (Boolean) getParam(DOUBLON_AUTORISE);
@@ -23,17 +24,18 @@ public class IhmMasterMind implements ConstLignesMM {
     private Integer nombreDeCouleurs = (Integer) getParam(NOMBRE_DE_COULEURS);
     private Boolean modeDebug = (Boolean)getParam(MODE_DEBUG);
     private Integer nombreDeEssais =(Integer)getParam(NOMBRE_D_ESSAIS);
+    private LibellesMenuSecondaire modeCourantDuJeu;
 
 
     private ArrayList<Integer> compositionChiffresSecrets;
     private  CouleursMastermind[]  compositionCouleursSecretes;
 
 
-
     // lignes MM affichees par l'ihm. +5 pour les lignes d'infos (titre, ...)
-    LigneJeuMM [] lignesJeuMM = new LigneJeuMM[nombreDeEssais + 5];
 
-    LigneJeuMM [] lignesProposition = new LigneJeuMM[nombreDeEssais] ;
+    private LigneJeuMM [] lignesJeuMM = new LigneJeuMM[nombreDeEssais + 5];
+
+    private LigneJeuMMProposition [] ligneJeuMMPropositions = new LigneJeuMMProposition[nombreDeEssais] ;
 
     int indexLignesJeuMM = 0, indexLignesProposition =0;
 
@@ -43,61 +45,56 @@ public class IhmMasterMind implements ConstLignesMM {
      * @param chiffresSecrets
      * @param couleursSecretes
      */
-    public IhmMasterMind(ArrayList<Integer> chiffresSecrets,
+    public IhmMasterMind(LibellesMenuSecondaire modeDeJeu, ArrayList<Integer> chiffresSecrets,
                          CouleursMastermind[]  couleursSecretes, ValidationPropale fctValidePropale) {
+
+
+        IntStream intStream;
+        Stream<Character> stream;
+        ArrayList<Character> libelleLigne;
 
         compositionCouleursSecretes = couleursSecretes;
         compositionChiffresSecrets = chiffresSecrets;
+        modeCourantDuJeu = modeDeJeu;
 
-        lignesJeuMM[TITRE] = new LigneJeuMM(compositionCouleursSecretes,
-                compositionChiffresSecrets,
-                String.valueOf(indexLignesJeuMM),TITRE,null);
+        lignesJeuMM[TITRE] = new LigneJeuMM(true,true,TITRE,TITRE,modeCourantDuJeu.toString());
+        lignesJeuMM[LIGNE_STATUS] = new LigneJeuMM(true,true,LIGNE_STATUS,LIGNE_STATUS,"");
+        lignesJeuMM[LIGNE_SECRETE] = new LigneJeuMM(true,true,LIGNE_SECRETE,LIGNE_SECRETE,"----------------");
 
-        lignesJeuMM[LIGNE_STATUS] = new LigneJeuMM(compositionCouleursSecretes,
-                compositionChiffresSecrets,
-                String.valueOf(indexLignesJeuMM),LIGNE_STATUS,null);
+        if (modeDebug) {
+            lignesJeuMM[LIGNE_SECRETE].setLibelleLigne(couleursSecretes);
+        }
 
-        lignesJeuMM[LIGNE_SECRETE] = new LigneJeuMM(compositionCouleursSecretes,
-                compositionChiffresSecrets,
-                String.valueOf(indexLignesJeuMM),LIGNE_SECRETE,null);
+        lignesJeuMM[LIGNE_ENTETE] = new LigneJeuMM(true,true,LIGNE_ENTETE,LIGNE_ENTETE," ## [ x, x, x, x ]  B  N " );
+
+        lignesJeuMM[LIGNE_TOUTES_COULEURS] = new LigneJeuMM(true,true,LIGNE_TOUTES_COULEURS,LIGNE_TOUTES_COULEURS,"");
+
+        lignesJeuMM[LIGNE_TOUTES_COULEURS].setLibelleLigne(CouleursMastermind.values());
+
+        lignesJeuMM[LIGNE_DE_SAISIE] = new LigneJeuMM(true,true,LIGNE_DE_SAISIE,LIGNE_DE_SAISIE,"Votre Proposition : ");
 
 
-        for (int k= LIGNE_SECRETE +1 ; k < k + nombreDeEssais; k++,indexLignesProposition++) {
+        for (int k= 0, indexLignesJeuMM= LIGNE_PROPOSITION ; k < nombreDeEssais; k++,indexLignesJeuMM++) {
 
-            lignesJeuMM[k] = new LigneJeuMM(compositionCouleursSecretes,
+            ligneJeuMMPropositions[k] = new LigneJeuMMProposition(compositionCouleursSecretes,
                     compositionChiffresSecrets,
-                    String.valueOf(k),ConstLignesMM.LIGNE_PROPOSITION,fctValidePropale);
+                    true,
+                    true,
+                    k,
+                    LIGNE_PROPOSITION,
+                    "",fctValidePropale );
 
-            lignesJeuMM[k].Clear();
-            lignesProposition[indexLignesProposition]= lignesJeuMM[k];
-
-
+            ligneJeuMMPropositions[k].Clear();
+            lignesJeuMM[indexLignesJeuMM] =  ligneJeuMMPropositions[k] ;
         }
-
-        lignesJeuMM[LIGNE_TOUTES_COULEURS] = new LigneJeuMM(compositionCouleursSecretes,
-                compositionChiffresSecrets,
-                String.valueOf(LIGNE_TOUTES_COULEURS),LIGNE_TOUTES_COULEURS,null);
-
-        ArrayList<Character> listeToutesCol = new ArrayList<>();
-        for (CouleursMastermind v : CouleursMastermind.values()) {
-            listeToutesCol.add(v.getLettreInitiale());
-        }
-        lignesJeuMM[LIGNE_TOUTES_COULEURS].setZoneProposition(listeToutesCol);
-
-        lignesJeuMM[LIGNE_DE_SAISIE] = new LigneJeuMM(compositionCouleursSecretes,
-                compositionChiffresSecrets,
-                String.valueOf(LIGNE_DE_SAISIE),LIGNE_DE_SAISIE,null);
-
-         ArrayList<Character> affichageParDefaut = new ArrayList<Character>(256);
-        affichageParDefaut.toArray(new String[]{"votre Proposition : "});
-        lignesJeuMM[LIGNE_DE_SAISIE].setZoneProposition(affichageParDefaut);
 
 
     }
-    public void runIhmMM() {
+    public Boolean runIhmMM() {
         for (int n =TITRE; n <=LIGNE_DE_SAISIE; n++) {
             System.out.println(lignesJeuMM[n].toString());
         }
+        return true;
     }
 }
 
@@ -106,130 +103,203 @@ public class IhmMasterMind implements ConstLignesMM {
  *
  */
 interface ConstLignesMM {
+    //pour table de jeu - les diffrents types de lignes de la table de jeu
     int TITRE =0;
     int LIGNE_STATUS = TITRE+1;
     int LIGNE_SECRETE = LIGNE_STATUS +1;
-    int LIGNE_PROPOSITION = LIGNE_SECRETE+1;
+    int LIGNE_ENTETE = LIGNE_SECRETE+1;
+    int LIGNE_PROPOSITION = LIGNE_ENTETE +1;
     int LIGNE_TOUTES_COULEURS = LIGNE_PROPOSITION+(Integer)getParam(NOMBRE_D_ESSAIS);
     int LIGNE_DE_SAISIE = LIGNE_TOUTES_COULEURS+1;
 
-     static int [] values() {
-         int [] locP = {TITRE,LIGNE_STATUS,LIGNE_SECRETE,LIGNE_PROPOSITION,LIGNE_TOUTES_COULEURS,LIGNE_DE_SAISIE};
-        return locP;
-    }
-}
 
+}
+interface ConstEvalPropale {
+    //pour résultat evaluation proposition : Noir == pion bien place,  blanc == pion mal placé
+    int NOIR_BIENPLACE = 0;
+    int BLANC_MALPLACE =NOIR_BIENPLACE+1;
+}
 /**
  *
  */
-class LigneJeuMM implements ConstLignesMM {
+abstract class LigneMasterMind implements ConstLignesMM ,ConstEvalPropale {
+    private boolean estDisponible;
+    private boolean estVisible ;
+    private int  rangDansTableJeu;
+    private int  typeDeLigne;
 
-    private ArrayList<Character> zoneProposition = new ArrayList(256);
-    private ArrayList<Integer> ZoneEvaluation = new ArrayList(256);
+    LigneMasterMind(boolean disponible, boolean visible, int rang, int typeLigne) {
+        estDisponible=disponible;
+        estVisible=visible;
+        rangDansTableJeu =rang;
+        typeDeLigne = typeLigne;
+    }
+    public abstract String toString();
 
-    private boolean disponible = true;
-    private boolean visible = true;
-    private String rangDansTableJeu;
+    public boolean isEstDisponible() {
+        return estDisponible;
+    }
 
-    private int typeDeLigne;
+    public void setEstDisponible(boolean estDisponible) {
+        this.estDisponible = estDisponible;
+    }
+
+    public boolean isEstVisible() {
+        return estVisible;
+    }
+
+    public void setEstVisible(boolean estVisible) {
+        this.estVisible = estVisible;
+    }
+
+    public int getTypeDeLigne() {
+        return typeDeLigne;
+    }
+
+    int getRangDansTableJeu() {
+        return rangDansTableJeu;
+    }
+
+}
+/**
+ *
+ */
+class LigneJeuMM extends LigneMasterMind {
+
+    private String libelleLigne;
+
+    private String getLibelleLigne() {
+        return libelleLigne;
+    }
+
+    public void setLibelleLigne(String infos) {
+        libelleLigne = infos;
+    }
+    void setLibelleLigne(CouleursMastermind[] colMM) {
+
+        StringBuilder listeToutesCol = new StringBuilder(256);
+        for (CouleursMastermind v : colMM) {
+            listeToutesCol.append(v.getLettreInitiale() + ' ');
+        }
+
+        libelleLigne = listeToutesCol.toString();
+    }
+
+    LigneJeuMM(boolean disponible,
+               boolean visible,
+               int rang,
+               int typeligne, String info) {
+
+        super(disponible, visible, rang, typeligne);
+        libelleLigne=info;
+    }
+
+    @Override
+    public String toString() {
+        return getLibelleLigne();
+    }
+}
+/**
+ *
+ */
+class LigneJeuMMProposition extends LigneJeuMM {
+
+    private StringBuilder zoneProposition = new StringBuilder(256);
+    private int [] ZoneEvaluation = new int[2];
 
 
-    private CouleursMastermind[] combinaisonCouleursSecretes;
+
+    private ArrayList<Character> propositionJoueur;
+
+    private ValidationPropale fctValideProposition;
+    private ArrayList<Character>  combinaisonInitialesSecretes;
     private ArrayList<Integer> combinaisonChiffresSecrets;
+
 
     private Boolean doublonAutorise = (Boolean) getParam(DOUBLON_AUTORISE);
     private Integer nombreDePositions = (Integer) getParam(NOMBRE_DE_POSITIONS);
     private Integer nombreDeCouleurs = (Integer) getParam(NOMBRE_DE_COULEURS);
 
 
-    public LigneJeuMM(CouleursMastermind[] secretCouleurs,
-                      ArrayList<Integer> secretChiffres,
-                      String rang,
-                      int typeligne,ValidationPropale fctValideProposition) {
+    LigneJeuMMProposition(CouleursMastermind[] secretCouleurs,
+                          ArrayList<Integer> secretChiffres,
+                          boolean disponible,
+                          boolean visible,
+                          int rang,
+                          int typeligne,
+                          String infos,
+                          ValidationPropale fct) {
+
+        super(disponible,visible,rang,typeligne,infos);
         combinaisonChiffresSecrets = secretChiffres;
-        combinaisonCouleursSecretes = secretCouleurs;
-        rangDansTableJeu = rang;
-        typeDeLigne = typeligne;
-
-
-
-    }
-
-    ArrayList<Character> getZoneProposition() {
-        return zoneProposition;
-    }
-
-    void setZoneProposition(ArrayList<Character> valPropale) {
-        zoneProposition.clear();
-        zoneProposition.add('[');
-        zoneProposition.add(' ');
-        for (int i = 0; i < valPropale.size() - 1; i++) {
-            zoneProposition.add(valPropale.get(i));
-            zoneProposition.add(',');
-            zoneProposition.add(' ');
+        combinaisonInitialesSecretes = new ArrayList<>(256);
+        for (CouleursMastermind couleursMastermind: secretCouleurs) {
+            combinaisonInitialesSecretes.add(couleursMastermind.getLettreInitiale());
         }
-        zoneProposition.add(' ');
-        zoneProposition.add(']');
+        fctValideProposition =fct;
+
     }
 
-    ArrayList<Integer> getZoneEvaluation() {
+    public void setPropositionJoueur(ArrayList<Character> propositionJoueur) {
+        this.propositionJoueur = propositionJoueur;
+    }
+
+    private int[] getZoneEvaluation() {
         return ZoneEvaluation;
     }
 
-    void setZoneEvaluation(ArrayList<Integer> zoneEvaluation) {
+    public void setZoneEvaluation(int[] zoneEvaluation) {
         ZoneEvaluation = zoneEvaluation;
     }
 
+    private String  getZoneProposition() {
 
-    int getTypeDeLigne() {
-        return typeDeLigne;
+        return zoneProposition.toString();
     }
 
-    void setTypeDeLigne(int typeDeLigne) {
-        this.typeDeLigne = typeDeLigne;
-    }
-
-    Boolean isDisponible() {
-        return disponible;
-    }
-
-    void isDisponible(Boolean disponible) {
-        this.disponible = disponible;
-    }
-
-    Boolean isVisible() {
-        return visible;
-    }
-
-    void isVisible(Boolean visible) {
-        this.visible = visible;
-    }
-
-    private void EvalProposition(int i) {
-    }
-
-    public String toString() {
-        return String.format("| %d | %s", rangDansTableJeu, zoneProposition.toArray().toString());
-    }
-
-    public void Clear() {
-        zoneProposition.clear();
-        ZoneEvaluation.clear();
-
-        zoneProposition.add('[');
-        zoneProposition.add(' ');
-        for (int i = 0; i < nombreDePositions; i++) {
-            zoneProposition.add('-');
-            zoneProposition.add(',');
-            zoneProposition.add(' ');
+    void setZoneProposition() {
+        zoneProposition.delete(0,zoneProposition.length());
+        zoneProposition.append('[');
+        zoneProposition.append(' ');
+        for (int i = 0; i < propositionJoueur.size() - 1; i++) {
+            zoneProposition.append(propositionJoueur.get(i));
+            zoneProposition.append(',');
+            zoneProposition.append(' ');
         }
-        zoneProposition.add(' ');
-        zoneProposition.add(']');
+        zoneProposition.append(' ');
+        zoneProposition.append(']');
     }
 
-    public void Reset() {
-        zoneProposition.clear();
-        ZoneEvaluation.clear();
+     Boolean EvalProposition(int i) {
+        return fctValideProposition.apply(propositionJoueur,combinaisonInitialesSecretes);
     }
 
+     void Clear() {
+        zoneProposition.delete(0,zoneProposition.length());
+        zoneProposition.append('[');
+        zoneProposition.append(' ');
+        for (int i = 0; i < nombreDePositions; i++) {
+            zoneProposition.append('-');
+            zoneProposition.append(',');
+            zoneProposition.append(' ');
+        }
+        zoneProposition.append(' ');
+        zoneProposition.append(']');
+
+         ZoneEvaluation[0] =ZoneEvaluation[1]=0;
+    }
+    @Override
+    public String toString() {
+        //  dans le plateau (xx - - - -  n b)
+        StringBuilder valRet = new StringBuilder(512);
+        valRet.append(' ');
+        valRet.append(getRangDansTableJeu());
+        valRet.append(' ');
+        valRet.append(getZoneProposition());
+        valRet.append(' ');
+        valRet.append(getZoneEvaluation()[0]);
+        valRet.append(' ');
+        valRet.append(getZoneEvaluation()[1]);
+        return null;
+    }
 }

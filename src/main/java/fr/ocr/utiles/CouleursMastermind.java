@@ -1,4 +1,4 @@
-package fr.ocr.params;
+package fr.ocr.utiles;
 
 public enum CouleursMastermind {
     AUBERGINE( 0,'A'),

@@ -6,7 +6,7 @@ import fr.ocr.modeconsole.Libelles.LibellesMenuPrincipal;
 import fr.ocr.modeconsole.Libelles.LibellesMenuSecondaire;
 import fr.ocr.modeconsole.MenuPrincipal;
 import fr.ocr.modeconsole.MenuSecondaire;
-import fr.ocr.params.CouleursMastermind;
+import fr.ocr.utiles.CouleursMastermind;
 import fr.ocr.params.Parametres;
 import fr.ocr.utiles.AppExceptions;
 import fr.ocr.utiles.Constantes.VersionPGM;

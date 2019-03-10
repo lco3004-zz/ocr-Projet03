@@ -1,6 +1,6 @@
 package fr.ocr.modeconsole;
 
-import fr.ocr.params.CouleursMastermind;
+import fr.ocr.utiles.CouleursMastermind;
 
 import java.util.ArrayList;
 
