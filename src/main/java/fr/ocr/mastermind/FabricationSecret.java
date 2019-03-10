@@ -1,8 +1,8 @@
 package fr.ocr.mastermind;
 
 
-import fr.ocr.utiles.CouleursMastermind;
 import fr.ocr.utiles.AppExceptions;
+import fr.ocr.utiles.CouleursMastermind;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
@@ -59,8 +59,6 @@ public class FabricationSecret {
      */
     FabricationSecret(ArrayList<Integer> chiffresSecretsFournis) throws AppExceptions {
         Object tmpRetour;
-
-
         if ((chiffresSecretsFournis == null) || chiffresSecretsFournis.size() > nombreDePositions)
             throw new AppExceptions(ERREUR_GENERIC);
 
@@ -72,9 +70,8 @@ public class FabricationSecret {
     /**
      * la table des chiffes secrets est à construire - cas où c'est l'odinateur qui propose la ligne secrete
      * cas où c'est le joueur qui doit deviner la ligne secrete, ou bien en mode duel
-     *
      */
-    public FabricationSecret()  {
+    public FabricationSecret() {
 
         Object tmpRetour;
 

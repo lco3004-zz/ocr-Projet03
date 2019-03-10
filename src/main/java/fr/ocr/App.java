@@ -6,10 +6,10 @@ import fr.ocr.modeconsole.Libelles.LibellesMenuPrincipal;
 import fr.ocr.modeconsole.Libelles.LibellesMenuSecondaire;
 import fr.ocr.modeconsole.MenuPrincipal;
 import fr.ocr.modeconsole.MenuSecondaire;
-import fr.ocr.utiles.CouleursMastermind;
 import fr.ocr.params.Parametres;
 import fr.ocr.utiles.AppExceptions;
 import fr.ocr.utiles.Constantes.VersionPGM;
+import fr.ocr.utiles.CouleursMastermind;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -72,7 +72,7 @@ public class App {
                                 logger.info(String.format("%s du jeu %s", ch_Sec.toString(), ch_Sup.toString()));
                                 if (ch_Sup.equals(CHOISIR_MASTERMIND)) {
                                     //menu_secondaire.majLigneEtat(String.format("%s - %s", ch_Sup.toString(), VoirInfoCodeSecret()));
-                                    JeuMM jeuMM = new JeuMM(ch_Sec,scanner);
+                                    JeuMM jeuMM = new JeuMM(ch_Sec, scanner);
                                     jeuMM.runJeuMM();
                                 } else {
                                     menu_secondaire.majLigneEtat(String.format("%s du jeu %s", ch_Sec.toString(), ch_Sup.toString()));
