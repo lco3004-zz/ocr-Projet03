@@ -7,28 +7,31 @@ import fr.ocr.params.CouleursMastermind;
 import fr.ocr.utiles.AppExceptions;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import static fr.ocr.params.LireParametres.getParam;
 import static fr.ocr.params.Parametres.NOMBRE_DE_POSITIONS;
 import static fr.ocr.utiles.Logs.logger;
 import static fr.ocr.utiles.Messages.ErreurMessages.ERREUR_GENERIC;
 
-public class JeuMM {
+public class JeuMM implements ValidationPropale{
     private Libelles.LibellesMenuSecondaire modeDeJeu;
+    FabricationSecret fabricationSecret;
+    ArrayList<Integer> chiffresSecrets;
+    CouleursMastermind[]  couleursSecretes;
+    IhmMasterMind ihmMasterMind;
+
     public JeuMM(Libelles.LibellesMenuSecondaire modeJeu) {
         modeDeJeu =modeJeu;
     }
     public void runJeuMM () throws AppExceptions {
         switch (modeDeJeu) {
             case MODE_CHALLENGER:
-                MenuSaisieSecret menuSaisieSecret = new MenuSaisieSecret();
-                FabricationSecret fabricationSecret = new FabricationSecret(menuSaisieSecret.saisirCombinaisonSecrete());
-                ArrayList<Integer> chiffresSecrets = fabricationSecret.getChiffresSecrets();
-                CouleursMastermind[]  couleursSecretes = fabricationSecret.getCouleursSecretes();
-                IhmMasterMind ihmMasterMind = new IhmMasterMind(chiffresSecrets,couleursSecretes);
-                ihmMasterMind.runIhmMM();
+                 fabricationSecret = new FabricationSecret();
                 break;
             case MODE_DEFENSEUR:
+                MenuSaisieSecret menuSaisieSecret = new MenuSaisieSecret();
+                fabricationSecret = new FabricationSecret(menuSaisieSecret.saisirCombinaisonSecrete());
                 break;
             case MODE_DUEL:
                 break;
@@ -36,5 +39,16 @@ public class JeuMM {
                 logger.error(String.format("%s", ERREUR_GENERIC));
                 throw new AppExceptions(ERREUR_GENERIC);
         }
+
+        chiffresSecrets = fabricationSecret.getChiffresSecrets();
+        CouleursMastermind[]  couleursSecretes = fabricationSecret.getCouleursSecretes();
+        ihmMasterMind = new IhmMasterMind(chiffresSecrets,couleursSecretes,this::apply);
+        ValidationPropale validationPropale;
+        ihmMasterMind.runIhmMM();
+    }
+
+    @Override
+    public Boolean apply(ArrayList<Character> x,ArrayList<Character> y) {
+        return false;
     }
 }

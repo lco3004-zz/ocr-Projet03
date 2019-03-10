@@ -1,6 +1,7 @@
 package fr.ocr;
 
 import fr.ocr.mastermind.FabricationSecret;
+import fr.ocr.mastermind.JeuMM;
 import fr.ocr.modeconsole.Libelles.LibellesMenuPrincipal;
 import fr.ocr.modeconsole.Libelles.LibellesMenuSecondaire;
 import fr.ocr.modeconsole.MenuPrincipal;
@@ -71,6 +72,8 @@ public class App {
                                 logger.info(String.format("%s du jeu %s", ch_Sec.toString(), ch_Sup.toString()));
                                 if (ch_Sup.equals(CHOISIR_MASTERMIND)) {
                                     menu_secondaire.majLigneEtat(String.format("%s - %s", ch_Sup.toString(), VoirInfoCodeSecret()));
+                                    JeuMM jeuMM = new JeuMM(ch_Sec);
+                                    jeuMM.runJeuMM();
                                 } else {
                                     menu_secondaire.majLigneEtat(String.format("%s du jeu %s", ch_Sec.toString(), ch_Sup.toString()));
                                 }
