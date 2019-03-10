@@ -10,7 +10,7 @@ public enum Parametres {
     NOMBRE_D_ESSAIS(12, 8, 12),
     DOUBLON_AUTORISE(false),
     CASE_VIDE_AUTORISE(false),
-    MODE_DEBUG(false);
+    MODE_DEBUG(true);
 
 
     private UnParam unParam;

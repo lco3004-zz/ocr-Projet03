@@ -7,6 +7,7 @@ import fr.ocr.utiles.CouleursMastermind;
 import fr.ocr.utiles.AppExceptions;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import static fr.ocr.utiles.Logs.logger;
 import static fr.ocr.utiles.Messages.ErreurMessages.ERREUR_GENERIC;
@@ -17,9 +18,11 @@ public class JeuMM implements ValidationPropale{
     private ArrayList<Integer> chiffresSecrets;
     CouleursMastermind[]  couleursSecretes;
     private IhmMasterMind ihmMasterMind;
+    private Scanner scanner;
 
-    public JeuMM(Libelles.LibellesMenuSecondaire modeJeu) {
+    public JeuMM(Libelles.LibellesMenuSecondaire modeJeu, Scanner sc) {
         modeDeJeu =modeJeu;
+        scanner = sc;
     }
     public void runJeuMM () throws AppExceptions {
         switch (modeDeJeu) {
@@ -42,7 +45,7 @@ public class JeuMM implements ValidationPropale{
         ihmMasterMind = new IhmMasterMind(modeDeJeu,chiffresSecrets,couleursSecretes, this);
 
         int boucle =20;
-        while ((boucle>0)&&(ihmMasterMind.runIhmMM())) {
+        while ((boucle>0)&&(!ihmMasterMind.runIhmMM(scanner))) {
             //evite de boucler : si utilisateur passe son temps à annuler saisie, stop
             boucle--;
         }

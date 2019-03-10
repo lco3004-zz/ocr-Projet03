@@ -1,6 +1,7 @@
 package fr.ocr.modeconsole;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -33,7 +34,7 @@ public class IhmMasterMind implements ConstLignesMM, ConstEvalPropale {
 
     // lignes MM affichees par l'ihm. +5 pour les lignes d'infos (titre, ...)
 
-    private LigneJeuMM [] lignesJeuMM = new LigneJeuMM[nombreDeEssais + 5];
+    private LigneJeuMM [] lignesJeuMM = new LigneJeuMM[NBRE_LIGNESTABLEMM];
 
     private LigneJeuMMProposition [] ligneJeuMMPropositions = new LigneJeuMMProposition[nombreDeEssais] ;
 
@@ -58,21 +59,20 @@ public class IhmMasterMind implements ConstLignesMM, ConstEvalPropale {
         modeCourantDuJeu = modeDeJeu;
 
         lignesJeuMM[TITRE] = new LigneJeuMM(true,true,TITRE,TITRE,modeCourantDuJeu.toString());
-        lignesJeuMM[LIGNE_STATUS] = new LigneJeuMM(true,true,LIGNE_STATUS,LIGNE_STATUS,"");
-        lignesJeuMM[LIGNE_SECRETE] = new LigneJeuMM(true,true,LIGNE_SECRETE,LIGNE_SECRETE,"----------------");
+        lignesJeuMM[LIGNE_STATUS] = new LigneJeuMM(true,true,LIGNE_STATUS,LIGNE_STATUS,   String.format(" --[ Debug=%s   ]---",modeDebug.toString()));
+        lignesJeuMM[LIGNE_SECRETE] = new LigneJeuMM(true,true,LIGNE_SECRETE,LIGNE_SECRETE,          " -------SECRET--------");
 
         if (modeDebug) {
             lignesJeuMM[LIGNE_SECRETE].setLibelleLigne(couleursSecretes);
         }
 
-        lignesJeuMM[LIGNE_ENTETE] = new LigneJeuMM(true,true,LIGNE_ENTETE,LIGNE_ENTETE," ## [ x, x, x, x ]  B  N " );
+        lignesJeuMM[LIGNE_ENTETE] = new LigneJeuMM(true,true,LIGNE_ENTETE,LIGNE_ENTETE," ## [ x, x, x, x ] B N" );
 
         lignesJeuMM[LIGNE_TOUTES_COULEURS] = new LigneJeuMM(true,true,LIGNE_TOUTES_COULEURS,LIGNE_TOUTES_COULEURS,"");
 
         lignesJeuMM[LIGNE_TOUTES_COULEURS].setLibelleLigne(CouleursMastermind.values());
 
         lignesJeuMM[LIGNE_DE_SAISIE] = new LigneJeuMM(true,true,LIGNE_DE_SAISIE,LIGNE_DE_SAISIE,"Votre Proposition : ");
-
 
         for (int k= 0, indexLignesJeuMM= LIGNE_PROPOSITION ; k < nombreDeEssais; k++,indexLignesJeuMM++) {
 
@@ -84,20 +84,25 @@ public class IhmMasterMind implements ConstLignesMM, ConstEvalPropale {
                     LIGNE_PROPOSITION,
                     "",fctValidePropale );
 
-            ligneJeuMMPropositions[k].Clear();
+            ligneJeuMMPropositions[k].Clear().setLibelleLigne();
             lignesJeuMM[indexLignesJeuMM] =  ligneJeuMMPropositions[k] ;
         }
-
-
     }
-    public Boolean runIhmMM() {
+
+    /**
+     *
+     * @return
+     * @param scanner
+     */
+    public Boolean runIhmMM(Scanner scanner) {
+        IOConsole.ClearScreen.cls();
         for (int n =TITRE; n <=LIGNE_DE_SAISIE; n++) {
             System.out.println(lignesJeuMM[n].toString());
         }
+        String s = scanner.next();
         return true;
     }
 }
-
 
 /**
  *
@@ -112,6 +117,8 @@ interface ConstLignesMM {
     int LIGNE_TOUTES_COULEURS = LIGNE_PROPOSITION+(Integer)getParam(NOMBRE_D_ESSAIS);
     int LIGNE_DE_SAISIE = LIGNE_TOUTES_COULEURS+1;
 
+    //dimesion
+    int NBRE_LIGNESTABLEMM = LIGNE_DE_SAISIE +1;
 
 }
 interface ConstEvalPropale {
@@ -167,6 +174,7 @@ abstract class LigneMasterMind implements ConstLignesMM ,ConstEvalPropale {
 class LigneJeuMM extends LigneMasterMind {
 
     private String libelleLigne;
+    private  String libelleLigneOriginal;
 
     private String getLibelleLigne() {
         return libelleLigne;
@@ -175,11 +183,16 @@ class LigneJeuMM extends LigneMasterMind {
     public void setLibelleLigne(String infos) {
         libelleLigne = infos;
     }
+    LigneJeuMM Clear () {
+        setLibelleLigne(libelleLigneOriginal);
+        return this;
+    }
     void setLibelleLigne(CouleursMastermind[] colMM) {
 
         StringBuilder listeToutesCol = new StringBuilder(256);
         for (CouleursMastermind v : colMM) {
-            listeToutesCol.append(v.getLettreInitiale() + ' ');
+            listeToutesCol.append(v.getLettreInitiale());
+            listeToutesCol.append(' ');
         }
 
         libelleLigne = listeToutesCol.toString();
@@ -192,6 +205,7 @@ class LigneJeuMM extends LigneMasterMind {
 
         super(disponible, visible, rang, typeligne);
         libelleLigne=info;
+        libelleLigneOriginal= info;
     }
 
     @Override
@@ -266,7 +280,8 @@ class LigneJeuMMProposition extends LigneJeuMM {
             zoneProposition.append(',');
             zoneProposition.append(' ');
         }
-        zoneProposition.append(' ');
+        int suppressionDerniereVirgule = zoneProposition.lastIndexOf(Character.toString(','),0);
+        zoneProposition.deleteCharAt(suppressionDerniereVirgule);
         zoneProposition.append(']');
     }
 
@@ -274,7 +289,8 @@ class LigneJeuMMProposition extends LigneJeuMM {
         return fctValideProposition.apply(propositionJoueur,combinaisonInitialesSecretes);
     }
 
-     void Clear() {
+    @Override
+    LigneJeuMMProposition Clear() {
         zoneProposition.delete(0,zoneProposition.length());
         zoneProposition.append('[');
         zoneProposition.append(' ');
@@ -283,23 +299,30 @@ class LigneJeuMMProposition extends LigneJeuMM {
             zoneProposition.append(',');
             zoneProposition.append(' ');
         }
-        zoneProposition.append(' ');
+
+        zoneProposition.deleteCharAt(zoneProposition.lastIndexOf(Character.toString(',')));
         zoneProposition.append(']');
 
-         ZoneEvaluation[0] =ZoneEvaluation[1]=0;
+        ZoneEvaluation[0] =ZoneEvaluation[1]=0;
+
+        return this;
     }
     @Override
     public String toString() {
         //  dans le plateau (xx - - - -  n b)
         StringBuilder valRet = new StringBuilder(512);
         valRet.append(' ');
-        valRet.append(getRangDansTableJeu());
+        valRet.append(String.format("%02d",getRangDansTableJeu()));
         valRet.append(' ');
         valRet.append(getZoneProposition());
         valRet.append(' ');
         valRet.append(getZoneEvaluation()[0]);
         valRet.append(' ');
         valRet.append(getZoneEvaluation()[1]);
-        return null;
+        return valRet.toString();
+    }
+
+    public void setLibelleLigne() {
+        super.setLibelleLigne(this.toString());
     }
 }
