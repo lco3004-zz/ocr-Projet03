@@ -156,6 +156,9 @@ public class IhmMasterMind implements ConstLignesMM, ConstEvalPropale {
                         int posCol = pattern.indexOf(saisieUneCouleur);
                         int taille = pattern.length();
                         pattern = pattern.substring(0, posCol) + pattern.substring(posCol + 1, taille);
+                        taille = pattern.length();
+                        String pourLower =String.valueOf(saisieUneCouleur).toLowerCase(Locale.forLanguageTag("fr"));
+                        posCol = pattern.indexOf(pourLower.toCharArray()[0]);
                     }
                 } else {
                     propositionJoueur.clear();
