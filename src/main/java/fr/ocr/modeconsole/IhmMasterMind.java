@@ -97,7 +97,9 @@ public class IhmMasterMind implements ConstLignesMM, ConstEvalPropale {
 
         lignesJeuMM[LIGNE_TOUTES_COULEURS].setLibelleLigne(CouleursMastermind.values());
 
-        lignesJeuMM[LIGNE_DE_SAISIE] = new LigneJeuMM(true, true, LIGNE_DE_SAISIE, LIGNE_DE_SAISIE, "Votre Proposition : ");
+        Character c = Libelles.CharactersEscape.K.toString().charAt(0);
+
+        lignesJeuMM[LIGNE_DE_SAISIE] = new LigneJeuMM(true, true, LIGNE_DE_SAISIE, LIGNE_DE_SAISIE, String.format(" Votre Proposition (%c : Retour): ", c));
 
         for (int k = 0, indexLignesJeuMM = LIGNE_PROPOSITION; k < nombreDeEssaisMax; k++, indexLignesJeuMM++) {
 
@@ -122,17 +124,20 @@ public class IhmMasterMind implements ConstLignesMM, ConstEvalPropale {
         IOConsole.ClearScreen.cls();
         boolean SecretTrouve = false, isEscape = false;
         Integer nbreEssaisConsommes = 0;
-        Character escapeChar = Libelles.CharactersEscape.Q.toString().charAt(0);
+        Character escapeChar = Libelles.CharactersEscape.K.toString().charAt(0);
         String patternInitial = ConstruitPatternSaisie(CouleursMastermind.values(), escapeChar);
         ArrayList<Character> propalDuJoueur;
         indexLignesProposition = 0;
 
         while (!SecretTrouve && nbreEssaisConsommes < nombreDeEssaisMax && !isEscape) {
+            lignesJeuMM[LIGNE_DE_SAISIE].setLibelleLigne(lignesJeuMM[LIGNE_DE_SAISIE].getLibelleLigneOriginal());
+
             propalDuJoueur = SaisieProposition(scanner, patternInitial, () -> Display(), escapeChar);
             if (propalDuJoueur.contains(escapeChar)) {
                 isEscape = true;
             } else {
                 ligneJeuMMPropositions[indexLignesProposition++].setPropositionJoueur(propalDuJoueur).setZoneProposition();
+                nbreEssaisConsommes++;
             }
 
         }
@@ -151,7 +156,8 @@ public class IhmMasterMind implements ConstLignesMM, ConstEvalPropale {
                 saisieUneCouleur = IOConsole.LectureClavier(pattern, scanner, fctDisplay, escChar);
                 if (saisieUneCouleur != escChar) {
                     propositionJoueur.add(saisieUneCouleur);
-                    System.out.print(saisieUneCouleur + " ");
+                     String infosSasiie = lignesJeuMM[LIGNE_DE_SAISIE].getLibelleLigne() + saisieUneCouleur.toString() +" ";
+                    lignesJeuMM[LIGNE_DE_SAISIE].setLibelleLigne(infosSasiie);
                     if (!doublonAutorise) {
                         int posCol = pattern.indexOf(saisieUneCouleur);
                         int taille = pattern.length();
@@ -159,6 +165,7 @@ public class IhmMasterMind implements ConstLignesMM, ConstEvalPropale {
                         taille = pattern.length();
                         String pourLower =String.valueOf(saisieUneCouleur).toLowerCase(Locale.forLanguageTag("fr"));
                         posCol = pattern.indexOf(pourLower.toCharArray()[0]);
+                        pattern = pattern.substring(0, posCol) + pattern.substring(posCol + 1, taille);
                     }
                 } else {
                     propositionJoueur.clear();
@@ -180,7 +187,12 @@ public class IhmMasterMind implements ConstLignesMM, ConstEvalPropale {
      */
     private void Display() {
         for (int n = TITRE; n <= LIGNE_DE_SAISIE; n++) {
-            System.out.println(lignesJeuMM[n].toString());
+            if (n == LIGNE_DE_SAISIE) {
+                System.out.print(lignesJeuMM[n].toString());
+            }
+            else {
+                System.out.println(lignesJeuMM[n].toString());
+            }
         }
     }
 
@@ -270,8 +282,12 @@ class LigneJeuMM extends LigneMasterMind {
         libelleLigneOriginal = info;
     }
 
-    private String getLibelleLigne() {
+    String getLibelleLigne() {
         return libelleLigne;
+    }
+
+    String getLibelleLigneOriginal() {
+        return libelleLigneOriginal;
     }
 
     void setLibelleLigne(String infos) {

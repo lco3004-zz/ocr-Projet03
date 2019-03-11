@@ -17,7 +17,7 @@ public enum Constantes {
     }
 
     public enum NomFichiersParametres {
-        FICHIER_PARAM_MASTER_MIND("target/classes/params.properties");
+        FICHIER_PARAM_MASTER_MIND("target/params.properties");
 
         private String nomFichier;
 

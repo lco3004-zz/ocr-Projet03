@@ -7,8 +7,8 @@ public enum Libelles {
     ;
 
     public enum CharactersEscape {
-        Q, //quitter
-        R  //retour menu principal
+        X, //quitter
+        K  //retour menu principal
     }
 
     /**

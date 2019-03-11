@@ -25,7 +25,7 @@ public class MenuSecondaire extends Menu<LibellesMenuSecondaire> {
      */
     public MenuSecondaire(String titre, Scanner sc) {
 
-        super(LibellesMenuSecondaire.values(), "[1-3 R r V v Q q]", LIGNE_ETAT, sc);
+        super(LibellesMenuSecondaire.values(), "[1 2 3 K k V v X x]", LIGNE_ETAT, sc);
 
         Character c;
         for (LibellesMenuSecondaire libellesMenu_secondaire : LibellesMenuSecondaire.values()) {
@@ -53,7 +53,7 @@ public class MenuSecondaire extends Menu<LibellesMenuSecondaire> {
 
                     break;
                 case RETOUR:
-                    c = Libelles.CharactersEscape.R.toString().charAt(0);
+                    c = Libelles.CharactersEscape.K.toString().charAt(0);
                     addLigneMenu(RETOUR, String.format("    %c -> RETOUR Menu Principal", c), c);
                     break;
                 case LOGGER_PARAMETRES:
@@ -61,7 +61,7 @@ public class MenuSecondaire extends Menu<LibellesMenuSecondaire> {
                     addLigneMenu(LOGGER_PARAMETRES, String.format("    %c -> LOGGER les Paramètres", c), c);
                     break;
                 case QUITTER:
-                    c = Libelles.CharactersEscape.Q.toString().charAt(0);
+                    c = Libelles.CharactersEscape.X.toString().charAt(0);
                     addLigneMenu(QUITTER, String.format("    %c -> QUITTER", c), c);
                     break;
                 case LIGNE_ETAT:

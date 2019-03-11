@@ -76,6 +76,10 @@ class LigneMenu<T extends Enum>   {
         return libelleLigne;
     }
 
+    String getLibelleLigne() {
+        return libelleLigne;
+    }
+
     T getReferenceEnumLibelle() {
         return referenceEnumLibelle;
     }
@@ -201,7 +205,7 @@ public abstract class Menu<T extends Enum> {
     public T RunMenu() throws AppExceptions {
         T enumActionChoisie;
 
-        Character escapeChar = Libelles.CharactersEscape.Q.toString().charAt(0);
+        Character escapeChar = Libelles.CharactersEscape.X.toString().charAt(0);
 
         try {
             enumActionChoisie = retrouveLigneMenu(LectureClavier(pattern_Menu,scanner,displayMenu, escapeChar));

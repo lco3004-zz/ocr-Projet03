@@ -25,8 +25,7 @@ public class MenuPrincipal extends Menu<LibellesMenuPrincipal>  {
      */
     public MenuPrincipal(Scanner sc) {
 
-        super(LibellesMenuPrincipal.values(), "[1-2 Q q]", LIGNE_ETAT, sc);
-
+        super(LibellesMenuPrincipal.values(),"[1-2 X x]" , LIGNE_ETAT, sc);
         Character c;
 
         for (LibellesMenuPrincipal libellesMenu_principal : LibellesMenuPrincipal.values()) {
@@ -43,7 +42,7 @@ public class MenuPrincipal extends Menu<LibellesMenuPrincipal>  {
                     addLigneMenu(CHOISIR_PLUS_MOINS, String.format("    %c -> JOUER au PLUSMOINS", c), c);
                     break;
                 case QUITTER:
-                    c = Libelles.CharactersEscape.Q.toString().charAt(0);
+                    c = Libelles.CharactersEscape.X.toString().charAt(0);
                     addLigneMenu(QUITTER, String.format("    %c -> QUITTER", c), c);
                     break;
                 case LIGNE_ETAT:

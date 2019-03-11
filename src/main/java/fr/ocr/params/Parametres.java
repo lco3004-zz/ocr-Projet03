@@ -7,7 +7,7 @@ public enum Parametres {
     NOMBRE_DE_POSITIONS(4, 3, 6),
     NOMBRE_DE_COULEURS(CouleursMastermind.values().length, 6, CouleursMastermind.values().length),
     NOMBRE_MAXI_DE_BOUCLES_RANDOMIZE(100, 10, 500),
-    NOMBRE_D_ESSAIS(12, 8, 12),
+    NOMBRE_D_ESSAIS(3, 3, 12),
     DOUBLON_AUTORISE(false),
     CASE_VIDE_AUTORISE(false),
     MODE_DEBUG(true);

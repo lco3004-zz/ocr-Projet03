@@ -68,7 +68,7 @@ public class App {
                         switch (ch_Sec) {
                             case TITRE:
                                 break;
-                            case MODE_DEFENSEUR:
+                            case  MODE_CHALLENGER :
                                 logger.info(String.format("%s du jeu %s", ch_Sec.toString(), ch_Sup.toString()));
                                 if (ch_Sup.equals(CHOISIR_MASTERMIND)) {
                                     //menu_secondaire.majLigneEtat(String.format("%s - %s", ch_Sup.toString(), VoirInfoCodeSecret()));
@@ -78,7 +78,7 @@ public class App {
                                     menu_secondaire.majLigneEtat(String.format("%s du jeu %s", ch_Sec.toString(), ch_Sup.toString()));
                                 }
                                 break;
-                            case MODE_CHALLENGER:
+                            case MODE_DEFENSEUR:
                             case MODE_DUEL:
                                 logger.info(String.format("%s du jeu %s", ch_Sec.toString(), ch_Sup.toString()));
                                 menu_secondaire.majLigneEtat(String.format("%s du jeu %s", ch_Sec.toString(), ch_Sup.toString()));
