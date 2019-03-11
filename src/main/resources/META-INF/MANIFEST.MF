@@ -1,4 +1,0 @@
-Manifest-Version: 1.0
-Class-Path: target/classes/log4j-api-2.11.2.jar;target/classes/log4j-core-2.11.2.jar
-Main-Class: fr.ocr.App
-

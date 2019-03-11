@@ -1,5 +1,8 @@
 package fr.ocr.utiles;
 
+import static fr.ocr.params.LireParametres.getParam;
+import static fr.ocr.params.Parametres.NOMBRE_D_ESSAIS;
+
 public enum Constantes {
     ;
 
@@ -29,11 +32,13 @@ public enum Constantes {
             return nomFichier;
         }
     }
+
     public interface ConstEvalPropale {
         //pour résultat evaluation proposition : Noir == pion bien place,  blanc == pion mal placé
         int NOIR_BIENPLACE = 0;
         int BLANC_MALPLACE = NOIR_BIENPLACE + 1;
     }
+
     public enum CouleursMastermind {
         AUBERGINE( 0,'A'),
         JAUNE(1,'J'),
@@ -111,5 +116,22 @@ public enum Constantes {
             QUITTER,
             SAISIR_CHOIX
         }
+    }
+    /**
+     *
+     */
+    public interface ConstLignesMM {
+        //pour table de jeu - les diffrents types de lignes de la table de jeu
+        int TITRE = 0;
+        int LIGNE_STATUS = TITRE + 1;
+        int LIGNE_SECRETE = LIGNE_STATUS + 1;
+        int LIGNE_ENTETE = LIGNE_SECRETE + 1;
+        int LIGNE_PROPOSITION = LIGNE_ENTETE + 1;
+        int LIGNE_TOUTES_COULEURS = LIGNE_PROPOSITION + (Integer) getParam(NOMBRE_D_ESSAIS);
+        int LIGNE_DE_SAISIE = LIGNE_TOUTES_COULEURS + 1;
+
+        //dimesion
+        int NBRE_LIGNESTABLEMM = LIGNE_DE_SAISIE + 1;
+
     }
 }

@@ -17,28 +17,12 @@ import static fr.ocr.utiles.Logs.logger;
 import static fr.ocr.utiles.Messages.ErreurMessages.ERREUR_GENERIC;
 
 
-/**
- *
- */
-interface ConstLignesMM {
-    //pour table de jeu - les diffrents types de lignes de la table de jeu
-    int TITRE = 0;
-    int LIGNE_STATUS = TITRE + 1;
-    int LIGNE_SECRETE = LIGNE_STATUS + 1;
-    int LIGNE_ENTETE = LIGNE_SECRETE + 1;
-    int LIGNE_PROPOSITION = LIGNE_ENTETE + 1;
-    int LIGNE_TOUTES_COULEURS = LIGNE_PROPOSITION + (Integer) getParam(NOMBRE_D_ESSAIS);
-    int LIGNE_DE_SAISIE = LIGNE_TOUTES_COULEURS + 1;
 
-    //dimesion
-    int NBRE_LIGNESTABLEMM = LIGNE_DE_SAISIE + 1;
-
-}
 
 /**
  *
  */
-public class IhmMasterMind implements ConstLignesMM, Constantes.ConstEvalPropale {
+public class IhmMasterMind implements Constantes.ConstLignesMM, Constantes.ConstEvalPropale {
 
 
     private Boolean doublonAutorise = (Boolean) getParam(DOUBLON_AUTORISE);
@@ -116,7 +100,7 @@ public class IhmMasterMind implements ConstLignesMM, Constantes.ConstEvalPropale
      * @param scanner
      * @return
      */
-    public Boolean runIhmMM(Scanner scanner) {
+    public void runIhmMM(Scanner scanner) {
         IOConsole.ClearScreen.cls();
         boolean SecretTrouve = false, isEscape = false;
         Integer nbreEssaisConsommes = 0;
@@ -125,19 +109,35 @@ public class IhmMasterMind implements ConstLignesMM, Constantes.ConstEvalPropale
         ArrayList<Character> propalDuJoueur;
         indexLignesProposition = 0;
 
-        while (!SecretTrouve && nbreEssaisConsommes < nombreDeEssaisMax && !isEscape) {
-            lignesJeuMM[LIGNE_DE_SAISIE].setLibelleLigne(lignesJeuMM[LIGNE_DE_SAISIE].getLibelleLigneOriginal());
+        while (!isEscape) {
+            if (!SecretTrouve && nbreEssaisConsommes < nombreDeEssaisMax) {
 
-            propalDuJoueur = SaisieProposition(scanner, patternInitial, () -> Display(), escapeChar);
-            if (propalDuJoueur.contains(escapeChar)) {
-                isEscape = true;
+                lignesJeuMM[LIGNE_DE_SAISIE].setLibelleLigne(lignesJeuMM[LIGNE_DE_SAISIE].getLibelleLigneOriginal());
+
+                propalDuJoueur = SaisieProposition(scanner, patternInitial, () -> Display(), escapeChar);
+
+                if (propalDuJoueur.contains(escapeChar)) {
+                    isEscape = true;
+                } else {
+                    SecretTrouve = ligneJeuMMPropositions[indexLignesProposition++].setPropositionJoueur(propalDuJoueur).setZoneProposition().EvalProposition();
+                    nbreEssaisConsommes++;
+                }
             } else {
-                ligneJeuMMPropositions[indexLignesProposition++].setPropositionJoueur(propalDuJoueur).setZoneProposition();
-                nbreEssaisConsommes++;
+                lignesJeuMM[LIGNE_DE_SAISIE].setLibelleLigne(lignesJeuMM[LIGNE_DE_SAISIE].getLibelleLigneOriginal());
+                if (SecretTrouve) {
+                    lignesJeuMM[LIGNE_STATUS].setLibelleLigne(" ----   VICTOIRE !!---");
+                    lignesJeuMM[LIGNE_TOUTES_COULEURS].setLibelleLigne("");
+                }
+                else {
+                    lignesJeuMM[LIGNE_STATUS].setLibelleLigne(" ----   Perdu Perdu --");
+                    lignesJeuMM[LIGNE_TOUTES_COULEURS].setLibelleLigne("");
+                }
+                propalDuJoueur = SaisieProposition(scanner, ConstruitPatternSaisie(escapeChar), () -> Display(), escapeChar);
+                if (propalDuJoueur.contains(escapeChar)) {
+                    isEscape = true;
+                }
             }
-
         }
-        return true;
     }
 
     /**
@@ -214,12 +214,24 @@ public class IhmMasterMind implements ConstLignesMM, Constantes.ConstEvalPropale
         listeInitialesColor.append(']');
         return listeInitialesColor.toString();
     }
+    private String ConstruitPatternSaisie(Character escCape) {
+        StringBuilder listeInitialesColor = new StringBuilder(256);
+        String s;
+        listeInitialesColor.append('[');
+        listeInitialesColor.append(' ');
+        listeInitialesColor.append(escCape);
+        listeInitialesColor.append(' ');
+        s = String.valueOf(escCape).toLowerCase(Locale.forLanguageTag("fr"));
+        listeInitialesColor.append(s.toCharArray()[0]);
+        listeInitialesColor.append(']');
+        return listeInitialesColor.toString();
+    }
 }
 
 /**
  *
  */
-abstract class LigneMasterMind implements ConstLignesMM, Constantes.ConstEvalPropale {
+abstract class LigneMasterMind implements Constantes.ConstLignesMM, Constantes.ConstEvalPropale {
     private boolean estDisponible;
     private boolean estVisible;
     private int rangDansTableJeu;
@@ -327,7 +339,6 @@ class LigneJeuMMProposition extends LigneJeuMM {
     private ArrayList<Character> combinaisonInitialesSecretes;
     private ArrayList<Integer> combinaisonChiffresSecrets;
 
-
     private Boolean doublonAutorise = (Boolean) getParam(DOUBLON_AUTORISE);
     private Integer nombreDePositions = (Integer) getParam(NOMBRE_DE_POSITIONS);
     private Integer nombreDeCouleurs = (Integer) getParam(NOMBRE_DE_COULEURS);
@@ -343,8 +354,11 @@ class LigneJeuMMProposition extends LigneJeuMM {
                           ValidationPropale fct) {
 
         super(disponible, visible, rang, typeligne, infos);
+
         combinaisonChiffresSecrets = secretChiffres;
+
         combinaisonInitialesSecretes = new ArrayList<>(256);
+
         for (CouleursMastermind couleursMastermind : secretCouleurs) {
             combinaisonInitialesSecretes.add(couleursMastermind.getLettreInitiale());
         }
@@ -376,7 +390,7 @@ class LigneJeuMMProposition extends LigneJeuMM {
         return zoneProposition.toString();
     }
 
-    void setZoneProposition() {
+    LigneJeuMMProposition setZoneProposition() {
         zoneProposition.delete(0, zoneProposition.length());
         zoneProposition.append('[');
         zoneProposition.append(' ');
@@ -387,9 +401,10 @@ class LigneJeuMMProposition extends LigneJeuMM {
         }
         zoneProposition.deleteCharAt(zoneProposition.lastIndexOf(Character.toString(',')));
         zoneProposition.append(']');
+        return this;
     }
 
-    Boolean EvalProposition(int i) {
+    Boolean EvalProposition() {
         return fctValideProposition.apply(propositionJoueur,
                 combinaisonInitialesSecretes,
                 nombreDePositions,

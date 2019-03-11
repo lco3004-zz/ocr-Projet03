@@ -45,13 +45,10 @@ public class JeuMM implements ValidationPropale {
 
         chiffresSecrets = fabricationSecret.getChiffresSecrets();
         Constantes.CouleursMastermind[] couleursSecretes = fabricationSecret.getCouleursSecretes();
+
         ihmMasterMind = new IhmMasterMind(modeDeJeu, chiffresSecrets, couleursSecretes, this);
 
-        int boucle = 20;
-        while ((boucle > 0) && (!ihmMasterMind.runIhmMM(scanner))) {
-            //evite de boucler : si utilisateur passe son temps à annuler saisie, stop
-            boucle--;
-        }
+        ihmMasterMind.runIhmMM(scanner);
     }
 
     @Override
