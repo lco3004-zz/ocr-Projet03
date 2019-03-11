@@ -1,6 +1,7 @@
 package fr.ocr.modeconsole;
 
 import fr.ocr.utiles.AppExceptions;
+import fr.ocr.utiles.Constantes;
 
 import java.util.ArrayList;
 import java.util.InputMismatchException;
@@ -205,7 +206,7 @@ public abstract class Menu<T extends Enum> {
     public T RunMenu() throws AppExceptions {
         T enumActionChoisie;
 
-        Character escapeChar = Libelles.CharactersEscape.X.toString().charAt(0);
+        Character escapeChar = Constantes.Libelles.CharactersEscape.X.toString().charAt(0);
 
         try {
             enumActionChoisie = retrouveLigneMenu(LectureClavier(pattern_Menu,scanner,displayMenu, escapeChar));
@@ -239,7 +240,7 @@ class DisplayMenu <T extends Enum> implements Affichage {
 
     private ArrayList<LigneMenu<T>> lignesMenu;
 
-    public DisplayMenu(ArrayList<LigneMenu<T>> x) {
+    DisplayMenu(ArrayList<LigneMenu<T>> x) {
         lignesMenu=x;
     }
 

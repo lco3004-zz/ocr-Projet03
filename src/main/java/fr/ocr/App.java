@@ -2,21 +2,21 @@ package fr.ocr;
 
 import fr.ocr.mastermind.FabricationSecret;
 import fr.ocr.mastermind.JeuMM;
-import fr.ocr.modeconsole.Libelles.LibellesMenuPrincipal;
-import fr.ocr.modeconsole.Libelles.LibellesMenuSecondaire;
+
 import fr.ocr.modeconsole.MenuPrincipal;
 import fr.ocr.modeconsole.MenuSecondaire;
 import fr.ocr.params.Parametres;
 import fr.ocr.utiles.AppExceptions;
+import fr.ocr.utiles.Constantes;
 import fr.ocr.utiles.Constantes.VersionPGM;
-import fr.ocr.utiles.CouleursMastermind;
+
 
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import static fr.ocr.modeconsole.Libelles.LibellesJeux;
-import static fr.ocr.modeconsole.Libelles.LibellesMenuPrincipal.CHOISIR_MASTERMIND;
+
 import static fr.ocr.params.LireParametres.getParam;
+import static fr.ocr.utiles.Constantes.Libelles.LibellesMenuPrincipal.CHOISIR_MASTERMIND;
 import static fr.ocr.utiles.Logs.getInstance;
 import static fr.ocr.utiles.Logs.logger;
 import static fr.ocr.utiles.Messages.ErreurMessages.PARAM_INCONNU;
@@ -40,8 +40,8 @@ public class App {
 
         MenuPrincipal menu_principal = new MenuPrincipal(scanner);
         boolean bouclePrincipale = true;
-        LibellesMenuSecondaire ch_Sec;
-        LibellesMenuPrincipal ch_Sup;
+        Constantes.Libelles.LibellesMenuSecondaire ch_Sec;
+        Constantes.Libelles.LibellesMenuPrincipal ch_Sup;
         MenuSecondaire menu_secondaire;
 
         while (bouclePrincipale) {
@@ -55,11 +55,11 @@ public class App {
                     boucleSecondaire = true;
 
                     if (ch_Sup.equals(CHOISIR_MASTERMIND)) {
-                        logger.info(String.format("choix du jeux : %s", LibellesJeux.MASTERMIND.toString()));
-                        menu_secondaire = new MenuSecondaire(LibellesJeux.MASTERMIND.toString(), scanner);
+                        logger.info(String.format("choix du jeux : %s", Constantes.Libelles.LibellesJeux.MASTERMIND.toString()));
+                        menu_secondaire = new MenuSecondaire(Constantes.Libelles.LibellesJeux.MASTERMIND.toString(), scanner);
                     } else {
-                        logger.info(String.format("choix du jeux : %s", LibellesJeux.PLUSMOINS.toString()));
-                        menu_secondaire = new MenuSecondaire(LibellesJeux.PLUSMOINS.toString(), scanner);
+                        logger.info(String.format("choix du jeux : %s", Constantes.Libelles.LibellesJeux.PLUSMOINS.toString()));
+                        menu_secondaire = new MenuSecondaire(Constantes.Libelles.LibellesJeux.PLUSMOINS.toString(), scanner);
                     }
 
                     while (boucleSecondaire) {
@@ -137,19 +137,19 @@ public class App {
 
     private static String VoirInfoCodeSecret() {
         FabricationSecret fabricationSecret = new FabricationSecret();
-        CouleursMastermind[] toutes = CouleursMastermind.values();
+        Constantes.CouleursMastermind[] toutes = Constantes.CouleursMastermind.values();
         StringBuilder s = new StringBuilder(4096);
-        for (CouleursMastermind x : toutes) {
+        for (Constantes.CouleursMastermind x : toutes) {
             s.append(String.format("%s%s", x.toString(), ", "));
         }
         logger.info("Toutes le couleurs = " + s.substring(0, s.lastIndexOf(",")));
 
         ArrayList<Integer> arrayList = fabricationSecret.getChiffresSecrets();
-        CouleursMastermind[] ligneATrouver = fabricationSecret.getCouleursSecretes();
+        Constantes.CouleursMastermind[] ligneATrouver = fabricationSecret.getCouleursSecretes();
 
         int tailleStringB = s.length();
         s.delete(0, tailleStringB - 1);
-        for (CouleursMastermind x : ligneATrouver) {
+        for (Constantes.CouleursMastermind x : ligneATrouver) {
             s.append(String.format("%s%s", x.toString(), ", "));
         }
         String valRet = String.format("%s %s", "Combinaison secrete = ", s.substring(0, s.lastIndexOf(",")));

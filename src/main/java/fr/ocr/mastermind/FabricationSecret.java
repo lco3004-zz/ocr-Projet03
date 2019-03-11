@@ -2,7 +2,8 @@ package fr.ocr.mastermind;
 
 
 import fr.ocr.utiles.AppExceptions;
-import fr.ocr.utiles.CouleursMastermind;
+import fr.ocr.utiles.Constantes;
+
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
@@ -50,7 +51,7 @@ public class FabricationSecret {
      * tableau qui contient les couleurs prises dans CouleursMastermind :
      * couleursSecretes[ i ] =  CouleursMastermind[ chiffresSecret[ i ]]
      */
-    private CouleursMastermind[] couleursSecretes;
+    private Constantes.CouleursMastermind[] couleursSecretes;
 
     /**
      * @param chiffresSecretsFournis la table des chiffes secrets est fourni par utilisateur
@@ -101,7 +102,7 @@ public class FabricationSecret {
         //pas assez de positions remplies - le random n'a pas marché
         if (chiffresSecrets.size() < nombreDePositions) {
 
-            CouleursMastermind[] couleursMastermind = CouleursMastermind.values();
+            Constantes.CouleursMastermind[] couleursMastermind = Constantes.CouleursMastermind.values();
             chiffresSecrets.clear();
             for (int i = 0; i < nombreDePositions; i++) {
                 chiffresSecrets.add(couleursMastermind[i].getValeurFacialeDeLaCouleur());
@@ -115,10 +116,10 @@ public class FabricationSecret {
      * renseigne la ligne secrete des couleurs (bijection couleurs / chiffres)
      */
     private void BijecterCouleurChiffres() {
-        couleursSecretes = new CouleursMastermind[nombreDePositions];
+        couleursSecretes = new Constantes.CouleursMastermind[nombreDePositions];
         int i = 0;
         for (int v : chiffresSecrets) {
-            couleursSecretes[i++] = CouleursMastermind.values()[v];
+            couleursSecretes[i++] = Constantes.CouleursMastermind.values()[v];
         }
     }
 
@@ -133,7 +134,7 @@ public class FabricationSecret {
     /**
      * @return CouleursMastermind[] Tableau des couleurs de la combinaison secrete
      */
-    public CouleursMastermind[] getCouleursSecretes() {
+    public Constantes.CouleursMastermind[] getCouleursSecretes() {
 
         return couleursSecretes;
     }

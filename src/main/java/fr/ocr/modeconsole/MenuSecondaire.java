@@ -1,11 +1,11 @@
 package fr.ocr.modeconsole;
 
-import fr.ocr.modeconsole.Libelles.LibellesMenuSecondaire;
 import fr.ocr.utiles.AppExceptions;
+import fr.ocr.utiles.Constantes;
 
 import java.util.Scanner;
 
-import static fr.ocr.modeconsole.Libelles.LibellesMenuSecondaire.*;
+import static fr.ocr.utiles.Constantes.Libelles.LibellesMenuSecondaire.*;
 import static fr.ocr.utiles.Logs.logger;
 import static fr.ocr.utiles.Messages.ErreurMessages.PARAM_INCONNU;
 
@@ -14,7 +14,7 @@ import static fr.ocr.utiles.Messages.ErreurMessages.PARAM_INCONNU;
  * <p>
  * hérite de la class Menu qui se charge du comportement d'un menu (afffichage, saisie)
  */
-public class MenuSecondaire extends Menu<LibellesMenuSecondaire> {
+public class MenuSecondaire extends Menu<Constantes.Libelles.LibellesMenuSecondaire> {
 
     /**
      * construit le menu secondaire en fournissant les chaines de caractères à afficher,
@@ -25,10 +25,10 @@ public class MenuSecondaire extends Menu<LibellesMenuSecondaire> {
      */
     public MenuSecondaire(String titre, Scanner sc) {
 
-        super(LibellesMenuSecondaire.values(), "[1 2 3 K k V v X x]", LIGNE_ETAT, sc);
+        super(Constantes.Libelles.LibellesMenuSecondaire.values(), "[1 2 3 K k V v X x]", LIGNE_ETAT, sc);
 
         Character c;
-        for (LibellesMenuSecondaire libellesMenu_secondaire : LibellesMenuSecondaire.values()) {
+        for (Constantes.Libelles.LibellesMenuSecondaire libellesMenu_secondaire : Constantes.Libelles.LibellesMenuSecondaire.values()) {
             switch (libellesMenu_secondaire) {
 
                 case TITRE:
@@ -53,7 +53,7 @@ public class MenuSecondaire extends Menu<LibellesMenuSecondaire> {
 
                     break;
                 case RETOUR:
-                    c = Libelles.CharactersEscape.K.toString().charAt(0);
+                    c = Constantes.Libelles.CharactersEscape.K.toString().charAt(0);
                     addLigneMenu(RETOUR, String.format("    %c -> RETOUR Menu Principal", c), c);
                     break;
                 case LOGGER_PARAMETRES:
@@ -61,7 +61,7 @@ public class MenuSecondaire extends Menu<LibellesMenuSecondaire> {
                     addLigneMenu(LOGGER_PARAMETRES, String.format("    %c -> LOGGER les Paramètres", c), c);
                     break;
                 case QUITTER:
-                    c = Libelles.CharactersEscape.X.toString().charAt(0);
+                    c = Constantes.Libelles.CharactersEscape.X.toString().charAt(0);
                     addLigneMenu(QUITTER, String.format("    %c -> QUITTER", c), c);
                     break;
                 case LIGNE_ETAT:
@@ -84,7 +84,7 @@ public class MenuSecondaire extends Menu<LibellesMenuSecondaire> {
      * @throws AppExceptions : sur erreur non gérée
      */
     @Override
-    public LibellesMenuSecondaire RunMenu() throws AppExceptions {
+    public Constantes.Libelles.LibellesMenuSecondaire RunMenu() throws AppExceptions {
         return super.RunMenu();
     }
 }

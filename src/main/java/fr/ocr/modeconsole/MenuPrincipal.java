@@ -1,11 +1,11 @@
 package fr.ocr.modeconsole;
 
-import fr.ocr.modeconsole.Libelles.LibellesMenuPrincipal;
 import fr.ocr.utiles.AppExceptions;
+import fr.ocr.utiles.Constantes;
 
 import java.util.Scanner;
 
-import static fr.ocr.modeconsole.Libelles.LibellesMenuPrincipal.*;
+import static fr.ocr.utiles.Constantes.Libelles.LibellesMenuPrincipal.*;
 import static fr.ocr.utiles.Logs.logger;
 import static fr.ocr.utiles.Messages.ErreurMessages.PARAM_INCONNU;
 
@@ -14,7 +14,7 @@ import static fr.ocr.utiles.Messages.ErreurMessages.PARAM_INCONNU;
  * <p>
  * hérite de la class Menu qui se charge du comportement d'un menu (afffichage, saisie)
  */
-public class MenuPrincipal extends Menu<LibellesMenuPrincipal>  {
+public class MenuPrincipal extends Menu<Constantes.Libelles.LibellesMenuPrincipal>  {
 
     /**
      * construit le menu principal en fournissant les chaines de caractères à afficher,
@@ -25,10 +25,10 @@ public class MenuPrincipal extends Menu<LibellesMenuPrincipal>  {
      */
     public MenuPrincipal(Scanner sc) {
 
-        super(LibellesMenuPrincipal.values(),"[1-2 X x]" , LIGNE_ETAT, sc);
+        super(Constantes.Libelles.LibellesMenuPrincipal.values(),"[1-2 X x]" , LIGNE_ETAT, sc);
         Character c;
 
-        for (LibellesMenuPrincipal libellesMenu_principal : LibellesMenuPrincipal.values()) {
+        for (Constantes.Libelles.LibellesMenuPrincipal libellesMenu_principal : Constantes.Libelles.LibellesMenuPrincipal.values()) {
             switch (libellesMenu_principal) {
                 case TITRE:
                     addLigneMenu(TITRE, "OCR-Projet03 - Menu Principal");
@@ -42,7 +42,7 @@ public class MenuPrincipal extends Menu<LibellesMenuPrincipal>  {
                     addLigneMenu(CHOISIR_PLUS_MOINS, String.format("    %c -> JOUER au PLUSMOINS", c), c);
                     break;
                 case QUITTER:
-                    c = Libelles.CharactersEscape.X.toString().charAt(0);
+                    c = Constantes.Libelles.CharactersEscape.X.toString().charAt(0);
                     addLigneMenu(QUITTER, String.format("    %c -> QUITTER", c), c);
                     break;
                 case LIGNE_ETAT:
@@ -64,7 +64,7 @@ public class MenuPrincipal extends Menu<LibellesMenuPrincipal>  {
      * @throws AppExceptions : sur erreur non gérée
      */
     @Override
-    public LibellesMenuPrincipal RunMenu() throws AppExceptions {
+    public Constantes.Libelles.LibellesMenuPrincipal RunMenu() throws AppExceptions {
         return super.RunMenu();
     }
 

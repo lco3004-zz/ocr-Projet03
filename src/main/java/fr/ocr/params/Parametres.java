@@ -1,11 +1,11 @@
 package fr.ocr.params;
 
 
-import fr.ocr.utiles.CouleursMastermind;
+import fr.ocr.utiles.Constantes;
 
 public enum Parametres {
     NOMBRE_DE_POSITIONS(4, 3, 6),
-    NOMBRE_DE_COULEURS(CouleursMastermind.values().length, 6, CouleursMastermind.values().length),
+    NOMBRE_DE_COULEURS(Constantes.CouleursMastermind.values().length, 6, Constantes.CouleursMastermind.values().length),
     NOMBRE_MAXI_DE_BOUCLES_RANDOMIZE(100, 10, 500),
     NOMBRE_D_ESSAIS(3, 3, 12),
     DOUBLON_AUTORISE(false),

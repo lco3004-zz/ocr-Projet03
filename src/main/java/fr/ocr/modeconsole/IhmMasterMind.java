@@ -1,9 +1,9 @@
 package fr.ocr.modeconsole;
 
 import fr.ocr.mastermind.ValidationPropale;
-import fr.ocr.modeconsole.Libelles.LibellesMenuSecondaire;
 import fr.ocr.utiles.AppExceptions;
-import fr.ocr.utiles.CouleursMastermind;
+import fr.ocr.utiles.Constantes;
+import fr.ocr.utiles.Constantes.CouleursMastermind;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -13,6 +13,8 @@ import java.util.stream.Stream;
 
 import static fr.ocr.params.LireParametres.getParam;
 import static fr.ocr.params.Parametres.*;
+import static fr.ocr.utiles.Logs.logger;
+import static fr.ocr.utiles.Messages.ErreurMessages.ERREUR_GENERIC;
 
 
 /**
@@ -33,16 +35,10 @@ interface ConstLignesMM {
 
 }
 
-interface ConstEvalPropale {
-    //pour résultat evaluation proposition : Noir == pion bien place,  blanc == pion mal placé
-    int NOIR_BIENPLACE = 0;
-    int BLANC_MALPLACE = NOIR_BIENPLACE + 1;
-}
-
 /**
  *
  */
-public class IhmMasterMind implements ConstLignesMM, ConstEvalPropale {
+public class IhmMasterMind implements ConstLignesMM, Constantes.ConstEvalPropale {
 
 
     private Boolean doublonAutorise = (Boolean) getParam(DOUBLON_AUTORISE);
@@ -51,7 +47,7 @@ public class IhmMasterMind implements ConstLignesMM, ConstEvalPropale {
     private Boolean modeDebug = (Boolean) getParam(MODE_DEBUG);
     private Integer nombreDeEssaisMax = (Integer) getParam(NOMBRE_D_ESSAIS);
 
-    private LibellesMenuSecondaire modeCourantDuJeu;
+    private Constantes.Libelles.LibellesMenuSecondaire modeCourantDuJeu;
 
 
     private ArrayList<Integer> compositionChiffresSecrets;
@@ -71,7 +67,7 @@ public class IhmMasterMind implements ConstLignesMM, ConstEvalPropale {
      * @param chiffresSecrets
      * @param couleursSecretes
      */
-    public IhmMasterMind(LibellesMenuSecondaire modeDeJeu, ArrayList<Integer> chiffresSecrets,
+    public IhmMasterMind(Constantes.Libelles.LibellesMenuSecondaire modeDeJeu, ArrayList<Integer> chiffresSecrets,
                          CouleursMastermind[] couleursSecretes, ValidationPropale fctValidePropale) {
 
 
@@ -97,7 +93,7 @@ public class IhmMasterMind implements ConstLignesMM, ConstEvalPropale {
 
         lignesJeuMM[LIGNE_TOUTES_COULEURS].setLibelleLigne(CouleursMastermind.values());
 
-        Character c = Libelles.CharactersEscape.K.toString().charAt(0);
+        Character c = Constantes.Libelles.CharactersEscape.K.toString().charAt(0);
 
         lignesJeuMM[LIGNE_DE_SAISIE] = new LigneJeuMM(true, true, LIGNE_DE_SAISIE, LIGNE_DE_SAISIE, String.format(" Votre Proposition (%c : Retour): ", c));
 
@@ -124,7 +120,7 @@ public class IhmMasterMind implements ConstLignesMM, ConstEvalPropale {
         IOConsole.ClearScreen.cls();
         boolean SecretTrouve = false, isEscape = false;
         Integer nbreEssaisConsommes = 0;
-        Character escapeChar = Libelles.CharactersEscape.K.toString().charAt(0);
+        Character escapeChar = Constantes.Libelles.CharactersEscape.K.toString().charAt(0);
         String patternInitial = ConstruitPatternSaisie(CouleursMastermind.values(), escapeChar);
         ArrayList<Character> propalDuJoueur;
         indexLignesProposition = 0;
@@ -148,10 +144,10 @@ public class IhmMasterMind implements ConstLignesMM, ConstEvalPropale {
      * @return
      */
     private ArrayList<Character> SaisieProposition(Scanner scanner, String pattern, Affichage fctDisplay, Character escChar) {
-        ArrayList<Character> propositionJoueur = new ArrayList<Character>(256);
+        ArrayList<Character> propositionJoueur = new ArrayList<>(256);
         try {
 
-            Character saisieUneCouleur = escChar;
+            Character saisieUneCouleur ;
             do {
                 saisieUneCouleur = IOConsole.LectureClavier(pattern, scanner, fctDisplay, escChar);
                 if (saisieUneCouleur != escChar) {
@@ -223,7 +219,7 @@ public class IhmMasterMind implements ConstLignesMM, ConstEvalPropale {
 /**
  *
  */
-abstract class LigneMasterMind implements ConstLignesMM, ConstEvalPropale {
+abstract class LigneMasterMind implements ConstLignesMM, Constantes.ConstEvalPropale {
     private boolean estDisponible;
     private boolean estVisible;
     private int rangDansTableJeu;
@@ -322,7 +318,7 @@ class LigneJeuMM extends LigneMasterMind {
 class LigneJeuMMProposition extends LigneJeuMM {
 
     private StringBuilder zoneProposition = new StringBuilder(256);
-    private int[] ZoneEvaluation = new int[2];
+    private int[] zoneEvaluation = new int[2];
 
 
     private ArrayList<Character> propositionJoueur;
@@ -362,11 +358,17 @@ class LigneJeuMMProposition extends LigneJeuMM {
     }
 
     private int[] getZoneEvaluation() {
-        return ZoneEvaluation;
+        return zoneEvaluation;
     }
 
-    public void setZoneEvaluation(int[] zoneEvaluation) {
-        ZoneEvaluation = zoneEvaluation;
+    public void setZoneEvaluation(int[] zoneEval) throws AppExceptions {
+        if (zoneEval.length != zoneEvaluation.length) {
+            logger.error(ERREUR_GENERIC.getMessageErreur());
+            throw new AppExceptions(ERREUR_GENERIC);
+        }
+        for (int i = 0; i <zoneEval.length  ; i++) {
+            this.zoneEvaluation[i] = zoneEval[i];
+        }
     }
 
     private String getZoneProposition() {
@@ -388,7 +390,10 @@ class LigneJeuMMProposition extends LigneJeuMM {
     }
 
     Boolean EvalProposition(int i) {
-        return fctValideProposition.apply(propositionJoueur, combinaisonInitialesSecretes);
+        return fctValideProposition.apply(propositionJoueur,
+                combinaisonInitialesSecretes,
+                nombreDePositions,
+                zoneEvaluation);
     }
 
     @Override
@@ -405,7 +410,7 @@ class LigneJeuMMProposition extends LigneJeuMM {
         zoneProposition.deleteCharAt(zoneProposition.lastIndexOf(Character.toString(',')));
         zoneProposition.append(']');
 
-        ZoneEvaluation[0] = ZoneEvaluation[1] = 0;
+        zoneEvaluation[0] = zoneEvaluation[1] = 0;
 
         return this;
     }
@@ -413,7 +418,7 @@ class LigneJeuMMProposition extends LigneJeuMM {
     @Override
     public String toString() {
         //  dans le plateau (xx - - - -  n b)
-        String valRet = " " +
+        return " " +
                 String.format("%02d", getRangDansTableJeu()) +
                 ' ' +
                 getZoneProposition() +
@@ -421,7 +426,6 @@ class LigneJeuMMProposition extends LigneJeuMM {
                 getZoneEvaluation()[0] +
                 ' ' +
                 getZoneEvaluation()[1];
-        return valRet;
     }
 
     void setLibelleLigne() {

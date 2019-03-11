@@ -1,6 +1,8 @@
 package fr.ocr.modeconsole;
 
-import fr.ocr.utiles.CouleursMastermind;
+
+
+import fr.ocr.utiles.Constantes;
 
 import java.util.ArrayList;
 
@@ -15,7 +17,7 @@ public class MenuSaisieSecret {
     public ArrayList <Integer> saisirCombinaisonSecrete() {
         ArrayList<Integer> combinaisonSecrete = new ArrayList<>(256);
         int monCompteur =0;
-        for (CouleursMastermind v: CouleursMastermind.values()) {
+        for (Constantes.CouleursMastermind v: Constantes.CouleursMastermind.values()) {
             combinaisonSecrete.add(v.getValeurFacialeDeLaCouleur());
             Integer nbPositions = (Integer) getParam(NOMBRE_DE_POSITIONS);
             if (monCompteur == nbPositions-1)
