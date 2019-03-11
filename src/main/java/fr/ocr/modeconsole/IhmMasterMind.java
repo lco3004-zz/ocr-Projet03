@@ -64,16 +64,24 @@ public class IhmMasterMind implements Constantes.ConstLignesMM, Constantes.Const
         modeCourantDuJeu = modeDeJeu;
 
         lignesJeuMM[TITRE] = new LigneJeuMM(true, true, TITRE, TITRE, modeCourantDuJeu.toString());
-        lignesJeuMM[LIGNE_STATUS] = new LigneJeuMM(true, true, LIGNE_STATUS, LIGNE_STATUS, String.format(" --[ Debug=%s   ]---", modeDebug.toString()));
-        lignesJeuMM[LIGNE_SECRETE] = new LigneJeuMM(true, true, LIGNE_SECRETE, LIGNE_SECRETE, " -------SECRET--------");
+
+        lignesJeuMM[LIGNE_STATUS] = new LigneJeuMM(true, true, LIGNE_STATUS, LIGNE_STATUS, String.format("      ", modeDebug.toString()));
+
+        lignesJeuMM[LIGNE_SECRETE] = new LigneJeuMM(true, false, LIGNE_SECRETE, LIGNE_SECRETE, " -------SECRET--------");
+        lignesJeuMM[LIGNE_SECRETE].setLibelleLigne(couleursSecretes);
 
         if (modeDebug) {
-            lignesJeuMM[LIGNE_SECRETE].setLibelleLigne(couleursSecretes);
+            lignesJeuMM[LIGNE_SECRETE].setEstVisible(true);
         }
 
-        lignesJeuMM[LIGNE_ENTETE] = new LigneJeuMM(true, true, LIGNE_ENTETE, LIGNE_ENTETE, " ## [ x, x, x, x ] B N");
+        String champBlancNoir;
+        champBlancNoir = String.format(" ## [ x, x, x, x ] %c %c", PIONS_BIENPLACES, PIONS_MALPLACES);
+        lignesJeuMM[LIGNE_ENTETE] = new LigneJeuMM(true, true, LIGNE_ENTETE, LIGNE_ENTETE, champBlancNoir);
 
-        lignesJeuMM[LIGNE_TOUTES_COULEURS] = new LigneJeuMM(true, true, LIGNE_TOUTES_COULEURS, LIGNE_TOUTES_COULEURS, "");
+        lignesJeuMM[LIGNE_BLANCH01] = new LigneJeuMM(true, true, LIGNE_BLANCH01, LIGNE_BLANCH01, " ");
+        lignesJeuMM[LIGNE_BLANCH02] = new LigneJeuMM(true, true, LIGNE_BLANCH02, LIGNE_BLANCH02, " ");
+
+        lignesJeuMM[LIGNE_TOUTES_COULEURS] = new LigneJeuMM(true, true, LIGNE_TOUTES_COULEURS, LIGNE_TOUTES_COULEURS, " ");
 
         lignesJeuMM[LIGNE_TOUTES_COULEURS].setLibelleLigne(CouleursMastermind.values());
 
@@ -129,7 +137,8 @@ public class IhmMasterMind implements Constantes.ConstLignesMM, Constantes.Const
                     lignesJeuMM[LIGNE_TOUTES_COULEURS].setLibelleLigne("");
                 }
                 else {
-                    lignesJeuMM[LIGNE_STATUS].setLibelleLigne(" ----   Perdu Perdu --");
+                    lignesJeuMM[LIGNE_SECRETE].setEstVisible(true);
+                    lignesJeuMM[LIGNE_SECRETE].setLibelleLigne(String.format("-- Perdu. Soluce = %s",lignesJeuMM[LIGNE_SECRETE].getLibelleLigne()));
                     lignesJeuMM[LIGNE_TOUTES_COULEURS].setLibelleLigne("");
                 }
                 propalDuJoueur = SaisieProposition(scanner, ConstruitPatternSaisie(escapeChar), () -> Display(), escapeChar);
@@ -183,11 +192,13 @@ public class IhmMasterMind implements Constantes.ConstLignesMM, Constantes.Const
      */
     private void Display() {
         for (int n = TITRE; n <= LIGNE_DE_SAISIE; n++) {
-            if (n == LIGNE_DE_SAISIE) {
-                System.out.print(lignesJeuMM[n].toString());
-            }
-            else {
-                System.out.println(lignesJeuMM[n].toString());
+            if (lignesJeuMM[n].isEstVisible()) {
+                if (n == LIGNE_DE_SAISIE) {
+                    System.out.print(lignesJeuMM[n].toString());
+                }
+                else {
+                    System.out.println(lignesJeuMM[n].toString());
+                }
             }
         }
     }
@@ -298,19 +309,23 @@ class LigneJeuMM extends LigneMasterMind {
         return libelleLigneOriginal;
     }
 
-    void setLibelleLigne(String infos) {
+    LigneJeuMM setLibelleLigne(String infos) {
+
         libelleLigne = infos;
+        return this;
     }
 
-    void setLibelleLigne(CouleursMastermind[] colMM) {
+    LigneJeuMM setLibelleLigne(CouleursMastermind[] colMM) {
 
         StringBuilder listeToutesCol = new StringBuilder(256);
+        listeToutesCol.append(" Les Couleurs -> ");
         for (CouleursMastermind v : colMM) {
             listeToutesCol.append(v.getLettreInitiale());
             listeToutesCol.append(' ');
         }
 
         libelleLigne = listeToutesCol.toString();
+        return this;
     }
 
     LigneJeuMM Clear() {
@@ -438,9 +453,9 @@ class LigneJeuMMProposition extends LigneJeuMM {
                 ' ' +
                 getZoneProposition() +
                 ' ' +
-                getZoneEvaluation()[0] +
+                getZoneEvaluation()[NOIR_BIENPLACE] +
                 ' ' +
-                getZoneEvaluation()[1];
+                getZoneEvaluation()[BLANC_MALPLACE];
     }
 
     void setLibelleLigne() {

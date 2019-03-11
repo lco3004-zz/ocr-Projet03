@@ -46,6 +46,8 @@ public class JeuMM implements ValidationPropale {
         chiffresSecrets = fabricationSecret.getChiffresSecrets();
         Constantes.CouleursMastermind[] couleursSecretes = fabricationSecret.getCouleursSecretes();
 
+        LogLaCombinaisonSecrete(couleursSecretes);
+
         ihmMasterMind = new IhmMasterMind(modeDeJeu, chiffresSecrets, couleursSecretes, this);
 
         ihmMasterMind.runIhmMM(scanner);
@@ -74,4 +76,29 @@ public class JeuMM implements ValidationPropale {
         }
         return zoneEvaluation[NOIR_BIENPLACE] == nombreDePositions;
     }
+
+    /**
+     *
+     * @return le code secret (String)
+     */
+    private String LogLaCombinaisonSecrete(Constantes.CouleursMastermind[] couleursSecretes) {
+
+        Constantes.CouleursMastermind[] toutes = Constantes.CouleursMastermind.values();
+        StringBuilder s = new StringBuilder(4096);
+
+        for (Constantes.CouleursMastermind x : toutes) {
+            s.append(String.format("%s%s", x.toString(), ", "));
+        }
+        logger.info("Toutes les couleurs = " + s.substring(0, s.lastIndexOf(", ")));
+
+        int tailleStringB = s.length();
+        s.delete(0, tailleStringB - 1);
+        for (Constantes.CouleursMastermind x : couleursSecretes) {
+            s.append(String.format("%s%s", x.toString(), ", "));
+        }
+        String valRet = String.format("%s %s", "Combinaison secrete = ", s.substring(0, s.lastIndexOf(", ")));
+        logger.info("Combinaison secrete = " + s.substring(0, s.lastIndexOf(",")));
+        return valRet;
+    }
+
 }

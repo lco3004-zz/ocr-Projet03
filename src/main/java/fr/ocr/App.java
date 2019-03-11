@@ -91,7 +91,7 @@ public class App {
                                 logger.info(String.format("%s du jeu %s", ch_Sec.toString(), ch_Sup.toString()));
                                 menu_secondaire.majLigneEtat(String.format("%s du jeu %s", ch_Sec.toString(), ch_Sup.toString()));
                                 if (ch_Sup.equals(CHOISIR_MASTERMIND)) {
-                                    logParamtreMM();
+                                    menu_secondaire.logParamtreMM();
                                 }
                                 break;
                             case QUITTER:
@@ -119,41 +119,5 @@ public class App {
         logger.info(FIN_NORMALE_APPLICATION.getMessageInfos());
     }
 
-    private static void logParamtreMM() throws AppExceptions {
-        Object tmpRetour;
-        for (Parametres x : Parametres.values()) {
-            tmpRetour = getParam(x);
-            if (tmpRetour instanceof Integer) {
-                logger.info(String.format("%s = %d", x.toString(), tmpRetour));
-            } else if (tmpRetour instanceof Boolean) {
-                logger.info(String.format("%s = %b", x.toString(), tmpRetour));
-            } else {
-                throw new AppExceptions(TYPE_PARAM_INCORRECT);
-            }
 
-        }
-
-    }
-
-    private static String VoirInfoCodeSecret() {
-        FabricationSecret fabricationSecret = new FabricationSecret();
-        Constantes.CouleursMastermind[] toutes = Constantes.CouleursMastermind.values();
-        StringBuilder s = new StringBuilder(4096);
-        for (Constantes.CouleursMastermind x : toutes) {
-            s.append(String.format("%s%s", x.toString(), ", "));
-        }
-        logger.info("Toutes le couleurs = " + s.substring(0, s.lastIndexOf(",")));
-
-        ArrayList<Integer> arrayList = fabricationSecret.getChiffresSecrets();
-        Constantes.CouleursMastermind[] ligneATrouver = fabricationSecret.getCouleursSecretes();
-
-        int tailleStringB = s.length();
-        s.delete(0, tailleStringB - 1);
-        for (Constantes.CouleursMastermind x : ligneATrouver) {
-            s.append(String.format("%s%s", x.toString(), ", "));
-        }
-        String valRet = String.format("%s %s", "Combinaison secrete = ", s.substring(0, s.lastIndexOf(",")));
-        logger.info("Combinaison secrete = " + s.substring(0, s.lastIndexOf(",")));
-        return valRet;
-    }
 }
