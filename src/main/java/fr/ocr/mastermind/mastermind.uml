@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>fr.ocr.mastermind</OriginalElement>
+  <nodes>
+    <node x="308.0" y="45.0">fr.ocr.mastermind.ValidationPropale</node>
+    <node x="20.0" y="0.0">fr.ocr.mastermind.FabricationSecret</node>
+    <node x="47.66666666666663" y="202.0">fr.ocr.mastermind.JeuMM</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="fr.ocr.mastermind.FabricationSecret" target="fr.ocr.mastermind.FabricationSecret">
+      <point x="-89.33333333333331" y="71.0" />
+      <point x="64.66666666666669" y="162.0" />
+      <point x="0.0" y="162.0" />
+      <point x="0.0" y="71.0" />
+      <point x="-134.0" y="-0.0" />
+    </edge>
+    <edge source="fr.ocr.mastermind.JeuMM" target="fr.ocr.mastermind.FabricationSecret">
+      <point x="0.0" y="-59.5" />
+      <point x="274.16666666666663" y="182.0" />
+      <point x="243.33333333333326" y="182.0" />
+      <point x="89.33333333333326" y="71.0" />
+    </edge>
+    <edge source="fr.ocr.mastermind.JeuMM" target="fr.ocr.mastermind.JeuMM">
+      <point x="0.0" y="59.5" />
+      <point x="274.16666666666663" y="341.0" />
+      <point x="27.66666666666663" y="341.0" />
+      <point x="27.66666666666663" y="261.5" />
+      <point x="-226.5" y="-0.0" />
+    </edge>
+    <edge source="fr.ocr.mastermind.JeuMM" target="fr.ocr.mastermind.ValidationPropale">
+      <point x="151.0" y="-59.5" />
+      <point x="425.16666666666663" y="182.0" />
+      <point x="534.5" y="182.0" />
+      <point x="0.0" y="26.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="1.0" x="249.0" y="315.0" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Constructors</Category>
+    <Category>Methods</Category>
+    <Category>Inner Classes</Category>
+    <Category>Properties</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

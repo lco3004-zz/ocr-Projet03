@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>fr.ocr.utiles</OriginalElement>
+  <nodes>
+    <node x="539.9999999999999" y="587.0">fr.ocr.utiles.Constantes.Libelles.LibellesJeux</node>
+    <node x="1148.5" y="476.0">fr.ocr.utiles.Constantes.ConstEvalPropale</node>
+    <node x="445.0" y="80.0">fr.ocr.utiles.Messages.InfosMessages</node>
+    <node x="671.0" y="80.0">fr.ocr.utiles.Messages.DebugMessages</node>
+    <node x="355.9999999999999" y="587.0">fr.ocr.utiles.Constantes.Libelles.LibellesMenuPrincipal</node>
+    <node x="488.5" y="0.0">fr.ocr.utiles.Messages</node>
+    <node x="875.7499999999999" y="375.0">fr.ocr.utiles.Constantes</node>
+    <node x="426.4999999999999" y="465.0">fr.ocr.utiles.Constantes.NomFichiersParametres</node>
+    <node x="701.4999999999999" y="465.0">fr.ocr.utiles.Constantes.CouleursMastermind</node>
+    <node x="20.0" y="662.0">fr.ocr.utiles.QuickSort</node>
+    <node x="159.9999999999999" y="587.0">fr.ocr.utiles.Constantes.Libelles.LibellesMenuSecondaire</node>
+    <node x="117.58333333333343" y="212.0">fr.ocr.utiles.AppExceptions</node>
+    <node x="299.4999999999999" y="476.0">fr.ocr.utiles.Constantes.Libelles</node>
+    <node x="0.0" y="587.0">fr.ocr.utiles.Constantes.Libelles.CharactersEscape</node>
+    <node x="1328.5" y="465.0">fr.ocr.utiles.Constantes.VersionPGM</node>
+    <node x="214.00000000000003" y="80.0">fr.ocr.utiles.Messages.ErreurMessages</node>
+    <node x="973.4999999999999" y="476.0">fr.ocr.utiles.Constantes.ConstLignesMM</node>
+    <node x="40.0" y="80.0">fr.ocr.utiles.Logs</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="fr.ocr.utiles.AppExceptions" target="fr.ocr.utiles.Logs">
+      <point x="-69.75000000000006" y="-59.0" />
+      <point x="187.33333333333337" y="192.0" />
+      <point x="157.25" y="192.0" />
+      <point x="50.25" y="26.0" />
+    </edge>
+    <edge source="fr.ocr.utiles.Constantes.Libelles.LibellesMenuSecondaire" target="fr.ocr.utiles.Constantes.Libelles">
+      <point x="0.0" y="-15.0" />
+      <point x="247.9999999999999" y="567.0" />
+      <point x="332.1249999999999" y="567.0" />
+      <point x="-10.875" y="15.0" />
+    </edge>
+    <edge source="fr.ocr.utiles.Constantes.Libelles.LibellesMenuPrincipal" target="fr.ocr.utiles.Constantes.Libelles">
+      <point x="0.0" y="-15.0" />
+      <point x="437.9999999999999" y="567.0" />
+      <point x="353.8749999999999" y="567.0" />
+      <point x="10.875" y="15.0" />
+    </edge>
+    <edge source="fr.ocr.utiles.Constantes.ConstLignesMM" target="fr.ocr.utiles.Constantes">
+      <point x="0.0" y="-15.0" />
+      <point x="1041.0" y="445.0" />
+      <point x="938.1666666666665" y="445.0" />
+      <point x="8.916666666666629" y="15.0" />
+    </edge>
+    <edge source="fr.ocr.utiles.Constantes.NomFichiersParametres" target="fr.ocr.utiles.Constantes.NomFichiersParametres">
+      <point x="0.0" y="26.0" />
+      <point x="543.9999999999999" y="537.0" />
+      <point x="406.4999999999999" y="537.0" />
+      <point x="406.4999999999999" y="491.0" />
+      <point x="-117.5" y="-0.0" />
+    </edge>
+    <edge source="fr.ocr.utiles.Messages.InfosMessages" target="fr.ocr.utiles.Messages.InfosMessages">
+      <point x="0.0" y="26.0" />
+      <point x="538.0" y="152.0" />
+      <point x="425.0" y="152.0" />
+      <point x="425.0" y="106.0" />
+      <point x="-93.0" y="-0.0" />
+    </edge>
+    <edge source="fr.ocr.utiles.Constantes.ConstEvalPropale" target="fr.ocr.utiles.Constantes.ConstEvalPropale">
+      <point x="0.0" y="15.0" />
+      <point x="1218.5" y="526.0" />
+      <point x="1128.5" y="526.0" />
+      <point x="1128.5" y="491.0" />
+      <point x="-70.0" y="-0.0" />
+    </edge>
+    <edge source="fr.ocr.utiles.Constantes.ConstLignesMM" target="fr.ocr.utiles.Constantes.ConstLignesMM">
+      <point x="0.0" y="15.0" />
+      <point x="1041.0" y="526.0" />
+      <point x="953.4999999999999" y="526.0" />
+      <point x="953.4999999999999" y="491.0" />
+      <point x="-67.5" y="-0.0" />
+    </edge>
+    <edge source="fr.ocr.utiles.Constantes.Libelles.LibellesJeux" target="fr.ocr.utiles.Constantes.Libelles">
+      <point x="0.0" y="-15.0" />
+      <point x="594.4999999999999" y="557.0" />
+      <point x="375.6249999999999" y="557.0" />
+      <point x="32.625" y="15.0" />
+    </edge>
+    <edge source="fr.ocr.utiles.Constantes.CouleursMastermind" target="fr.ocr.utiles.Constantes.CouleursMastermind">
+      <point x="0.0" y="26.0" />
+      <point x="817.4999999999999" y="537.0" />
+      <point x="681.4999999999999" y="537.0" />
+      <point x="681.4999999999999" y="491.0" />
+      <point x="-116.0" y="-0.0" />
+    </edge>
+    <edge source="fr.ocr.utiles.Messages.ErreurMessages" target="fr.ocr.utiles.Messages.ErreurMessages">
+      <point x="-47.75" y="26.0" />
+      <point x="261.75" y="152.0" />
+      <point x="194.00000000000003" y="152.0" />
+      <point x="194.00000000000003" y="106.0" />
+      <point x="-95.5" y="-0.0" />
+    </edge>
+    <edge source="fr.ocr.utiles.Constantes.VersionPGM" target="fr.ocr.utiles.Constantes">
+      <point x="0.0" y="-26.0" />
+      <point x="1415.5" y="425.0" />
+      <point x="973.8333333333333" y="425.0" />
+      <point x="44.58333333333337" y="15.0" />
+    </edge>
+    <edge source="fr.ocr.utiles.Constantes.ConstEvalPropale" target="fr.ocr.utiles.Constantes">
+      <point x="0.0" y="-15.0" />
+      <point x="1218.5" y="435.0" />
+      <point x="955.9999999999999" y="435.0" />
+      <point x="26.75" y="15.0" />
+    </edge>
+    <edge source="fr.ocr.utiles.Messages.DebugMessages" target="fr.ocr.utiles.Messages.DebugMessages">
+      <point x="0.0" y="26.0" />
+      <point x="768.5" y="152.0" />
+      <point x="651.0" y="152.0" />
+      <point x="651.0" y="106.0" />
+      <point x="-97.5" y="-0.0" />
+    </edge>
+    <edge source="fr.ocr.utiles.Logs" target="fr.ocr.utiles.Logs">
+      <point x="16.75" y="26.0" />
+      <point x="123.75" y="172.0" />
+      <point x="0.0" y="172.0" />
+      <point x="0.0" y="88.66666666666669" />
+      <point x="-67.0" y="-17.333333333333314" />
+    </edge>
+    <edge source="fr.ocr.utiles.Constantes.NomFichiersParametres" target="fr.ocr.utiles.Constantes">
+      <point x="0.0" y="-26.0" />
+      <point x="543.9999999999999" y="435.0" />
+      <point x="902.4999999999999" y="435.0" />
+      <point x="-26.75" y="15.0" />
+    </edge>
+    <edge source="fr.ocr.utiles.Messages.ErreurMessages" target="fr.ocr.utiles.Messages">
+      <point x="0.0" y="-26.0" />
+      <point x="309.5" y="55.0" />
+      <point x="505.0" y="55.0" />
+      <point x="-33.0" y="15.0" />
+    </edge>
+    <edge source="fr.ocr.utiles.Constantes.Libelles.CharactersEscape" target="fr.ocr.utiles.Constantes.Libelles">
+      <point x="0.0" y="-15.0" />
+      <point x="70.0" y="557.0" />
+      <point x="310.3749999999999" y="557.0" />
+      <point x="-32.625" y="15.0" />
+    </edge>
+    <edge source="fr.ocr.utiles.Messages.DebugMessages" target="fr.ocr.utiles.Messages">
+      <point x="0.0" y="-26.0" />
+      <point x="768.5" y="55.0" />
+      <point x="571.0" y="55.0" />
+      <point x="33.0" y="15.0" />
+    </edge>
+    <edge source="fr.ocr.utiles.QuickSort" target="fr.ocr.utiles.QuickSort">
+      <point x="0.0" y="26.0" />
+      <point x="92.5" y="734.0" />
+      <point x="0.0" y="734.0" />
+      <point x="0.0" y="688.0" />
+      <point x="-72.5" y="-0.0" />
+    </edge>
+    <edge source="fr.ocr.utiles.Messages.InfosMessages" target="fr.ocr.utiles.Messages">
+      <point x="0.0" y="-26.0" />
+      <point x="0.0" y="15.0" />
+    </edge>
+    <edge source="fr.ocr.utiles.Constantes.VersionPGM" target="fr.ocr.utiles.Constantes.VersionPGM">
+      <point x="0.0" y="26.0" />
+      <point x="1415.5" y="537.0" />
+      <point x="1308.5" y="537.0" />
+      <point x="1308.5" y="491.0" />
+      <point x="-87.0" y="-0.0" />
+    </edge>
+    <edge source="fr.ocr.utiles.AppExceptions" target="fr.ocr.utiles.Messages.ErreurMessages">
+      <point x="69.74999999999994" y="-59.0" />
+      <point x="326.83333333333337" y="192.0" />
+      <point x="357.25" y="192.0" />
+      <point x="47.75" y="26.0" />
+    </edge>
+    <edge source="fr.ocr.utiles.Constantes.Libelles" target="fr.ocr.utiles.Constantes">
+      <point x="0.0" y="-15.0" />
+      <point x="342.9999999999999" y="425.0" />
+      <point x="884.6666666666665" y="425.0" />
+      <point x="-44.58333333333337" y="15.0" />
+    </edge>
+    <edge source="fr.ocr.utiles.Constantes.CouleursMastermind" target="fr.ocr.utiles.Constantes">
+      <point x="0.0" y="-26.0" />
+      <point x="817.4999999999999" y="445.0" />
+      <point x="920.3333333333333" y="445.0" />
+      <point x="-8.916666666666629" y="15.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="1.0" x="664.0" y="403.0" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Constructors</Category>
+    <Category>Inner Classes</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+
