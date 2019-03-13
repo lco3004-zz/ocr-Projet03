@@ -11,7 +11,7 @@ import static fr.ocr.utiles.Messages.ErreurMessages.SORTIE_PGM_SUR_ERREURNONGERE
  * selecteur d'exception de l'application
  * peut sortir de l'application sur ERREUR_GENERIC avec coderetour au systeme = à -1
  */
-public class AppExceptions extends Exception {
+public class AppExceptions extends RuntimeException {
 
     public AppExceptions(IOException e) {
         logger.error(e.getMessage());
