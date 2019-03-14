@@ -26,6 +26,19 @@ public class JeuMM implements ValidationPropale {
         modeDeJeu = modeJeu;
         scanner = sc;
     }
+    /* a mettre en place : une lambda en arrivage direct java 8 ou + je sais plus
+     il s'agit d'une BiConsumer qui permet de passer une methode en
+           final ArrayList<String> form = new ArrayList<>(256) ;
+        HashMap<String,String> valRet = splitParamters(request.getQueryString());
+        valRet.forEach((s,r)-> {
+            form.add(String.format(" Clef %s , Valeur %s",s,r));
+        });
+        String pourWeb="Parametres :  ";
+        for (String s :form) {
+            pourWeb += " - " + s + " , ";
+        }
+        response.getWriter().println(pourWeb);
+     */
 
     public void runJeuMM() throws AppExceptions {
         switch (modeDeJeu) {
