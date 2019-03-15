@@ -35,7 +35,7 @@ public class IhmMasterMind implements Constantes.ConstLignesMM, Constantes.Const
 
 
     private ArrayList<Integer> compositionChiffresSecrets;
-    private CouleursMastermind[] compositionCouleursSecretes;
+
 
 
     // lignes MM affichees par l'ihm. +5 pour les lignes d'infos (titre, ...)
@@ -56,6 +56,7 @@ public class IhmMasterMind implements Constantes.ConstLignesMM, Constantes.Const
 
 
         compositionCouleursSecretes = couleursSecretes;
+
         compositionChiffresSecrets = chiffresSecrets;
         modeCourantDuJeu = modeDeJeu;
 
@@ -71,7 +72,14 @@ public class IhmMasterMind implements Constantes.ConstLignesMM, Constantes.Const
         }
 
         String champBlancNoir;
-        champBlancNoir = String.format(" ## [ x, x, x, x ] %c %c", PIONS_BIENPLACES, PIONS_MALPLACES);
+        StringBuilder lesCroixEtVirgules = new StringBuilder(256);
+        for (int nbPositions =0; nbPositions<nombreDePositions;nbPositions++) {
+            lesCroixEtVirgules.append(' ');
+            lesCroixEtVirgules.append('x');
+            lesCroixEtVirgules.append(',');
+        }
+
+        champBlancNoir = String.format(" ## [%s ] %c %c", lesCroixEtVirgules.substring(0,lesCroixEtVirgules.length()-1),PIONS_BIENPLACES, PIONS_MALPLACES);
         lignesJeuMM[LIGNE_ENTETE] = new LigneJeuMM(true, true, LIGNE_ENTETE, LIGNE_ENTETE, champBlancNoir);
 
         lignesJeuMM[LIGNE_BLANCH01] = new LigneJeuMM(true, true, LIGNE_BLANCH01, LIGNE_BLANCH01, " ");
@@ -79,7 +87,7 @@ public class IhmMasterMind implements Constantes.ConstLignesMM, Constantes.Const
 
         lignesJeuMM[LIGNE_TOUTES_COULEURS] = new LigneJeuMM(true, true, LIGNE_TOUTES_COULEURS, LIGNE_TOUTES_COULEURS, " ");
 
-        lignesJeuMM[LIGNE_TOUTES_COULEURS].setLibelleLigne(CouleursMastermind.values());
+        lignesJeuMM[LIGNE_TOUTES_COULEURS].setLibelleLigne(CouleursMastermind.values(),nombreDeCouleurs);
 
         Character c = Constantes.Libelles.CharactersEscape.K.toString().charAt(0);
 
@@ -87,7 +95,7 @@ public class IhmMasterMind implements Constantes.ConstLignesMM, Constantes.Const
 
         for (int k = 0, indexLignesJeuMM = LIGNE_PROPOSITION; k < nombreDeEssaisMax; k++, indexLignesJeuMM++) {
 
-            ligneJeuMMPropositions[k] = new LigneJeuMMProposition(compositionCouleursSecretes,
+            ligneJeuMMPropositions[k] = new LigneJeuMMProposition(couleursSecretes,
                     compositionChiffresSecrets,
                     true,
                     true,
@@ -311,16 +319,24 @@ class LigneJeuMM extends LigneMasterMind {
         return this;
     }
 
-    LigneJeuMM setLibelleLigne(CouleursMastermind[] colMM) {
+    LigneJeuMM setLibelleLigne(CouleursMastermind[] colMM, int nbCouleurs) {
 
         StringBuilder listeToutesCol = new StringBuilder(256);
         listeToutesCol.append(" Les Couleurs -> ");
+        int couleursUtilisees = 0 ;
         for (CouleursMastermind v : colMM) {
-            listeToutesCol.append(v.getLettreInitiale());
-            listeToutesCol.append(' ');
+            if (couleursUtilisees < nbCouleurs) {
+                listeToutesCol.append(v.getLettreInitiale());
+                listeToutesCol.append(' ');
+            }
+            couleursUtilisees++;
         }
-
         libelleLigne = listeToutesCol.toString();
+        return this;
+    }
+
+    LigneJeuMM setLibelleLigne(CouleursMastermind[] colMM) {
+        setLibelleLigne(colMM,colMM.length);
         return this;
     }
 
@@ -352,7 +368,6 @@ class LigneJeuMMProposition extends LigneJeuMM {
 
     private Boolean doublonAutorise = (Boolean) getParam(DOUBLON_AUTORISE);
     private Integer nombreDePositions = (Integer) getParam(NOMBRE_DE_POSITIONS);
-    private Integer nombreDeCouleurs = (Integer) getParam(NOMBRE_DE_COULEURS);
 
 
     LigneJeuMMProposition(CouleursMastermind[] secretCouleurs,
