@@ -118,6 +118,10 @@ public final class LireParametres {
                 Integer borneMax = (Integer) parametres.getValeurMax();
                 if (valLue >= borneMin && valLue <= borneMax) {
                     retVal = valLue;
+                } else if (valLue < borneMin) {
+                    retVal = borneMin;
+                } if (valLue>borneMax) {
+                    retVal = borneMax;
                 } else {
                     throw new AppExceptions(VALEUR_PARAM_INCORRECT);
                 }

@@ -55,8 +55,6 @@ public class IhmMasterMind implements Constantes.ConstLignesMM, Constantes.Const
                          CouleursMastermind[] couleursSecretes, ValidationPropale fctValidePropale) {
 
 
-        compositionCouleursSecretes = couleursSecretes;
-
         compositionChiffresSecrets = chiffresSecrets;
         modeCourantDuJeu = modeDeJeu;
 
