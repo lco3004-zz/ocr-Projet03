@@ -41,18 +41,25 @@ public enum Constantes {
         char PIONS_BIENPLACES ='N';
         char PIONS_MALPLACES ='B';
     }
-
     public enum CouleursMastermind {
-        AUBERGINE( 0,'A'),
-        JAUNE(1,'J'),
-        VERT( 2,'V'),
-        ROUGE( 3,'R'),
-        BLEU( 4,'B'),
-        ORANGE( 5,'O'),
-        TURQUOISE( 6,'T'),
-        MAUVE( 7,'M'),
-        INDIGO( 8,'I'),
-        CARMIN( 9,'C');
+		AUBERGINE( 0,'A'),
+		JAUNE(1,'J'),
+		VERT( 2,'V'),
+		ROUGE( 3,'R'),
+		BLEU( 4,'B'),
+		ORANGE( 5,'O'),
+		TURQUOISE( 6,'T'),
+		MAUVE( 7,'M'),
+		INDIGO( 8,'I'),
+		CARMIN( 9,'C'),
+		DORIAN(10,'D'),
+		EBENE(11,'E'),
+		FUSHIA(12,'F'),
+		GRIS(13,'G'),
+		PRUNE(14,'P'),
+		SAUMON(15,'S'),
+		LAVANDE(16,'L'),
+		NOIR(17,'N');
 
         private int valeurFacialeDeLaCouleur;
         private char lettreInitiale;
@@ -65,7 +72,9 @@ public enum Constantes {
         public int getValeurFacialeDeLaCouleur() {
             return valeurFacialeDeLaCouleur;
         }
-        public char getLettreInitiale () {return lettreInitiale;}
+        public char getLettreInitiale () {
+			return lettreInitiale;
+		}
     }
     /**
      * Constantes pour les menus

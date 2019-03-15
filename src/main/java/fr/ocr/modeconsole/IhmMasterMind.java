@@ -27,7 +27,6 @@ public class IhmMasterMind implements Constantes.ConstLignesMM, Constantes.Const
 
     private Boolean doublonAutorise = (Boolean) getParam(DOUBLON_AUTORISE);
     private Integer nombreDePositions = (Integer) getParam(NOMBRE_DE_POSITIONS);
-    private Integer nombreDeCouleurs = (Integer) getParam(NOMBRE_DE_COULEURS);
     private Boolean modeDebug = (Boolean) getParam(MODE_DEBUG);
     private Integer nombreDeEssaisMax = (Integer) getParam(NOMBRE_D_ESSAIS);
 
