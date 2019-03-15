@@ -5,7 +5,6 @@ import fr.ocr.modeconsole.MenuSaisieSecret;
 import fr.ocr.utiles.AppExceptions;
 import fr.ocr.utiles.Constantes;
 
-
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -14,6 +13,18 @@ import static fr.ocr.utiles.Constantes.ConstEvalPropale.NOIR_BIENPLACE;
 import static fr.ocr.utiles.Logs.logger;
 import static fr.ocr.utiles.Messages.ErreurMessages.ERREUR_GENERIC;
 
+/**
+ * "Modele" du jeuMastermind
+ * Note :
+ * * la combinaison secrete est soit calculée par ordinateur en mode challeger
+ * * soit saisie par le joueur
+ * *la fabrication de la composition secrete 'S' dépend de :
+ * * * NOMBRE_DE_COULEURS : le nombre de couleurs disponibles  'N'
+ * * * * limité à 18 max par construction, valeur min 6 couleurs qui est une valeur std)
+ * * * NOMBRE_DE_POSITIONS : le nombre de couleurs 'P'  constituant la composition secrete S,
+ * * * * 8 max par construction, min 4 qui est une valeur Std
+ * * * DOUBLON_AUTORISE
+ */
 public class JeuMM implements ValidationPropale {
     Constantes.CouleursMastermind[] couleursSecretes;
     private Constantes.Libelles.LibellesMenuSecondaire modeDeJeu;
@@ -70,16 +81,16 @@ public class JeuMM implements ValidationPropale {
     public Boolean apply(ArrayList<Character> propaleJoueur,
                          ArrayList<Character> combinaisonSecrete,
                          Integer nombreDePositions,
-                         int [] zoneEvaluation) {
+                         int[] zoneEvaluation) {
 
         int rangPropale;
 
-        zoneEvaluation[NOIR_BIENPLACE]=0;
-        zoneEvaluation[BLANC_MALPLACE]=0;
+        zoneEvaluation[NOIR_BIENPLACE] = 0;
+        zoneEvaluation[BLANC_MALPLACE] = 0;
 
         for (Character couleurSec : combinaisonSecrete) {
             rangPropale = propaleJoueur.indexOf(couleurSec);
-            if (rangPropale >=0) {
+            if (rangPropale >= 0) {
                 if ((rangPropale == combinaisonSecrete.indexOf(couleurSec))) {
                     zoneEvaluation[NOIR_BIENPLACE]++;
                 } else {
@@ -91,7 +102,6 @@ public class JeuMM implements ValidationPropale {
     }
 
     /**
-     *
      * @return le code secret (String)
      */
     private String LogLaCombinaisonSecrete(Constantes.CouleursMastermind[] couleursSecretes) {
