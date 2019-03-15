@@ -4,8 +4,8 @@ package fr.ocr.params;
 import fr.ocr.utiles.Constantes;
 
 public enum Parametres {
-    NOMBRE_DE_POSITIONS(4, 4, 6),
-    NOMBRE_DE_COULEURS(8, 8, Constantes.CouleursMastermind.values().length),
+    NOMBRE_DE_POSITIONS(6, 4, 8),
+    NOMBRE_DE_COULEURS(10, 8, Constantes.CouleursMastermind.values().length),
     NOMBRE_MAXI_DE_BOUCLES_RANDOMIZE(100, 10, 500),
     NOMBRE_D_ESSAIS(8, 4, 12),
     DOUBLON_AUTORISE(false),
