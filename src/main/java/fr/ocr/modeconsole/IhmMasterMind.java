@@ -55,10 +55,6 @@ public class IhmMasterMind implements Constantes.ConstLignesMM, Constantes.Const
                          CouleursMastermind[] couleursSecretes, ValidationPropale fctValidePropale) {
 
 
-        IntStream intStream;
-        Stream<Character> stream;
-        ArrayList<Character> libelleLigne;
-
         compositionCouleursSecretes = couleursSecretes;
         compositionChiffresSecrets = chiffresSecrets;
         modeCourantDuJeu = modeDeJeu;
