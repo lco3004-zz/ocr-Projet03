@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>fr.ocr.mastermind.JeuMM</OriginalElement>
+  <nodes>
+    <node x="641.0" y="0.0">fr.ocr.mastermind.ValidationPropale</node>
+    <node x="0.0" y="80.0">fr.ocr.modeconsole.LigneJeuMMProposition</node>
+    <node x="904.6474999999999" y="205.0">fr.ocr.mastermind.FabricationSecret</node>
+    <node x="147.52249999999992" y="238.5">fr.ocr.modeconsole.IhmMasterMind</node>
+    <node x="705.7749999999999" y="374.0">fr.ocr.mastermind.JeuMM</node>
+    <node x="723.6474999999999" y="102.5">fr.ocr.mastermind.EvaluationChallenger</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="fr.ocr.mastermind.EvaluationChallenger" target="fr.ocr.mastermind.ValidationPropale">
+      <point x="0.0" y="-15.0" />
+      <point x="803.6474999999999" y="60.0" />
+      <point x="741.1" y="60.0" />
+      <point x="28.600000000000023" y="15.0" />
+    </edge>
+    <edge source="fr.ocr.mastermind.JeuMM" target="fr.ocr.mastermind.FabricationSecret">
+      <point x="72.75" y="-26.0" />
+      <point x="924.0249999999999" y="344.0" />
+      <point x="971.8974999999999" y="344.0" />
+      <point x="-67.25" y="59.5" />
+    </edge>
+    <edge source="fr.ocr.modeconsole.LigneJeuMMProposition" target="fr.ocr.mastermind.ValidationPropale">
+      <point x="175.5" y="-37.5" />
+      <point x="526.5" y="60.0" />
+      <point x="683.9" y="60.0" />
+      <point x="-28.600000000000023" y="15.0" />
+    </edge>
+    <edge source="fr.ocr.mastermind.JeuMM" target="fr.ocr.mastermind.EvaluationChallenger">
+      <point x="-24.25" y="-26.0" />
+      <point x="827.0249999999999" y="354.0" />
+      <point x="803.6474999999999" y="354.0" />
+      <point x="0.0" y="15.0" />
+    </edge>
+    <edge source="fr.ocr.modeconsole.IhmMasterMind" target="fr.ocr.mastermind.ValidationPropale">
+      <point x="231.75" y="-26.0" />
+      <point x="688.2724999999999" y="180.0" />
+      <point x="713.1474999999999" y="180.0" />
+      <point x="0.0" y="15.0" />
+    </edge>
+    <edge source="fr.ocr.mastermind.JeuMM" target="fr.ocr.mastermind.ValidationPropale">
+      <point x="24.25" y="-26.0" />
+      <point x="875.5249999999999" y="354.0" />
+      <point x="894.1474999999999" y="354.0" />
+      <point x="894.1474999999999" y="50.0" />
+      <point x="769.7" y="50.0" />
+      <point x="57.200000000000045" y="15.0" />
+    </edge>
+    <edge source="fr.ocr.modeconsole.IhmMasterMind" target="fr.ocr.modeconsole.LigneJeuMMProposition">
+      <point x="-231.75" y="-26.0" />
+      <point x="224.77249999999992" y="180.0" />
+      <point x="117.0" y="180.0" />
+      <point x="-234.0" y="37.5" />
+    </edge>
+    <edge source="fr.ocr.mastermind.JeuMM" target="fr.ocr.modeconsole.IhmMasterMind">
+      <point x="-72.75" y="-26.0" />
+      <point x="778.5249999999999" y="344.0" />
+      <point x="611.0224999999999" y="344.0" />
+      <point x="154.5" y="26.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="0.8826714801444043" x="640.0" y="150.5" />
+  <SelectedNodes>
+    <node>fr.ocr.mastermind.JeuMM</node>
+  </SelectedNodes>
+  <Categories>
+    <Category>Inner Classes</Category>
+    <Category>Properties</Category>
+    <Category>Constructors</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

@@ -1,26 +1,18 @@
 package fr.ocr;
 
-import fr.ocr.mastermind.FabricationSecret;
 import fr.ocr.mastermind.JeuMM;
-
 import fr.ocr.modeconsole.MenuPrincipal;
 import fr.ocr.modeconsole.MenuSecondaire;
-import fr.ocr.params.Parametres;
 import fr.ocr.utiles.AppExceptions;
 import fr.ocr.utiles.Constantes;
 import fr.ocr.utiles.Constantes.VersionPGM;
 
-
-import java.util.ArrayList;
 import java.util.Scanner;
 
-
-import static fr.ocr.params.LireParametres.getParam;
 import static fr.ocr.utiles.Constantes.Libelles.LibellesMenuPrincipal.CHOISIR_MASTERMIND;
 import static fr.ocr.utiles.Logs.getInstance;
 import static fr.ocr.utiles.Logs.logger;
 import static fr.ocr.utiles.Messages.ErreurMessages.PARAM_INCONNU;
-import static fr.ocr.utiles.Messages.ErreurMessages.TYPE_PARAM_INCORRECT;
 import static fr.ocr.utiles.Messages.InfosMessages.FIN_NORMALE_APPLICATION;
 import static fr.ocr.utiles.Messages.InfosMessages.LANCEMENT_APPLICATION;
 
@@ -71,7 +63,6 @@ public class App {
                             case  MODE_CHALLENGER :
                                 logger.info(String.format("%s du jeu %s", ch_Sec.toString(), ch_Sup.toString()));
                                 if (ch_Sup.equals(CHOISIR_MASTERMIND)) {
-                                    //menu_secondaire.majLigneEtat(String.format("%s - %s", ch_Sup.toString(), VoirInfoCodeSecret()));
                                     JeuMM jeuMM = new JeuMM(ch_Sec, scanner);
                                     jeuMM.runJeuMM();
                                 } else {

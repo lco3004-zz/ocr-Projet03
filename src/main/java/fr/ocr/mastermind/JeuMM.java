@@ -26,36 +26,25 @@ import static fr.ocr.utiles.Messages.ErreurMessages.ERREUR_GENERIC;
  * * * * 8 max par construction, min 4 qui est une valeur Std
  * * * DOUBLON_AUTORISE
  */
-public class JeuMM implements ValidationPropale {
+public class JeuMM  {
     Constantes.CouleursMastermind[] couleursSecretes;
     private Constantes.Libelles.LibellesMenuSecondaire modeDeJeu;
     private FabricationSecret fabricationSecret;
     private ArrayList<Integer> chiffresSecrets;
     private IhmMasterMind ihmMasterMind;
     private Scanner scanner;
+    private  ValidationPropale validationPropale ;
 
     public JeuMM(Constantes.Libelles.LibellesMenuSecondaire modeJeu, Scanner sc) {
         modeDeJeu = modeJeu;
         scanner = sc;
     }
-    /* a mettre en place : une lambda en arrivage direct java 8 ou + je sais plus
-     il s'agit d'une BiConsumer qui permet de passer une methode en
-           final ArrayList<String> form = new ArrayList<>(256) ;
-        HashMap<String,String> valRet = splitParamters(request.getQueryString());
-        valRet.forEach((s,r)-> {
-            form.add(String.format(" Clef %s , Valeur %s",s,r));
-        });
-        String pourWeb="Parametres :  ";
-        for (String s :form) {
-            pourWeb += " - " + s + " , ";
-        }
-        response.getWriter().println(pourWeb);
-     */
 
     public void runJeuMM() throws AppExceptions {
         switch (modeDeJeu) {
             case MODE_CHALLENGER:
                 fabricationSecret = new FabricationSecret();
+                validationPropale = new  EvaluationChallenger ();
                 break;
             case MODE_DEFENSEUR:
                 MenuSaisieSecret menuSaisieSecret = new MenuSaisieSecret();
@@ -73,38 +62,10 @@ public class JeuMM implements ValidationPropale {
 
         LogLaCombinaisonSecrete(couleursSecretes);
 
-        ihmMasterMind = new IhmMasterMind(modeDeJeu, chiffresSecrets, couleursSecretes, this);
+        ihmMasterMind = new IhmMasterMind(modeDeJeu, chiffresSecrets, couleursSecretes, validationPropale);
 
         ihmMasterMind.runIhmMM(scanner);
     }
-
-    @Override
-    public Boolean apply(ArrayList<Character> propaleJoueur,
-                         ArrayList<Character> combinaisonSecrete,
-                         Integer nombreDePositions,
-                         int[] zoneEvaluation) {
-
-        int rangPropale;
-
-        zoneEvaluation[NOIR_BIENPLACE] = 0;
-        zoneEvaluation[BLANC_MALPLACE] = 0;
-
-        for (Character couleurSec : combinaisonSecrete) {
-            rangPropale = propaleJoueur.indexOf(couleurSec);
-            if (rangPropale >= 0) {
-                if ((rangPropale == combinaisonSecrete.indexOf(couleurSec))) {
-                    zoneEvaluation[NOIR_BIENPLACE]++;
-                } else {
-                    zoneEvaluation[BLANC_MALPLACE]++;
-                }
-            }
-        }
-        return zoneEvaluation[NOIR_BIENPLACE] == nombreDePositions;
-    }
-
-    /*
-
-     */
 
     /**
      *
@@ -164,6 +125,33 @@ public class JeuMM implements ValidationPropale {
         String valRet = String.format("%s %s", "Combinaison secrete = ", s.substring(0, s.lastIndexOf(", ")));
         logger.info("Combinaison secrete = " + s.substring(0, s.lastIndexOf(",")));
         return valRet;
+    }
+
+}
+class EvaluationChallenger implements ValidationPropale{
+
+    @Override
+    public Boolean apply(ArrayList<Character> propaleJoueur,
+                         ArrayList<Character> combinaisonSecrete,
+                         Integer nombreDePositions,
+                         int [] zoneEvaluation) {
+
+        int rangPropale;
+
+        zoneEvaluation[NOIR_BIENPLACE]=0;
+        zoneEvaluation[BLANC_MALPLACE]=0;
+
+        for (Character couleurSec : combinaisonSecrete) {
+            rangPropale = propaleJoueur.indexOf(couleurSec);
+            if (rangPropale >=0) {
+                if ((rangPropale == combinaisonSecrete.indexOf(couleurSec))) {
+                    zoneEvaluation[NOIR_BIENPLACE]++;
+                } else {
+                    zoneEvaluation[BLANC_MALPLACE]++;
+                }
+            }
+        }
+        return zoneEvaluation[NOIR_BIENPLACE] == nombreDePositions;
     }
 
 }
