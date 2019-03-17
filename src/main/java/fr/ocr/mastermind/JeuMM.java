@@ -5,7 +5,6 @@ import fr.ocr.modeconsole.MenuSaisieSecret;
 import fr.ocr.utiles.AppExceptions;
 import fr.ocr.utiles.Constantes;
 
-
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -14,14 +13,14 @@ import static fr.ocr.utiles.Constantes.ConstEvalPropale.NOIR_BIENPLACE;
 import static fr.ocr.utiles.Logs.logger;
 import static fr.ocr.utiles.Messages.ErreurMessages.ERREUR_GENERIC;
 
-public class JeuMM implements ValidationPropale {
+public class JeuMM  {
     Constantes.CouleursMastermind[] couleursSecretes;
     private Constantes.Libelles.LibellesMenuSecondaire modeDeJeu;
     private FabricationSecret fabricationSecret;
     private ArrayList<Integer> chiffresSecrets;
     private IhmMasterMind ihmMasterMind;
     private Scanner scanner;
-
+    private  ValidationPropale validationPropale ;
     public JeuMM(Constantes.Libelles.LibellesMenuSecondaire modeJeu, Scanner sc) {
         modeDeJeu = modeJeu;
         scanner = sc;
@@ -31,6 +30,7 @@ public class JeuMM implements ValidationPropale {
         switch (modeDeJeu) {
             case MODE_CHALLENGER:
                 fabricationSecret = new FabricationSecret();
+                validationPropale = new  EvaluationChallenger ();
                 break;
             case MODE_DEFENSEUR:
                 MenuSaisieSecret menuSaisieSecret = new MenuSaisieSecret();
@@ -48,34 +48,11 @@ public class JeuMM implements ValidationPropale {
 
         LogLaCombinaisonSecrete(couleursSecretes);
 
-        ihmMasterMind = new IhmMasterMind(modeDeJeu, chiffresSecrets, couleursSecretes, this);
+        ihmMasterMind = new IhmMasterMind(modeDeJeu, chiffresSecrets, couleursSecretes,validationPropale );
 
         ihmMasterMind.runIhmMM(scanner);
     }
 
-    @Override
-    public Boolean apply(ArrayList<Character> propaleJoueur,
-                         ArrayList<Character> combinaisonSecrete,
-                         Integer nombreDePositions,
-                         int [] zoneEvaluation) {
-
-        int rangPropale;
-
-        zoneEvaluation[NOIR_BIENPLACE]=0;
-        zoneEvaluation[BLANC_MALPLACE]=0;
-
-        for (Character couleurSec : combinaisonSecrete) {
-            rangPropale = propaleJoueur.indexOf(couleurSec);
-            if (rangPropale >=0) {
-                if ((rangPropale == combinaisonSecrete.indexOf(couleurSec))) {
-                    zoneEvaluation[NOIR_BIENPLACE]++;
-                } else {
-                    zoneEvaluation[BLANC_MALPLACE]++;
-                }
-            }
-        }
-        return zoneEvaluation[NOIR_BIENPLACE] == nombreDePositions;
-    }
 
     /**
      *
@@ -101,4 +78,30 @@ public class JeuMM implements ValidationPropale {
         return valRet;
     }
 
+}
+class EvaluationChallenger implements ValidationPropale{
+
+    @Override
+    public Boolean apply(ArrayList<Character> propaleJoueur,
+                         ArrayList<Character> combinaisonSecrete,
+                         Integer nombreDePositions,
+                         int [] zoneEvaluation) {
+
+        int rangPropale;
+
+        zoneEvaluation[NOIR_BIENPLACE]=0;
+        zoneEvaluation[BLANC_MALPLACE]=0;
+
+        for (Character couleurSec : combinaisonSecrete) {
+            rangPropale = propaleJoueur.indexOf(couleurSec);
+            if (rangPropale >=0) {
+                if ((rangPropale == combinaisonSecrete.indexOf(couleurSec))) {
+                    zoneEvaluation[NOIR_BIENPLACE]++;
+                } else {
+                    zoneEvaluation[BLANC_MALPLACE]++;
+                }
+            }
+        }
+        return zoneEvaluation[NOIR_BIENPLACE] == nombreDePositions;
+    }
 }
