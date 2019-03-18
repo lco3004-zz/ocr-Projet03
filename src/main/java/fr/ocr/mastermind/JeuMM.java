@@ -1,6 +1,7 @@
 package fr.ocr.mastermind;
 
 import fr.ocr.modeconsole.IhmMasterMind;
+import fr.ocr.modeconsole.LigneJeuMM;
 import fr.ocr.utiles.AppExceptions;
 import fr.ocr.utiles.Constantes.CouleursMastermind;
 import fr.ocr.utiles.Constantes.Libelles.LibellesMenuSecondaire;
@@ -12,6 +13,9 @@ import java.util.Scanner;
 
 import static fr.ocr.params.LireParametres.getParam;
 import static fr.ocr.params.Parametres.*;
+import static fr.ocr.utiles.Constantes.ConstEvalPropale.BLANC_MALPLACE;
+import static fr.ocr.utiles.Constantes.ConstEvalPropale.NOIR_BIENPLACE;
+import static fr.ocr.utiles.Constantes.ConstLignesMM.NBRE_LIGNESTABLEMM;
 import static fr.ocr.utiles.Logs.logger;
 import static fr.ocr.utiles.Messages.ErreurMessages.ERREUR_GENERIC;
 
@@ -29,14 +33,16 @@ import static fr.ocr.utiles.Messages.ErreurMessages.ERREUR_GENERIC;
  */
 abstract class JeuMM {
 
-    protected ValiderPropositionChallengeur validerPropositionChallengeur = (ArrayList<Character> propaleJoueur,
-                                                                             ArrayList<Character> combinaisonSecrete,
-                                                                             Integer nombreDePositions,
-                                                                             int[] zoneEvaluation) -> false;
+    protected ValiderProposition validerProposition = new ValiderProposition() {
+        @Override
+        public Boolean apply(ArrayList<Character> proposition, ArrayList<Character> secret, Integer nombreDePositions, int[] zoneEvaluation) {
+            return null;
+        }
+    };
 
-    protected ObtenirPropaleDefenseur obtenirPropaleDefenseur = () -> null;
+    protected ProduirePropale produirePropale;
 
-
+    protected LigneJeuMM[] lignesJeuMM = new LigneJeuMM[NBRE_LIGNESTABLEMM];
 
     private LibellesMenuSecondaire modeJeu;
     private Scanner scanner;
@@ -54,14 +60,14 @@ abstract class JeuMM {
      */
     public void runJeuMMChallengeur(FabricationSecretMM fabricationSecretMM) {
 
-
         LogLaCombinaisonSecrete(fabricationSecretMM.getCouleursSecretes());
 
         new IhmMasterMind(modeJeu,
                 fabricationSecretMM.getChiffresSecrets(),
                 fabricationSecretMM.getCouleursSecretes(),
-                validerPropositionChallengeur)
-                .runIhmMMChallengeur(scanner);
+                validerProposition,
+                lignesJeuMM)
+                .runIhmMMChallengeur(scanner, produirePropale);
     }
 
     /**
@@ -73,8 +79,10 @@ abstract class JeuMM {
 
         new IhmMasterMind(modeJeu,
                 fabricationSecretMM.getChiffresSecrets(),
-                fabricationSecretMM.getCouleursSecretes())
-                .runIhmMMDefenseur(scanner, obtenirPropaleDefenseur);
+                fabricationSecretMM.getCouleursSecretes(),
+                validerProposition,
+                lignesJeuMM)
+                .runIhmMMDefenseur(scanner, produirePropale);
     }
 
     /**
@@ -228,4 +236,57 @@ class FabricationSecretMM {
         return couleursSecretes;
     }
 
+}
+
+/**
+ *
+ */
+class EvalPropaleChallengeur implements ValiderProposition {
+
+    @Override
+    public Boolean apply(ArrayList<Character> propaleJoueur,
+                         ArrayList<Character> combinaisonSecrete,
+                         Integer nombreDePositions,
+                         int[] zoneEvaluation) {
+
+        int rangPropale;
+
+        zoneEvaluation[NOIR_BIENPLACE] = 0;
+        zoneEvaluation[BLANC_MALPLACE] = 0;
+
+        for (Character couleurSec : combinaisonSecrete) {
+            rangPropale = propaleJoueur.indexOf(couleurSec);
+            if (rangPropale >= 0) {
+                if ((rangPropale == combinaisonSecrete.indexOf(couleurSec))) {
+                    zoneEvaluation[NOIR_BIENPLACE]++;
+                } else {
+                    zoneEvaluation[BLANC_MALPLACE]++;
+                }
+            }
+        }
+        return zoneEvaluation[NOIR_BIENPLACE] == nombreDePositions;
+    }
+}
+
+/**
+ *
+ */
+class EvalPropaleDefenseur implements ValiderProposition {
+
+    /**
+     * @param propaleJoueur      P, la proposition du joueur
+     * @param combinaisonSecrete S, la combinaison secrete à trouver
+     * @param nombreDePositions  , le nombre positions 'emplacement de pions) ur une ligne du jeu
+     * @param zoneEvaluation,    tableau entier de taille 2 qui contient le nombre de Blancs (mal placés) et le nombre de Noirs (bien placés)
+     * @return si P est égal à S  , fin de partie donc la méthode répond true (false sinon)
+     */
+    @Override
+    public Boolean apply(ArrayList<Character> propaleJoueur,
+                         ArrayList<Character> combinaisonSecrete,
+                         Integer nombreDePositions,
+                         int[] zoneEvaluation) {
+
+
+        return false;
+    }
 }
