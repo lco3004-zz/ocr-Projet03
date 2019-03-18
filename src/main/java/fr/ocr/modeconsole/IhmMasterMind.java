@@ -1,14 +1,14 @@
 package fr.ocr.modeconsole;
 
 
-import fr.ocr.mastermind.ObtenirPropaleDefenseurMM;
-import fr.ocr.mastermind.ValiderPropositionMM;
+import fr.ocr.mastermind.ObtenirPropaleDefenseur;
 import fr.ocr.utiles.AppExceptions;
 import fr.ocr.utiles.Constantes;
 import fr.ocr.utiles.Constantes.ConstEvalPropale;
 import fr.ocr.utiles.Constantes.ConstLignesMM;
 import fr.ocr.utiles.Constantes.CouleursMastermind;
 import fr.ocr.utiles.Constantes.Libelles.LibellesMenuSecondaire;
+import fr.ocr.utiles.ValiderProposition;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -35,8 +35,6 @@ public class IhmMasterMind implements
     private Boolean modeDebug = (Boolean) getParam(MODE_DEBUG);
     private Integer nombreDeEssaisMax = (Integer) getParam(NOMBRE_D_ESSAIS);
 
-    private ObtenirPropaleDefenseurMM obtenirPropaleDefenseurMM;
-
 
     private ArrayList<Integer> compositionChiffresSecrets;
 
@@ -54,15 +52,64 @@ public class IhmMasterMind implements
 
 
     /**
+     *
+     * @param modeDeJeu
      * @param chiffresSecrets
      * @param couleursSecretes
-     * @param obtenirPropaleDefenseurMM
      */
-    public IhmMasterMind(LibellesMenuSecondaire modeDeJeu, ArrayList<Integer> chiffresSecrets,
-                         CouleursMastermind[] couleursSecretes, ValiderPropositionMM fctValidePropale, ObtenirPropaleDefenseurMM obtenirPropaleDefenseurMM) {
+    public IhmMasterMind(LibellesMenuSecondaire modeDeJeu,
+                         ArrayList<Integer> chiffresSecrets,
+                         CouleursMastermind[] couleursSecretes) {
+
+        this(modeDeJeu, chiffresSecrets, couleursSecretes, new EvalDefenseurChallengeurMM());
+    }
+
+    /**
+     *
+     * @param modeDeJeu
+     * @param chiffresSecrets
+     * @param couleursSecretes
+     * @param fctValidePropaleChallengeur
+     */
+    public IhmMasterMind(LibellesMenuSecondaire modeDeJeu,
+                         ArrayList<Integer> chiffresSecrets,
+                         CouleursMastermind[] couleursSecretes,
+                         ValiderProposition fctValidePropaleChallengeur) {
+
+        PreparationMenu(modeDeJeu, chiffresSecrets, couleursSecretes);
+
+        PrepareLignesPropositions(couleursSecretes, fctValidePropaleChallengeur);
+    }
 
 
-        this.obtenirPropaleDefenseurMM = obtenirPropaleDefenseurMM;
+    /**
+     *
+     * @param couleursSecretes
+     * @param validerProposition
+     */
+    void PrepareLignesPropositions(CouleursMastermind[] couleursSecretes, ValiderProposition validerProposition) {
+        for (int k = 0, indexLignesJeuMM = LIGNE_PROPOSITION; k < nombreDeEssaisMax; k++, indexLignesJeuMM++) {
+
+            ligneJeuMMPropositions[k] = new LigneJeuMMProposition(couleursSecretes,
+                    compositionChiffresSecrets,
+                    true,
+                    true,
+                    k,
+                    LIGNE_PROPOSITION,
+                    "", validerProposition);
+
+            ligneJeuMMPropositions[k].Clear().setLibelleLigne();
+            lignesJeuMM[indexLignesJeuMM] = ligneJeuMMPropositions[k];
+        }
+    }
+
+    /**
+     * @param modeDeJeu
+     * @param chiffresSecrets
+     * @param couleursSecretes
+     */
+    void PreparationMenu(LibellesMenuSecondaire modeDeJeu, ArrayList<Integer> chiffresSecrets,
+                         CouleursMastermind[] couleursSecretes) {
 
         compositionChiffresSecrets = chiffresSecrets;
 
@@ -100,26 +147,13 @@ public class IhmMasterMind implements
 
         lignesJeuMM[LIGNE_DE_SAISIE] = new LigneJeuMM(true, true, LIGNE_DE_SAISIE, LIGNE_DE_SAISIE, String.format(" Votre Proposition (%c : Retour): ", c));
 
-        for (int k = 0, indexLignesJeuMM = LIGNE_PROPOSITION; k < nombreDeEssaisMax; k++, indexLignesJeuMM++) {
-
-            ligneJeuMMPropositions[k] = new LigneJeuMMProposition(couleursSecretes,
-                    compositionChiffresSecrets,
-                    true,
-                    true,
-                    k,
-                    LIGNE_PROPOSITION,
-                    "", fctValidePropale);
-
-            ligneJeuMMPropositions[k].Clear().setLibelleLigne();
-            lignesJeuMM[indexLignesJeuMM] = ligneJeuMMPropositions[k];
-        }
     }
 
     /**
      * @param scanner
      */
-    public void runIhmMMDefenseur(Scanner scanner) {
-
+    public void runIhmMMDefenseur(Scanner scanner, ObtenirPropaleDefenseur getPropaleDef) {
+        ObtenirPropaleDefenseur obtenirPropaleDefenseur = getPropaleDef;
         IOConsole.ClearScreen.cls();
 
         boolean SecretTrouve = false, isEscape = false;
@@ -136,7 +170,7 @@ public class IhmMasterMind implements
 
         while (!SecretTrouve && nbreEssaisConsommes < nombreDeEssaisMax) {
 
-            propalOrdinateur = obtenirPropaleDefenseurMM.getPropaleDefenseur();
+            propalOrdinateur = obtenirPropaleDefenseur.getPropaleDefenseur();
 
             SecretTrouve = ligneJeuMMPropositions[indexLignesProposition++].setPropositionJoueur(propalOrdinateur).setZoneProposition().EvalProposition();
 
@@ -432,7 +466,7 @@ class LigneJeuMMProposition extends LigneJeuMM {
 
     private ArrayList<Character> propositionJoueur;
 
-    private ValiderPropositionMM fctValideProposition;
+    private ValiderProposition fctValideProposition;
     private ArrayList<Character> combinaisonInitialesSecretes;
     private ArrayList<Integer> combinaisonChiffresSecrets;
 
@@ -447,7 +481,7 @@ class LigneJeuMMProposition extends LigneJeuMM {
                           int rang,
                           int typeligne,
                           String infos,
-                          ValiderPropositionMM fct) {
+                          ValiderProposition fct) {
 
         super(disponible, visible, rang, typeligne, infos);
 

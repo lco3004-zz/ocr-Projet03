@@ -29,12 +29,12 @@ import static fr.ocr.utiles.Messages.ErreurMessages.ERREUR_GENERIC;
  */
 abstract class JeuMM {
 
-    protected ValiderPropositionMM validerPropositionMM = (ArrayList<Character> propaleJoueur,
-                                                           ArrayList<Character> combinaisonSecrete,
-                                                           Integer nombreDePositions,
-                                                           int[] zoneEvaluation) -> false;
+    protected ValiderPropositionChallengeur validerPropositionChallengeur = (ArrayList<Character> propaleJoueur,
+                                                                             ArrayList<Character> combinaisonSecrete,
+                                                                             Integer nombreDePositions,
+                                                                             int[] zoneEvaluation) -> false;
 
-    protected ObtenirPropaleDefenseurMM obtenirPropaleDefenseurMM = () -> null;
+    protected ObtenirPropaleDefenseur obtenirPropaleDefenseur = () -> null;
 
 
 
@@ -54,12 +54,13 @@ abstract class JeuMM {
      */
     public void runJeuMMChallengeur(FabricationSecretMM fabricationSecretMM) {
 
+
         LogLaCombinaisonSecrete(fabricationSecretMM.getCouleursSecretes());
 
         new IhmMasterMind(modeJeu,
                 fabricationSecretMM.getChiffresSecrets(),
                 fabricationSecretMM.getCouleursSecretes(),
-                validerPropositionMM, obtenirPropaleDefenseurMM)
+                validerPropositionChallengeur)
                 .runIhmMMChallengeur(scanner);
     }
 
@@ -72,10 +73,8 @@ abstract class JeuMM {
 
         new IhmMasterMind(modeJeu,
                 fabricationSecretMM.getChiffresSecrets(),
-                fabricationSecretMM.getCouleursSecretes(),
-                validerPropositionMM,
-                obtenirPropaleDefenseurMM)
-                .runIhmMMDefenseur(scanner);
+                fabricationSecretMM.getCouleursSecretes())
+                .runIhmMMDefenseur(scanner, obtenirPropaleDefenseur);
     }
 
     /**
@@ -198,13 +197,13 @@ class FabricationSecretMM {
             }
         }
 
-        BijecterCouleurChiffres(chiffresSecrets, nombreDePositions);
+        couleursSecretes = BijecterCouleurChiffres(chiffresSecrets, nombreDePositions);
     }
 
     /**
      * renseigne la ligne secrete des couleurs (bijection couleurs / chiffres)
      */
-    public CouleursMastermind[] BijecterCouleurChiffres(ArrayList<Integer> chiffresSec, Integer nbPos) {
+    private CouleursMastermind[] BijecterCouleurChiffres(ArrayList<Integer> chiffresSec, Integer nbPos) {
         CouleursMastermind[] coulSec = new CouleursMastermind[nbPos];
         int i = 0;
         for (int v : chiffresSec) {

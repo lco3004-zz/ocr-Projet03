@@ -7,24 +7,29 @@ import java.util.ArrayList;
 import static fr.ocr.params.LireParametres.getParam;
 import static fr.ocr.params.Parametres.NOMBRE_DE_POSITIONS;
 
-public class ProduirePropaleDefenseurMM implements ObtenirPropaleDefenseurMM {
+@FunctionalInterface
+public interface ObtenirPropaleDefenseur {
+    ArrayList<Character> getPropaleDefenseur();
+
+}
+
+
+class ProduirePropaleDefenseur implements ObtenirPropaleDefenseur {
     /**
      * @return
      */
     public ArrayList<Character> getPropaleDefenseur() {
-        ArrayList<Character> propositionEnLettre = new ArrayList<>(256);
-        ArrayList<Integer> propositionEnChiffre = new ArrayList<>(256);
 
-        int monCompteur = 0;
+        ArrayList<Character> propositionOrdinateur = new ArrayList<>(256);
+
+        int monCompteur = 1;
+        Integer nbPositions = (Integer) getParam(NOMBRE_DE_POSITIONS);
         for (Constantes.CouleursMastermind v : Constantes.CouleursMastermind.values()) {
-            propositionEnChiffre.add(v.getValeurFacialeDeLaCouleur());
-            Integer nbPositions = (Integer) getParam(NOMBRE_DE_POSITIONS);
+            propositionOrdinateur.add(v.getLettreInitiale());
             if (monCompteur == nbPositions - 1)
                 break;
             monCompteur++;
         }
-
-
-        return propositionEnLettre;
+        return propositionOrdinateur;
     }
 }

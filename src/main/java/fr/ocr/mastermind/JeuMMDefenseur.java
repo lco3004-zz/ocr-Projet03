@@ -23,8 +23,7 @@ public class JeuMMDefenseur extends JeuMM {
     public void runJeuMM() {
         MenuSaisieSecret menuSaisieSecret = new MenuSaisieSecret();
         FabricationSecretMM fabricationSecretMM = new FabricationSecretMM(menuSaisieSecret.saisirCombinaisonSecrete());
-        this.validerPropositionMM = new EvalDefenseurMM();
-        this.obtenirPropaleDefenseurMM = new ProduirePropaleDefenseurMM();
+        this.obtenirPropaleDefenseur = new ProduirePropaleDefenseur();
         super.runJeuMMDefenseur(fabricationSecretMM);
     }
 
