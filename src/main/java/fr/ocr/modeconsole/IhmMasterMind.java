@@ -123,7 +123,7 @@ public class IhmMasterMind implements Constantes.ConstLignesMM, Constantes.Const
 
                 lignesJeuMM[LIGNE_DE_SAISIE].setLibelleLigne(lignesJeuMM[LIGNE_DE_SAISIE].getLibelleLigneOriginal());
 
-                propalDuJoueur = SaisieProposition(scanner, patternInitial, () -> Display(), escapeChar);
+                propalDuJoueur = SaisieProposition(scanner, patternInitial, () -> AfficherLigne(), escapeChar);
 
                 if (propalDuJoueur.contains(escapeChar)) {
                     isEscape = true;
@@ -142,7 +142,7 @@ public class IhmMasterMind implements Constantes.ConstLignesMM, Constantes.Const
                     lignesJeuMM[LIGNE_SECRETE].setLibelleLigne(String.format("-- Perdu. Soluce = %s",lignesJeuMM[LIGNE_SECRETE].getLibelleLigne()));
                     lignesJeuMM[LIGNE_TOUTES_COULEURS].setLibelleLigne("");
                 }
-                propalDuJoueur = SaisieProposition(scanner, ConstruitPatternSaisie(escapeChar), () -> Display(), escapeChar);
+                propalDuJoueur = SaisieProposition(scanner, ConstruitPatternSaisie(escapeChar), () -> AfficherLigne(), escapeChar);
                 if (propalDuJoueur.contains(escapeChar)) {
                     isEscape = true;
                 }
@@ -153,7 +153,7 @@ public class IhmMasterMind implements Constantes.ConstLignesMM, Constantes.Const
     /**
      * @return
      */
-    private ArrayList<Character> SaisieProposition(Scanner scanner, String pattern, Affichage fctDisplay, Character escChar) {
+    private ArrayList<Character> SaisieProposition(Scanner scanner, String pattern, AffichageMenu fctDisplay, Character escChar) {
         ArrayList<Character> propositionJoueur = new ArrayList<>(256);
         try {
 
@@ -191,7 +191,7 @@ public class IhmMasterMind implements Constantes.ConstLignesMM, Constantes.Const
     /**
      *
      */
-    private void Display() {
+    private void AfficherLigne() {
         for (int n = TITRE; n <= LIGNE_DE_SAISIE; n++) {
             if (lignesJeuMM[n].isEstVisible()) {
                 if (n == LIGNE_DE_SAISIE) {

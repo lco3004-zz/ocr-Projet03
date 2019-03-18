@@ -20,7 +20,7 @@ class IOConsole {
      */
     static Character LectureClavier(String pattern_Menu,
                                     Scanner scanner,
-                                    Affichage affichage,
+                                    AffichageMenu affichageMenu,
                                     Character escapeChar) throws AppExceptions {
 
         Pattern patternChoix = Pattern.compile(pattern_Menu);
@@ -30,7 +30,7 @@ class IOConsole {
 
         ClearScreen.cls();
 
-        affichage.Display();
+        affichageMenu.Display();
 
         while (choix.equals("") && scanner.hasNext()) {
             cRet = escapeChar;
@@ -42,7 +42,7 @@ class IOConsole {
                     } catch (InputMismatchException e1) {
                         String tmp = scanner.next();
                         ClearScreen.cls();
-                        affichage.Display();
+                        affichageMenu.Display();
                     }
                 } catch (StringIndexOutOfBoundsException e1) {
                     logger.info(CTRL_C);

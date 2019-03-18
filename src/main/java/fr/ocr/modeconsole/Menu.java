@@ -4,14 +4,12 @@ import fr.ocr.utiles.AppExceptions;
 import fr.ocr.utiles.Constantes;
 
 import java.util.ArrayList;
-import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
 import static fr.ocr.modeconsole.IOConsole.LectureClavier;
 import static fr.ocr.utiles.Logs.logger;
 import static fr.ocr.utiles.Messages.ErreurMessages.ERREUR_GENERIC;
-import static fr.ocr.utiles.Messages.InfosMessages.CTRL_C;
 
 /**
  * @param <T> : Enum  qui vaut soit LibellesMMenuPrincipal , soit LibellesMenuSecondaire
@@ -236,7 +234,7 @@ public abstract class Menu<T extends Enum> {
  *
  * @param <T> instances de Libelles....
  */
-class DisplayMenu <T extends Enum> implements Affichage {
+class DisplayMenu<T extends Enum> implements AffichageMenu {
 
     private ArrayList<LigneMenu<T>> lignesMenu;
 

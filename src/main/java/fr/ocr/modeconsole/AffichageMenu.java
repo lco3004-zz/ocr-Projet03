@@ -1,5 +1,5 @@
 package fr.ocr.modeconsole;
 
-public interface Affichage {
+public interface AffichageMenu {
     void Display();
 }
