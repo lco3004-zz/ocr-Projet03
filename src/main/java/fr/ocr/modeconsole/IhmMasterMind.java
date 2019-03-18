@@ -4,6 +4,7 @@ import fr.ocr.lesjeux.ValidationPropale;
 import fr.ocr.utiles.AppExceptions;
 import fr.ocr.utiles.Constantes;
 import fr.ocr.utiles.Constantes.CouleursMastermind;
+import fr.ocr.utiles.Constantes.Libelles.LibellesMenuSecondaire;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -29,7 +30,7 @@ public class IhmMasterMind implements Constantes.ConstLignesMM, Constantes.Const
     private Boolean modeDebug = (Boolean) getParam(MODE_DEBUG);
     private Integer nombreDeEssaisMax = (Integer) getParam(NOMBRE_D_ESSAIS);
 
-    private Constantes.Libelles.LibellesMenuSecondaire modeCourantDuJeu;
+
 
 
     private ArrayList<Integer> compositionChiffresSecrets;
@@ -49,14 +50,14 @@ public class IhmMasterMind implements Constantes.ConstLignesMM, Constantes.Const
      * @param chiffresSecrets
      * @param couleursSecretes
      */
-    public IhmMasterMind(Constantes.Libelles.LibellesMenuSecondaire modeDeJeu, ArrayList<Integer> chiffresSecrets,
+    public IhmMasterMind(LibellesMenuSecondaire modeDeJeu, ArrayList<Integer> chiffresSecrets,
                          CouleursMastermind[] couleursSecretes, ValidationPropale fctValidePropale) {
 
 
         compositionChiffresSecrets = chiffresSecrets;
-        modeCourantDuJeu = modeDeJeu;
 
-        lignesJeuMM[TITRE] = new LigneJeuMM(true, true, TITRE, TITRE, modeCourantDuJeu.toString());
+
+        lignesJeuMM[TITRE] = new LigneJeuMM(true, true, TITRE, TITRE, modeDeJeu.toString());
 
         lignesJeuMM[LIGNE_STATUS] = new LigneJeuMM(true, true, LIGNE_STATUS, LIGNE_STATUS, String.format("      ", modeDebug.toString()));
 

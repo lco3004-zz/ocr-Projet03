@@ -1,16 +1,20 @@
 package fr.ocr.lesjeux;
 
-import fr.ocr.utiles.Constantes;
+
+import fr.ocr.utiles.Constantes.Libelles.LibellesMenuSecondaire;
 
 import java.util.Scanner;
 
 public class JeuMMChallengeur extends JeuMM {
+
+
     /**
      * @param modeJeu
      * @param sc
      */
-    public JeuMMChallengeur(Constantes.Libelles.LibellesMenuSecondaire modeJeu, Scanner sc) {
+    public JeuMMChallengeur(LibellesMenuSecondaire modeJeu, Scanner sc) {
         super(modeJeu, sc);
+
     }
 
     public void runJeuMM() {

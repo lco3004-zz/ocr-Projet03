@@ -2,9 +2,9 @@ package fr.ocr.lesjeux;
 
 import fr.ocr.modeconsole.IhmMasterMind;
 import fr.ocr.utiles.Constantes;
+import fr.ocr.utiles.Constantes.Libelles.LibellesMenuSecondaire;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 import static fr.ocr.utiles.Logs.logger;
@@ -23,9 +23,10 @@ import static fr.ocr.utiles.Logs.logger;
  */
 public abstract class JeuMM {
 
-    private Constantes.Libelles.LibellesMenuSecondaire modeDeJeu;
+    private LibellesMenuSecondaire modeJeu;
 
     private Scanner scanner;
+
 
     protected ValidationPropale validationPropale = (ArrayList<Character> propaleJoueur,
                                                      ArrayList<Character> combinaisonSecrete,
@@ -33,12 +34,12 @@ public abstract class JeuMM {
                                                      int[] zoneEvaluation) -> false;
 
     /**
-     * @param modeJeu
+
      * @param sc
      */
-    public JeuMM(Constantes.Libelles.LibellesMenuSecondaire modeJeu, Scanner sc) {
-        modeDeJeu = modeJeu;
+    public JeuMM(LibellesMenuSecondaire modeJeu, Scanner sc) {
         scanner = sc;
+        this.modeJeu = modeJeu;
     }
 
     /**
@@ -49,49 +50,13 @@ public abstract class JeuMM {
 
         LogLaCombinaisonSecrete(fabricationSecretMM.getCouleursSecretes());
 
-        new IhmMasterMind(modeDeJeu,
+        new IhmMasterMind(modeJeu,
                 fabricationSecretMM.getChiffresSecrets(),
                 fabricationSecretMM.getCouleursSecretes(),
                 validationPropale).runIhmMM(scanner);
     }
 
-    /**
-     *
-     * @param number nombre a convertir (sous forme de chaine)
-     * @param sBase  base du nombre à convertir
-     * @param dBase  base de destination
-     * @return
-     */
-    public  String baseConversion(String number,
-                                  int sBase, int dBase)
-    {
-        // Parse the number with source radix
-        // and return in specified radix(base)
-        return Integer.toString(Integer.parseInt(number, sBase), dBase);
-    }
-    /**
-     *       Sc(i,j)
-     *       I   J
-     *       0 (0..nbPos)
-     *       1 (0..nbPos-1)
-     *       2 (0..nbPos-2)
-     *       3 (0)
-     *       4 (0..nbPos-4) 0..0
-     * @param nbPos
-     * @return List< Integer [] >
-     */
-    public static List< Integer [] > LesScoresPossibles (int nbPos) {
-        List<Integer [] > scPossible = new ArrayList<Integer [] >(256);
-        for (int noirs =0; noirs < nbPos -1 ;noirs++) {
-            for (int blancs = 0; blancs <= nbPos - noirs; blancs++) {
 
-                scPossible.add(new Integer[]{noirs, blancs});
-            }
-        }
-        scPossible.add(new Integer[] {nbPos-1, 0});
-        scPossible.add(new Integer[] {nbPos, 0});
-        return scPossible;
-    }
     /**
      * @return le code secret (String)
      */
