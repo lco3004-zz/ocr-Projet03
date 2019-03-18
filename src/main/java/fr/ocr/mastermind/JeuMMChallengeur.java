@@ -19,7 +19,7 @@ public class JeuMMChallengeur extends JeuMM {
 
     public void runJeuMM() {
         FabricationSecretMM fabricationSecretMM = new FabricationSecretMM();
-        this.validerProposition = new EvalChallengeurMM();
-        super.runJeuMM(fabricationSecretMM);
+        this.validerPropositionMM = new EvalChallengeurMM();
+        super.runJeuMMChallengeur(fabricationSecretMM);
     }
 }

@@ -2,7 +2,7 @@ package fr.ocr.mastermind;
 
 import fr.ocr.modeconsole.IhmMasterMind;
 import fr.ocr.utiles.AppExceptions;
-import fr.ocr.utiles.Constantes;
+import fr.ocr.utiles.Constantes.CouleursMastermind;
 import fr.ocr.utiles.Constantes.Libelles.LibellesMenuSecondaire;
 
 import java.math.RoundingMode;
@@ -29,10 +29,15 @@ import static fr.ocr.utiles.Messages.ErreurMessages.ERREUR_GENERIC;
  */
 abstract class JeuMM {
 
-    protected ValiderProposition validerProposition = (ArrayList<Character> propaleJoueur,
-                                                       ArrayList<Character> combinaisonSecrete,
-                                                       Integer nombreDePositions,
-                                                       int[] zoneEvaluation) -> false;
+    protected ValiderPropositionMM validerPropositionMM = (ArrayList<Character> propaleJoueur,
+                                                           ArrayList<Character> combinaisonSecrete,
+                                                           Integer nombreDePositions,
+                                                           int[] zoneEvaluation) -> false;
+
+    protected ObtenirPropaleDefenseurMM obtenirPropaleDefenseurMM = () -> null;
+
+
+
     private LibellesMenuSecondaire modeJeu;
     private Scanner scanner;
 
@@ -47,34 +52,48 @@ abstract class JeuMM {
     /**
      * @param fabricationSecretMM
      */
-    public void runJeuMM(FabricationSecretMM fabricationSecretMM) {
+    public void runJeuMMChallengeur(FabricationSecretMM fabricationSecretMM) {
 
         LogLaCombinaisonSecrete(fabricationSecretMM.getCouleursSecretes());
 
         new IhmMasterMind(modeJeu,
                 fabricationSecretMM.getChiffresSecrets(),
                 fabricationSecretMM.getCouleursSecretes(),
-                validerProposition)
-                .runIhmMM(scanner);
+                validerPropositionMM, obtenirPropaleDefenseurMM)
+                .runIhmMMChallengeur(scanner);
     }
 
+    /**
+     * @param fabricationSecretMM
+     */
+    public void runJeuMMDefenseur(FabricationSecretMM fabricationSecretMM) {
+
+        LogLaCombinaisonSecrete(fabricationSecretMM.getCouleursSecretes());
+
+        new IhmMasterMind(modeJeu,
+                fabricationSecretMM.getChiffresSecrets(),
+                fabricationSecretMM.getCouleursSecretes(),
+                validerPropositionMM,
+                obtenirPropaleDefenseurMM)
+                .runIhmMMDefenseur(scanner);
+    }
 
     /**
      * @return le code secret (String)
      */
-    private String LogLaCombinaisonSecrete(Constantes.CouleursMastermind[] couleursSecretes) {
+    private String LogLaCombinaisonSecrete(CouleursMastermind[] couleursSecretes) {
 
-        Constantes.CouleursMastermind[] toutes = Constantes.CouleursMastermind.values();
+        CouleursMastermind[] toutes = CouleursMastermind.values();
         StringBuilder s = new StringBuilder(4096);
 
-        for (Constantes.CouleursMastermind x : toutes) {
+        for (CouleursMastermind x : toutes) {
             s.append(String.format("%s%s", x.toString(), ", "));
         }
         logger.info("Toutes les couleurs = " + s.substring(0, s.lastIndexOf(", ")));
 
         int tailleStringB = s.length();
         s.delete(0, tailleStringB - 1);
-        for (Constantes.CouleursMastermind x : couleursSecretes) {
+        for (CouleursMastermind x : couleursSecretes) {
             s.append(String.format("%s%s", x.toString(), ", "));
         }
         String valRet = String.format("%s %s", "Combinaison secrete = ", s.substring(0, s.lastIndexOf(", ")));
@@ -121,7 +140,7 @@ class FabricationSecretMM {
      * tableau qui contient les couleurs prises dans CouleursMastermind :
      * couleursSecretes[ i ] =  CouleursMastermind[ chiffresSecret[ i ]]
      */
-    private Constantes.CouleursMastermind[] couleursSecretes;
+    private CouleursMastermind[] couleursSecretes;
 
     /**
      * @param chiffresSecretsFournis la table des chiffes secrets est fourni par utilisateur
@@ -135,7 +154,7 @@ class FabricationSecretMM {
 
         chiffresSecrets = chiffresSecretsFournis;
 
-        BijecterCouleurChiffres();
+        couleursSecretes = BijecterCouleurChiffres(chiffresSecrets, nombreDePositions);
     }
 
     /**
@@ -172,25 +191,26 @@ class FabricationSecretMM {
         //pas assez de positions remplies - le random n'a pas marché
         if (chiffresSecrets.size() < nombreDePositions) {
 
-            Constantes.CouleursMastermind[] couleursMastermind = Constantes.CouleursMastermind.values();
+            CouleursMastermind[] couleursMastermind = CouleursMastermind.values();
             chiffresSecrets.clear();
             for (int i = 0; i < nombreDePositions; i++) {
                 chiffresSecrets.add(couleursMastermind[i].getValeurFacialeDeLaCouleur());
             }
         }
 
-        BijecterCouleurChiffres();
+        BijecterCouleurChiffres(chiffresSecrets, nombreDePositions);
     }
 
     /**
      * renseigne la ligne secrete des couleurs (bijection couleurs / chiffres)
      */
-    private void BijecterCouleurChiffres() {
-        couleursSecretes = new Constantes.CouleursMastermind[nombreDePositions];
+    public CouleursMastermind[] BijecterCouleurChiffres(ArrayList<Integer> chiffresSec, Integer nbPos) {
+        CouleursMastermind[] coulSec = new CouleursMastermind[nbPos];
         int i = 0;
-        for (int v : chiffresSecrets) {
-            couleursSecretes[i++] = Constantes.CouleursMastermind.values()[v];
+        for (int v : chiffresSec) {
+            coulSec[i++] = CouleursMastermind.values()[v];
         }
+        return coulSec;
     }
 
     /**
@@ -204,7 +224,7 @@ class FabricationSecretMM {
     /**
      * @return CouleursMastermind[] Tableau des couleurs de la combinaison secrete
      */
-    public Constantes.CouleursMastermind[] getCouleursSecretes() {
+    public CouleursMastermind[] getCouleursSecretes() {
 
         return couleursSecretes;
     }

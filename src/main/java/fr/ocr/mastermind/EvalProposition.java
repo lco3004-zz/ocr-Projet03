@@ -6,7 +6,7 @@ import static fr.ocr.utiles.Constantes.ConstEvalPropale.BLANC_MALPLACE;
 import static fr.ocr.utiles.Constantes.ConstEvalPropale.NOIR_BIENPLACE;
 
 
-class EvalChallengeurMM implements ValiderProposition {
+class EvalChallengeurMM implements ValiderPropositionMM {
 
     @Override
     public Boolean apply(ArrayList<Character> propaleJoueur,
@@ -37,7 +37,7 @@ class EvalChallengeurMM implements ValiderProposition {
 /**
  *
  */
-class EvalDefenseurMM implements ValiderProposition {
+class EvalDefenseurMM implements ValiderPropositionMM {
 
     /**
      * @param propaleJoueur      P, la proposition du joueur

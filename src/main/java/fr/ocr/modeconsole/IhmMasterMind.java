@@ -1,8 +1,8 @@
 package fr.ocr.modeconsole;
 
 
-import fr.ocr.mastermind.ObtenirLaProposition;
-import fr.ocr.mastermind.ValiderProposition;
+import fr.ocr.mastermind.ObtenirPropaleDefenseurMM;
+import fr.ocr.mastermind.ValiderPropositionMM;
 import fr.ocr.utiles.AppExceptions;
 import fr.ocr.utiles.Constantes;
 import fr.ocr.utiles.Constantes.ConstEvalPropale;
@@ -35,7 +35,7 @@ public class IhmMasterMind implements
     private Boolean modeDebug = (Boolean) getParam(MODE_DEBUG);
     private Integer nombreDeEssaisMax = (Integer) getParam(NOMBRE_D_ESSAIS);
 
-    private ObtenirLaProposition obtenirLaProposition;
+    private ObtenirPropaleDefenseurMM obtenirPropaleDefenseurMM;
 
 
     private ArrayList<Integer> compositionChiffresSecrets;
@@ -50,14 +50,19 @@ public class IhmMasterMind implements
     private int indexLignesJeuMM = 0, indexLignesProposition = 0;
 
 
+    private Character escapeChar = Constantes.Libelles.CharactersEscape.K.toString().charAt(0);
+
 
     /**
      * @param chiffresSecrets
      * @param couleursSecretes
+     * @param obtenirPropaleDefenseurMM
      */
     public IhmMasterMind(LibellesMenuSecondaire modeDeJeu, ArrayList<Integer> chiffresSecrets,
-                         CouleursMastermind[] couleursSecretes, ValiderProposition fctValidePropale) {
+                         CouleursMastermind[] couleursSecretes, ValiderPropositionMM fctValidePropale, ObtenirPropaleDefenseurMM obtenirPropaleDefenseurMM) {
 
+
+        this.obtenirPropaleDefenseurMM = obtenirPropaleDefenseurMM;
 
         compositionChiffresSecrets = chiffresSecrets;
 
@@ -112,9 +117,8 @@ public class IhmMasterMind implements
 
     /**
      * @param scanner
-     * @return
      */
-    public void runIhmMM(Scanner scanner) {
+    public void runIhmMMDefenseur(Scanner scanner) {
 
         IOConsole.ClearScreen.cls();
 
@@ -122,11 +126,66 @@ public class IhmMasterMind implements
 
         Integer nbreEssaisConsommes = 0;
 
-        Character escapeChar = Constantes.Libelles.CharactersEscape.K.toString().charAt(0);
+        String patternEscape = ConstruitPatternSaisie(escapeChar);
+
+        ArrayList<Character> propalOrdinateur;
+
+        indexLignesProposition = 0;
+
+        lignesJeuMM[LIGNE_TOUTES_COULEURS].setLibelleLigne("");
+
+        while (!SecretTrouve && nbreEssaisConsommes < nombreDeEssaisMax) {
+
+            propalOrdinateur = obtenirPropaleDefenseurMM.getPropaleDefenseur();
+
+            SecretTrouve = ligneJeuMMPropositions[indexLignesProposition++].setPropositionJoueur(propalOrdinateur).setZoneProposition().EvalProposition();
+
+            nbreEssaisConsommes++;
+        }
+
+        if (SecretTrouve) {
+            lignesJeuMM[LIGNE_STATUS].setLibelleLigne(" ----   Ordinateur Gagne !!---");
+        } else {
+            lignesJeuMM[LIGNE_SECRETE].setLibelleLigne("-- Ordinateur Perd !! --");
+        }
+
+        lignesJeuMM[LIGNE_DE_SAISIE].setLibelleLigne(lignesJeuMM[LIGNE_DE_SAISIE].getLibelleLigneOriginal());
+        //
+        // pour confirmation sortie du jeu , par le defenseur (sinon - pas d'affichage et retour direct au menu superieur
+        // seule saise possible 'escapeChar'
+        //
+        IOConsole.LectureClavier(patternEscape, scanner, new EcrireSurEcran() {
+            @Override
+            public void Display() {
+                for (int n = TITRE; n <= LIGNE_DE_SAISIE; n++) {
+                    if (lignesJeuMM[n].isEstVisible()) {
+                        if (n == LIGNE_DE_SAISIE) {
+                            System.out.print(lignesJeuMM[n].toString());
+                        } else {
+                            System.out.println(lignesJeuMM[n].toString());
+                        }
+                    }
+                }
+            }
+        }, escapeChar);
+
+    }
+
+    /**
+     * @param scanner
+     * @return
+     */
+    public void runIhmMMChallengeur(Scanner scanner) {
+
+        IOConsole.ClearScreen.cls();
+
+        boolean SecretTrouve = false, isEscape = false;
+
+        Integer nbreEssaisConsommes = 0;
 
         String patternInitial = ConstruitPatternSaisie(CouleursMastermind.values(), escapeChar);
 
-        ArrayList<Character> propalDuJoueur;
+        ArrayList<Character> propaleChallengeur;
 
         indexLignesProposition = 0;
 
@@ -135,12 +194,12 @@ public class IhmMasterMind implements
 
                 lignesJeuMM[LIGNE_DE_SAISIE].setLibelleLigne(lignesJeuMM[LIGNE_DE_SAISIE].getLibelleLigneOriginal());
 
-                propalDuJoueur = ObtenirLaProposition(scanner, patternInitial, escapeChar);
+                propaleChallengeur = getPropaleChallengeur(scanner, patternInitial, escapeChar);
 
-                if (propalDuJoueur.contains(escapeChar)) {
+                if (propaleChallengeur.contains(escapeChar)) {
                     isEscape = true;
                 } else {
-                    SecretTrouve = ligneJeuMMPropositions[indexLignesProposition++].setPropositionJoueur(propalDuJoueur).setZoneProposition().EvalProposition();
+                    SecretTrouve = ligneJeuMMPropositions[indexLignesProposition++].setPropositionJoueur(propaleChallengeur).setZoneProposition().EvalProposition();
                     nbreEssaisConsommes++;
                 }
             } else {
@@ -153,14 +212,13 @@ public class IhmMasterMind implements
                     lignesJeuMM[LIGNE_SECRETE].setLibelleLigne(String.format("-- Perdu. Soluce = %s", lignesJeuMM[LIGNE_SECRETE].getLibelleLigne()));
                     lignesJeuMM[LIGNE_TOUTES_COULEURS].setLibelleLigne("");
                 }
-                propalDuJoueur = ObtenirLaProposition(scanner, ConstruitPatternSaisie(escapeChar), escapeChar);
-                if (propalDuJoueur.contains(escapeChar)) {
+                propaleChallengeur = getPropaleChallengeur(scanner, ConstruitPatternSaisie(escapeChar), escapeChar);
+                if (propaleChallengeur.contains(escapeChar)) {
                     isEscape = true;
                 }
             }
         }
     }
-
 
     /**
      *
@@ -169,7 +227,7 @@ public class IhmMasterMind implements
      * @param escChar
      * @return
      */
-    private ArrayList<Character> ObtenirLaProposition(Scanner scanner, String pattern, Character escChar) {
+    private ArrayList<Character> getPropaleChallengeur(Scanner scanner, String pattern, Character escChar) {
         ArrayList<Character> propositionJoueur = new ArrayList<>(256);
         try {
 
@@ -374,7 +432,7 @@ class LigneJeuMMProposition extends LigneJeuMM {
 
     private ArrayList<Character> propositionJoueur;
 
-    private ValiderProposition fctValideProposition;
+    private ValiderPropositionMM fctValideProposition;
     private ArrayList<Character> combinaisonInitialesSecretes;
     private ArrayList<Integer> combinaisonChiffresSecrets;
 
@@ -389,7 +447,7 @@ class LigneJeuMMProposition extends LigneJeuMM {
                           int rang,
                           int typeligne,
                           String infos,
-                          ValiderProposition fct) {
+                          ValiderPropositionMM fct) {
 
         super(disponible, visible, rang, typeligne, infos);
 

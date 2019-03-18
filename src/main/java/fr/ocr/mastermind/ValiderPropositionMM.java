@@ -3,7 +3,7 @@ package fr.ocr.mastermind;
 import java.util.ArrayList;
 
 @FunctionalInterface
-public interface ValiderProposition {
+public interface ValiderPropositionMM {
 
      Boolean apply(ArrayList<Character> proposition,
                    ArrayList<Character> secret,

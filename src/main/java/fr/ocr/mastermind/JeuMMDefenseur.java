@@ -20,6 +20,15 @@ public class JeuMMDefenseur extends JeuMM {
 
     }
 
+    public void runJeuMM() {
+        MenuSaisieSecret menuSaisieSecret = new MenuSaisieSecret();
+        FabricationSecretMM fabricationSecretMM = new FabricationSecretMM(menuSaisieSecret.saisirCombinaisonSecrete());
+        this.validerPropositionMM = new EvalDefenseurMM();
+        this.obtenirPropaleDefenseurMM = new ProduirePropaleDefenseurMM();
+        super.runJeuMMDefenseur(fabricationSecretMM);
+    }
+
+
     /**
      * Sc(i,j)
      * I   J
@@ -45,12 +54,6 @@ public class JeuMMDefenseur extends JeuMM {
         return scPossible;
     }
 
-    public void runJeuMM() {
-        MenuSaisieSecret menuSaisieSecret = new MenuSaisieSecret();
-        FabricationSecretMM fabricationSecretMM = new FabricationSecretMM(menuSaisieSecret.saisirCombinaisonSecrete());
-        this.validerProposition = new EvalDefenseurMM();
-        super.runJeuMM(fabricationSecretMM);
-    }
 
     /**
      * @param number nombre a convertir (sous forme de chaine)
