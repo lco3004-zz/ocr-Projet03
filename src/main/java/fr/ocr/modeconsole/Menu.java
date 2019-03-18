@@ -13,7 +13,6 @@ import static fr.ocr.utiles.Messages.ErreurMessages.ERREUR_GENERIC;
 
 /**
  * @param <T> : Enum  qui vaut soit LibellesMMenuPrincipal , soit LibellesMenuSecondaire
- *
  * @author laurentCordier
  * <p>
  * <p>
@@ -51,7 +50,7 @@ import static fr.ocr.utiles.Messages.ErreurMessages.ERREUR_GENERIC;
  * <p>
  * un objet LigneMenu qui correspond à une action de saisie ou une zone variable d'information a un selecteur null
  */
-class LigneMenu<T extends Enum>   {
+class LigneMenu<T extends Enum> {
     private String libelleLigne;
 
     private T referenceEnumLibelle;
@@ -79,16 +78,16 @@ class LigneMenu<T extends Enum>   {
         return libelleLigne;
     }
 
+    void setLibelleLigne(String libelleLigne) {
+        this.libelleLigne = libelleLigne;
+    }
+
     T getReferenceEnumLibelle() {
         return referenceEnumLibelle;
     }
 
     Character getSelecteur() {
         return selecteur;
-    }
-
-    void setLibelleLigne(String libelleLigne) {
-        this.libelleLigne = libelleLigne;
     }
 
 
@@ -118,7 +117,7 @@ public abstract class Menu<T extends Enum> {
     // pour retrouver la statusbar dans le tableau des lignes de ligneMenu
     private T clefStatusBar;
 
-    private  DisplayMenu displayMenu ;
+    private DisplayMenu displayMenu;
 
     /**
      * Constructeur Menu
@@ -170,7 +169,6 @@ public abstract class Menu<T extends Enum> {
      *
      * @param codeRet : caractère saisi par l'utilisateur qui sert de clef
      *                pour retrouver la ligne LigneMenu qui a codeRet comme valeur de selecteur
-     *
      * @return instance d'une classe d'un Enum (LibellesMenuSecondaire par exemple)
      */
     private T retrouveLigneMenu(Character codeRet) {
@@ -198,7 +196,6 @@ public abstract class Menu<T extends Enum> {
      * c.a.d l'instance d'une classe d'un Enum  (QUITTER, RETOUR ....)
      *
      * @return instance d'une classe d'un Enum (LibellesMenuSecondaire par exemple)
-     *
      * @throws AppExceptions sur erreur ou CTRL-C
      */
     public T RunMenu() throws AppExceptions {
@@ -207,9 +204,8 @@ public abstract class Menu<T extends Enum> {
         Character escapeChar = Constantes.Libelles.CharactersEscape.X.toString().charAt(0);
 
         try {
-            enumActionChoisie = retrouveLigneMenu(LectureClavier(pattern_Menu,scanner,displayMenu, escapeChar));
-        }
-        catch (Exception e) {
+            enumActionChoisie = retrouveLigneMenu(LectureClavier(pattern_Menu, scanner, displayMenu, escapeChar));
+        } catch (Exception e) {
             logger.error(String.format("%s %s ", ERREUR_GENERIC, e.getClass().getSimpleName()));
             throw new AppExceptions(ERREUR_GENERIC);
         }
@@ -234,12 +230,12 @@ public abstract class Menu<T extends Enum> {
  *
  * @param <T> instances de Libelles....
  */
-class DisplayMenu<T extends Enum> implements AffichageMenu {
+class DisplayMenu<T extends Enum> implements EcrireSurEcran {
 
     private ArrayList<LigneMenu<T>> lignesMenu;
 
     DisplayMenu(ArrayList<LigneMenu<T>> x) {
-        lignesMenu=x;
+        lignesMenu = x;
     }
 
     /*

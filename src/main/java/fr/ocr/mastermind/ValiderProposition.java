@@ -1,9 +1,9 @@
-package fr.ocr.lesjeux;
+package fr.ocr.mastermind;
 
 import java.util.ArrayList;
 
 @FunctionalInterface
-public interface ValidationPropale {
+public interface ValiderProposition {
 
      Boolean apply(ArrayList<Character> proposition,
                    ArrayList<Character> secret,

@@ -1,7 +1,6 @@
 package fr.ocr.modeconsole;
 
 
-
 import fr.ocr.utiles.Constantes;
 
 import java.util.ArrayList;
@@ -14,13 +13,13 @@ import static fr.ocr.params.Parametres.NOMBRE_DE_POSITIONS;
  */
 public class MenuSaisieSecret {
 
-    public ArrayList <Integer> saisirCombinaisonSecrete() {
+    public ArrayList<Integer> saisirCombinaisonSecrete() {
         ArrayList<Integer> combinaisonSecrete = new ArrayList<>(256);
-        int monCompteur =0;
-        for (Constantes.CouleursMastermind v: Constantes.CouleursMastermind.values()) {
+        int monCompteur = 0;
+        for (Constantes.CouleursMastermind v : Constantes.CouleursMastermind.values()) {
             combinaisonSecrete.add(v.getValeurFacialeDeLaCouleur());
             Integer nbPositions = (Integer) getParam(NOMBRE_DE_POSITIONS);
-            if (monCompteur == nbPositions-1)
+            if (monCompteur == nbPositions - 1)
                 break;
             monCompteur++;
         }

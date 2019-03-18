@@ -33,33 +33,25 @@ public enum Constantes {
         }
     }
 
-    public interface ConstEvalPropale {
-        //pour résultat evaluation proposition : Noir == pion bien place,  blanc == pion mal placé
-        int NOIR_BIENPLACE = 0;
-        int BLANC_MALPLACE = NOIR_BIENPLACE + 1;
-        //libelle colonne eval
-        char PIONS_BIENPLACES ='N';
-        char PIONS_MALPLACES ='B';
-    }
     public enum CouleursMastermind {
-		AUBERGINE( 0,'A'),
-		JAUNE(1,'J'),
-		VERT( 2,'V'),
-		ROUGE( 3,'R'),
-		BLEU( 4,'B'),
-		ORANGE( 5,'O'),
-		TURQUOISE( 6,'T'),
-		MAUVE( 7,'M'),
-		INDIGO( 8,'I'),
-		CARMIN( 9,'C'),
-		DORIAN(10,'D'),
-		EBENE(11,'E'),
-		FUSHIA(12,'F'),
-		GRIS(13,'G'),
-		PRUNE(14,'P'),
-		SAUMON(15,'S'),
-		LAVANDE(16,'L'),
-		NOIR(17,'N');
+        AUBERGINE(0, 'A'),
+        JAUNE(1, 'J'),
+        VERT(2, 'V'),
+        ROUGE(3, 'R'),
+        BLEU(4, 'B'),
+        ORANGE(5, 'O'),
+        TURQUOISE(6, 'T'),
+        MAUVE(7, 'M'),
+        INDIGO(8, 'I'),
+        CARMIN(9, 'C'),
+        DORIAN(10, 'D'),
+        EBENE(11, 'E'),
+        FUSHIA(12, 'F'),
+        GRIS(13, 'G'),
+        PRUNE(14, 'P'),
+        SAUMON(15, 'S'),
+        LAVANDE(16, 'L'),
+        NOIR(17, 'N');
 
         private int valeurFacialeDeLaCouleur;
         private char lettreInitiale;
@@ -72,10 +64,12 @@ public enum Constantes {
         public int getValeurFacialeDeLaCouleur() {
             return valeurFacialeDeLaCouleur;
         }
-        public char getLettreInitiale () {
-			return lettreInitiale;
-		}
+
+        public char getLettreInitiale() {
+            return lettreInitiale;
+        }
     }
+
     /**
      * Constantes pour les menus
      */
@@ -129,6 +123,16 @@ public enum Constantes {
             SAISIR_CHOIX
         }
     }
+
+    public interface ConstEvalPropale {
+        //pour résultat evaluation proposition : Noir == pion bien place,  blanc == pion mal placé
+        int NOIR_BIENPLACE = 0;
+        int BLANC_MALPLACE = NOIR_BIENPLACE + 1;
+        //libelle colonne eval
+        char PIONS_BIENPLACES = 'N';
+        char PIONS_MALPLACES = 'B';
+    }
+
     /**
      *
      */
@@ -137,10 +141,10 @@ public enum Constantes {
         int TITRE = 0;
         int LIGNE_STATUS = TITRE + 1;
         int LIGNE_SECRETE = LIGNE_STATUS + 1;
-        int LIGNE_BLANCH01 =LIGNE_SECRETE + 1;
+        int LIGNE_BLANCH01 = LIGNE_SECRETE + 1;
         int LIGNE_ENTETE = LIGNE_BLANCH01 + 1;
         int LIGNE_PROPOSITION = LIGNE_ENTETE + 1;
-        int LIGNE_BLANCH02 =LIGNE_PROPOSITION + (Integer) getParam(NOMBRE_D_ESSAIS);
+        int LIGNE_BLANCH02 = LIGNE_PROPOSITION + (Integer) getParam(NOMBRE_D_ESSAIS);
         int LIGNE_TOUTES_COULEURS = LIGNE_BLANCH02 + 1;
         int LIGNE_DE_SAISIE = LIGNE_TOUTES_COULEURS + 1;
 

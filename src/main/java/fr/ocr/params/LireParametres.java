@@ -119,8 +119,8 @@ public final class LireParametres {
                 if (valLue >= borneMin && valLue <= borneMax) {
                     retVal = valLue;
                 } else if (valLue < borneMin) {
-                        retVal = borneMin;
-                } else  if (valLue > borneMax) {
+                    retVal = borneMin;
+                } else if (valLue > borneMax) {
                     retVal = borneMax;
                 } else {
                     throw new AppExceptions(VALEUR_PARAM_INCORRECT);

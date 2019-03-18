@@ -1,7 +1,7 @@
 package fr.ocr;
 
-import fr.ocr.lesjeux.JeuMMChallengeur;
-import fr.ocr.lesjeux.JeuMMDefenseur;
+import fr.ocr.mastermind.JeuMMChallengeur;
+import fr.ocr.mastermind.JeuMMDefenseur;
 import fr.ocr.modeconsole.MenuPrincipal;
 import fr.ocr.modeconsole.MenuSecondaire;
 import fr.ocr.utiles.AppExceptions;
@@ -62,7 +62,7 @@ public class App {
                         switch (ch_Sec) {
                             case TITRE:
                                 break;
-                            case  MODE_CHALLENGER :
+                            case MODE_CHALLENGER:
                                 if (ch_Sup.equals(CHOISIR_MASTERMIND)) {
                                     JeuMMChallengeur jeuMMChallengeur = new JeuMMChallengeur(ch_Sec, scanner);
                                     jeuMMChallengeur.runJeuMM();

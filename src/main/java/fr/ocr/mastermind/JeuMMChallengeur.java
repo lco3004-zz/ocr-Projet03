@@ -1,4 +1,4 @@
-package fr.ocr.lesjeux;
+package fr.ocr.mastermind;
 
 
 import fr.ocr.utiles.Constantes.Libelles.LibellesMenuSecondaire;
@@ -19,7 +19,7 @@ public class JeuMMChallengeur extends JeuMM {
 
     public void runJeuMM() {
         FabricationSecretMM fabricationSecretMM = new FabricationSecretMM();
-        this.validationPropale = new EvalChallengeurMM();
+        this.validerProposition = new EvalChallengeurMM();
         super.runJeuMM(fabricationSecretMM);
     }
 }

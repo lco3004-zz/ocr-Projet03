@@ -11,17 +11,17 @@ import static fr.ocr.utiles.Logs.logger;
 import static fr.ocr.utiles.Messages.ErreurMessages.ERREUR_GENERIC;
 import static fr.ocr.utiles.Messages.InfosMessages.CTRL_C;
 
-class IOConsole {
+public class IOConsole {
 
     /*
      * saisie clavier avec pattern
      *
      * retourne le caractère qui correspond à la saisie utilisateur (filtré par pattern )
      */
-    static Character LectureClavier(String pattern_Menu,
-                                    Scanner scanner,
-                                    AffichageMenu affichageMenu,
-                                    Character escapeChar) throws AppExceptions {
+    public static Character LectureClavier(String pattern_Menu,
+                                           Scanner scanner,
+                                           EcrireSurEcran ecrireSurEcran,
+                                           Character escapeChar) throws AppExceptions {
 
         Pattern patternChoix = Pattern.compile(pattern_Menu);
 
@@ -30,7 +30,7 @@ class IOConsole {
 
         ClearScreen.cls();
 
-        affichageMenu.Display();
+        ecrireSurEcran.Display();
 
         while (choix.equals("") && scanner.hasNext()) {
             cRet = escapeChar;
@@ -42,7 +42,7 @@ class IOConsole {
                     } catch (InputMismatchException e1) {
                         String tmp = scanner.next();
                         ClearScreen.cls();
-                        affichageMenu.Display();
+                        ecrireSurEcran.Display();
                     }
                 } catch (StringIndexOutOfBoundsException e1) {
                     logger.info(CTRL_C);
@@ -60,8 +60,8 @@ class IOConsole {
      * efface l'afficage console . Clear ou Cls sont appellés selon le système
      * sur lequel le programme est exécuté
      */
-    static class ClearScreen {
-        static void cls() {
+    public static class ClearScreen {
+        public static void cls() {
             try {
 
                 final String os = System.getProperty("os.name");

@@ -14,7 +14,7 @@ import static fr.ocr.utiles.Messages.ErreurMessages.PARAM_INCONNU;
  * <p>
  * hérite de la class Menu qui se charge du comportement d'un menu (afffichage, saisie)
  */
-public class MenuPrincipal extends Menu<Constantes.Libelles.LibellesMenuPrincipal>  {
+public class MenuPrincipal extends Menu<Constantes.Libelles.LibellesMenuPrincipal> {
 
     /**
      * construit le menu principal en fournissant les chaines de caractères à afficher,
@@ -25,7 +25,7 @@ public class MenuPrincipal extends Menu<Constantes.Libelles.LibellesMenuPrincipa
      */
     public MenuPrincipal(Scanner sc) {
 
-        super(Constantes.Libelles.LibellesMenuPrincipal.values(),"[1-2 X x]" , LIGNE_ETAT, sc);
+        super(Constantes.Libelles.LibellesMenuPrincipal.values(), "[1-2 X x]", LIGNE_ETAT, sc);
         Character c;
 
         for (Constantes.Libelles.LibellesMenuPrincipal libellesMenu_principal : Constantes.Libelles.LibellesMenuPrincipal.values()) {
@@ -60,7 +60,6 @@ public class MenuPrincipal extends Menu<Constantes.Libelles.LibellesMenuPrincipa
     /**
      * @return instance d'une classe de LibellesMenuPrincipal qui correspond à  l'action à réaliser
      * 'i.e : QUITTER, JOUER ...)
-     *
      * @throws AppExceptions : sur erreur non gérée
      */
     @Override

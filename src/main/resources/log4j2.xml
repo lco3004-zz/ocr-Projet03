@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<Configuration monitorInterval="60" >
+<Configuration monitorInterval="60">
     <Properties>
         <Property name="log-path">./logProjet03</Property>
         <Property name="archive">${log-path}/archive</Property>
@@ -23,7 +23,7 @@
             </Policies>
             <DefaultRolloverStrategy max="30"/>
         </RollingFile>
- 
+         
     </Appenders>
     <Loggers>
         <Logger name="ocr_Projet03" level="debug" additivity="false">

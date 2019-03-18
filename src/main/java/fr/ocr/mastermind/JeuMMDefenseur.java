@@ -1,18 +1,23 @@
-package fr.ocr.lesjeux;
+package fr.ocr.mastermind;
+
+import fr.ocr.modeconsole.MenuSaisieSecret;
+import fr.ocr.utiles.Constantes.Libelles.LibellesMenuSecondaire;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
-public class EvalDefenseurMM implements ValidationPropale {
-
+public class JeuMMDefenseur extends JeuMM {
 
     private List<Integer[]> lesScoresPossibles;
 
     /**
-     * @param nbPositions le nombre de positions dans une ligne du jeu MM
+     * @param modeJeu
+     * @param sc
      */
-    public EvalDefenseurMM(Integer nbPositions) {
-        lesScoresPossibles = CalculScoresPossibles(nbPositions);
+    public JeuMMDefenseur(LibellesMenuSecondaire modeJeu, Scanner sc) {
+        super(modeJeu, sc);
+
     }
 
     /**
@@ -24,7 +29,7 @@ public class EvalDefenseurMM implements ValidationPropale {
      * 3 (0)
      * 4 (0..nbPos-4) 0..0
      *
-     * @param nbPos  Integer , le nombre de positions dans une ligne du jeu MM
+     * @param nbPos Integer , le nombre de positions dans une ligne du jeu MM
      * @return List<Integer [ ]> les scores possibles qui peuvent être obtenus par une proposition
      */
     public static List<Integer[]> CalculScoresPossibles(int nbPos) {
@@ -40,22 +45,11 @@ public class EvalDefenseurMM implements ValidationPropale {
         return scPossible;
     }
 
-    /**
-     *
-     * @param propaleJoueur  P, la proposition du joueur
-     * @param combinaisonSecrete  S, la combinaison secrete à trouver
-     * @param nombreDePositions , le nombre positions 'emplacement de pions) ur une ligne du jeu
-     * @param zoneEvaluation,  tableau entier de taille 2 qui contient le nombre de Blancs (mal placés) et le nombre de Noirs (bien placés)
-     * @return si P est égal à S  , fin de partie donc la méthode répond true (false sinon)
-     */
-    @Override
-    public Boolean apply(ArrayList<Character> propaleJoueur,
-                         ArrayList<Character> combinaisonSecrete,
-                         Integer nombreDePositions,
-                         int[] zoneEvaluation) {
-
-
-        return false;
+    public void runJeuMM() {
+        MenuSaisieSecret menuSaisieSecret = new MenuSaisieSecret();
+        FabricationSecretMM fabricationSecretMM = new FabricationSecretMM(menuSaisieSecret.saisirCombinaisonSecrete());
+        this.validerProposition = new EvalDefenseurMM();
+        super.runJeuMM(fabricationSecretMM);
     }
 
     /**
@@ -70,4 +64,5 @@ public class EvalDefenseurMM implements ValidationPropale {
         // and return in specified radix(base)
         return Integer.toString(Integer.parseInt(number, sBase), dBase);
     }
+
 }

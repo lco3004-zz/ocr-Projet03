@@ -1,4 +1,4 @@
-package fr.ocr.lesjeux;
+package fr.ocr.mastermind;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

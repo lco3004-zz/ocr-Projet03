@@ -83,7 +83,6 @@ public class MenuSecondaire extends Menu<Constantes.Libelles.LibellesMenuSeconda
     /**
      * @return instance d'une classe de LibellesMenuPSecondaie qui correspond à  l'action à réaliser
      * 'i.e : QUITTER, JOUER ...)
-     *
      * @throws AppExceptions : sur erreur non gérée
      */
     @Override
@@ -92,10 +91,9 @@ public class MenuSecondaire extends Menu<Constantes.Libelles.LibellesMenuSeconda
     }
 
     /**
-     *
-     * @throws AppExceptions  en cas d'incoherence interne
+     * @throws AppExceptions en cas d'incoherence interne
      */
-    public  void logParamtreMM() throws AppExceptions {
+    public void logParamtreMM() throws AppExceptions {
         Object tmpRetour;
         for (Parametres x : Parametres.values()) {
             tmpRetour = getParam(x);

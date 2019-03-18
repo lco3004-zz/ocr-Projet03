@@ -1,8 +1,12 @@
 package fr.ocr.modeconsole;
 
-import fr.ocr.lesjeux.ValidationPropale;
+
+import fr.ocr.mastermind.ObtenirLaProposition;
+import fr.ocr.mastermind.ValiderProposition;
 import fr.ocr.utiles.AppExceptions;
 import fr.ocr.utiles.Constantes;
+import fr.ocr.utiles.Constantes.ConstEvalPropale;
+import fr.ocr.utiles.Constantes.ConstLignesMM;
 import fr.ocr.utiles.Constantes.CouleursMastermind;
 import fr.ocr.utiles.Constantes.Libelles.LibellesMenuSecondaire;
 
@@ -16,12 +20,13 @@ import static fr.ocr.utiles.Logs.logger;
 import static fr.ocr.utiles.Messages.ErreurMessages.ERREUR_GENERIC;
 
 
-
-
 /**
  *
  */
-public class IhmMasterMind implements Constantes.ConstLignesMM, Constantes.ConstEvalPropale {
+public class IhmMasterMind implements
+        ConstLignesMM,
+        ConstEvalPropale,
+        EcrireSurEcran {
 
 
     private Boolean doublonAutorise = (Boolean) getParam(DOUBLON_AUTORISE);
@@ -30,11 +35,10 @@ public class IhmMasterMind implements Constantes.ConstLignesMM, Constantes.Const
     private Boolean modeDebug = (Boolean) getParam(MODE_DEBUG);
     private Integer nombreDeEssaisMax = (Integer) getParam(NOMBRE_D_ESSAIS);
 
-
+    private ObtenirLaProposition obtenirLaProposition;
 
 
     private ArrayList<Integer> compositionChiffresSecrets;
-
 
 
     // lignes MM affichees par l'ihm. +5 pour les lignes d'infos (titre, ...)
@@ -46,12 +50,13 @@ public class IhmMasterMind implements Constantes.ConstLignesMM, Constantes.Const
     private int indexLignesJeuMM = 0, indexLignesProposition = 0;
 
 
+
     /**
      * @param chiffresSecrets
      * @param couleursSecretes
      */
     public IhmMasterMind(LibellesMenuSecondaire modeDeJeu, ArrayList<Integer> chiffresSecrets,
-                         CouleursMastermind[] couleursSecretes, ValidationPropale fctValidePropale) {
+                         CouleursMastermind[] couleursSecretes, ValiderProposition fctValidePropale) {
 
 
         compositionChiffresSecrets = chiffresSecrets;
@@ -70,13 +75,13 @@ public class IhmMasterMind implements Constantes.ConstLignesMM, Constantes.Const
 
         String champBlancNoir;
         StringBuilder lesCroixEtVirgules = new StringBuilder(256);
-        for (int nbPositions =0; nbPositions<nombreDePositions;nbPositions++) {
+        for (int nbPositions = 0; nbPositions < nombreDePositions; nbPositions++) {
             lesCroixEtVirgules.append(' ');
             lesCroixEtVirgules.append('x');
             lesCroixEtVirgules.append(',');
         }
 
-        champBlancNoir = String.format(" ## [%s ] %c %c", lesCroixEtVirgules.substring(0,lesCroixEtVirgules.length()-1),PIONS_BIENPLACES, PIONS_MALPLACES);
+        champBlancNoir = String.format(" ## [%s ] %c %c", lesCroixEtVirgules.substring(0, lesCroixEtVirgules.length() - 1), PIONS_BIENPLACES, PIONS_MALPLACES);
         lignesJeuMM[LIGNE_ENTETE] = new LigneJeuMM(true, true, LIGNE_ENTETE, LIGNE_ENTETE, champBlancNoir);
 
         lignesJeuMM[LIGNE_BLANCH01] = new LigneJeuMM(true, true, LIGNE_BLANCH01, LIGNE_BLANCH01, " ");
@@ -84,7 +89,7 @@ public class IhmMasterMind implements Constantes.ConstLignesMM, Constantes.Const
 
         lignesJeuMM[LIGNE_TOUTES_COULEURS] = new LigneJeuMM(true, true, LIGNE_TOUTES_COULEURS, LIGNE_TOUTES_COULEURS, " ");
 
-        lignesJeuMM[LIGNE_TOUTES_COULEURS].setLibelleLigne(CouleursMastermind.values(),nombreDeCouleurs);
+        lignesJeuMM[LIGNE_TOUTES_COULEURS].setLibelleLigne(CouleursMastermind.values(), nombreDeCouleurs);
 
         Character c = Constantes.Libelles.CharactersEscape.K.toString().charAt(0);
 
@@ -110,12 +115,19 @@ public class IhmMasterMind implements Constantes.ConstLignesMM, Constantes.Const
      * @return
      */
     public void runIhmMM(Scanner scanner) {
+
         IOConsole.ClearScreen.cls();
+
         boolean SecretTrouve = false, isEscape = false;
+
         Integer nbreEssaisConsommes = 0;
+
         Character escapeChar = Constantes.Libelles.CharactersEscape.K.toString().charAt(0);
+
         String patternInitial = ConstruitPatternSaisie(CouleursMastermind.values(), escapeChar);
+
         ArrayList<Character> propalDuJoueur;
+
         indexLignesProposition = 0;
 
         while (!isEscape) {
@@ -123,7 +135,7 @@ public class IhmMasterMind implements Constantes.ConstLignesMM, Constantes.Const
 
                 lignesJeuMM[LIGNE_DE_SAISIE].setLibelleLigne(lignesJeuMM[LIGNE_DE_SAISIE].getLibelleLigneOriginal());
 
-                propalDuJoueur = SaisieProposition(scanner, patternInitial, () -> AfficherLigne(), escapeChar);
+                propalDuJoueur = ObtenirLaProposition(scanner, patternInitial, escapeChar);
 
                 if (propalDuJoueur.contains(escapeChar)) {
                     isEscape = true;
@@ -136,13 +148,12 @@ public class IhmMasterMind implements Constantes.ConstLignesMM, Constantes.Const
                 if (SecretTrouve) {
                     lignesJeuMM[LIGNE_STATUS].setLibelleLigne(" ----   VICTOIRE !!---");
                     lignesJeuMM[LIGNE_TOUTES_COULEURS].setLibelleLigne("");
-                }
-                else {
+                } else {
                     lignesJeuMM[LIGNE_SECRETE].setEstVisible(true);
-                    lignesJeuMM[LIGNE_SECRETE].setLibelleLigne(String.format("-- Perdu. Soluce = %s",lignesJeuMM[LIGNE_SECRETE].getLibelleLigne()));
+                    lignesJeuMM[LIGNE_SECRETE].setLibelleLigne(String.format("-- Perdu. Soluce = %s", lignesJeuMM[LIGNE_SECRETE].getLibelleLigne()));
                     lignesJeuMM[LIGNE_TOUTES_COULEURS].setLibelleLigne("");
                 }
-                propalDuJoueur = SaisieProposition(scanner, ConstruitPatternSaisie(escapeChar), () -> AfficherLigne(), escapeChar);
+                propalDuJoueur = ObtenirLaProposition(scanner, ConstruitPatternSaisie(escapeChar), escapeChar);
                 if (propalDuJoueur.contains(escapeChar)) {
                     isEscape = true;
                 }
@@ -150,26 +161,45 @@ public class IhmMasterMind implements Constantes.ConstLignesMM, Constantes.Const
         }
     }
 
+
     /**
+     *
+     * @param scanner
+     * @param pattern
+     * @param escChar
      * @return
      */
-    private ArrayList<Character> SaisieProposition(Scanner scanner, String pattern, AffichageMenu fctDisplay, Character escChar) {
+    private ArrayList<Character> ObtenirLaProposition(Scanner scanner, String pattern, Character escChar) {
         ArrayList<Character> propositionJoueur = new ArrayList<>(256);
         try {
 
-            Character saisieUneCouleur ;
+            Character saisieUneCouleur;
             do {
-                saisieUneCouleur = IOConsole.LectureClavier(pattern, scanner, fctDisplay, escChar);
+                saisieUneCouleur = IOConsole.LectureClavier(pattern, scanner, new EcrireSurEcran() {
+                    @Override
+                    public void Display() {
+                        for (int n = TITRE; n <= LIGNE_DE_SAISIE; n++) {
+                            if (lignesJeuMM[n].isEstVisible()) {
+                                if (n == LIGNE_DE_SAISIE) {
+                                    System.out.print(lignesJeuMM[n].toString());
+                                } else {
+                                    System.out.println(lignesJeuMM[n].toString());
+                                }
+                            }
+                        }
+                    }
+                }, escChar);
+
                 if (saisieUneCouleur != escChar) {
                     propositionJoueur.add(saisieUneCouleur);
-                     String infosSasiie = lignesJeuMM[LIGNE_DE_SAISIE].getLibelleLigne() + saisieUneCouleur.toString() +" ";
+                    String infosSasiie = lignesJeuMM[LIGNE_DE_SAISIE].getLibelleLigne() + saisieUneCouleur.toString() + " ";
                     lignesJeuMM[LIGNE_DE_SAISIE].setLibelleLigne(infosSasiie);
                     if (!doublonAutorise) {
                         int posCol = pattern.indexOf(saisieUneCouleur);
                         int taille = pattern.length();
                         pattern = pattern.substring(0, posCol) + pattern.substring(posCol + 1, taille);
                         taille = pattern.length();
-                        String pourLower =String.valueOf(saisieUneCouleur).toLowerCase(Locale.forLanguageTag("fr"));
+                        String pourLower = String.valueOf(saisieUneCouleur).toLowerCase(Locale.forLanguageTag("fr"));
                         posCol = pattern.indexOf(pourLower.toCharArray()[0]);
                         pattern = pattern.substring(0, posCol) + pattern.substring(posCol + 1, taille);
                     }
@@ -186,22 +216,6 @@ public class IhmMasterMind implements Constantes.ConstLignesMM, Constantes.Const
             propositionJoueur.add(escChar);
         }
         return propositionJoueur;
-    }
-
-    /**
-     *
-     */
-    private void AfficherLigne() {
-        for (int n = TITRE; n <= LIGNE_DE_SAISIE; n++) {
-            if (lignesJeuMM[n].isEstVisible()) {
-                if (n == LIGNE_DE_SAISIE) {
-                    System.out.print(lignesJeuMM[n].toString());
-                }
-                else {
-                    System.out.println(lignesJeuMM[n].toString());
-                }
-            }
-        }
     }
 
     /**
@@ -226,6 +240,7 @@ public class IhmMasterMind implements Constantes.ConstLignesMM, Constantes.Const
         listeInitialesColor.append(']');
         return listeInitialesColor.toString();
     }
+
     private String ConstruitPatternSaisie(Character escCape) {
         StringBuilder listeInitialesColor = new StringBuilder(256);
         String s;
@@ -243,7 +258,7 @@ public class IhmMasterMind implements Constantes.ConstLignesMM, Constantes.Const
 /**
  *
  */
-abstract class LigneMasterMind implements Constantes.ConstLignesMM, Constantes.ConstEvalPropale {
+abstract class LigneMasterMind implements ConstLignesMM, ConstEvalPropale {
     private boolean estDisponible;
     private boolean estVisible;
     private int rangDansTableJeu;
@@ -306,22 +321,27 @@ class LigneJeuMM extends LigneMasterMind {
         return libelleLigne;
     }
 
-    String getLibelleLigneOriginal() {
-        return libelleLigneOriginal;
-    }
-
     LigneJeuMM setLibelleLigne(String infos) {
 
         libelleLigne = infos;
         return this;
     }
 
+    LigneJeuMM setLibelleLigne(CouleursMastermind[] colMM) {
+        setLibelleLigne(colMM, colMM.length);
+        return this;
+    }
+
+    String getLibelleLigneOriginal() {
+        return libelleLigneOriginal;
+    }
+
     LigneJeuMM setLibelleLigne(CouleursMastermind[] colMM, int nbCouleurs) {
 
         StringBuilder listeToutesCol = new StringBuilder(256);
         listeToutesCol.append(" Les Couleurs -> ");
-        int couleursUtilisees = 0 ;
-        for (CouleursMastermind v : colMM) {
+        int couleursUtilisees = 0;
+        for (Constantes.CouleursMastermind v : colMM) {
             if (couleursUtilisees < nbCouleurs) {
                 listeToutesCol.append(v.getLettreInitiale());
                 listeToutesCol.append(' ');
@@ -329,11 +349,6 @@ class LigneJeuMM extends LigneMasterMind {
             couleursUtilisees++;
         }
         libelleLigne = listeToutesCol.toString();
-        return this;
-    }
-
-    LigneJeuMM setLibelleLigne(CouleursMastermind[] colMM) {
-        setLibelleLigne(colMM,colMM.length);
         return this;
     }
 
@@ -359,7 +374,7 @@ class LigneJeuMMProposition extends LigneJeuMM {
 
     private ArrayList<Character> propositionJoueur;
 
-    private ValidationPropale fctValideProposition;
+    private ValiderProposition fctValideProposition;
     private ArrayList<Character> combinaisonInitialesSecretes;
     private ArrayList<Integer> combinaisonChiffresSecrets;
 
@@ -374,7 +389,7 @@ class LigneJeuMMProposition extends LigneJeuMM {
                           int rang,
                           int typeligne,
                           String infos,
-                          ValidationPropale fct) {
+                          ValiderProposition fct) {
 
         super(disponible, visible, rang, typeligne, infos);
 
@@ -382,7 +397,7 @@ class LigneJeuMMProposition extends LigneJeuMM {
 
         combinaisonInitialesSecretes = new ArrayList<>(256);
 
-        for (CouleursMastermind couleursMastermind : secretCouleurs) {
+        for (Constantes.CouleursMastermind couleursMastermind : secretCouleurs) {
             combinaisonInitialesSecretes.add(couleursMastermind.getLettreInitiale());
         }
         fctValideProposition = fct;
@@ -403,7 +418,7 @@ class LigneJeuMMProposition extends LigneJeuMM {
             logger.error(ERREUR_GENERIC.getMessageErreur());
             throw new AppExceptions(ERREUR_GENERIC);
         }
-        for (int i = 0; i <zoneEval.length  ; i++) {
+        for (int i = 0; i < zoneEval.length; i++) {
             this.zoneEvaluation[i] = zoneEval[i];
         }
     }
@@ -470,3 +485,4 @@ class LigneJeuMMProposition extends LigneJeuMM {
         super.setLibelleLigne(this.toString());
     }
 }
+
