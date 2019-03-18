@@ -23,7 +23,6 @@ import static fr.ocr.utiles.Logs.logger;
  */
 public abstract class JeuMM {
 
-    Constantes.CouleursMastermind[] couleursSecretes;
     private Constantes.Libelles.LibellesMenuSecondaire modeDeJeu;
 
     private Scanner scanner;
@@ -48,72 +47,13 @@ public abstract class JeuMM {
      */
     public void runJeuMM(FabricationSecretMM fabricationSecretMM) {
 
-        LogLaCombinaisonSecrete(couleursSecretes);
+        LogLaCombinaisonSecrete(fabricationSecretMM.getCouleursSecretes());
 
         new IhmMasterMind(modeDeJeu,
                 fabricationSecretMM.getChiffresSecrets(),
                 fabricationSecretMM.getCouleursSecretes(),
                 validationPropale).runIhmMM(scanner);
     }
-
-/*
-    public void runJeuMM() throws AppExceptions {
-        FabricationSecretMM fabricationSecretMM =null;
-        ArrayList<Integer> chiffresSecrets;
-        IhmMasterMind ihmMasterMind;
-
-        ValidationPropale validationPropale =null;
-
-        switch (modeDeJeu) {
-            case MODE_CHALLENGER:
-                fabricationSecretMM = new FabricationSecretMM();
-                validationPropale = (ArrayList<Character> propaleJoueur,
-                                     ArrayList<Character> combinaisonSecrete,
-                                     Integer nombreDePositions,
-                                     int [] zoneEvaluation)->{
-
-                                        int rangPropale;
-                                        zoneEvaluation[NOIR_BIENPLACE]=0;
-                                        zoneEvaluation[BLANC_MALPLACE]=0;
-
-                                        for (Character couleurSec : combinaisonSecrete) {
-                                            rangPropale = propaleJoueur.indexOf(couleurSec);
-                                            if (rangPropale >=0) {
-                                                if ((rangPropale == combinaisonSecrete.indexOf(couleurSec))) {
-                                                    zoneEvaluation[NOIR_BIENPLACE]++;
-                                                } else {
-                                                    zoneEvaluation[BLANC_MALPLACE]++;
-                                                }
-                                            }
-                                        }
-                                        return zoneEvaluation[NOIR_BIENPLACE] == nombreDePositions;
-                                    };
-                break;
-            case MODE_DEFENSEUR:
-                MenuSaisieSecret menuSaisieSecret = new MenuSaisieSecret();
-                fabricationSecretMM = new FabricationSecretMM(menuSaisieSecret.saisirCombinaisonSecrete());
-                validationPropale = (ArrayList<Character> propaleJoueur,
-                                     ArrayList<Character> combinaisonSecrete,
-                                     Integer nombreDePositions,
-                                     int [] zoneEvaluation)-> false;
-                break;
-            case MODE_DUEL:
-                break;
-            default:
-                logger.error(String.format("%s", ERREUR_GENERIC));
-                throw new AppExceptions(ERREUR_GENERIC);
-        }
-
-        chiffresSecrets = fabricationSecretMM.getChiffresSecrets();
-        Constantes.CouleursMastermind[] couleursSecretes = fabricationSecretMM.getCouleursSecretes();
-
-        LogLaCombinaisonSecrete(couleursSecretes);
-
-        ihmMasterMind = new IhmMasterMind(modeDeJeu, chiffresSecrets, couleursSecretes, validationPropale);
-
-        ihmMasterMind.runIhmMM(scanner);
-    }
-*/
 
     /**
      *

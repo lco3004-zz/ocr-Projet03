@@ -1,6 +1,7 @@
 package fr.ocr;
 
 import fr.ocr.lesjeux.JeuMMChallengeur;
+import fr.ocr.lesjeux.JeuMMDefenseur;
 import fr.ocr.modeconsole.MenuPrincipal;
 import fr.ocr.modeconsole.MenuSecondaire;
 import fr.ocr.utiles.AppExceptions;
@@ -70,6 +71,14 @@ public class App {
                                 }
                                 break;
                             case MODE_DEFENSEUR:
+                                logger.info(String.format("%s du jeu %s", ch_Sec.toString(), ch_Sup.toString()));
+                                if (ch_Sup.equals(CHOISIR_MASTERMIND)) {
+                                    JeuMMDefenseur jeuMMDefenseur = new JeuMMDefenseur(ch_Sec, scanner);
+                                    jeuMMDefenseur.runJeuMM();
+                                } else {
+                                    menu_secondaire.majLigneEtat(String.format("%s du jeu %s", ch_Sec.toString(), ch_Sup.toString()));
+                                }
+                                break;
                             case MODE_DUEL:
                                 logger.info(String.format("%s du jeu %s", ch_Sec.toString(), ch_Sup.toString()));
                                 menu_secondaire.majLigneEtat(String.format("%s du jeu %s", ch_Sec.toString(), ch_Sup.toString()));
