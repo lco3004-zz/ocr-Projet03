@@ -1,9 +1,8 @@
-package fr.ocr.mastermind;
+package fr.ocr.lesjeux;
 
 
 import fr.ocr.utiles.AppExceptions;
 import fr.ocr.utiles.Constantes;
-
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
@@ -34,7 +33,7 @@ import static fr.ocr.utiles.Messages.ErreurMessages.ERREUR_GENERIC;
  * <p>
  * Classe utilisée lorsque le jeu se fait contre l'ordinateur
  */
-public class FabricationSecret {
+public class FabricationSecretMM {
 
     //tableau qui contient les chiffres tirés au hazard modulo le parametre NOMBRE_DE_POSITIONS
     private ArrayList<Integer> chiffresSecrets;
@@ -58,7 +57,7 @@ public class FabricationSecret {
      *                               cas où c'est l'ordinateur qui doit trouver la ligne secrete
      * @throws AppExceptions incohérence parametre ou tableau des chiffres passé en parametre
      */
-    FabricationSecret(ArrayList<Integer> chiffresSecretsFournis) throws AppExceptions {
+    FabricationSecretMM(ArrayList<Integer> chiffresSecretsFournis) throws AppExceptions {
         Object tmpRetour;
         if ((chiffresSecretsFournis == null) || chiffresSecretsFournis.size() > nombreDePositions)
             throw new AppExceptions(ERREUR_GENERIC);
@@ -72,7 +71,7 @@ public class FabricationSecret {
      * la table des chiffes secrets est à construire - cas où c'est l'odinateur qui propose la ligne secrete
      * cas où c'est le joueur qui doit deviner la ligne secrete, ou bien en mode duel
      */
-    public FabricationSecret() {
+    public FabricationSecretMM() {
 
         Object tmpRetour;
 

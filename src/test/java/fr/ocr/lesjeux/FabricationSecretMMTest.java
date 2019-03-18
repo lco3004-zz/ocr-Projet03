@@ -1,10 +1,10 @@
-package fr.ocr.mastermind;
+package fr.ocr.lesjeux;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class FabricationSecretTest {
+class FabricationSecretMMTest {
 
     @BeforeEach
     void setUp() {

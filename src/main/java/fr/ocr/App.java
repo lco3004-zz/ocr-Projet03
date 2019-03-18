@@ -1,6 +1,6 @@
 package fr.ocr;
 
-import fr.ocr.mastermind.JeuMM;
+import fr.ocr.lesjeux.JeuMMChallengeur;
 import fr.ocr.modeconsole.MenuPrincipal;
 import fr.ocr.modeconsole.MenuSecondaire;
 import fr.ocr.utiles.AppExceptions;
@@ -63,8 +63,8 @@ public class App {
                             case  MODE_CHALLENGER :
                                 logger.info(String.format("%s du jeu %s", ch_Sec.toString(), ch_Sup.toString()));
                                 if (ch_Sup.equals(CHOISIR_MASTERMIND)) {
-                                    JeuMM jeuMM = new JeuMM(ch_Sec, scanner);
-                                    jeuMM.runJeuMM();
+                                    JeuMMChallengeur jeuMMChallengeur = new JeuMMChallengeur(ch_Sec, scanner);
+                                    jeuMMChallengeur.runJeuMM();
                                 } else {
                                     menu_secondaire.majLigneEtat(String.format("%s du jeu %s", ch_Sec.toString(), ch_Sup.toString()));
                                 }

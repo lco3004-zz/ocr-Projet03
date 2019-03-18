@@ -17,7 +17,7 @@ import static fr.ocr.utiles.Messages.InfosMessages.*;
  * Lecture /ecriture d'un fichier Property dont le nom est pass&eacute; en parametres du constructeur
  * Si le fichier n'existe pas, il est cr&eacute;&eacute; avec les valeurs par d&eacute;faut des parametres.
  * IOParams est abstraite car un fichier property se distingue par les properties
- * qu'il contient : l'impl&eacute;mentation de la m&eacute;thode getParamDefaut d&eacute;pend du jeu concern&eacute; (mastermind ou jeu
+ * qu'il contient : l'impl&eacute;mentation de la m&eacute;thode getParamDefaut d&eacute;pend du jeu concern&eacute; (lesjeux ou jeu
  * plus/moins, mais aussi config des menus de l'applicaiton
  */
 class IOParams {
@@ -78,7 +78,7 @@ class IOParams {
 
     /**
      * méthode abstraite car le jeu de paramètres concernés n'est pas connu ici
-     * peut être (e.g) :mastermind, jeux +/- , params du mode d'afficahge COnsole
+     * peut être (e.g) :lesjeux, jeux +/- , params du mode d'afficahge COnsole
      *
      * @param listeParams properties, charge la collection "Properties" avec valeur par défaut des paramètres
      */

@@ -1,6 +1,6 @@
 package fr.ocr.modeconsole;
 
-import fr.ocr.mastermind.ValidationPropale;
+import fr.ocr.lesjeux.ValidationPropale;
 import fr.ocr.utiles.AppExceptions;
 import fr.ocr.utiles.Constantes;
 import fr.ocr.utiles.Constantes.CouleursMastermind;
@@ -8,8 +8,6 @@ import fr.ocr.utiles.Constantes.CouleursMastermind;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Scanner;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 import static fr.ocr.params.LireParametres.getParam;
 import static fr.ocr.params.Parametres.*;
