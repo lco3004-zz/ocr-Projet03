@@ -66,7 +66,7 @@ abstract class JeuMM {
                 fabricationSecretMM.getChiffresSecrets(),
                 fabricationSecretMM.getCouleursSecretes(),
                 validerProposition,
-                lignesJeuMM)
+                lignesJeuMM, false)
                 .runIhmMMChallengeur(scanner, produirePropale);
     }
 
@@ -81,7 +81,8 @@ abstract class JeuMM {
                 fabricationSecretMM.getChiffresSecrets(),
                 fabricationSecretMM.getCouleursSecretes(),
                 validerProposition,
-                lignesJeuMM)
+                lignesJeuMM,
+                true)
                 .runIhmMMDefenseur(scanner, produirePropale);
     }
 
@@ -285,8 +286,6 @@ class EvalPropaleDefenseur implements ValiderProposition {
                          ArrayList<Character> combinaisonSecrete,
                          Integer nombreDePositions,
                          int[] zoneEvaluation) {
-
-
-        return false;
+        return true;
     }
 }

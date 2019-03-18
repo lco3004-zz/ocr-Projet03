@@ -58,10 +58,10 @@ public class IhmMasterMind implements
                          ArrayList<Integer> chiffresSecrets,
                          CouleursMastermind[] couleursSecretes,
                          ValiderProposition fctValidePropale,
-                         LigneJeuMM[] lignesJeuMM) {
+                         LigneJeuMM[] lignesJeuMM, boolean isSecretVisible) {
 
         this.lignesJeuMM = lignesJeuMM;
-        PreparationMenu(modeDeJeu, chiffresSecrets, couleursSecretes);
+        PreparationMenu(modeDeJeu, chiffresSecrets, couleursSecretes, isSecretVisible);
 
         PrepareLignesPropositions(couleursSecretes, fctValidePropale);
     }
@@ -94,7 +94,7 @@ public class IhmMasterMind implements
      * @param couleursSecretes
      */
     void PreparationMenu(LibellesMenuSecondaire modeDeJeu, ArrayList<Integer> chiffresSecrets,
-                         CouleursMastermind[] couleursSecretes) {
+                         CouleursMastermind[] couleursSecretes, boolean isSecretVisible) {
 
         compositionChiffresSecrets = chiffresSecrets;
 
@@ -106,7 +106,7 @@ public class IhmMasterMind implements
         lignesJeuMM[LIGNE_SECRETE] = new LigneJeuMM(true, false, LIGNE_SECRETE, LIGNE_SECRETE, " -------SECRET--------");
         lignesJeuMM[LIGNE_SECRETE].setLibelleLigne(couleursSecretes);
 
-        if (modeDebug) {
+        if (modeDebug || isSecretVisible) {
             lignesJeuMM[LIGNE_SECRETE].setEstVisible(true);
         }
 
@@ -124,13 +124,9 @@ public class IhmMasterMind implements
         lignesJeuMM[LIGNE_BLANCH01] = new LigneJeuMM(true, true, LIGNE_BLANCH01, LIGNE_BLANCH01, " ");
         lignesJeuMM[LIGNE_BLANCH02] = new LigneJeuMM(true, true, LIGNE_BLANCH02, LIGNE_BLANCH02, " ");
 
-        lignesJeuMM[LIGNE_TOUTES_COULEURS] = new LigneJeuMM(true, true, LIGNE_TOUTES_COULEURS, LIGNE_TOUTES_COULEURS, " ");
-
-        lignesJeuMM[LIGNE_TOUTES_COULEURS].setLibelleLigne(CouleursMastermind.values(), nombreDeCouleurs);
-
         Character c = Constantes.Libelles.CharactersEscape.K.toString().charAt(0);
 
-        lignesJeuMM[LIGNE_DE_SAISIE] = new LigneJeuMM(true, true, LIGNE_DE_SAISIE, LIGNE_DE_SAISIE, String.format(" Votre Proposition (%c : Retour): ", c));
+        lignesJeuMM[LIGNE_DE_SAISIE] = new LigneJeuMM(true, true, LIGNE_DE_SAISIE, LIGNE_DE_SAISIE, String.format(" Votre choix (%c : Retour): ", c));
 
     }
 
@@ -139,7 +135,6 @@ public class IhmMasterMind implements
      */
     public void runIhmMMDefenseur(Scanner scanner, ProduirePropale getPropaleDef) {
 
-        IOConsole.ClearScreen.cls();
 
         boolean SecretTrouve = false, isEscape = false;
 
@@ -151,7 +146,9 @@ public class IhmMasterMind implements
 
         indexLignesProposition = 0;
 
-        lignesJeuMM[LIGNE_TOUTES_COULEURS].setLibelleLigne("");
+        IOConsole.ClearScreen.cls();
+
+        lignesJeuMM[LIGNE_TOUTES_COULEURS].setLibelleLigne("mettre coueleur saisie defenseur ici");
 
         while (!SecretTrouve && nbreEssaisConsommes < nombreDeEssaisMax) {
 
@@ -163,9 +160,9 @@ public class IhmMasterMind implements
         }
 
         if (SecretTrouve) {
-            lignesJeuMM[LIGNE_STATUS].setLibelleLigne(" ----   Ordinateur Gagne !!---");
+            lignesJeuMM[LIGNE_STATUS].setLibelleLigne("!! Ordinateur Gagne !!");
         } else {
-            lignesJeuMM[LIGNE_SECRETE].setLibelleLigne("-- Ordinateur Perd !! --");
+            lignesJeuMM[LIGNE_SECRETE].setLibelleLigne("!! Ordinateur Perd !!");
         }
 
         lignesJeuMM[LIGNE_DE_SAISIE].setLibelleLigne(lignesJeuMM[LIGNE_DE_SAISIE].getLibelleLigneOriginal());
@@ -207,6 +204,11 @@ public class IhmMasterMind implements
         indexLignesProposition = 0;
 
         IOConsole.ClearScreen.cls();
+
+        lignesJeuMM[LIGNE_TOUTES_COULEURS] = new LigneJeuMM(true, true, LIGNE_TOUTES_COULEURS, LIGNE_TOUTES_COULEURS, " ");
+
+        lignesJeuMM[LIGNE_TOUTES_COULEURS].setLibelleLigne(CouleursMastermind.values(), nombreDeCouleurs);
+
 
         while (!isEscape) {
             if (!SecretTrouve && nbreEssaisConsommes < nombreDeEssaisMax) {

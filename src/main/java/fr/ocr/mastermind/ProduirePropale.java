@@ -38,7 +38,7 @@ class ProduirePropaleDefenseur implements ProduirePropale {
 
         ArrayList<Character> propositionOrdinateur = new ArrayList<>(256);
 
-        int monCompteur = 1;
+        int monCompteur = 0;
         Integer nbPositions = (Integer) getParam(NOMBRE_DE_POSITIONS);
         for (Constantes.CouleursMastermind v : Constantes.CouleursMastermind.values()) {
             propositionOrdinateur.add(v.getLettreInitiale());

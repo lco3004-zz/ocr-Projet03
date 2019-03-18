@@ -52,7 +52,7 @@ public class LigneJeuMM extends LigneMasterMind {
     LigneJeuMM setLibelleLigne(Constantes.CouleursMastermind[] colMM, int nbCouleurs) {
 
         StringBuilder listeToutesCol = new StringBuilder(256);
-        listeToutesCol.append(" Les Couleurs -> ");
+        listeToutesCol.append("Les Couleurs -> ");
         int couleursUtilisees = 0;
         for (Constantes.CouleursMastermind v : colMM) {
             if (couleursUtilisees < nbCouleurs) {
