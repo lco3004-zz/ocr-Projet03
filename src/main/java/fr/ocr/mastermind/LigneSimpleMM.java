@@ -1,4 +1,4 @@
-package fr.ocr.modeconsole;
+package fr.ocr.mastermind;
 
 import fr.ocr.utiles.Constantes;
 
@@ -8,10 +8,10 @@ public class LigneSimpleMM extends LignePlateauMM {
     private String libelleLigne;
     private String libelleLigneOriginal;
 
-    public LigneSimpleMM(boolean disponible,
-                         boolean visible,
-                         int rang,
-                         int typeligne, String info) {
+    LigneSimpleMM(boolean disponible,
+                  boolean visible,
+                  int rang,
+                  int typeligne, String info) {
 
         super(disponible, visible, rang, typeligne);
         libelleLigne = info;
@@ -28,7 +28,7 @@ public class LigneSimpleMM extends LignePlateauMM {
         return this;
     }
 
-    public LigneSimpleMM setLibelleLigne(Constantes.CouleursMastermind[] colMM) {
+    LigneSimpleMM setLibelleLigne(Constantes.CouleursMastermind[] colMM) {
         setLibelleLigne(colMM, colMM.length);
         return this;
     }
@@ -37,7 +37,7 @@ public class LigneSimpleMM extends LignePlateauMM {
         return libelleLigneOriginal;
     }
 
-    public LigneSimpleMM setLibelleLigne(Constantes.CouleursMastermind[] colMM, int nbCouleurs) {
+    LigneSimpleMM setLibelleLigne(Constantes.CouleursMastermind[] colMM, int nbCouleurs) {
 
         StringBuilder listeToutesCol = new StringBuilder(256);
         listeToutesCol.append("Les Couleurs -> ");

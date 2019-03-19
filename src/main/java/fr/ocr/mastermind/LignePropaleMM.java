@@ -1,6 +1,5 @@
-package fr.ocr.modeconsole;
+package fr.ocr.mastermind;
 
-import fr.ocr.mastermind.ValiderProposition;
 import fr.ocr.utiles.AppExceptions;
 import fr.ocr.utiles.Constantes;
 
@@ -31,14 +30,14 @@ public class LignePropaleMM extends LigneSimpleMM {
     private Integer nombreDePositions = (Integer) getParam(NOMBRE_DE_POSITIONS);
 
 
-    public LignePropaleMM(Constantes.CouleursMastermind[] secretCouleurs,
-                          ArrayList<Integer> secretChiffres,
-                          boolean disponible,
-                          boolean visible,
-                          int rang,
-                          int typeligne,
-                          String infos,
-                          ValiderProposition fct) {
+    LignePropaleMM(Constantes.CouleursMastermind[] secretCouleurs,
+                   ArrayList<Integer> secretChiffres,
+                   boolean disponible,
+                   boolean visible,
+                   int rang,
+                   int typeligne,
+                   String infos,
+                   ValiderProposition fct) {
 
         super(disponible, visible, rang, typeligne, infos);
 
@@ -53,12 +52,12 @@ public class LignePropaleMM extends LigneSimpleMM {
 
     }
 
-    LignePropaleMM setPropositionJoueur(ArrayList<Character> propositionJoueur) {
+    public LignePropaleMM setPropositionJoueur(ArrayList<Character> propositionJoueur) {
         this.propositionJoueur = propositionJoueur;
         return this;
     }
 
-    public int[] getZoneEvaluation() {
+    private int[] getZoneEvaluation() {
         return zoneEvaluation;
     }
 
@@ -67,17 +66,21 @@ public class LignePropaleMM extends LigneSimpleMM {
             logger.error(ERREUR_GENERIC.getMessageErreur());
             throw new AppExceptions(ERREUR_GENERIC);
         }
+        System.arraycopy(zoneEval, 0, zoneEvaluation, 0, zoneEval.length);
+
+        /*
         for (int i = 0; i < zoneEval.length; i++) {
-            this.zoneEvaluation[i] = zoneEval[i];
+            zoneEvaluation[i] = zoneEval[i];
         }
+         */
     }
 
-    public String getZoneProposition() {
+    private String getZoneProposition() {
 
         return zoneProposition.toString();
     }
 
-    LignePropaleMM setZoneProposition() {
+    public LignePropaleMM setZoneProposition() {
         zoneProposition.delete(0, zoneProposition.length());
         zoneProposition.append('[');
         zoneProposition.append(' ');
@@ -91,7 +94,7 @@ public class LignePropaleMM extends LigneSimpleMM {
         return this;
     }
 
-    Boolean EvalProposition() {
+    public Boolean EvalProposition() {
         return fctValideProposition.apply(propositionJoueur,
                 combinaisonInitialesSecretes,
                 nombreDePositions,
@@ -130,7 +133,7 @@ public class LignePropaleMM extends LigneSimpleMM {
                 getZoneEvaluation()[BLANC_MALPLACE];
     }
 
-    public void setLibelleLigne() {
+    void setLibelleLigne() {
         super.setLibelleLigne(this.toString());
     }
 }

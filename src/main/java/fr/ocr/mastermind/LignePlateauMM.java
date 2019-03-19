@@ -1,4 +1,4 @@
-package fr.ocr.modeconsole;
+package fr.ocr.mastermind;
 
 import fr.ocr.utiles.Constantes;
 

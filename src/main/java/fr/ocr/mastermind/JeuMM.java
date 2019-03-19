@@ -1,8 +1,6 @@
 package fr.ocr.mastermind;
 
 import fr.ocr.modeconsole.IhmMasterMind;
-import fr.ocr.modeconsole.LignePropaleMM;
-import fr.ocr.modeconsole.LigneSimpleMM;
 import fr.ocr.utiles.Constantes;
 import fr.ocr.utiles.Constantes.CouleursMastermind;
 import fr.ocr.utiles.Constantes.Libelles.LibellesMenuSecondaire;
@@ -61,7 +59,7 @@ abstract class JeuMM {
 
         lignesSimpleMM[TITRE] = new LigneSimpleMM(true, true, TITRE, TITRE, modeDeJeu.toString());
 
-        lignesSimpleMM[LIGNE_STATUS] = new LigneSimpleMM(true, true, LIGNE_STATUS, LIGNE_STATUS, String.format("      ", getParam(MODE_DEBUG).toString()));
+        lignesSimpleMM[LIGNE_STATUS] = new LigneSimpleMM(true, true, LIGNE_STATUS, LIGNE_STATUS, String.format(" %s", getParam(MODE_DEBUG).toString()));
 
         lignesSimpleMM[LIGNE_SECRETE] = new LigneSimpleMM(true, false, LIGNE_SECRETE, LIGNE_SECRETE, " -------SECRET--------");
         lignesSimpleMM[LIGNE_SECRETE].setLibelleLigne(couleursSecretes);

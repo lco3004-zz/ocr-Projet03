@@ -2,8 +2,6 @@ package fr.ocr.mastermind;
 
 import fr.ocr.modeconsole.EcrireSurEcran;
 import fr.ocr.modeconsole.IOConsole;
-import fr.ocr.modeconsole.LignePropaleMM;
-import fr.ocr.modeconsole.LigneSimpleMM;
 import fr.ocr.utiles.AppExceptions;
 import fr.ocr.utiles.Constantes;
 

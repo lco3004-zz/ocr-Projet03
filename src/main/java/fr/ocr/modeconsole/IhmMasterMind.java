@@ -1,6 +1,8 @@
 package fr.ocr.modeconsole;
 
 
+import fr.ocr.mastermind.LignePropaleMM;
+import fr.ocr.mastermind.LigneSimpleMM;
 import fr.ocr.mastermind.ProduirePropale;
 import fr.ocr.mastermind.ValiderProposition;
 import fr.ocr.utiles.Constantes;
@@ -48,9 +50,7 @@ public class IhmMasterMind implements
         this.lignesPropaleMM = lignesPropaleMM;
     }
 
-    /**
-     * @param scanner
-     */
+
     public void runIhmMMDefenseur(Scanner scanner, ProduirePropale getPropaleDef) {
 
 
@@ -169,7 +169,7 @@ public class IhmMasterMind implements
     }
 
     /**
-     * @param escapeChar  le pattern de saisie ne contient que le caractère d'échappement
+     * @param escapeChar le pattern de saisie ne contient que le caractère d'échappement
      * @return String listeInitialesColor (pattern de saisie
      */
     private String ConstruitPatternSaisie(Character escapeChar) {
