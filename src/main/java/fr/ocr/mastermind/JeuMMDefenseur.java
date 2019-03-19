@@ -48,7 +48,7 @@ public class JeuMMDefenseur extends JeuMM {
         this.produirePropale = new ProduirePropaleDefenseur();
         this.validerProposition = new EvalPropaleDefenseur();
 
-        super.runJeuMMDefenseur(fabricationSecretMM);
+        super.RunJeuMMDefenseur(fabricationSecretMM);
     }
 
     /**

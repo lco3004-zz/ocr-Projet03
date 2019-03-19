@@ -1,6 +1,7 @@
 package fr.ocr.mastermind;
 
-import fr.ocr.modeconsole.IhmMasterMind;
+import fr.ocr.modeconsole.IhmChallengeurMM;
+import fr.ocr.modeconsole.IhmDefenseurMM;
 import fr.ocr.utiles.Constantes;
 import fr.ocr.utiles.Constantes.CouleursMastermind;
 import fr.ocr.utiles.Constantes.Libelles.LibellesMenuSecondaire;
@@ -52,7 +53,6 @@ abstract class JeuMM {
 
     }
 
-
     private void PreparationMenu(LibellesMenuSecondaire modeDeJeu, ArrayList<Integer> chiffresSecrets,
                                  CouleursMastermind[] couleursSecretes, boolean isSecretVisible) {
 
@@ -100,43 +100,47 @@ abstract class JeuMM {
         }
     }
 
-    private void runJeuMM(FabricationSecretMM fabricationSecretMM, boolean isSecretVisible) {
-        new IhmMasterMind(modeJeu,
+    private void PrepareRunJeuMM(FabricationSecretMM fabricationSecretMM, boolean isSecretVisible) {
+
+        LogLaCombinaisonSecrete(fabricationSecretMM.getCouleursSecretes());
+
+        PreparationMenu(modeJeu,
+                fabricationSecretMM.getChiffresSecrets(),
+                fabricationSecretMM.getCouleursSecretes(),
+                isSecretVisible);
+    }
+
+    void RunJeuMMChallengeur(FabricationSecretMM fabricationSecretMM) {
+
+        PrepareRunJeuMM(fabricationSecretMM, false);
+
+        lignesSimpleMM[LIGNE_TOUTES_COULEURS].setLibelleLigne(CouleursMastermind.values(), nombreDeCouleurs);
+
+        new IhmChallengeurMM(modeJeu,
                 fabricationSecretMM.getChiffresSecrets(),
                 fabricationSecretMM.getCouleursSecretes(),
                 validerProposition,
                 lignesSimpleMM,
                 lignesPropaleMM,
-                isSecretVisible)
-                .runIhmMMChallengeur(scanner, produirePropale);
+                false)
+                .runIhmMM(scanner, produirePropale);
     }
 
 
-    void runJeuMMChallengeur(FabricationSecretMM fabricationSecretMM) {
+    void RunJeuMMDefenseur(FabricationSecretMM fabricationSecretMM) {
 
-        LogLaCombinaisonSecrete(fabricationSecretMM.getCouleursSecretes());
-        PreparationMenu(modeJeu,
-                fabricationSecretMM.getChiffresSecrets(),
-                fabricationSecretMM.getCouleursSecretes(),
-                false);
-
-        lignesSimpleMM[LIGNE_TOUTES_COULEURS].setLibelleLigne(CouleursMastermind.values(), nombreDeCouleurs);
-
-        runJeuMM(fabricationSecretMM, false);
-    }
-
-
-    void runJeuMMDefenseur(FabricationSecretMM fabricationSecretMM) {
-
-        LogLaCombinaisonSecrete(fabricationSecretMM.getCouleursSecretes());
-        PreparationMenu(modeJeu,
-                fabricationSecretMM.getChiffresSecrets(),
-                fabricationSecretMM.getCouleursSecretes(),
-                true);
+        PrepareRunJeuMM(fabricationSecretMM, true);
 
         lignesSimpleMM[LIGNE_TOUTES_COULEURS].setLibelleLigne("mettre coueleur saisie defenseur ici");
 
-        runJeuMM(fabricationSecretMM, false);
+        new IhmDefenseurMM(modeJeu,
+                fabricationSecretMM.getChiffresSecrets(),
+                fabricationSecretMM.getCouleursSecretes(),
+                validerProposition,
+                lignesSimpleMM,
+                lignesPropaleMM,
+                true)
+                .runIhmMM(scanner, produirePropale);
     }
 
     /**

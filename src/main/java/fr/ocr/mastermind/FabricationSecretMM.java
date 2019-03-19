@@ -2,7 +2,7 @@ package fr.ocr.mastermind;
 
 
 import fr.ocr.utiles.AppExceptions;
-import fr.ocr.utiles.Constantes;
+import fr.ocr.utiles.Constantes.CouleursMastermind;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
@@ -33,23 +33,16 @@ import static fr.ocr.utiles.Messages.ErreurMessages.ERREUR_GENERIC;
  * Classe utilisée lorsque le jeu se fait contre l'ordinateur
  */
 class FabricationSecretMM {
-
-    //tableau qui contient les chiffres tirés au hazard modulo le parametre NOMBRE_DE_POSITIONS
+    /*
+     *    tableau qui contient les chiffres tirés au hazard modulo le parametre NOMBRE_DE_POSITIONS
+     */
     private ArrayList<Integer> chiffresSecrets;
 
-    private Boolean doublonAutorise = (Boolean) getParam(DOUBLON_AUTORISE);
-
-    private Integer nombreDePositions = (Integer) getParam(NOMBRE_DE_POSITIONS);
-
-    private Integer nombreDeCouleurs = (Integer) getParam(NOMBRE_DE_COULEURS);
-
-    private Integer nombreDebBoucleMax = (Integer) getParam(NOMBRE_MAXI_DE_BOUCLES_RANDOMIZE);
-
-    /**
+    /*
      * tableau qui contient les couleurs prises dans CouleursMastermind :
      * couleursSecretes[ i ] =  CouleursMastermind[ chiffresSecret[ i ]]
      */
-    private Constantes.CouleursMastermind[] couleursSecretes;
+    private CouleursMastermind[] couleursSecretes;
 
     /**
      * @param chiffresSecretsFournis la table des chiffes secrets est fourni par utilisateur
@@ -57,13 +50,14 @@ class FabricationSecretMM {
      * @throws AppExceptions incohérence parametre ou tableau des chiffres passé en parametre
      */
     FabricationSecretMM(ArrayList<Integer> chiffresSecretsFournis) throws AppExceptions {
-        Object tmpRetour;
-        if ((chiffresSecretsFournis == null) || chiffresSecretsFournis.size() > nombreDePositions)
+
+        if ((chiffresSecretsFournis == null) || (chiffresSecretsFournis.size() > (Integer) getParam(NOMBRE_DE_POSITIONS))) {
             throw new AppExceptions(ERREUR_GENERIC);
+        }
 
         chiffresSecrets = chiffresSecretsFournis;
 
-        couleursSecretes = BijecterCouleurChiffres(chiffresSecrets, nombreDePositions);
+        couleursSecretes = BijecterCouleurChiffres(chiffresSecrets, (Integer) getParam(NOMBRE_DE_POSITIONS));
     }
 
     /**
@@ -72,21 +66,24 @@ class FabricationSecretMM {
      */
     FabricationSecretMM() {
 
-        Object tmpRetour;
-
         int valeurAleatoire;
 
         DecimalFormat df = new DecimalFormat("#");
-
 
         chiffresSecrets = new ArrayList<>();
 
         // "graine" pour le random.
         df.setRoundingMode(RoundingMode.HALF_UP);
 
-        for (int placeOccupee = 0, nbreDeBoucles = 0; (placeOccupee < nombreDePositions) && (nbreDeBoucles < nombreDebBoucleMax); nbreDeBoucles++) {
+        Integer nombreDebBoucleMax = (Integer) getParam(NOMBRE_MAXI_DE_BOUCLES_RANDOMIZE);
+
+        int placeOccupee = 0, nbreDeBoucles = 0;
+
+        while ((placeOccupee < (Integer) getParam(NOMBRE_DE_POSITIONS)) && (nbreDeBoucles < nombreDebBoucleMax)) {
+            Integer nombreDeCouleurs = (Integer) getParam(NOMBRE_DE_COULEURS);
             valeurAleatoire = (Integer.parseInt(df.format(Math.random() * 100)) % nombreDeCouleurs);
 
+            Boolean doublonAutorise = (Boolean) getParam(DOUBLON_AUTORISE);
             if (!doublonAutorise) {
                 if (!chiffresSecrets.contains(valeurAleatoire)) {
                     chiffresSecrets.add(valeurAleatoire);
@@ -96,28 +93,33 @@ class FabricationSecretMM {
                 chiffresSecrets.add(valeurAleatoire);
                 placeOccupee++;
             }
+            nbreDeBoucles++;
         }
-        //pas assez de positions remplies - le random n'a pas marché
-        if (chiffresSecrets.size() < nombreDePositions) {
 
-            Constantes.CouleursMastermind[] couleursMastermind = Constantes.CouleursMastermind.values();
+        //pas assez de positions remplies - le random n'a pas marché
+        if (chiffresSecrets.size() < (Integer) getParam(NOMBRE_DE_POSITIONS)) {
+
+            CouleursMastermind[] couleursMastermind = CouleursMastermind.values();
             chiffresSecrets.clear();
-            for (int i = 0; i < nombreDePositions; i++) {
+            for (int i = 0; i < (Integer) getParam(NOMBRE_DE_POSITIONS); i++) {
                 chiffresSecrets.add(couleursMastermind[i].getValeurFacialeDeLaCouleur());
             }
         }
 
-        couleursSecretes = BijecterCouleurChiffres(chiffresSecrets, nombreDePositions);
+        couleursSecretes = BijecterCouleurChiffres(chiffresSecrets, (Integer) getParam(NOMBRE_DE_POSITIONS));
     }
 
     /**
      * renseigne la ligne secrete des couleurs (bijection couleurs / chiffres)
+     * @param chiffresSec   ArrayList<Integer> , combinaison secrete en chiffres
+     * @param nbPos Integer , nombre de positions par ligne de jeu
+     * @return la ligne secrete sous forme de couleurs
      */
-    private Constantes.CouleursMastermind[] BijecterCouleurChiffres(ArrayList<Integer> chiffresSec, Integer nbPos) {
-        Constantes.CouleursMastermind[] coulSec = new Constantes.CouleursMastermind[nbPos];
+    private CouleursMastermind[] BijecterCouleurChiffres(ArrayList<Integer> chiffresSec, Integer nbPos) {
+        CouleursMastermind[] coulSec = new CouleursMastermind[nbPos];
         int i = 0;
         for (int v : chiffresSec) {
-            coulSec[i++] = Constantes.CouleursMastermind.values()[v];
+            coulSec[i++] = CouleursMastermind.values()[v];
         }
         return coulSec;
     }
@@ -126,15 +128,13 @@ class FabricationSecretMM {
      * @return ArrayList<Byte> Tableau des chiffres de la combinaisons secrete
      */
     ArrayList<Integer> getChiffresSecrets() {
-
         return chiffresSecrets;
     }
 
     /**
      * @return CouleursMastermind[] Tableau des couleurs de la combinaison secrete
      */
-    Constantes.CouleursMastermind[] getCouleursSecretes() {
-
+    CouleursMastermind[] getCouleursSecretes() {
         return couleursSecretes;
     }
 

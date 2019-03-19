@@ -17,6 +17,6 @@ public class JeuMMChallengeur extends JeuMM {
         this.validerProposition = new EvalPropaleChallengeur();
 
         this.produirePropale = new ProduirePropaleChallengeur(lignesSimpleMM, lignesPropaleMM);
-        super.runJeuMMChallengeur(fabricationSecretMM);
+        super.RunJeuMMChallengeur(fabricationSecretMM);
     }
 }
