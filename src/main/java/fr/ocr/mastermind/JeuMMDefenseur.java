@@ -11,10 +11,7 @@ public class JeuMMDefenseur extends JeuMM {
 
     private List<Integer[]> lesScoresPossibles;
 
-    /**
-     * @param modeJeu
-     * @param sc
-     */
+
     public JeuMMDefenseur(LibellesMenuSecondaire modeJeu, Scanner sc) {
         super(modeJeu, sc);
 
@@ -27,9 +24,7 @@ public class JeuMMDefenseur extends JeuMM {
         this.validerProposition = new EvalPropaleDefenseur();
 
         super.runJeuMMDefenseur(fabricationSecretMM);
-
     }
-
 
     /**
      * Sc(i,j)
@@ -44,7 +39,7 @@ public class JeuMMDefenseur extends JeuMM {
      * @return List<Integer [ ]> les scores possibles qui peuvent être obtenus par une proposition
      */
     public static List<Integer[]> CalculScoresPossibles(int nbPos) {
-        List<Integer[]> scPossible = new ArrayList<Integer[]>(256);
+        List<Integer[]> scPossible = new ArrayList<>(256);
         for (int noirs = 0; noirs < nbPos - 1; noirs++) {
             for (int blancs = 0; blancs <= nbPos - noirs; blancs++) {
 
@@ -61,7 +56,7 @@ public class JeuMMDefenseur extends JeuMM {
      * @param number nombre a convertir (sous forme de chaine)
      * @param sBase  base du nombre à convertir
      * @param dBase  base de destination
-     * @return
+     * @return chaine nombre en base dBase
      */
     public String baseConversion(String number,
                                  int sBase, int dBase) {

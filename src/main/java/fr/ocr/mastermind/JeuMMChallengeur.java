@@ -7,10 +7,6 @@ import java.util.Scanner;
 
 public class JeuMMChallengeur extends JeuMM {
 
-    /**
-     * @param modeJeu
-     * @param sc
-     */
     public JeuMMChallengeur(LibellesMenuSecondaire modeJeu, Scanner sc) {
         super(modeJeu, sc);
 
@@ -20,7 +16,7 @@ public class JeuMMChallengeur extends JeuMM {
         FabricationSecretMM fabricationSecretMM = new FabricationSecretMM();
         this.validerProposition = new EvalPropaleChallengeur();
 
-        this.produirePropale = new ProduirePropaleChallengeur(lignesJeuMM);
+        this.produirePropale = new ProduirePropaleChallengeur(lignesSimpleMM, lignesPropaleMM);
         super.runJeuMMChallengeur(fabricationSecretMM);
     }
 }

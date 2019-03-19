@@ -2,7 +2,8 @@ package fr.ocr.mastermind;
 
 import fr.ocr.modeconsole.EcrireSurEcran;
 import fr.ocr.modeconsole.IOConsole;
-import fr.ocr.modeconsole.LigneJeuMM;
+import fr.ocr.modeconsole.LignePropaleMM;
+import fr.ocr.modeconsole.LigneSimpleMM;
 import fr.ocr.utiles.AppExceptions;
 import fr.ocr.utiles.Constantes;
 
@@ -13,11 +14,15 @@ import java.util.Scanner;
 import static fr.ocr.params.LireParametres.getParam;
 import static fr.ocr.params.Parametres.DOUBLON_AUTORISE;
 import static fr.ocr.params.Parametres.NOMBRE_DE_POSITIONS;
-import static fr.ocr.utiles.Constantes.ConstLignesMM.LIGNE_DE_SAISIE;
-import static fr.ocr.utiles.Constantes.ConstLignesMM.TITRE;
+import static fr.ocr.utiles.Constantes.ConstLigneSimple.LIGNE_DE_SAISIE;
+import static fr.ocr.utiles.Constantes.ConstLigneSimple.TITRE;
 
 
+/**
+ *
+ */
 public interface ProduirePropale {
+
     default ArrayList<Character> getPropaleDefenseur() {
         return null;
     }
@@ -27,13 +32,11 @@ public interface ProduirePropale {
     }
 }
 
-
+/**
+ *
+ */
 class ProduirePropaleDefenseur implements ProduirePropale {
 
-
-    /**
-     * @return
-     */
     public ArrayList<Character> getPropaleDefenseur() {
 
         ArrayList<Character> propositionOrdinateur = new ArrayList<>(256);
@@ -50,12 +53,17 @@ class ProduirePropaleDefenseur implements ProduirePropale {
     }
 }
 
+/**
+ *
+ */
 class ProduirePropaleChallengeur implements ProduirePropale {
 
-    private LigneJeuMM[] lignesJeuMM;
+    private LignePropaleMM[] lignesPropaleMM;
+    private LigneSimpleMM[] lignesSimpleMM;
 
-    public ProduirePropaleChallengeur(LigneJeuMM[] lignesJeuMM) {
-        this.lignesJeuMM = lignesJeuMM;
+    ProduirePropaleChallengeur(LigneSimpleMM[] lignesSimpleMM, LignePropaleMM[] lignesPropaleMM) {
+        this.lignesSimpleMM = lignesSimpleMM;
+        this.lignesPropaleMM = lignesPropaleMM;
     }
 
     public ArrayList<Character> getPropaleChallengeur(Scanner scanner, String pattern, Character escChar) {
@@ -71,11 +79,11 @@ class ProduirePropaleChallengeur implements ProduirePropale {
                     @Override
                     public void Display() {
                         for (int n = TITRE; n <= LIGNE_DE_SAISIE; n++) {
-                            if (lignesJeuMM[n].isEstVisible()) {
+                            if (lignesSimpleMM[n].isEstVisible()) {
                                 if (n == LIGNE_DE_SAISIE) {
-                                    System.out.print(lignesJeuMM[n].toString());
+                                    System.out.print(lignesSimpleMM[n].toString());
                                 } else {
-                                    System.out.println(lignesJeuMM[n].toString());
+                                    System.out.println(lignesSimpleMM[n].toString());
                                 }
                             }
                         }
@@ -84,8 +92,8 @@ class ProduirePropaleChallengeur implements ProduirePropale {
 
                 if (saisieUneCouleur != escChar) {
                     propositionJoueur.add(saisieUneCouleur);
-                    String infosSasiie = lignesJeuMM[LIGNE_DE_SAISIE].getLibelleLigne() + saisieUneCouleur.toString() + " ";
-                    lignesJeuMM[LIGNE_DE_SAISIE].setLibelleLigne(infosSasiie);
+                    String infosSasiie = lignesSimpleMM[LIGNE_DE_SAISIE].getLibelleLigne() + saisieUneCouleur.toString() + " ";
+                    lignesSimpleMM[LIGNE_DE_SAISIE].setLibelleLigne(infosSasiie);
                     if (!doublonAutorise) {
                         int posCol = pattern.indexOf(saisieUneCouleur);
                         int taille = pattern.length();
@@ -109,8 +117,4 @@ class ProduirePropaleChallengeur implements ProduirePropale {
         }
         return propositionJoueur;
     }
-    /**
-     * @param colMM
-     * @return
-     */
 }

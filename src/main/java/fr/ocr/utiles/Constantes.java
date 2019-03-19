@@ -136,7 +136,7 @@ public enum Constantes {
     /**
      *
      */
-    public interface ConstLignesMM {
+    public interface ConstLigneSimple {
         //pour table de jeu - les diffrents types de lignes de la table de jeu
         int TITRE = 0;
         int LIGNE_STATUS = TITRE + 1;

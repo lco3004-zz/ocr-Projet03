@@ -15,116 +15,7 @@ import static fr.ocr.utiles.Messages.ErreurMessages.ERREUR_GENERIC;
 /**
  *
  */
-public class LigneJeuMM extends LigneMasterMind {
-
-    private String libelleLigne;
-    private String libelleLigneOriginal;
-
-    LigneJeuMM(boolean disponible,
-               boolean visible,
-               int rang,
-               int typeligne, String info) {
-
-        super(disponible, visible, rang, typeligne);
-        libelleLigne = info;
-        libelleLigneOriginal = info;
-    }
-
-    public String getLibelleLigne() {
-        return libelleLigne;
-    }
-
-    public LigneJeuMM setLibelleLigne(String infos) {
-
-        libelleLigne = infos;
-        return this;
-    }
-
-    LigneJeuMM setLibelleLigne(Constantes.CouleursMastermind[] colMM) {
-        setLibelleLigne(colMM, colMM.length);
-        return this;
-    }
-
-    String getLibelleLigneOriginal() {
-        return libelleLigneOriginal;
-    }
-
-    LigneJeuMM setLibelleLigne(Constantes.CouleursMastermind[] colMM, int nbCouleurs) {
-
-        StringBuilder listeToutesCol = new StringBuilder(256);
-        listeToutesCol.append("Les Couleurs -> ");
-        int couleursUtilisees = 0;
-        for (Constantes.CouleursMastermind v : colMM) {
-            if (couleursUtilisees < nbCouleurs) {
-                listeToutesCol.append(v.getLettreInitiale());
-                listeToutesCol.append(' ');
-            }
-            couleursUtilisees++;
-        }
-        libelleLigne = listeToutesCol.toString();
-        return this;
-    }
-
-    LigneJeuMM Clear() {
-        setLibelleLigne(libelleLigneOriginal);
-        return this;
-    }
-
-    @Override
-    public String toString() {
-        return getLibelleLigne();
-    }
-}
-
-/**
- *
- */
-abstract class LigneMasterMind implements Constantes.ConstLignesMM, Constantes.ConstEvalPropale {
-    private boolean estDisponible;
-    private boolean estVisible;
-    private int rangDansTableJeu;
-    private int typeDeLigne;
-
-    LigneMasterMind(boolean disponible, boolean visible, int rang, int typeLigne) {
-        estDisponible = disponible;
-        estVisible = visible;
-        rangDansTableJeu = rang;
-        typeDeLigne = typeLigne;
-    }
-
-    public abstract String toString();
-
-    public boolean isEstDisponible() {
-        return estDisponible;
-    }
-
-    public void setEstDisponible(boolean estDisponible) {
-        this.estDisponible = estDisponible;
-    }
-
-    public boolean isEstVisible() {
-        return estVisible;
-    }
-
-    public void setEstVisible(boolean estVisible) {
-        this.estVisible = estVisible;
-    }
-
-    public int getTypeDeLigne() {
-        return typeDeLigne;
-    }
-
-    int getRangDansTableJeu() {
-        return rangDansTableJeu;
-    }
-
-}
-
-
-/**
- *
- */
-class LigneJeuMMProposition extends LigneJeuMM {
+public class LignePropaleMM extends LigneSimpleMM {
 
     private StringBuilder zoneProposition = new StringBuilder(256);
     private int[] zoneEvaluation = new int[2];
@@ -140,7 +31,7 @@ class LigneJeuMMProposition extends LigneJeuMM {
     private Integer nombreDePositions = (Integer) getParam(NOMBRE_DE_POSITIONS);
 
 
-    LigneJeuMMProposition(Constantes.CouleursMastermind[] secretCouleurs,
+    public LignePropaleMM(Constantes.CouleursMastermind[] secretCouleurs,
                           ArrayList<Integer> secretChiffres,
                           boolean disponible,
                           boolean visible,
@@ -162,12 +53,12 @@ class LigneJeuMMProposition extends LigneJeuMM {
 
     }
 
-    LigneJeuMMProposition setPropositionJoueur(ArrayList<Character> propositionJoueur) {
+    LignePropaleMM setPropositionJoueur(ArrayList<Character> propositionJoueur) {
         this.propositionJoueur = propositionJoueur;
         return this;
     }
 
-    private int[] getZoneEvaluation() {
+    public int[] getZoneEvaluation() {
         return zoneEvaluation;
     }
 
@@ -181,12 +72,12 @@ class LigneJeuMMProposition extends LigneJeuMM {
         }
     }
 
-    private String getZoneProposition() {
+    public String getZoneProposition() {
 
         return zoneProposition.toString();
     }
 
-    LigneJeuMMProposition setZoneProposition() {
+    LignePropaleMM setZoneProposition() {
         zoneProposition.delete(0, zoneProposition.length());
         zoneProposition.append('[');
         zoneProposition.append(' ');
@@ -208,7 +99,7 @@ class LigneJeuMMProposition extends LigneJeuMM {
     }
 
     @Override
-    LigneJeuMMProposition Clear() {
+    public LignePropaleMM Clear() {
         zoneProposition.delete(0, zoneProposition.length());
         zoneProposition.append('[');
         zoneProposition.append(' ');
@@ -239,7 +130,7 @@ class LigneJeuMMProposition extends LigneJeuMM {
                 getZoneEvaluation()[BLANC_MALPLACE];
     }
 
-    void setLibelleLigne() {
+    public void setLibelleLigne() {
         super.setLibelleLigne(this.toString());
     }
 }
