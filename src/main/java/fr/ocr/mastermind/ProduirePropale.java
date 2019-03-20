@@ -33,7 +33,8 @@ public interface ProduirePropale {
         return null;
     }
 
-    void setScorePropale(int[] scorePropale);
+    default void setScorePropale(int[] scorePropale) {
+    }
 }
 
 /**
@@ -54,6 +55,7 @@ class ProduirePropaleDefenseur implements ProduirePropale {
         System.arraycopy(sc, 0, scorePropale, 0, sc.length);
     }
 
+    @Override
     public ArrayList<Character> getPropaleDefenseur() {
 
         return lesCombinaisonsPossibles.get(monCompteur++);
@@ -156,6 +158,7 @@ class ProduirePropaleChallengeur implements ProduirePropale {
         this.lignesPropaleMM = lignesPropaleMM;
     }
 
+    @Override
     public ArrayList<Character> getPropaleChallengeur(Scanner scanner, String pattern, Character escChar) {
         ArrayList<Character> propositionJoueur = new ArrayList<>(256);
         Boolean doublonAutorise = (Boolean) getParam(DOUBLON_AUTORISE);
@@ -206,10 +209,5 @@ class ProduirePropaleChallengeur implements ProduirePropale {
             propositionJoueur.add(escChar);
         }
         return propositionJoueur;
-    }
-
-    @Override
-    public void setScorePropale(int[] scorePropale) {
-
     }
 }

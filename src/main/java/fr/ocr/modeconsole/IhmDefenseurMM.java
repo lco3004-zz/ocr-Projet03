@@ -43,8 +43,7 @@ public class IhmDefenseurMM implements
 
     public IhmDefenseurMM(LibellesMenuSecondaire modeDeJeu, ArrayList<Integer> chiffresSecrets,
                           CouleursMastermind[] couleursSecretes, ValiderProposition fctValidePropale,
-                          LigneSimpleMM[] lignesSimpleMM, LignePropaleMM[] lignesPropaleMM,
-                          boolean isSecretVisible) {
+                          LigneSimpleMM[] lignesSimpleMM, LignePropaleMM[] lignesPropaleMM) {
 
         this.lignesSimpleMM = lignesSimpleMM;
         this.lignesPropaleMM = lignesPropaleMM;

@@ -28,19 +28,22 @@ public class LigneSimpleMM extends LignePlateauMM {
         return this;
     }
 
-    LigneSimpleMM setLibelleLigne(Constantes.CouleursMastermind[] colMM) {
-        setLibelleLigne(colMM, colMM.length);
-        return this;
-    }
-
     public String getLibelleLigneOriginal() {
         return libelleLigneOriginal;
     }
 
+    LigneSimpleMM setLibelleLigne(Constantes.CouleursMastermind[] colMM) {
+        return setLibelleLigne(colMM, colMM.length);
+    }
+
     LigneSimpleMM setLibelleLigne(Constantes.CouleursMastermind[] colMM, int nbCouleurs) {
+        return setLibelleLigne(colMM, nbCouleurs, "Les Couleurs -> ");
+    }
+
+    LigneSimpleMM setLibelleLigne(Constantes.CouleursMastermind[] colMM, int nbCouleurs, String enTete) {
 
         StringBuilder listeToutesCol = new StringBuilder(256);
-        listeToutesCol.append("Les Couleurs -> ");
+        listeToutesCol.append(enTete);
         int couleursUtilisees = 0;
         for (Constantes.CouleursMastermind v : colMM) {
             if (couleursUtilisees < nbCouleurs) {

@@ -9,7 +9,7 @@ public enum Parametres {
     NOMBRE_MAXI_DE_BOUCLES_RANDOMIZE(100, 10, 1000),
     NOMBRE_D_ESSAIS(8, 4, 12),
     DOUBLON_AUTORISE(false),
-    MODE_DEBUG(false);
+    MODE_DEBUG(true);
 
 
     private UnParam unParam;

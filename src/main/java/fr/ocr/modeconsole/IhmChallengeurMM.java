@@ -43,8 +43,7 @@ public class IhmChallengeurMM implements
 
     public IhmChallengeurMM(LibellesMenuSecondaire modeDeJeu, ArrayList<Integer> chiffresSecrets,
                             CouleursMastermind[] couleursSecretes, ValiderProposition fctValidePropale,
-                            LigneSimpleMM[] lignesSimpleMM, LignePropaleMM[] lignesPropaleMM,
-                            boolean isSecretVisible) {
+                            LigneSimpleMM[] lignesSimpleMM, LignePropaleMM[] lignesPropaleMM) {
 
         this.lignesSimpleMM = lignesSimpleMM;
         this.lignesPropaleMM = lignesPropaleMM;
