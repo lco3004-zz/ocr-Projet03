@@ -15,9 +15,7 @@ public interface ValiderProposition {
     }
 }
 
-/**
- *
- */
+
 class EvalPropaleChallengeur implements ValiderProposition {
 
     @Override
@@ -46,9 +44,6 @@ class EvalPropaleChallengeur implements ValiderProposition {
 }
 
 
-/**
- *
- */
 class EvalPropaleDefenseur implements ValiderProposition {
 
     /**
