@@ -58,7 +58,8 @@ class EvalPropaleDefenseur implements ValiderProposition {
                          ArrayList<Character> combinaisonSecrete,
                          Integer nombreDePositions,
                          int[] zoneEvaluation) {
-        return true;
+
+        return (new EvalPropaleChallengeur()).apply(propaleJoueur, combinaisonSecrete, nombreDePositions, zoneEvaluation);
     }
 }
 

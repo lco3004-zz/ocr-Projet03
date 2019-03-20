@@ -70,7 +70,11 @@ public class IhmDefenseurMM implements
 
             propalOrdinateur = getPropaleDef.getPropaleDefenseur();
 
-            SecretTrouve = lignesPropaleMM[indexLignesProposition++].setPropositionJoueur(propalOrdinateur).setZoneProposition().EvalProposition();
+            SecretTrouve = lignesPropaleMM[indexLignesProposition].setPropositionJoueur(propalOrdinateur).setZoneProposition().EvalProposition();
+
+            getPropaleDef.setScorePropale(lignesPropaleMM[indexLignesProposition].getZoneEvaluation());
+
+            indexLignesProposition++;
             nbreEssaisConsommes++;
         }
 

@@ -1,5 +1,6 @@
 package fr.ocr.modeconsole;
 
+
 import fr.ocr.utiles.AppExceptions;
 import fr.ocr.utiles.Constantes;
 

@@ -57,7 +57,7 @@ public class LignePropaleMM extends LigneSimpleMM {
         return this;
     }
 
-    private int[] getZoneEvaluation() {
+    public int[] getZoneEvaluation() {
         return zoneEvaluation;
     }
 

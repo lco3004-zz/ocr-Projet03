@@ -27,6 +27,8 @@ public class App {
 
     public static void main(String[] args) throws AppExceptions {
         //Creation du Singleton qui gere les logsapplicatifs (log4j2)
+
+
         getInstance(App.class.getSimpleName());
         logger.info(String.format("%s Version= %s", LANCEMENT_APPLICATION.getMessageInfos(), VersionPGM.VERSION_APPLICATION.getVersion()));
         Scanner scanner = new Scanner(System.in);
