@@ -6,6 +6,8 @@ import fr.ocr.utiles.Constantes.Libelles.LibellesMenuSecondaire;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static fr.ocr.params.LireParametres.getParam;
 import static fr.ocr.params.Parametres.NOMBRE_DE_COULEURS;
@@ -46,10 +48,29 @@ public class JeuMMDefenseur extends JeuMM {
         long X = 0;
         double puisDix = 0.0;
         for (int i = 0; i < nbPositions; i++) {
-            nbreMax += nbCouleurs * pow(10, i);
-            String s = baseConversion(String.valueOf(nbreMax), 10, nbCouleurs);
-            lesPossibles.add(s);
+            nbreMax += (nbCouleurs - 1) * pow(10, i);
         }
+        String paddingZero = String.format("%s%d%s", "%0", nbPositions, "d");
+        for (int i = 0; baseConversion(String.valueOf(i), 10, nbCouleurs) <= nbreMax; i++) {
+
+            String.format(paddingZero, baseConversion(Integer.toString(i), 10, nbCouleurs));
+
+            //List <Character> tmpList = Arrays.<Character>asList(tmpTab);
+
+            //ArrayList<Character> tmpList = new Arrays.asList();
+
+            //Stream<Character> characterStream = tmpList.stream().distinct();
+
+            //ArrayList<Character> tmpChaine = characterStream.collect(Collectors.toCollection(ArrayList::new));
+
+            //if (tmpChaine.size() == nbPositions)
+            //lesPossibles.add(tmpChaine.toString());
+        }
+        int k = lesPossibles.size();
+
+        //faire un file writer
+        Stream<String> stringStream = lesPossibles.stream().distinct();
+        ArrayList<String> t = stringStream.collect(Collectors.toCollection(ArrayList::new));
     }
 
 
@@ -59,11 +80,11 @@ public class JeuMMDefenseur extends JeuMM {
      * @param dBase  base de destination
      * @return chaine nombre en base dBase
      */
-    private String baseConversion(String number,
-                                  int sBase, int dBase) {
+    private Integer baseConversion(String number,
+                                   int sBase, int dBase) {
         // Parse the number with source radix
         // and return in specified radix(base)
-        return Integer.toString(Integer.parseInt(number, sBase), dBase);
+        return Integer.valueOf(Integer.toString(Integer.parseInt(number, sBase), dBase));
     }
 
     /**
