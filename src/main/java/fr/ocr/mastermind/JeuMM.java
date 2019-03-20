@@ -59,7 +59,7 @@ abstract class JeuMM {
 
         lignesSimpleMM[TITRE] = new LigneSimpleMM(true, true, TITRE, TITRE, modeDeJeu.toString());
 
-        lignesSimpleMM[LIGNE_STATUS] = new LigneSimpleMM(true, true, LIGNE_STATUS, LIGNE_STATUS, String.format(" %s", getParam(MODE_DEBUG).toString()));
+        lignesSimpleMM[LIGNE_STATUS] = new LigneSimpleMM(true, true, LIGNE_STATUS, LIGNE_STATUS, String.format(" Mode debug = %s", getParam(MODE_DEBUG).toString()));
 
         lignesSimpleMM[LIGNE_SECRETE] = new LigneSimpleMM(true, false, LIGNE_SECRETE, LIGNE_SECRETE, " -------SECRET--------");
 
@@ -97,7 +97,7 @@ abstract class JeuMM {
 
     private void PrepareRunJeuMM(FabricationSecretMM fabricationSecretMM) {
 
-        LogLaCombinaisonSecrete(fabricationSecretMM.getCouleursSecretes());
+        LogLaCombinaisonSecrete(fabricationSecretMM.getCouleursSecretes(), nombreDeCouleurs);
 
         PreparationMenu(modeJeu,
                 fabricationSecretMM.getChiffresSecrets(),
@@ -143,13 +143,16 @@ abstract class JeuMM {
     /**
      * @return le code secret (String)
      */
-    private String LogLaCombinaisonSecrete(CouleursMastermind[] couleursSecretes) {
+    private String LogLaCombinaisonSecrete(CouleursMastermind[] couleursSecretes, int nombreDeCouleurs) {
 
         CouleursMastermind[] toutes = CouleursMastermind.values();
         StringBuilder s = new StringBuilder(4096);
-
+        int nbCoulRetenue = 0;
         for (CouleursMastermind x : toutes) {
             s.append(String.format("%s%s", x.toString(), ", "));
+            nbCoulRetenue++;
+            if (nbCoulRetenue >= nombreDeCouleurs)
+                break;
         }
         logger.info("Toutes les couleurs = " + s.substring(0, s.lastIndexOf(", ")));
 

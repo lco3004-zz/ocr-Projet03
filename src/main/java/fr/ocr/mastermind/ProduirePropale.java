@@ -10,13 +10,12 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 import static fr.ocr.params.LireParametres.getParam;
 import static fr.ocr.params.Parametres.*;
 import static fr.ocr.utiles.Constantes.ConstLigneSimple.LIGNE_DE_SAISIE;
 import static fr.ocr.utiles.Constantes.ConstLigneSimple.TITRE;
+import static fr.ocr.utiles.Logs.logger;
 import static java.lang.StrictMath.pow;
 
 
@@ -64,6 +63,7 @@ class ProduirePropaleDefenseur implements ProduirePropale {
     private ArrayList<ArrayList<Character>> produireListeDesPossibles() {
         int nbCouleurs = (int) getParam(NOMBRE_DE_COULEURS);
         int nbPositions = (int) getParam(NOMBRE_DE_POSITIONS);
+        Boolean isDoublonAutorise = (Boolean) getParam(DOUBLON_AUTORISE);
         double nbreMax = 0;
         ArrayList<ArrayList<Character>> lesPossibles = new ArrayList<>(4096);
         //nombre max, Classe_X,   et liste des possibles , Secret []
@@ -82,15 +82,17 @@ class ProduirePropaleDefenseur implements ProduirePropale {
 
             String tmpString = String.format(paddingZero, baseConversion(Integer.toString(i), 10, nbCouleurs));
 
-            IntStream intStream = String.format(paddingZero, baseConversion(Integer.toString(i), 10, nbCouleurs)).chars().distinct();
 
-            Stream<Character> characterStream = String.format(paddingZero, baseConversion(Integer.toString(i), 10, nbCouleurs)).chars().distinct().mapToObj(c -> (char) c);
+            ArrayList<Character> tmpPossible;
 
-            ArrayList<Character> tmpPossible = String.format(paddingZero, baseConversion(Integer.toString(i), 10, nbCouleurs)).chars().distinct().mapToObj(c -> (char) c).collect(Collectors.toCollection(ArrayList::new));
+            if (isDoublonAutorise) {
+                tmpPossible = String.format(paddingZero, baseConversion(Integer.toString(i), 10, nbCouleurs)).chars().mapToObj(c -> (char) c).collect(Collectors.toCollection(ArrayList::new));
+            } else {
+                tmpPossible = String.format(paddingZero, baseConversion(Integer.toString(i), 10, nbCouleurs)).chars().distinct().mapToObj(c -> (char) c).collect(Collectors.toCollection(ArrayList::new));
+            }
+            ArrayList<Character> uneComposition = new ArrayList<>(nbPositions);
 
             if (tmpPossible.size() == nbPositions) {
-                ArrayList<Character> uneComposition = new ArrayList<>(nbPositions);
-                int k = 0;
                 for (Character v : tmpPossible) {
                     int locTmp = Integer.parseInt(v.toString());
                     uneComposition.add(CouleursMastermind.values()[locTmp].getLettreInitiale());
@@ -99,6 +101,23 @@ class ProduirePropaleDefenseur implements ProduirePropale {
             }
 
         }
+        //
+        logger.debug(String.format("Tableau des Possibles , Nombre = %02d , DoublonAutorise ? = %b", lesPossibles.size(), isDoublonAutorise));
+
+        StringBuilder tmpLigneLog = new StringBuilder(256);
+        int lignedansfichierlog = 0;
+        for (int tailleTab = 0; tailleTab < lesPossibles.size(); tailleTab += 10) {
+            tmpLigneLog.delete(0, tmpLigneLog.length());
+            tmpLigneLog.append(String.format("-> %d : |", ++lignedansfichierlog));
+
+            for (int nbCombiParLigne = 0; nbCombiParLigne < 10; nbCombiParLigne++) {
+                tmpLigneLog.append(" ");
+                tmpLigneLog.append(lesPossibles.get(tailleTab));
+            }
+            tmpLigneLog.append(" |");
+            logger.debug(tmpLigneLog.toString());
+        }
+
         return lesPossibles;
     }
 

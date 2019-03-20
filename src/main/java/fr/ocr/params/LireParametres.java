@@ -11,7 +11,8 @@ import java.util.Properties;
 import static fr.ocr.utiles.Constantes.NomFichiersParametres.FICHIER_PARAM_MASTER_MIND;
 import static fr.ocr.utiles.Logs.logger;
 import static fr.ocr.utiles.Messages.ErreurMessages.*;
-import static fr.ocr.utiles.Messages.InfosMessages.*;
+import static fr.ocr.utiles.Messages.InfosMessages.CREATION_FICHIER_PARAMETRE;
+import static fr.ocr.utiles.Messages.InfosMessages.REMPLACEMENT_PAR_VALEUR_DEFAUT;
 
 /**
  * Lecture /ecriture d'un fichier Property dont le nom est pass&eacute; en parametres du constructeur
@@ -100,12 +101,10 @@ class IOParams {
 
 public final class LireParametres {
 
+    static IOParams parametrageMasterMind = new IOParams(FICHIER_PARAM_MASTER_MIND.getNomFichier());
+    static Properties parametreMasterMindLu = parametrageMasterMind.lireParametre().getListeParams();
+
     public static Object getParam(Parametres nomDuParamtreARecuperer) {
-
-        logger.debug(LANCEMENT_GESTION_DES_PARAMETRES.getMessageInfos());
-
-        IOParams parametrageMasterMind = new IOParams(FICHIER_PARAM_MASTER_MIND.getNomFichier());
-        Properties parametreMasterMindLu = parametrageMasterMind.lireParametre().getListeParams();
 
 
         Object retVal;
@@ -152,8 +151,6 @@ public final class LireParametres {
                 logger.error(REMPLACEMENT_PAR_VALEUR_DEFAUT.getMessageInfos() + VALEUR_PARAM_INCORRECT.getMessageErreur());
             }
         }
-
-        logger.debug(FIN_NORMALE_GESTION_DES_PARAMETRES.getMessageInfos());
 
         return retVal;
     }
