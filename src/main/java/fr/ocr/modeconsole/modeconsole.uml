@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>fr.ocr.modeconsole</OriginalElement>
+  <nodes>
+    <node x="219.16046365914792" y="230.0">fr.ocr.modeconsole.IhmDefenseurMM</node>
+    <node x="200.1817042606516" y="0.0">fr.ocr.modeconsole.EcrireSurEcran</node>
+    <node x="0.0" y="405.0">fr.ocr.modeconsole.MenuSaisieSecret</node>
+    <node x="145.0" y="330.0">fr.ocr.modeconsole.MenuSecondaire</node>
+    <node x="343.1817042606516" y="0.0">fr.ocr.modeconsole.IOConsole.ClearScreen</node>
+    <node x="25.310275689223033" y="0.0">fr.ocr.modeconsole.LigneMenu</node>
+    <node x="46.81027568922303" y="230.0">fr.ocr.modeconsole.Menu</node>
+    <node x="403.1604636591479" y="230.0">fr.ocr.modeconsole.IhmChallengeurMM</node>
+    <node x="107.37750626566421" y="110.0">fr.ocr.modeconsole.DisplayMenu</node>
+    <node x="281.2904761904762" y="110.0">fr.ocr.modeconsole.IOConsole</node>
+    <node x="0.0" y="330.0">fr.ocr.modeconsole.MenuPrincipal</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="fr.ocr.modeconsole.IhmChallengeurMM" target="fr.ocr.modeconsole.IOConsole.ClearScreen">
+      <point x="51.66666666666663" y="-15.0" />
+      <point x="532.3271303258146" y="210.0" />
+      <point x="534.9154761904762" y="210.0" />
+      <point x="534.9154761904762" y="70.0" />
+      <point x="439.4317042606516" y="70.0" />
+      <point x="41.25" y="15.0" />
+    </edge>
+    <edge source="fr.ocr.modeconsole.IhmDefenseurMM" target="fr.ocr.modeconsole.EcrireSurEcran">
+      <point x="-54.0" y="-15.0" />
+      <point x="237.16046365914792" y="200.0" />
+      <point x="234.8775062656642" y="200.0" />
+      <point x="234.8775062656642" y="90.0" />
+      <point x="237.0817042606516" y="90.0" />
+      <point x="-24.599999999999994" y="15.0" />
+    </edge>
+    <edge source="fr.ocr.modeconsole.Menu" target="fr.ocr.modeconsole.Menu">
+      <point x="-31.599999999999994" y="15.0" />
+      <point x="54.71027568922304" y="280.0" />
+      <point x="26.810275689223033" y="280.0" />
+      <point x="26.810275689223033" y="245.0" />
+      <point x="-39.5" y="-0.0" />
+    </edge>
+    <edge source="fr.ocr.modeconsole.Menu" target="fr.ocr.modeconsole.IOConsole">
+      <point x="33.85714285714286" y="-15.0" />
+      <point x="120.1674185463659" y="210.0" />
+      <point x="298.4571428571429" y="210.0" />
+      <point x="-34.333333333333314" y="15.0" />
+    </edge>
+    <edge source="fr.ocr.modeconsole.DisplayMenu" target="fr.ocr.modeconsole.EcrireSurEcran">
+      <point x="39.0" y="-15.0" />
+      <point x="204.8775062656642" y="90.0" />
+      <point x="212.4817042606516" y="90.0" />
+      <point x="-49.19999999999999" y="15.0" />
+    </edge>
+    <edge source="fr.ocr.modeconsole.Menu" target="fr.ocr.modeconsole.LigneMenu">
+      <point x="-22.571428571428555" y="-15.0" />
+      <point x="63.73884711779448" y="200.0" />
+      <point x="54.87750626566421" y="200.0" />
+      <point x="54.87750626566421" y="70.0" />
+      <point x="63.88170426065159" y="70.0" />
+      <point x="-15.428571428571445" y="15.0" />
+    </edge>
+    <edge source="fr.ocr.modeconsole.LigneMenu" target="fr.ocr.modeconsole.LigneMenu">
+      <point x="-46.28571428571428" y="15.0" />
+      <point x="33.024561403508756" y="50.0" />
+      <point x="5.310275689223033" y="50.0" />
+      <point x="5.310275689223033" y="15.0" />
+      <point x="-54.0" y="-0.0" />
+    </edge>
+    <edge source="fr.ocr.modeconsole.IhmChallengeurMM" target="fr.ocr.modeconsole.IOConsole">
+      <point x="-51.66666666666663" y="-15.0" />
+      <point x="428.9937969924813" y="200.0" />
+      <point x="367.12380952380954" y="200.0" />
+      <point x="34.333333333333314" y="15.0" />
+    </edge>
+    <edge source="fr.ocr.modeconsole.IOConsole.ClearScreen" target="fr.ocr.modeconsole.IOConsole">
+      <point x="-13.75" y="15.0" />
+      <point x="384.4317042606516" y="90.0" />
+      <point x="367.12380952380954" y="90.0" />
+      <point x="34.333333333333314" y="-15.0" />
+    </edge>
+    <edge source="fr.ocr.modeconsole.DisplayMenu" target="fr.ocr.modeconsole.LigneMenu">
+      <point x="0.0" y="-15.0" />
+      <point x="165.8775062656642" y="80.0" />
+      <point x="125.59598997493732" y="80.0" />
+      <point x="46.28571428571429" y="15.0" />
+    </edge>
+    <edge source="fr.ocr.modeconsole.IhmChallengeurMM" target="fr.ocr.modeconsole.EcrireSurEcran">
+      <point x="0.0" y="-15.0" />
+      <point x="480.6604636591479" y="80.0" />
+      <point x="310.8817042606516" y="80.0" />
+      <point x="49.19999999999999" y="15.0" />
+    </edge>
+    <edge source="fr.ocr.modeconsole.MenuPrincipal" target="fr.ocr.modeconsole.Menu">
+      <point x="31.25" y="-15.0" />
+      <point x="93.75" y="310.0" />
+      <point x="86.31027568922303" y="310.0" />
+      <point x="0.0" y="15.0" />
+    </edge>
+    <edge source="fr.ocr.modeconsole.MenuSecondaire" target="fr.ocr.modeconsole.Menu">
+      <point x="34.25" y="-15.0" />
+      <point x="247.75" y="300.0" />
+      <point x="117.91027568922304" y="300.0" />
+      <point x="31.60000000000001" y="15.0" />
+    </edge>
+    <edge source="fr.ocr.modeconsole.IhmDefenseurMM" target="fr.ocr.modeconsole.IOConsole.ClearScreen">
+      <point x="54.0" y="-15.0" />
+      <point x="345.1604636591479" y="210.0" />
+      <point x="415.51503759398497" y="210.0" />
+      <point x="415.51503759398497" y="90.0" />
+      <point x="411.9317042606516" y="90.0" />
+      <point x="13.75" y="15.0" />
+    </edge>
+    <edge source="fr.ocr.modeconsole.IhmDefenseurMM" target="fr.ocr.modeconsole.IOConsole">
+      <point x="18.0" y="-15.0" />
+      <point x="309.1604636591479" y="210.0" />
+      <point x="332.7904761904762" y="210.0" />
+      <point x="0.0" y="15.0" />
+    </edge>
+    <edge source="fr.ocr.modeconsole.Menu" target="fr.ocr.modeconsole.DisplayMenu">
+      <point x="11.285714285714292" y="-15.0" />
+      <point x="97.59598997493731" y="190.0" />
+      <point x="165.8775062656642" y="190.0" />
+      <point x="0.0" y="15.0" />
+    </edge>
+    <edge source="fr.ocr.modeconsole.IOConsole" target="fr.ocr.modeconsole.EcrireSurEcran">
+      <point x="-34.333333333333314" y="-15.0" />
+      <point x="298.4571428571429" y="90.0" />
+      <point x="286.28170426065157" y="90.0" />
+      <point x="24.599999999999966" y="15.0" />
+    </edge>
+    <edge source="fr.ocr.modeconsole.IhmChallengeurMM" target="fr.ocr.modeconsole.IhmChallengeurMM">
+      <point x="0.0" y="15.0" />
+      <point x="480.6604636591479" y="280.0" />
+      <point x="383.1604636591479" y="280.0" />
+      <point x="383.1604636591479" y="245.0" />
+      <point x="-77.5" y="-0.0" />
+    </edge>
+    <edge source="fr.ocr.modeconsole.IOConsole" target="fr.ocr.modeconsole.IOConsole.ClearScreen">
+      <point x="0.0" y="-15.0" />
+      <point x="332.7904761904762" y="90.0" />
+      <point x="356.9317042606516" y="90.0" />
+      <point x="-41.25" y="15.0" />
+    </edge>
+    <edge source="fr.ocr.modeconsole.DisplayMenu" target="fr.ocr.modeconsole.DisplayMenu">
+      <point x="-39.0" y="15.0" />
+      <point x="126.87750626566421" y="160.0" />
+      <point x="87.37750626566421" y="160.0" />
+      <point x="87.37750626566421" y="125.0" />
+      <point x="-58.5" y="-0.0" />
+    </edge>
+    <edge source="fr.ocr.modeconsole.IhmDefenseurMM" target="fr.ocr.modeconsole.IhmDefenseurMM">
+      <point x="0.0" y="15.0" />
+      <point x="291.1604636591479" y="280.0" />
+      <point x="199.16046365914792" y="280.0" />
+      <point x="199.16046365914792" y="245.0" />
+      <point x="-72.0" y="-0.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="1.0" x="279.5" y="222.5" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Properties</Category>
+    <Category>Inner Classes</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+
