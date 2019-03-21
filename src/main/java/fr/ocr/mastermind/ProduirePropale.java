@@ -32,7 +32,7 @@ public interface ProduirePropale {
         return null;
     }
 
-    default void setScorePropale(int[] scorePropale) {
+    default void setScorePropale(ArrayList<Character> laPropaleScoree, int[] scorePropale) {
     }
 }
 
@@ -41,62 +41,100 @@ public interface ProduirePropale {
  */
 class ProduirePropaleDefenseur implements ProduirePropale {
     Integer nombreDePositions = (Integer) getParam(NOMBRE_DE_POSITIONS);
+
+
     int monCompteur = 0;
+
+    ArrayList<UnePropale> lesPropalesEvaluees;
+    
     ArrayList<ArrayList<Character>> lesCombinaisonsPossibles;
-    ArrayList<int[]> lesScoresPropales;
 
-    int[] scorePropale = new int[2];
-
+    /**
+     *
+     */
     public ProduirePropaleDefenseur() {
         lesCombinaisonsPossibles = produireListeDesPossibles();
-        lesScoresPropales = new ArrayList<int[]>(2048);
+        lesPropalesEvaluees = new ArrayList<>(4096);
     }
 
+    /**
+     * @param laPropaleScoree
+     * @param sc
+     */
     @Override
-    public void setScorePropale(int[] sc) {
-        if (monCompteur == 0) monCompteur += 1;
-        System.arraycopy(sc, 0, scorePropale, 0, sc.length);
-        lesScoresPropales.add(scorePropale);
+    public void setScorePropale(ArrayList<Character> laPropaleScoree, int[] sc) {
 
-        chercheNouvellePropale();
+        Integer laPos = lesCombinaisonsPossibles.indexOf(laPropaleScoree);
+
+        lesPropalesEvaluees.add(new UnePropale(laPropaleScoree, sc, laPos));
     }
 
-    private void chercheNouvellePropale() {
+    /**
+     *
+     */
+    private UnePropale chercheNouvellePropale(UnePropale laPropaleScoree) {
+
+        //premiere propale - donc celle de rang 0 des possibles
+        if (laPropaleScoree == null) {
+            int[] scinitial = {0, 0};
+            return new UnePropale(lesCombinaisonsPossibles.get(0), scinitial, 0);
+        }
+
+        // à partir d'icice n'est plus la premiere propostion
+
         EvalPropaleChallengeur verifieScore = new EvalPropaleChallengeur();
 
-        int k = 0;
-        boolean iscontinue = true;
+        UnePropale laNouvellePropale = null;
 
-        int[] scoreTmp = new int[2];
+        for (ArrayList<Character> nouvelleCombinaison : lesCombinaisonsPossibles) {
 
-        while (monCompteur < lesCombinaisonsPossibles.size()) {
-            k = 0;
-            iscontinue = true;
-            while ((k < lesScoresPropales.size()) && iscontinue) {
-                verifieScore.apply(lesCombinaisonsPossibles.get(monCompteur),
-                        lesCombinaisonsPossibles.get(k),
-                        nombreDePositions, scoreTmp);
-                if ((scoreTmp[0] != lesScoresPropales.get(k)[0]) ||
-                        (scoreTmp[1] != lesScoresPropales.get(k)[1])) {
-                    iscontinue = false;
+            if (lesCombinaisonsPossibles.indexOf(nouvelleCombinaison) != laPropaleScoree.sonRang) {
 
-                } else {
-                    k++;
+                for (UnePropale unePrecentePropale : lesPropalesEvaluees) {
+
+                    int[] scoreTmp = new int[2];
+
+                    scoreTmp[0] = scoreTmp[1] = 0;
+
+                    laNouvellePropale = new UnePropale(nouvelleCombinaison, scoreTmp, lesCombinaisonsPossibles.indexOf(nouvelleCombinaison));
+
+                    verifieScore.apply(nouvelleCombinaison, unePrecentePropale.saValeur, nombreDePositions, scoreTmp);
+
+                    if ((scoreTmp[0] != unePrecentePropale.sonScore[0]) ||
+                            (scoreTmp[1] != unePrecentePropale.sonScore[1])) {
+                        laNouvellePropale = null;
+                        break;
+                    }
                 }
             }
-            if (iscontinue) {
+            if (laNouvellePropale != null)
                 break;
-            }
-            monCompteur++;
         }
+        return laNouvellePropale;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public ArrayList<Character> getPropaleDefenseur() {
-        ArrayList<Character> valret = lesCombinaisonsPossibles.get((monCompteur >= lesCombinaisonsPossibles.size() ? lesCombinaisonsPossibles.size() - 1 : monCompteur));
-        return valret;
+        UnePropale unePropale = null;
+
+        if (monCompteur == 0) {
+            unePropale = chercheNouvellePropale(null);
+            monCompteur = 1;
+        } else {
+            unePropale = chercheNouvellePropale(lesPropalesEvaluees.get(lesPropalesEvaluees.size() - 1));
+        }
+
+        return unePropale.saValeur;
     }
 
+    /**
+     *
+     * @return
+     */
     private ArrayList<ArrayList<Character>> produireListeDesPossibles() {
         int nbCouleurs = (int) getParam(NOMBRE_DE_COULEURS);
         int nbPositions = (int) getParam(NOMBRE_DE_POSITIONS);
@@ -158,18 +196,30 @@ class ProduirePropaleDefenseur implements ProduirePropale {
         return lesPossibles;
     }
 
-
     /**
      * @param number nombre a convertir (sous forme de chaine)
      * @param sBase  base du nombre à convertir
      * @param dBase  base de destination
      * @return chaine nombre en base dBase
      */
-    private Integer baseConversion(String number,
-                                   int sBase, int dBase) {
-        // Parse the number with source radix
-        // and return in specified radix(base)
+    private Integer baseConversion(String number, int sBase, int dBase) {
         return Integer.valueOf(Integer.toString(Integer.parseInt(number, sBase), dBase));
+    }
+
+    /**
+     *
+     */
+    class UnePropale {
+
+        int[] sonScore = new int[2];
+        ArrayList<Character> saValeur;
+        Integer sonRang;
+
+        public UnePropale(ArrayList<Character> propale, int[] sc, Integer rangdeLaPropale) {
+            System.arraycopy(sc, 0, sonScore, 0, sc.length);
+            saValeur = propale;
+            sonRang = rangdeLaPropale;
+        }
     }
 
     /**
@@ -196,8 +246,7 @@ class ProduirePropaleDefenseur implements ProduirePropale {
         scPossible.add(new Integer[]{nbPos, 0});
         return scPossible;
     }
-
-
+    
 }
 
 /**

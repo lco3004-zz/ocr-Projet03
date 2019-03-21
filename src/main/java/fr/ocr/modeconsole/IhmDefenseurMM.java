@@ -72,7 +72,7 @@ public class IhmDefenseurMM implements
             SecretTrouve = lignesPropaleMM[indexLignesProposition].setPropositionJoueur(propalOrdinateur).setZoneProposition().EvalProposition();
 
             if (!SecretTrouve) {
-                getPropaleDef.setScorePropale(lignesPropaleMM[indexLignesProposition].getZoneEvaluation());
+                getPropaleDef.setScorePropale(propalOrdinateur, lignesPropaleMM[indexLignesProposition].getZoneEvaluation());
             }
 
             indexLignesProposition++;
