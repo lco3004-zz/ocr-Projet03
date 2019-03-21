@@ -71,14 +71,17 @@ public class IhmDefenseurMM implements
 
             SecretTrouve = lignesPropaleMM[indexLignesProposition].setPropositionJoueur(propalOrdinateur).setZoneProposition().EvalProposition();
 
-            getPropaleDef.setScorePropale(lignesPropaleMM[indexLignesProposition].getZoneEvaluation());
+            if (!SecretTrouve) {
+                getPropaleDef.setScorePropale(lignesPropaleMM[indexLignesProposition].getZoneEvaluation());
+            }
 
             indexLignesProposition++;
             nbreEssaisConsommes++;
         }
 
         if (SecretTrouve) {
-            lignesSimpleMM[LIGNE_STATUS].setLibelleLigne("!! Ordinateur Gagne !!");
+            lignesSimpleMM[LIGNE_SECRETE].setLibelleLigne("!! Ordinateur Gagne !!");
+
         } else {
             lignesSimpleMM[LIGNE_SECRETE].setLibelleLigne("!! Ordinateur Perd !!");
         }

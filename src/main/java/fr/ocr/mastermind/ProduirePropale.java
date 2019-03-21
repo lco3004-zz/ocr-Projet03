@@ -40,24 +40,61 @@ public interface ProduirePropale {
  *
  */
 class ProduirePropaleDefenseur implements ProduirePropale {
-
+    Integer nombreDePositions = (Integer) getParam(NOMBRE_DE_POSITIONS);
     int monCompteur = 0;
     ArrayList<ArrayList<Character>> lesCombinaisonsPossibles;
+    ArrayList<int[]> lesScoresPropales;
+
     int[] scorePropale = new int[2];
 
     public ProduirePropaleDefenseur() {
         lesCombinaisonsPossibles = produireListeDesPossibles();
+        lesScoresPropales = new ArrayList<int[]>(2048);
     }
 
     @Override
     public void setScorePropale(int[] sc) {
+        if (monCompteur == 0) monCompteur += 1;
         System.arraycopy(sc, 0, scorePropale, 0, sc.length);
+        lesScoresPropales.add(scorePropale);
+
+        chercheNouvellePropale();
+    }
+
+    private void chercheNouvellePropale() {
+        EvalPropaleChallengeur verifieScore = new EvalPropaleChallengeur();
+
+        int k = 0;
+        boolean iscontinue = true;
+
+        int[] scoreTmp = new int[2];
+
+        while (monCompteur < lesCombinaisonsPossibles.size()) {
+            k = 0;
+            iscontinue = true;
+            while ((k < lesScoresPropales.size()) && iscontinue) {
+                verifieScore.apply(lesCombinaisonsPossibles.get(monCompteur),
+                        lesCombinaisonsPossibles.get(k),
+                        nombreDePositions, scoreTmp);
+                if ((scoreTmp[0] != lesScoresPropales.get(k)[0]) ||
+                        (scoreTmp[1] != lesScoresPropales.get(k)[1])) {
+                    iscontinue = false;
+
+                } else {
+                    k++;
+                }
+            }
+            if (iscontinue) {
+                break;
+            }
+            monCompteur++;
+        }
     }
 
     @Override
     public ArrayList<Character> getPropaleDefenseur() {
-
-        return lesCombinaisonsPossibles.get(monCompteur++);
+        ArrayList<Character> valret = lesCombinaisonsPossibles.get((monCompteur >= lesCombinaisonsPossibles.size() ? lesCombinaisonsPossibles.size() - 1 : monCompteur));
+        return valret;
     }
 
     private ArrayList<ArrayList<Character>> produireListeDesPossibles() {
@@ -110,9 +147,9 @@ class ProduirePropaleDefenseur implements ProduirePropale {
             tmpLigneLog.delete(0, tmpLigneLog.length());
             tmpLigneLog.append(String.format("-> %d : |", ++lignedansfichierlog));
 
-            for (int nbCombiParLigne = 0; nbCombiParLigne < 10; nbCombiParLigne++) {
+            for (int nbCombiParLigne = tailleTab; nbCombiParLigne < tailleTab + 10; nbCombiParLigne++) {
                 tmpLigneLog.append(" ");
-                tmpLigneLog.append(lesPossibles.get(tailleTab));
+                tmpLigneLog.append(lesPossibles.get(nbCombiParLigne));
             }
             tmpLigneLog.append(" |");
             logger.debug(tmpLigneLog.toString());

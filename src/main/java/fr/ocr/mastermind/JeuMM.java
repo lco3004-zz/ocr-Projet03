@@ -129,7 +129,7 @@ abstract class JeuMM {
         PrepareRunJeuMM(fabricationSecretMM);
         int nbColSec = fabricationSecretMM.getCouleursSecretes().length;
         lignesSimpleMM[LIGNE_TOUTES_COULEURS].setLibelleLigne(fabricationSecretMM.getCouleursSecretes(), nbColSec, " Combinaison secrete : ");
-
+        lignesSimpleMM[LIGNE_SECRETE].setEstVisible(true);
 
         new IhmDefenseurMM(modeJeu,
                 fabricationSecretMM.getChiffresSecrets(),
