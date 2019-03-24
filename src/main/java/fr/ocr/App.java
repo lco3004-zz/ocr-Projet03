@@ -1,7 +1,7 @@
 package fr.ocr;
 
-import fr.ocr.mastermind.JeuMMChallengeur;
-import fr.ocr.mastermind.JeuMMDefenseur;
+
+import fr.ocr.mastermind.JeuMasterMind;
 import fr.ocr.modeconsole.MenuPrincipal;
 import fr.ocr.modeconsole.MenuSecondaire;
 import fr.ocr.utiles.AppExceptions;
@@ -66,16 +66,16 @@ public class App {
                                 break;
                             case MODE_CHALLENGER:
                                 if (ch_Sup.equals(CHOISIR_MASTERMIND)) {
-                                    JeuMMChallengeur jeuMMChallengeur = new JeuMMChallengeur(ch_Sec, scanner);
-                                    jeuMMChallengeur.runJeuMM();
+                                    JeuMasterMind jeuMasterMind = JeuMasterMind.CHALLENGEUR(ch_Sec, scanner);
+                                    jeuMasterMind.runJeuMM();
                                 } else {
                                     menu_secondaire.majLigneEtat(String.format("%s du jeu %s", ch_Sec.toString(), ch_Sup.toString()));
                                 }
                                 break;
                             case MODE_DEFENSEUR:
                                 if (ch_Sup.equals(CHOISIR_MASTERMIND)) {
-                                    JeuMMDefenseur jeuMMDefenseur = new JeuMMDefenseur(ch_Sec, scanner);
-                                    jeuMMDefenseur.runJeuMM();
+                                    JeuMasterMind jeuMasterMind = JeuMasterMind.DEFENSEUR(ch_Sec, scanner);
+                                    jeuMasterMind.runJeuMM();
                                 } else {
                                     menu_secondaire.majLigneEtat(String.format("%s du jeu %s", ch_Sec.toString(), ch_Sup.toString()));
                                 }
