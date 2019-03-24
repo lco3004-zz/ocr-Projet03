@@ -1,9 +1,10 @@
 package fr.ocr.mastermind;
 
-import fr.ocr.modeconsole.IhmChallengeurMM;
-import fr.ocr.modeconsole.IhmDefenseurMM;
+import fr.ocr.modeconsole.EcrireSurEcran;
+import fr.ocr.modeconsole.IOConsole;
 import fr.ocr.utiles.AppExceptions;
 import fr.ocr.utiles.Constantes;
+import fr.ocr.utiles.FabPattSais;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
@@ -56,8 +57,8 @@ class JeuMMDefenseur extends JeuMM {
         // DEBUT MOCK
         FabricationSecretMM fabricationSecretMM = new FabricationSecretMM();
         //FIN MOCK
-        this.produirePropale = new ProduirePropaleDefenseur();
-        this.validerProposition = new EvalPropaleDefenseur();
+        this.produirePropaleMM = new ProduirePropaleMMDefenseur();
+        this.validerPropositionMM = new EvalPropaleDefenseur();
 
         super.RunJeuMMDefenseur(fabricationSecretMM);
     }
@@ -76,9 +77,9 @@ class JeuMMChallengeur extends JeuMM {
     @Override
     public void runJeuMM() {
         FabricationSecretMM fabricationSecretMM = new FabricationSecretMM();
-        this.validerProposition = new EvalPropaleChallengeur();
+        this.validerPropositionMM = new EvalPropaleChallengeur();
 
-        this.produirePropale = new ProduirePropaleChallengeur(lignesSimpleMM, lignesPropaleMM);
+        this.produirePropaleMM = new ProduirePropaleMMChallengeur(lignesSimpleMM, lignesPropaleMM);
         super.RunJeuMMChallengeur(fabricationSecretMM);
     }
 }
@@ -99,13 +100,13 @@ abstract class JeuMM implements JeuMasterMind {
 
     LignePropaleMM[] lignesPropaleMM = new LignePropaleMM[(Integer) getParam(NOMBRE_D_ESSAIS)];
     LigneSimpleMM[] lignesSimpleMM = new LigneSimpleMM[NBRE_LIGNESTABLEMM];
-    ValiderProposition validerProposition = new ValiderProposition() {
+    ValiderPropositionMM validerPropositionMM = new ValiderPropositionMM() {
         @Override
         public Boolean apply(ArrayList<Character> proposition, ArrayList<Character> secret, Integer nombreDePositions, int[] zoneEvaluation) {
             return null;
         }
     };
-    ProduirePropale produirePropale;
+    ProduirePropaleMM produirePropaleMM;
     private Integer nombreDePositions = (Integer) getParam(NOMBRE_DE_POSITIONS);
     private Integer nombreDeCouleurs = (Integer) getParam(NOMBRE_DE_COULEURS);
     private Boolean modeDebug = (Boolean) getParam(MODE_DEBUG);
@@ -155,7 +156,7 @@ abstract class JeuMM implements JeuMasterMind {
                     true,
                     k,
                     LIGNE_PROPOSITION,
-                    "", validerProposition);
+                    "", validerPropositionMM);
             lignesPropaleMM[k].Clear().setLibelleLigne();
 
             lignesSimpleMM[indexLignesJeuMM] = lignesPropaleMM[k];
@@ -172,6 +173,8 @@ abstract class JeuMM implements JeuMasterMind {
     }
 
     void RunJeuMMChallengeur(FabricationSecretMM fabricationSecretMM) {
+        Character escapeChar = Constantes.Libelles.CharactersEscape.K.toString().charAt(0);
+        Integer nombreDeEssaisMax = (Integer) getParam(NOMBRE_D_ESSAIS);
 
         PrepareRunJeuMM(fabricationSecretMM);
         lignesSimpleMM[LIGNE_SECRETE].setLibelleLigne(fabricationSecretMM.getCouleursSecretes());
@@ -181,31 +184,123 @@ abstract class JeuMM implements JeuMasterMind {
         }
         lignesSimpleMM[LIGNE_TOUTES_COULEURS].setLibelleLigne(CouleursMastermind.values(), nombreDeCouleurs);
 
-        new IhmChallengeurMM(modeJeu,
-                fabricationSecretMM.getChiffresSecrets(),
-                fabricationSecretMM.getCouleursSecretes(),
-                validerProposition,
-                lignesSimpleMM,
-                lignesPropaleMM)
-                .runIhmMM(scanner, produirePropale);
+        boolean SecretTrouve = false, isEscape = false;
+
+        Integer nbreEssaisConsommes = 0;
+
+        String patternInitial = FabPattSais.ConstruitPatternSaisie(CouleursMastermind.values(), escapeChar);
+
+        ArrayList<Character> propaleChallengeur;
+
+        int indexLignesProposition = 0;
+
+        IOConsole.ClearScreen.cls();
+
+        while (!isEscape) {
+            if (!SecretTrouve && nbreEssaisConsommes < nombreDeEssaisMax) {
+
+                lignesSimpleMM[LIGNE_DE_SAISIE].setLibelleLigne(lignesSimpleMM[LIGNE_DE_SAISIE].getLibelleLigneOriginal());
+
+                propaleChallengeur = produirePropaleMM.getPropaleChallengeur(scanner, patternInitial, escapeChar);
+
+                if (propaleChallengeur.contains(escapeChar)) {
+                    isEscape = true;
+                } else {
+                    SecretTrouve = lignesPropaleMM[indexLignesProposition++].setPropositionJoueur(propaleChallengeur).setZoneProposition().EvalProposition();
+                    nbreEssaisConsommes++;
+                }
+            } else {
+                lignesSimpleMM[LIGNE_DE_SAISIE].setLibelleLigne(lignesSimpleMM[LIGNE_DE_SAISIE].getLibelleLigneOriginal());
+                if (SecretTrouve) {
+                    lignesSimpleMM[LIGNE_STATUS].setLibelleLigne(" ----   VICTOIRE !!---");
+                    lignesSimpleMM[LIGNE_TOUTES_COULEURS].setLibelleLigne("");
+                } else {
+                    lignesSimpleMM[LIGNE_SECRETE].setEstVisible(true);
+                    lignesSimpleMM[LIGNE_SECRETE].setLibelleLigne(String.format("-- Perdu. Soluce = %s", lignesSimpleMM[LIGNE_SECRETE].getLibelleLigne()));
+                    lignesSimpleMM[LIGNE_TOUTES_COULEURS].setLibelleLigne("");
+                }
+                propaleChallengeur = produirePropaleMM.getPropaleChallengeur(scanner, FabPattSais.ConstruitPatternSaisie(escapeChar), escapeChar);
+                if (propaleChallengeur.contains(escapeChar)) {
+                    isEscape = true;
+                }
+            }
+        }
+
     }
 
-
     void RunJeuMMDefenseur(FabricationSecretMM fabricationSecretMM) {
+        Integer nombreDeEssaisMax = (Integer) getParam(NOMBRE_D_ESSAIS);
+        Character escapeChar = Constantes.Libelles.CharactersEscape.K.toString().charAt(0);
 
         PrepareRunJeuMM(fabricationSecretMM);
         int nbColSec = fabricationSecretMM.getCouleursSecretes().length;
         lignesSimpleMM[LIGNE_TOUTES_COULEURS].setLibelleLigne(fabricationSecretMM.getCouleursSecretes(), nbColSec, " Combinaison secrete : ");
         lignesSimpleMM[LIGNE_SECRETE].setEstVisible(true);
 
-        new IhmDefenseurMM(modeJeu,
+        /*new IhmDefenseurMM(modeJeu,
                 fabricationSecretMM.getChiffresSecrets(),
                 fabricationSecretMM.getCouleursSecretes(),
-                validerProposition,
+                validerPropositionMM,
                 lignesSimpleMM,
                 lignesPropaleMM)
-                .runIhmMM(scanner, produirePropale);
+                .runIhmMM(scanner, produirePropaleMM);
+        */
+
+
+        boolean SecretTrouve = false, isEscape = false;
+
+        Integer nbreEssaisConsommes = 0;
+
+        String patternEscape = FabPattSais.ConstruitPatternSaisie(escapeChar);
+
+        ArrayList<Character> propalOrdinateur;
+
+        int indexLignesProposition = 0;
+
+        IOConsole.ClearScreen.cls();
+
+        while (!SecretTrouve && nbreEssaisConsommes < nombreDeEssaisMax) {
+
+            propalOrdinateur = produirePropaleMM.getPropaleDefenseur();
+
+            SecretTrouve = lignesPropaleMM[indexLignesProposition].setPropositionJoueur(propalOrdinateur).setZoneProposition().EvalProposition();
+
+            if (!SecretTrouve) {
+                produirePropaleMM.setScorePropale(propalOrdinateur, lignesPropaleMM[indexLignesProposition].getZoneEvaluation());
+            }
+
+            indexLignesProposition++;
+            nbreEssaisConsommes++;
+        }
+
+        if (SecretTrouve) {
+            lignesSimpleMM[LIGNE_SECRETE].setLibelleLigne("!! Ordinateur Gagne !!");
+
+        } else {
+            lignesSimpleMM[LIGNE_SECRETE].setLibelleLigne("!! Ordinateur Perd !!");
+        }
+
+        lignesSimpleMM[LIGNE_DE_SAISIE].setLibelleLigne(lignesSimpleMM[LIGNE_DE_SAISIE].getLibelleLigneOriginal());
+        //
+        // pour confirmation sortie du jeu , par le defenseur (sinon - pas d'affichage et retour direct au menu superieur
+        // seule saise possible 'escapeChar'
+        //
+        IOConsole.LectureClavier(patternEscape, scanner, new EcrireSurEcran() {
+            @Override
+            public void Display() {
+                for (int n = TITRE; n <= LIGNE_DE_SAISIE; n++) {
+                    if (lignesSimpleMM[n].isEstVisible()) {
+                        if (n == LIGNE_DE_SAISIE) {
+                            System.out.print(lignesSimpleMM[n].toString());
+                        } else {
+                            System.out.println(lignesSimpleMM[n].toString());
+                        }
+                    }
+                }
+            }
+        }, escapeChar);
     }
+
 
     /**
      * @return le code secret (String)
@@ -235,131 +330,3 @@ abstract class JeuMM implements JeuMasterMind {
 
 }
 
-
-/**
- * Création de la combinaison secrète de couleurs à découvrir
- * construite à partir  de la liste prédéfinie de couleurs "CouleursMastermind"
- * <p>
- * Méthode :
- * tirage aléatoire d'un nombre modulo  le nombre de couleurs prédéfinies
- * cette valeur est ajoutée au tableau chiffresSecrets
- * et
- * pour chacune de ces valeurs
- * le tableau couleurSecretes est renseigné avec : ListeDeCouleursPrédéfinies [valeur]
- * <p>
- * il y a donc bijection entre le tableau chiffresSecrets et le tableau couleursSecretes.
- * <p>
- * Si le paramètre applicatif  DOUBLON_AUTORISE est vrai, il peut y avoir plusieurs couleurs identiques dans la combinaison (sinon, non)
- * le paramètre applicatif  NOMBRE_DE_POSITIONS indique la taille des tableaux  chiffresSecrets et  couleursSecretes
- * le parametre applicatif NOMBRE_MAXI_DE_BOUCLES_RANDOMIZE limite de le nombre de boucles effectuées dans la recherche
- * d'un nombre aléatoire unique (cas ou DOUBLON_AUTORISE est faux car il faut alors une couleur/chiffre unique dans la ligne secrète)
- * <p>
- * Classe utilisée lorsque le jeu se fait contre l'ordinateur
- */
-class FabricationSecretMM {
-    /*
-     *    tableau qui contient les chiffres tirés au hazard modulo le parametre NOMBRE_DE_POSITIONS
-     */
-    private ArrayList<Integer> chiffresSecrets;
-
-    /*
-     * tableau qui contient les couleurs prises dans CouleursMastermind :
-     * couleursSecretes[ i ] =  CouleursMastermind[ chiffresSecret[ i ]]
-     */
-    private CouleursMastermind[] couleursSecretes;
-
-    /**
-     * @param chiffresSecretsFournis la table des chiffes secrets est fourni par utilisateur
-     *                               cas où c'est l'ordinateur qui doit trouver la ligne secrete
-     * @throws AppExceptions incohérence parametre ou tableau des chiffres passé en parametre
-     */
-    FabricationSecretMM(ArrayList<Integer> chiffresSecretsFournis) throws AppExceptions {
-
-        if ((chiffresSecretsFournis == null) || (chiffresSecretsFournis.size() > (Integer) getParam(NOMBRE_DE_POSITIONS))) {
-            throw new AppExceptions(ERREUR_GENERIC);
-        }
-
-        chiffresSecrets = chiffresSecretsFournis;
-
-        couleursSecretes = BijecterCouleurChiffres(chiffresSecrets, (Integer) getParam(NOMBRE_DE_POSITIONS));
-    }
-
-    /**
-     * la table des chiffes secrets est à construire - cas où c'est l'odinateur qui propose la ligne secrete
-     * cas où c'est le joueur qui doit deviner la ligne secrete, ou bien en mode duel
-     */
-    FabricationSecretMM() {
-
-        int valeurAleatoire;
-
-        DecimalFormat df = new DecimalFormat("#");
-
-        chiffresSecrets = new ArrayList<>();
-
-        // "graine" pour le random.
-        df.setRoundingMode(RoundingMode.HALF_UP);
-
-        Integer nombreDebBoucleMax = (Integer) getParam(NOMBRE_MAXI_DE_BOUCLES_RANDOMIZE);
-
-        int placeOccupee = 0, nbreDeBoucles = 0;
-
-        while ((placeOccupee < (Integer) getParam(NOMBRE_DE_POSITIONS)) && (nbreDeBoucles < nombreDebBoucleMax)) {
-            Integer nombreDeCouleurs = (Integer) getParam(NOMBRE_DE_COULEURS);
-            valeurAleatoire = (Integer.parseInt(df.format(Math.random() * 100)) % nombreDeCouleurs);
-
-            Boolean doublonAutorise = (Boolean) getParam(DOUBLON_AUTORISE);
-            if (!doublonAutorise) {
-                if (!chiffresSecrets.contains(valeurAleatoire)) {
-                    chiffresSecrets.add(valeurAleatoire);
-                    placeOccupee++;
-                }
-            } else {
-                chiffresSecrets.add(valeurAleatoire);
-                placeOccupee++;
-            }
-            nbreDeBoucles++;
-        }
-
-        //pas assez de positions remplies - le random n'a pas marché
-        if (chiffresSecrets.size() < (Integer) getParam(NOMBRE_DE_POSITIONS)) {
-
-            CouleursMastermind[] couleursMastermind = CouleursMastermind.values();
-            chiffresSecrets.clear();
-            for (int i = 0; i < (Integer) getParam(NOMBRE_DE_POSITIONS); i++) {
-                chiffresSecrets.add(couleursMastermind[i].getValeurFacialeDeLaCouleur());
-            }
-        }
-
-        couleursSecretes = BijecterCouleurChiffres(chiffresSecrets, (Integer) getParam(NOMBRE_DE_POSITIONS));
-    }
-
-    /**
-     * renseigne la ligne secrete des couleurs (bijection couleurs / chiffres)
-     *
-     * @param chiffresSec ArrayList<Integer> , combinaison secrete en chiffres
-     * @param nbPos       Integer , nombre de positions par ligne de jeu
-     * @return la ligne secrete sous forme de couleurs
-     */
-    private CouleursMastermind[] BijecterCouleurChiffres(ArrayList<Integer> chiffresSec, Integer nbPos) {
-        CouleursMastermind[] coulSec = new CouleursMastermind[nbPos];
-        int i = 0;
-        for (int v : chiffresSec) {
-            coulSec[i++] = CouleursMastermind.values()[v];
-        }
-        return coulSec;
-    }
-
-    /**
-     * @return ArrayList<Byte> Tableau des chiffres de la combinaisons secrete
-     */
-    ArrayList<Integer> getChiffresSecrets() {
-        return chiffresSecrets;
-    }
-
-    /**
-     * @return CouleursMastermind[] Tableau des couleurs de la combinaison secrete
-     */
-    CouleursMastermind[] getCouleursSecretes() {
-        return couleursSecretes;
-    }
-}

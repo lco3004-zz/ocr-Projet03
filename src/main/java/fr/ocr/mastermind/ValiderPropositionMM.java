@@ -6,7 +6,7 @@ import static fr.ocr.utiles.Constantes.ConstEvalPropale.BLANC_MALPLACE;
 import static fr.ocr.utiles.Constantes.ConstEvalPropale.NOIR_BIENPLACE;
 
 
-public interface ValiderProposition {
+public interface ValiderPropositionMM {
     default Boolean apply(ArrayList<Character> proposition,
                           ArrayList<Character> secret,
                           Integer nombreDePositions,
@@ -16,7 +16,7 @@ public interface ValiderProposition {
 }
 
 
-class EvalPropaleChallengeur implements ValiderProposition {
+class EvalPropaleChallengeur implements ValiderPropositionMM {
 
     @Override
     public Boolean apply(ArrayList<Character> propaleJoueur,
@@ -44,7 +44,7 @@ class EvalPropaleChallengeur implements ValiderProposition {
 }
 
 
-class EvalPropaleDefenseur implements ValiderProposition {
+class EvalPropaleDefenseur implements ValiderPropositionMM {
 
     /**
      * @param propaleJoueur      P, la proposition du joueur

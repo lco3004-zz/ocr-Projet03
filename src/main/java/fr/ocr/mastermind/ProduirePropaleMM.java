@@ -22,7 +22,7 @@ import static java.lang.StrictMath.pow;
 /**
  *
  */
-public interface ProduirePropale {
+public interface ProduirePropaleMM {
 
     default ArrayList<Character> getPropaleDefenseur() {
         return null;
@@ -39,7 +39,7 @@ public interface ProduirePropale {
 /**
  *
  */
-class ProduirePropaleDefenseur implements ProduirePropale {
+class ProduirePropaleMMDefenseur implements ProduirePropaleMM {
     Integer nombreDePositions = (Integer) getParam(NOMBRE_DE_POSITIONS);
 
 
@@ -52,7 +52,7 @@ class ProduirePropaleDefenseur implements ProduirePropale {
     /**
      *
      */
-    public ProduirePropaleDefenseur() {
+    public ProduirePropaleMMDefenseur() {
         lesCombinaisonsPossibles = produireListeDesPossibles();
         lesPropalesEvaluees = new ArrayList<>(4096);
     }
@@ -253,12 +253,12 @@ class ProduirePropaleDefenseur implements ProduirePropale {
  *
  */
 
-class ProduirePropaleChallengeur implements ProduirePropale {
+class ProduirePropaleMMChallengeur implements ProduirePropaleMM {
 
     private LignePropaleMM[] lignesPropaleMM;
     private LigneSimpleMM[] lignesSimpleMM;
 
-    ProduirePropaleChallengeur(LigneSimpleMM[] lignesSimpleMM, LignePropaleMM[] lignesPropaleMM) {
+    ProduirePropaleMMChallengeur(LigneSimpleMM[] lignesSimpleMM, LignePropaleMM[] lignesPropaleMM) {
         this.lignesSimpleMM = lignesSimpleMM;
         this.lignesPropaleMM = lignesPropaleMM;
     }
