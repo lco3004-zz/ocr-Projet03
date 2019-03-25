@@ -13,8 +13,9 @@ import java.util.stream.Collectors;
 
 import static fr.ocr.params.LireParametres.getParam;
 import static fr.ocr.params.Parametres.*;
-import static fr.ocr.utiles.Constantes.ConstLigneSimple.LIGNE_DE_SAISIE;
-import static fr.ocr.utiles.Constantes.ConstLigneSimple.TITRE;
+import static fr.ocr.utiles.Constantes.ConstTailleStringBuilder.TAIILE_INITIALE;
+import static fr.ocr.utiles.Constantes.ConstTypeDeLigne.LIGNE_DE_SAISIE;
+import static fr.ocr.utiles.Constantes.ConstTypeDeLigne.TITRE;
 import static fr.ocr.utiles.Logs.logger;
 import static java.lang.StrictMath.pow;
 
@@ -155,7 +156,7 @@ class ProduirePropaleMMDefenseur implements ProduirePropaleMM {
         int nbPositions = (int) getParam(NOMBRE_DE_POSITIONS);
         Boolean isDoublonAutorise = (Boolean) getParam(DOUBLON_AUTORISE);
         double nbreMax = 0;
-        ArrayList<ArrayList<Character>> lesPossibles = new ArrayList<>(4096);
+        ArrayList<ArrayList<Character>> lesPossibles = new ArrayList<>(TAIILE_INITIALE);
         //nombre max, Classe_X,   et liste des possibles , Secret []
         // Classe_X = Somme[i=0..NbrPos-1] {nbColx 10Puissance(i)}
         //Secret [] = vide
@@ -180,7 +181,7 @@ class ProduirePropaleMMDefenseur implements ProduirePropaleMM {
             } else {
                 tmpPossible = String.format(paddingZero, baseConversion(Integer.toString(i), 10, nbCouleurs)).chars().distinct().mapToObj(c -> (char) c).collect(Collectors.toCollection(ArrayList::new));
             }
-            ArrayList<Character> uneComposition = new ArrayList<>(nbPositions);
+            ArrayList<Character> uneComposition = new ArrayList<>(nbPositions + 1);
 
             if (tmpPossible.size() == nbPositions) {
                 for (Character v : tmpPossible) {
@@ -194,7 +195,7 @@ class ProduirePropaleMMDefenseur implements ProduirePropaleMM {
         //
         logger.debug(String.format("Tableau des Possibles , Nombre = %02d , DoublonAutorise ? = %b", lesPossibles.size(), isDoublonAutorise));
 
-        StringBuilder tmpLigneLog = new StringBuilder(256);
+        StringBuilder tmpLigneLog = new StringBuilder(TAIILE_INITIALE);
         int lignedansfichierlog = 0;
         for (int tailleTab = 0; tailleTab < lesPossibles.size(); tailleTab += 10) {
             tmpLigneLog.delete(0, tmpLigneLog.length());
@@ -276,9 +277,9 @@ class ProduirePropaleMMDefenseur implements ProduirePropaleMM {
 class ProduirePropaleMMChallengeur implements ProduirePropaleMM {
 
     private LignePropaleMM[] lignesPropaleMM;
-    private LigneSimpleMM[] lignesSimpleMM;
+    private LigneMM[] lignesSimpleMM;
 
-    ProduirePropaleMMChallengeur(LigneSimpleMM[] lignesSimpleMM, LignePropaleMM[] lignesPropaleMM) {
+    ProduirePropaleMMChallengeur(LigneMM[] lignesSimpleMM, LignePropaleMM[] lignesPropaleMM) {
         this.lignesSimpleMM = lignesSimpleMM;
         this.lignesPropaleMM = lignesPropaleMM;
     }

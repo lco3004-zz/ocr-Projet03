@@ -12,7 +12,8 @@ import static fr.ocr.params.LireParametres.getParam;
 import static fr.ocr.params.Parametres.*;
 import static fr.ocr.utiles.Constantes.ConstEvalPropale.PIONS_BIENPLACES;
 import static fr.ocr.utiles.Constantes.ConstEvalPropale.PIONS_MALPLACES;
-import static fr.ocr.utiles.Constantes.ConstLigneSimple.*;
+import static fr.ocr.utiles.Constantes.ConstTailleStringBuilder.TAIILE_INITIALE;
+import static fr.ocr.utiles.Constantes.ConstTypeDeLigne.*;
 import static fr.ocr.utiles.Constantes.CouleursMastermind;
 import static fr.ocr.utiles.Constantes.Libelles.LibellesMenuSecondaire;
 import static fr.ocr.utiles.Logs.logger;
@@ -130,7 +131,7 @@ abstract class JeuMM implements JeuMasterMind {
     /*
      * tableau de lignes de type affichage simple  . pas d'autre fonction que de stocker une chaine de car. à afficher
      */
-    LigneSimpleMM[] lignesSimpleMM = new LigneSimpleMM[NBRE_LIGNESTABLEMM];
+    LigneMM[] lignesSimpleMM = new LigneMM[NBRE_LIGNESTABLEMM];
 
     // variable d'interface qui polymorphise - la validation dépend du mode du jeu en cours
     ValiderPropositionMM validerPropositionMM;
@@ -190,16 +191,16 @@ abstract class JeuMM implements JeuMasterMind {
          * affectation des chaines de caractères aux lignes du menu à afficher
          * chaque lign du tableau est repéré par son indice indiqué dans un Enum
          */
-        lignesSimpleMM[TITRE] = new LigneSimpleMM(true, true, TITRE, TITRE, modeDeJeu.toString());
+        lignesSimpleMM[TITRE] = new LigneMM(true, true, TITRE, TITRE, modeDeJeu.toString());
 
-        lignesSimpleMM[LIGNE_STATUS] = new LigneSimpleMM(true, true, LIGNE_STATUS, LIGNE_STATUS, String.format(" Mode debug = %s", getParam(MODE_DEBUG).toString()));
+        lignesSimpleMM[LIGNE_STATUS] = new LigneMM(true, true, LIGNE_STATUS, LIGNE_STATUS, String.format(" Mode debug = %s", getParam(MODE_DEBUG).toString()));
 
-        lignesSimpleMM[LIGNE_SECRETE] = new LigneSimpleMM(true, false, LIGNE_SECRETE, LIGNE_SECRETE, " -------SECRET--------");
+        lignesSimpleMM[LIGNE_SECRETE] = new LigneMM(true, false, LIGNE_SECRETE, LIGNE_SECRETE, " -------SECRET--------");
 
         //pattern uniquement visuel qui est utiliser pour afficher les lignes de type Propositons
         String champBlancNoir;
 
-        StringBuilder lesCroixEtVirgules = new StringBuilder(256);
+        StringBuilder lesCroixEtVirgules = new StringBuilder(TAIILE_INITIALE);
 
         for (int nbPositions = 0; nbPositions < nombreDePositions; nbPositions++) {
 
@@ -210,18 +211,18 @@ abstract class JeuMM implements JeuMasterMind {
             lesCroixEtVirgules.append(',');
         }
 
-        lignesSimpleMM[LIGNE_TOUTES_COULEURS] = new LigneSimpleMM(true, true, LIGNE_TOUTES_COULEURS, LIGNE_TOUTES_COULEURS, " ");
+        lignesSimpleMM[LIGNE_TOUTES_COULEURS] = new LigneMM(true, true, LIGNE_TOUTES_COULEURS, LIGNE_TOUTES_COULEURS, " ");
 
         // definti le libelle d'entete de la table  de jeu , dépend du nombre de positions paramétrées.
         champBlancNoir = String.format(" ## [%s ] %c %c", lesCroixEtVirgules.substring(0, lesCroixEtVirgules.length() - 1), PIONS_BIENPLACES, PIONS_MALPLACES);
-        lignesSimpleMM[LIGNE_ENTETE] = new LigneSimpleMM(true, true, LIGNE_ENTETE, LIGNE_ENTETE, champBlancNoir);
+        lignesSimpleMM[LIGNE_ENTETE] = new LigneMM(true, true, LIGNE_ENTETE, LIGNE_ENTETE, champBlancNoir);
 
         //lignes separatrices pour affichage uniquement
-        lignesSimpleMM[LIGNE_BLANCH01] = new LigneSimpleMM(true, true, LIGNE_BLANCH01, LIGNE_BLANCH01, " ");
-        lignesSimpleMM[LIGNE_BLANCH02] = new LigneSimpleMM(true, true, LIGNE_BLANCH02, LIGNE_BLANCH02, " ");
+        lignesSimpleMM[LIGNE_BLANCH01] = new LigneMM(true, true, LIGNE_BLANCH01, LIGNE_BLANCH01, " ");
+        lignesSimpleMM[LIGNE_BLANCH02] = new LigneMM(true, true, LIGNE_BLANCH02, LIGNE_BLANCH02, " ");
 
         //ligne de bas de table , habituelle 'i.e votre choix ?'
-        lignesSimpleMM[LIGNE_DE_SAISIE] = new LigneSimpleMM(true, true, LIGNE_DE_SAISIE, LIGNE_DE_SAISIE, String.format(" Votre choix (%c : Retour): ", charactersEscape));
+        lignesSimpleMM[LIGNE_DE_SAISIE] = new LigneMM(true, true, LIGNE_DE_SAISIE, LIGNE_DE_SAISIE, String.format(" Votre choix (%c : Retour): ", charactersEscape));
 
         /*
          * affectation des lignes de type proposition
@@ -457,7 +458,7 @@ abstract class JeuMM implements JeuMasterMind {
 
         CouleursMastermind[] toutes = CouleursMastermind.values();
 
-        StringBuilder s = new StringBuilder(4096);
+        StringBuilder s = new StringBuilder(TAIILE_INITIALE);
 
         int nbCoulRetenue = 0;
 

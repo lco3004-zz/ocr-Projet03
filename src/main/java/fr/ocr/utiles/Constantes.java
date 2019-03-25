@@ -7,7 +7,7 @@ public enum Constantes {
     ;
 
     public enum VersionPGM {
-        VERSION_APPLICATION("V0.1");
+        VERSION_APPLICATION("V1.0.1");
         private String version;
 
         VersionPGM(String s) {
@@ -133,10 +133,14 @@ public enum Constantes {
         char PIONS_MALPLACES = 'B';
     }
 
+    public interface ConstTailleStringBuilder {
+        int TAIILE_INITIALE = 2048;
+    }
+
     /**
      *
      */
-    public interface ConstLigneSimple {
+    public interface ConstTypeDeLigne {
         //pour table de jeu - les diffrents types de lignes de la table de jeu
         int TITRE = 0;
         int LIGNE_STATUS = TITRE + 1;

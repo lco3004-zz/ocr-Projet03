@@ -2,11 +2,13 @@ package fr.ocr.utiles;
 
 import java.util.Locale;
 
+import static fr.ocr.utiles.Constantes.ConstTailleStringBuilder.TAIILE_INITIALE;
+
 public final class FabPattSais {
 
     static private String ConstruitPatternSaisie(Constantes.CouleursMastermind[] colMM,
                                                  Character escapeChar) {
-        StringBuilder patternSaisie = new StringBuilder(256);
+        StringBuilder patternSaisie = new StringBuilder(TAIILE_INITIALE);
         String s;
         patternSaisie.append('[');
         for (Constantes.CouleursMastermind v : colMM) {
@@ -29,7 +31,7 @@ public final class FabPattSais {
      * @return String listeInitialesColor (pattern de saisie
      */
     static public String ConstruitPatternSaisie(Character escapeChar) {
-        StringBuilder patternSaisie = new StringBuilder(256);
+        StringBuilder patternSaisie = new StringBuilder(TAIILE_INITIALE);
         String s;
         patternSaisie.append('[');
         patternSaisie.append(' ');
