@@ -6,7 +6,6 @@ import fr.ocr.utiles.AppExceptions;
 import fr.ocr.utiles.Constantes.CouleursMastermind;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
 import java.util.stream.Collectors;
@@ -24,13 +23,17 @@ import static java.lang.StrictMath.pow;
  *
  * @author Laurent Cordier
  * <p>
+ *     construit une proposition soit par saisie, soit par algo
  * <p>
  * ***************************************************************************************************************
  */
 
 /**
  * ***************************************************************************************************************
- *
+ *<p>
+ *     interface d'accès au deux modes principaux d'obtention d'une proposition (defenseur, challengeur)
+ *     la méthode setScorePropale est utilisé en mode défenseur.
+ *</p>
  *
  * ***************************************************************************************************************
  */
@@ -51,21 +54,41 @@ public interface ProduirePropaleMM {
 /**
  * ***************************************************************************************************************
  *
+ *  Proposition en mode Defenseur : algo
+ *
+ *      * la propositon Pprime est identique au secret S à chercher .
+ *      *
+ *      * les propales P<i>  déja scorées ont donné  un score : Score(P<i>,S) = SC<i> .
+ *      *
+ *      * Donc si Pprime est égal à S , alors pour toutes les propales déja scorées :
+ *      *        Score (P<i>,Pprime)  doit être égal au score  Score(P<i>,S)
+ *      *
+ *      * Sinon, Pprime n'est pas égale à S , donc ne pas retenir cette propostion Pprime.
+ *      *
+ *      * on passe à la suivante dans liste des possibles.
+ *      *
+ *      * sachant que la liste des possibles est complète, cette conditon est suffisante pour garantir
+ *      * qu'il existe une Pprime tel que Score(Pprime, S> == SC(S,S)
  *
  * ***************************************************************************************************************
  */
 class ProduirePropaleMMDefenseur implements ProduirePropaleMM {
-    private Integer nombreDePositions = (Integer) getParam(NOMBRE_DE_POSITIONS);
 
+    //nombre de couleur par ligne de jeu (nombre de position)
+    private Integer nombreDePositions = (Integer) getParam(NOMBRE_DE_POSITIONS);
 
     private int monCompteur = 0;
 
+    //liste des propositions qui ont déja été soumises à validation
     private ArrayList<UnePropale> lesPropalesEvaluees;
 
+    //liste de toutes les propostions possible dans ce jeu (dépend du paramétrage)
     private ArrayList<ArrayList<Character>> lesCombinaisonsPossibles;
 
     /**
-     *
+     * ***************************************************************************************************************
+     *   constructeur
+     * ***************************************************************************************************************
      */
     ProduirePropaleMMDefenseur() {
         lesCombinaisonsPossibles = produireListeDesPossibles();
@@ -73,8 +96,13 @@ class ProduirePropaleMMDefenseur implements ProduirePropaleMM {
     }
 
     /**
+     * ***************************************************************************************************************
+     * memorise la propostion en cours et son score (creation objet laPropaleScoree)
+     *
      * @param laPropaleScoree  proposition avec son score obtenue après présentation au validateur
      * @param sc  scanner de saisie clavier
+     *
+     * ***************************************************************************************************************
      */
     @Override
     public void setScorePropale(ArrayList<Character> laPropaleScoree, int[] sc) {
@@ -85,9 +113,28 @@ class ProduirePropaleMMDefenseur implements ProduirePropaleMM {
     }
 
     /**
+     * ***************************************************************************************************************
+     * détermine quelle proposition parmi les possibles, il faut soumettre à validation
+     *
+     *
+     *      * la propositon Pprime est identique au secret S à chercher .
+     *      *
+     *      * les propales P<i>  déja scorées ont donné  un score : Score(P<i>,S) = SC<i> .
+     *      *
+     *      * Donc si Pprime est égal à S , alors pour toutes les propales déja scorées :
+     *      *        Score (P<i>,Pprime)  doit être égal au score  Score(P<i>,S)
+     *      *
+     *      * Sinon, Pprime n'est pas égale à S , donc ne pas retenir cette propostion Pprime.
+     *      *
+     *      * on passe à la suivante dans liste des possibles.
+     *      *
+     *      * sachant que la liste des possibles est complète, cette conditon est suffisante pour garantir
+     *      * qu'il existe une Pprime tel que Score(Pprime, S> == SC(S,S)
      *
      * @param laPropaleScoree dernière proposition présentée, avec son score obtenue après présentation au validateur
      * @return une nouvelle proposition à présenter au validateur
+     *
+     * ***************************************************************************************************************
      */
     private UnePropale chercheNouvellePropale(UnePropale laPropaleScoree) {
 
@@ -97,31 +144,35 @@ class ProduirePropaleMMDefenseur implements ProduirePropaleMM {
             return new UnePropale(lesCombinaisonsPossibles.get(0), scinitial, 0);
         }
 
-        // à partir d'icice n'est plus la premiere propostion
-
-        EvalPropaleChallengeur verifieScore = new EvalPropaleChallengeur();
-
+        // à partir d'ici n'est plus la premiere propostion
         UnePropale laNouvellePropale = null;
 
+        //pour toutes les combinaisons du jeu (selon paramétrage)
         for (ArrayList<Character> nouvelleCombinaison : lesCombinaisonsPossibles) {
 
+            //ne pas repasser sur la propale qui vient d'être présentée à validateur
             if (lesCombinaisonsPossibles.indexOf(nouvelleCombinaison) != laPropaleScoree.sonRang) {
 
-                for (UnePropale unePrecentePropale : lesPropalesEvaluees) {
+                //réxéamine toutes le propales déja scorées .
+                for (UnePropale unePrecedentePropale : lesPropalesEvaluees) {
 
                     int[] scoreTmp = new int[2];
 
                     laNouvellePropale = new UnePropale(nouvelleCombinaison, scoreTmp, lesCombinaisonsPossibles.indexOf(nouvelleCombinaison));
 
-                    verifieScore.apply(nouvelleCombinaison, unePrecentePropale.saValeur, nombreDePositions, scoreTmp);
+                    // appel de la méthode de validation par calcul - c'est la méthode qui est aussi utilisé par le mode Challenger
+                    (new EvalPropaleParmiPossible()).apply(nouvelleCombinaison, unePrecedentePropale.saValeur, nombreDePositions, scoreTmp);
 
-                    if ((scoreTmp[0] != unePrecentePropale.sonScore[0]) ||
-                            (scoreTmp[1] != unePrecentePropale.sonScore[1])) {
+                    //si le score ne correspond pas à celui obtenu lors de la validation de la propale "unePrecedentePropale"
+                    //stop, on passe à la combinaison possible suivante
+                    if ((scoreTmp[0] != unePrecedentePropale.sonScore[0]) ||
+                            (scoreTmp[1] != unePrecedentePropale.sonScore[1])) {
                         laNouvellePropale = null;
                         break;
                     }
                 }
             }
+            //on a trouvé une proposition candidate
             if (laNouvellePropale != null)
                 break;
         }
@@ -130,12 +181,19 @@ class ProduirePropaleMMDefenseur implements ProduirePropaleMM {
 
 
     /**
+     * ***************************************************************************************************************
+     * renvoie une propostion candidate
      *
      * @return proposition sous forme de liste de caractères, qui sont les initiales des couleurs de la proposition
+     * ***************************************************************************************************************
+     *
      */
     @Override
     public ArrayList<Character> getPropaleDefenseur() {
         UnePropale unePropale;
+
+        //cas particulier si c'est le premier appel à la méthode, on renvoie la première proposition de la liste
+        //des propositons possibles
 
         if (monCompteur == 0) {
             unePropale = chercheNouvellePropale(null);
@@ -148,25 +206,39 @@ class ProduirePropaleMMDefenseur implements ProduirePropaleMM {
     }
 
     /**
+     * ***************************************************************************************************************
+     * Constuit la lsite des propositions possible pour ce jeu (paramétrage)
      *
-     * @return liste des combinaisons possibles
+     * Methode : calculer en base B telque B = nombreDeCouleurs du jeu (paramétrage)
+     * les propositons vont de la Proposition0 "[0,0,..,0]" où taille de Proposition0 == nombreDePositions
+     * à la PropsiitonN "[nombreDeCouleurs,nombreDeCouleurs,...,nombreDeCouleurs]" où taille de Proposition0 == nombreDePositions
+     * ie pour 4 positions et 6 couleurs
+     * les possibles vont de [0,0,0,0] à [5,5,5,5]
+     *
+     * @return liste des combinaisons possibles sous forme de liste de liste de character
+     *
+     * ***************************************************************************************************************
      */
     private ArrayList<ArrayList<Character>> produireListeDesPossibles() {
+
         int nbCouleurs = (int) getParam(NOMBRE_DE_COULEURS);
+
         int nbPositions = (int) getParam(NOMBRE_DE_POSITIONS);
+
         Boolean isDoublonAutorise = (Boolean) getParam(DOUBLON_AUTORISE);
+
         double nbreMax = 0;
+
         ArrayList<ArrayList<Character>> lesPossibles = new ArrayList<>(TAIILE_INITIALE);
-        //nombre max, Classe_X,   et liste des possibles , Secret []
-        // Classe_X = Somme[i=0..NbrPos-1] {nbColx 10Puissance(i)}
-        //Secret [] = vide
-        // Secret [] = de i = 0 à i = Classe_X faire Secret[] = Secret[] +  nbPosClist ( Base(nbCol,i) )
-        // Secret [] = unique(Secret[]
+
         long X = 0;
+
         double puisDix = 0.0;
+
         for (int i = 0; i < nbPositions; i++) {
             nbreMax += (nbCouleurs - 1) * pow(10, i);
         }
+
         String paddingZero = String.format("%s%d%s", "%0", nbPositions, "d");
 
         for (int i = 0; baseConversion(String.valueOf(i), 10, nbCouleurs) <= nbreMax; i++) {
@@ -181,6 +253,7 @@ class ProduirePropaleMMDefenseur implements ProduirePropaleMM {
             } else {
                 tmpPossible = String.format(paddingZero, baseConversion(Integer.toString(i), 10, nbCouleurs)).chars().distinct().mapToObj(c -> (char) c).collect(Collectors.toCollection(ArrayList::new));
             }
+
             ArrayList<Character> uneComposition = new ArrayList<>(nbPositions + 1);
 
             if (tmpPossible.size() == nbPositions) {
@@ -188,24 +261,31 @@ class ProduirePropaleMMDefenseur implements ProduirePropaleMM {
                     int locTmp = Integer.parseInt(v.toString());
                     uneComposition.add(CouleursMastermind.values()[locTmp].getLettreInitiale());
                 }
+
                 lesPossibles.add(uneComposition);
             }
-
         }
         //
         logger.debug(String.format("Tableau des Possibles , Nombre = %02d , DoublonAutorise ? = %b", lesPossibles.size(), isDoublonAutorise));
 
         StringBuilder tmpLigneLog = new StringBuilder(TAIILE_INITIALE);
+
         int lignedansfichierlog = 0;
+
         for (int tailleTab = 0; tailleTab < lesPossibles.size(); tailleTab += 10) {
             tmpLigneLog.delete(0, tmpLigneLog.length());
+
             tmpLigneLog.append(String.format("-> %d : |", ++lignedansfichierlog));
 
             for (int nbCombiParLigne = tailleTab; nbCombiParLigne < tailleTab + 10; nbCombiParLigne++) {
+
                 tmpLigneLog.append(" ");
+
                 tmpLigneLog.append(lesPossibles.get(nbCombiParLigne));
             }
+
             tmpLigneLog.append(" |");
+
             logger.debug(tmpLigneLog.toString());
         }
 
@@ -223,33 +303,9 @@ class ProduirePropaleMMDefenseur implements ProduirePropaleMM {
     }
 
     /**
-     * Sc(i,j)
-     * I   J
-     * 0 (0..nbPos)
-     * 1 (0..nbPos-1)
-     * 2 (0..nbPos-2)
-     * 3 (0)
-     * 4 (0..nbPos-4) 0..0
-     *
-     * @param nbPos Integer , le nombre de positions dans une ligne du jeu MM
-     * @return List of arrays of Integer , les scores possibles qui peuvent être obtenus par une proposition
-     */
-    public List<Integer[]> CalculScoresPossibles(int nbPos) {
-        List<Integer[]> scPossible = new ArrayList<>(256);
-        for (int noirs = 0; noirs < nbPos - 1; noirs++) {
-            for (int blancs = 0; blancs <= nbPos - noirs; blancs++) {
-
-                scPossible.add(new Integer[]{noirs, blancs});
-            }
-        }
-        scPossible.add(new Integer[]{nbPos - 1, 0});
-        scPossible.add(new Integer[]{nbPos, 0});
-        return scPossible;
-    }
-
-    /**
      * ***************************************************************************************************************
      *
+     *  innerclase pour conserver la propositon X avec son score
      *
      * ***************************************************************************************************************
      */
@@ -259,6 +315,15 @@ class ProduirePropaleMMDefenseur implements ProduirePropaleMM {
         ArrayList<Character> saValeur;
         Integer sonRang;
 
+        /**
+         * ***************************************************************************************************************
+         *
+         * @param propale         propostion
+         * @param sc              score de la propositon
+         * @param rangdeLaPropale rang de la propositon dans la lsite des possibles
+         *                        <p>
+         *                        ***************************************************************************************************************
+         */
         UnePropale(ArrayList<Character> propale, int[] sc, Integer rangdeLaPropale) {
             System.arraycopy(sc, 0, sonScore, 0, sc.length);
             saValeur = propale;
@@ -271,6 +336,7 @@ class ProduirePropaleMMDefenseur implements ProduirePropaleMM {
 /**
  * ***************************************************************************************************************
  *
+ *  Proposition en mode Challengeur : saisie clavier
  *
  * ***************************************************************************************************************
  */

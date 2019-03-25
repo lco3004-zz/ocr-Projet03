@@ -449,8 +449,9 @@ class LignePropaleMM extends LigneMM {
 
     /**
      * ***************************************************************************************************************
+     *conversion du score en String
      *
-     * @return
+     * @return String, le score sous forme de String avec séparateur et mise en forme
      *
      * ***************************************************************************************************************
      */
@@ -467,6 +468,11 @@ class LignePropaleMM extends LigneMM {
                 getZoneEvaluation()[BLANC_MALPLACE];
     }
 
+    /**
+     * ***************************************************************************************************************
+     * renseigne le champ  libelleLigne
+     * ***************************************************************************************************************
+     */
     void setLibelleLigne() {
         super.setLibelleLigne(this.toString());
     }

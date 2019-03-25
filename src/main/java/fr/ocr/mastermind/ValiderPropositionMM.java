@@ -30,10 +30,37 @@ public interface ValiderPropositionMM {
                           Integer nombreDePositions,
 
                           int[] zoneEvaluation) {
-        return null;
+        int rangPropale;
+
+        zoneEvaluation[NOIR_BIENPLACE] = 0;
+        zoneEvaluation[BLANC_MALPLACE] = 0;
+
+        for (Character couleurSec : secret) {
+            rangPropale = proposition.indexOf(couleurSec);
+            if (rangPropale >= 0) {
+                if ((rangPropale == secret.indexOf(couleurSec))) {
+                    zoneEvaluation[NOIR_BIENPLACE]++;
+                } else {
+                    zoneEvaluation[BLANC_MALPLACE]++;
+                }
+            }
+        }
+        return zoneEvaluation[NOIR_BIENPLACE] == nombreDePositions;
     }
+
 }
 
+class EvalPropaleParmiPossible implements ValiderPropositionMM {
+
+    @Override
+    public Boolean apply(ArrayList<Character> propaleJoueur,
+                         ArrayList<Character> combinaisonSecrete,
+                         Integer nombreDePositions,
+                         int[] zoneEvaluation) {
+
+        return ValiderPropositionMM.super.apply(propaleJoueur, combinaisonSecrete, nombreDePositions, zoneEvaluation);
+    }
+}
 /**
  * ***************************************************************************************************************
  *
@@ -48,28 +75,14 @@ class EvalPropaleChallengeur implements ValiderPropositionMM {
      *
      * ***************************************************************************************************************
      */
+
     @Override
     public Boolean apply(ArrayList<Character> propaleJoueur,
                          ArrayList<Character> combinaisonSecrete,
                          Integer nombreDePositions,
                          int[] zoneEvaluation) {
 
-        int rangPropale;
-
-        zoneEvaluation[NOIR_BIENPLACE] = 0;
-        zoneEvaluation[BLANC_MALPLACE] = 0;
-
-        for (Character couleurSec : combinaisonSecrete) {
-            rangPropale = propaleJoueur.indexOf(couleurSec);
-            if (rangPropale >= 0) {
-                if ((rangPropale == combinaisonSecrete.indexOf(couleurSec))) {
-                    zoneEvaluation[NOIR_BIENPLACE]++;
-                } else {
-                    zoneEvaluation[BLANC_MALPLACE]++;
-                }
-            }
-        }
-        return zoneEvaluation[NOIR_BIENPLACE] == nombreDePositions;
+        return ValiderPropositionMM.super.apply(propaleJoueur, combinaisonSecrete, nombreDePositions, zoneEvaluation);
     }
 }
 
@@ -95,6 +108,7 @@ class EvalPropaleDefenseur implements ValiderPropositionMM {
      *
      * ***************************************************************************************************************
      */
+
     @Override
     public Boolean apply(ArrayList<Character> propaleJoueur,
                          ArrayList<Character> combinaisonSecrete,
