@@ -14,18 +14,14 @@ import static fr.ocr.utiles.Constantes.ConstTailleStringBuilder.TAIILE_INITIALE;
 import static fr.ocr.utiles.Logs.logger;
 import static fr.ocr.utiles.Messages.ErreurMessages.ERREUR_GENERIC;
 /**
- * ***************************************************************************************************************
- *
  * @author Laurent Cordier
  * <p>
  *     modele des lignes de la table de jeu Mastermind
  * <p>
- * ***************************************************************************************************************
  */
 
 
 /**
- * ***************************************************************************************************************
  * <p>
  *     Attribut et comportement généraux d'une ligne
  *     estDisponible : toujours vrai - reservé pour mise en place d'un rollback
@@ -33,7 +29,6 @@ import static fr.ocr.utiles.Messages.ErreurMessages.ERREUR_GENERIC;
  *     rangDans le tableau : explicite
  *     typeDeligne : valeur prise parmi  Constantes.ConstTypeDeLigne
  * <p>
- * ***************************************************************************************************************
  */
 abstract class LignePlateauMM implements ConstTypeDeLigne, ConstEvalPropale {
 
@@ -46,7 +41,11 @@ abstract class LignePlateauMM implements ConstTypeDeLigne, ConstEvalPropale {
     private int typeDeLigne;
 
     /*
-     * ***************************************************************************************************************
+     * Construteur
+     * @param disponible
+     * @param visible
+     * @param rang
+     * @param typeLigne
      */
     LignePlateauMM(boolean disponible, boolean visible, int rang, int typeLigne) {
         estDisponible = disponible;
@@ -55,62 +54,37 @@ abstract class LignePlateauMM implements ConstTypeDeLigne, ConstEvalPropale {
         typeDeLigne = typeLigne;
     }
 
-    /*
-     * ***************************************************************************************************************
-     */
     public abstract String toString();
 
-    /*
-     * ***************************************************************************************************************
-     */
     public boolean isEstDisponible() {
         return estDisponible;
     }
 
-    /*
-     * ***************************************************************************************************************
-     */
     public void setEstDisponible(boolean estDisponible) {
         this.estDisponible = estDisponible;
     }
 
-    /*
-     * ***************************************************************************************************************
-     */
     public boolean isEstVisible() {
         return estVisible;
     }
 
-    /*
-     * ***************************************************************************************************************
-     */
     public void setEstVisible(boolean estVisible) {
         this.estVisible = estVisible;
     }
 
-    /*
-     * ***************************************************************************************************************
-     */
     public int getTypeDeLigne() {
         return typeDeLigne;
     }
 
-    /*
-     * ***************************************************************************************************************
-     */
     int getRangDansTableJeu() {
         return rangDansTableJeu;
     }
 }
 
 /**
- * ***************************************************************************************************************
- *
  *<p>
  *     ligne simple d'affichage
  *</p>
- *
- * ***************************************************************************************************************
  */
 class LigneMM extends LignePlateauMM {
 
@@ -118,8 +92,7 @@ class LigneMM extends LignePlateauMM {
 
     private String libelleLigneOriginal;
 
-    /**
-     * ***************************************************************************************************************
+    /*
      * Constructeur
      *
      * @param disponible   boolean  : à true ligne est disponible pour recevoir une proposition (true par defaut)
@@ -127,8 +100,6 @@ class LigneMM extends LignePlateauMM {
      * @param rang         int : rang de cette ligne dans le tableau des lignes
      * @param typeligne    int  type de ligne (simple )
      * @param info          String valeur par defaut qui sera affichée pour cette ligne
-     *
-     * ***************************************************************************************************************
      */
     LigneMM(boolean disponible, boolean visible, int rang, int typeligne, String info) {
 
@@ -140,62 +111,46 @@ class LigneMM extends LignePlateauMM {
     }
 
     /**
-     * ***************************************************************************************************************
      * retourne l'attibut libelleLigne
-     *
      * @return String,  l'attribut libelleLigne
-     *
-     * ***************************************************************************************************************
      */
     public String getLibelleLigne() {
         return libelleLigne;
     }
 
     /**
-     * ***************************************************************************************************************
      * renseigne l'attribut libelleLigne
-     *
      * @param infos  : String qui sera affichée, pour cette ligne
      * @return   :  LigneMM,  l'objet ligne (this)  ! utilie pour chainage de méthode
-     *
-     * ***************************************************************************************************************
      */
     public LigneMM setLibelleLigne(String infos) {
 
         libelleLigne = infos;
+
         return this;
     }
 
     /**
-     * ***************************************************************************************************************
      * renseigne l'attribut libelleLigne
-     *
      * @param colMM   CouleursMastermind[] , liste de couleur qui sera affichée, pour cette ligne
      * @return LigneMM,  l'objet ligne (this)  ! utilie pour chainage de méthode
-     *
-     * ***************************************************************************************************************
      */
     LigneMM setLibelleLigne(CouleursMastermind[] colMM) {
         return setLibelleLigne(colMM, colMM.length);
     }
 
     /**
-     * ***************************************************************************************************************
      * renseigne l'attribut libelleLigne
-     *
      * @param colMM CouleursMastermind[] , liste de couleur qui sera affichée, pour cette ligne
      * @param nbCouleurs int, nombre de couleurs utilisées pour jouer (parametrage du jeu)
      *                   c'est donc un sous-ensemble de l'ensemble des couleurs déclarées dans le code source (Enum)
      * @return LigneMM,  l'objet ligne (this)  ! utilie pour chainage de méthode
-     *
-     * ***************************************************************************************************************
      */
     LigneMM setLibelleLigne(CouleursMastermind[] colMM, int nbCouleurs) {
         return setLibelleLigne(colMM, nbCouleurs, "Les Couleurs -> ");
     }
 
     /**
-     * ***************************************************************************************************************
      *renseigne l'attribut  libelleLigne
      *
      * @param colMM     CouleursMastermind[] , liste de couleur qui sera affichée, pour cette ligne
@@ -203,8 +158,6 @@ class LigneMM extends LignePlateauMM {
      *                        c'est donc un sous-ensemble de l'ensemble des couleurs déclarées dans le code source (Enum)
      * @param enTete    String , libelle à placer avant le contenu de colMM
      * @return LigneMM,  l'objet ligne (this)  ! utilie pour chainage de méthode
-     *
-     * ***************************************************************************************************************
      */
     LigneMM setLibelleLigne(CouleursMastermind[] colMM, int nbCouleurs, String enTete) {
 
@@ -228,33 +181,24 @@ class LigneMM extends LignePlateauMM {
     }
 
     /**
-     * ***************************************************************************************************************
      * retourne l'attibut libelleLigneOriginal
-     *
      * @return String,  l'attribut libelleLigneOriginal
-     * <p>
-     * ***************************************************************************************************************
      */
     public String getLibelleLigneOriginal() {
         return libelleLigneOriginal;
     }
 
-    /*
-     * ***************************************************************************************************************
+    /**
      *  efface la ligne courante en remettant son libelle par defaut
-     *
      *   @return LigneMM,  l'objet ligne (this)  ! utilie pour chainage de méthode
-     * ***************************************************************************************************************
      */
     public LigneMM Clear() {
         setLibelleLigne(libelleLigneOriginal);
         return this;
     }
 
-    /*
-     * ***************************************************************************************************************
+    /**
      * renvoie l'attribut libelleLigne de la ligne courante
-     * ***************************************************************************************************************
      */
     @Override
     public String toString() {
@@ -263,12 +207,9 @@ class LigneMM extends LignePlateauMM {
 }
 
 /**
- * ***************************************************************************************************************
  *<p>
  *     ligne d'affichaget et de validation (score) d'une proposition
  *</p>
- *
- * ***************************************************************************************************************
  */
 class LignePropaleMM extends LigneMM {
 
@@ -294,9 +235,7 @@ class LignePropaleMM extends LigneMM {
     private Integer nombreDePositions = (Integer) getParam(NOMBRE_DE_POSITIONS);
 
     /**
-     * ***************************************************************************************************************
      * Constructeur
-     *
      * @param secretCouleurs   CouleursMastermind[] , combinaison secrete , dans sa forme Couleur (i.e VERT,JAUNE,...)
      * @param secretChiffres   ArrayList d'Integer combinaison secrete dans sa forme en chiffre (i.e 1,8, 4..)
      * @param disponible       boolean true (reserve)
@@ -305,8 +244,6 @@ class LignePropaleMM extends LigneMM {
      * @param typeligne         int type de ligne (proposition)
      * @param infos             String, libelle par defaut de la ligne (sa valeur originale
      * @param fct               méthode de validaiton de la proposition
-     *
-     * ***************************************************************************************************************
      */
     LignePropaleMM(CouleursMastermind[] secretCouleurs, ArrayList<Integer> secretChiffres, boolean disponible,
                    boolean visible, int rang, int typeligne, String infos, ValiderPropositionMM fct) {
@@ -326,13 +263,9 @@ class LignePropaleMM extends LigneMM {
     }
 
     /**
-     * ***************************************************************************************************************
      * renseigne l'attribut propositionJoueur
-     *
-     * @param propositionJoueur  ArrayList<Character>, proposition sous forme initiale de couleur (i.e J pour Jaune)
+     * @param propositionJoueur  ArrayList Character, proposition sous forme initiale de couleur (i.e J pour Jaune)
      * @return LignePropaleMM,  l'objet ligne (this)  ! utile pour chainage de méthode
-     *
-     * ***************************************************************************************************************
      */
     public LignePropaleMM setPropositionJoueur(ArrayList<Character> propositionJoueur) {
         this.propositionJoueur = propositionJoueur;
@@ -340,25 +273,17 @@ class LignePropaleMM extends LigneMM {
     }
 
     /**
-     * ***************************************************************************************************************
      * renvoie la valeur de l'attribut zoneEvaluation, qui est le score de la proposition sous forme [NOIRS,BLANCS]
-     *
      * @return int [], score de la proposition , résultat de son evaluation par la méthode fctValideProposition
-     *
-     * ***************************************************************************************************************
      */
     public int[] getZoneEvaluation() {
         return zoneEvaluation;
     }
 
     /**
-     * ***************************************************************************************************************
      * copie le paramètre zoneEval dans l'attribut zoneEvaluation
-     *
      * @param zoneEval   : score obtneu par la proposition
      * @throws AppExceptions , leve exception si zoneEval et zoneEvaluation sont de taille différentes
-     *
-     * ***************************************************************************************************************
      */
     public void setZoneEvaluation(int[] zoneEval) throws AppExceptions {
         if (zoneEval.length != zoneEvaluation.length) {
@@ -370,23 +295,17 @@ class LignePropaleMM extends LigneMM {
     }
 
     /**
-     * ***************************************************************************************************************
      * renvoie la valeur de zoneProposition sous forme de String
      * @return String valeur de l'attribut zoneProposition sous forme de String
-     * ***************************************************************************************************************
      */
     private String getZoneProposition() {
         return zoneProposition.toString();
     }
 
     /**
-     * ***************************************************************************************************************
      * à partir de l'attribut propositionJoueur,
      * construit la chaine de caractère qui sera affiché (attribut  zoneProposition)
-     *
      * @return LignePropaleMM,  l'objet ligne (this)  ! utile pour chainage de méthode
-     *
-     * ***************************************************************************************************************
      */
     public LignePropaleMM setZoneProposition() {
         zoneProposition.delete(0, zoneProposition.length());
@@ -403,15 +322,11 @@ class LignePropaleMM extends LigneMM {
     }
 
     /**
-     * ***************************************************************************************************************
      *  appel de la fonction d'évaluation associée à cette ligne (attribut  fctValideProposition)
      *  note : fctValideProposition peut varier d'une lignePropale à une autre , c'est le cas du mode duel
      *  où alternativement la méthode de validdation est soit automatique (mode challengeur), soit saisie par le defenseur
      *  (mode defenseur)
-     *
      * @return Boolean , true si proposition est égal à secret
-     *
-     * ***************************************************************************************************************
      */
     public Boolean EvalProposition() {
         return fctValideProposition.apply(propositionJoueur,
@@ -421,12 +336,8 @@ class LignePropaleMM extends LigneMM {
     }
 
     /**
-     * ***************************************************************************************************************
      * l'attribut zoneProposition est remis à sa valeur par defaut
-     *
      * @return LignePropaleMM,  l'objet ligne (this)  ! utile pour chainage de méthode
-     *
-     * ***************************************************************************************************************
      */
     @Override
     public LignePropaleMM Clear() {
@@ -448,12 +359,8 @@ class LignePropaleMM extends LigneMM {
     }
 
     /**
-     * ***************************************************************************************************************
      *conversion du score en String
-     *
      * @return String, le score sous forme de String avec séparateur et mise en forme
-     *
-     * ***************************************************************************************************************
      */
     @Override
     public String toString() {

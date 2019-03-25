@@ -19,8 +19,6 @@ import static fr.ocr.utiles.Constantes.Libelles.LibellesMenuSecondaire;
 import static fr.ocr.utiles.Logs.logger;
 
 /**
- * ***************************************************************************************************************
- *
  * @author Laurent Cordier
  * mode challenegeur  :  JeuMasterMind jeuMasterMind = JeuMasterMind.CHALLENGEUR(ch_Sec, scanner);
  * mode Defenseur :  JeuMasterMind jeuMasterMind = JeuMasterMind.DEFENSEUR(ch_Sec, scanner);
@@ -28,7 +26,6 @@ import static fr.ocr.utiles.Logs.logger;
  * <p>
  * Interface qui donne acc&egrave;s aux mode de jeu MasterMind.
  * <p>
- * ***************************************************************************************************************
  */
 public interface JeuMasterMind {
 
@@ -44,9 +41,7 @@ public interface JeuMasterMind {
 }
 
 /**
- * ***************************************************************************************************************
  * Classe du mode de jeu Defenseur mastermind - Ordinateur décode propostion du joueur
- * ***************************************************************************************************************
  */
 class JeuMMDefenseur extends JeuMM {
 
@@ -76,9 +71,7 @@ class JeuMMDefenseur extends JeuMM {
 }
 
 /**
- * ***************************************************************************************************************
  * classe du mode Challengeur - ordianteur fabrique un secret, le Joeur essaie de la découvrir
- * ***************************************************************************************************************
  */
 class JeuMMChallengeur extends JeuMM {
 
@@ -103,20 +96,17 @@ class JeuMMChallengeur extends JeuMM {
 }
 
 /**
- * ***************************************************************************************************************
  * "Modele" du jeuMastermind
  * Note :
  * * la combinaison secrete est
  * * * soit calculée par ordinateur en mode challeger
  * * * soit saisie par le joueur
- *
  * *la fabrication de la composition secrete 'S' dépend de :
  * * * NOMBRE_DE_COULEURS : le nombre de couleurs disponibles  'N'
  * * * * limité à 18 max par construction, valeur min 6 couleurs qui est une valeur std)
  * * * NOMBRE_DE_POSITIONS : le nombre de couleurs 'P'  constituant la composition secrete S,
  * * * * 8 max par construction, min 4 qui est une valeur Std
  * * * DOUBLON_AUTORISE
- * ***************************************************************************************************************
  */
 abstract class JeuMM implements JeuMasterMind {
 
@@ -158,11 +148,9 @@ abstract class JeuMM implements JeuMasterMind {
     private Scanner scanner;
 
     /**
-     * ***************************************************************************************************************
-     *
+     * construteur
      * @param modeJeu : challengeur, defenseur, duel
      * @param sc      scanner saisie clavier
-     *                ***************************************************************************************************************
      */
     JeuMM(LibellesMenuSecondaire modeJeu, Scanner sc) {
 
@@ -172,17 +160,14 @@ abstract class JeuMM implements JeuMasterMind {
     }
 
     /**
-     * ***************************************************************************************************************
      * création des objets  des lignes de la table du jeu Mastermind
      * affectation des données affichables, de la méthode de validation
-     *
      * @param modeDeJeu        : challengeur, defenseur, duel
      * @param chiffresSecrets  combinaison secrete sous forme de chiffre {8,6,...)
      * @param couleursSecretes combinaison secrete sous forme de mots  i.e (VERT, BLEU,...}
      *                         <p>
      *                         * chiffresSecrets et couleursSecretes sont liés par bijection : l'enumeration des Couleurs est formé par
      *                         i.e ...VERT(8,'V),... 8 est le chiffre , V l'initiale de la couleur Verte
-     *                         ***************************************************************************************************************
      */
     private void PreparationMenu(LibellesMenuSecondaire modeDeJeu, ArrayList<Integer> chiffresSecrets,
                                  CouleursMastermind[] couleursSecretes) {
@@ -224,11 +209,7 @@ abstract class JeuMM implements JeuMasterMind {
         //ligne de bas de table , habituelle 'i.e votre choix ?'
         lignesSimpleMM[LIGNE_DE_SAISIE] = new LigneMM(true, true, LIGNE_DE_SAISIE, LIGNE_DE_SAISIE, String.format(" Votre choix (%c : Retour): ", charactersEscape));
 
-        /*
-         * affectation des lignes de type proposition
-         *
-         */
-
+        //affectation des lignes de type proposition
         for (int k = 0, indexLignesJeuMM = LIGNE_PROPOSITION; k < (Integer) getParam(NOMBRE_D_ESSAIS); k++, indexLignesJeuMM++) {
             /*
              * en paramètres
@@ -255,11 +236,8 @@ abstract class JeuMM implements JeuMasterMind {
     }
 
     /**
-     * ***************************************************************************************************************
      * evite duplcation code entre mode challengeur, defenseur et duel
-     *
      * @param fabricationSecretMM instance qui dépend du mode de jeu (saisie ou calcul)
-     *                            ***************************************************************************************************************
      */
     private void PrepareRunJeuMM(FabricationSecretMM fabricationSecretMM) {
 
@@ -269,11 +247,8 @@ abstract class JeuMM implements JeuMasterMind {
     }
 
     /**
-     * ***************************************************************************************************************
      * lance le jeu en mode challengeur
-     *
      * @param fabricationSecretMM instance qui dépend du mode de jeu (saisie ou calcul)
-     *                            ***************************************************************************************************************
      */
     void RunJeuMMChallengeur(FabricationSecretMM fabricationSecretMM) {
 
@@ -365,11 +340,8 @@ abstract class JeuMM implements JeuMasterMind {
     }
 
     /**
-     * ***************************************************************************************************************
      *lance le jeu en mode Defenseur
-     *
      * @param fabricationSecretMM
-     * ***************************************************************************************************************
      */
     void RunJeuMMDefenseur(FabricationSecretMM fabricationSecretMM) {
 
@@ -445,14 +417,9 @@ abstract class JeuMM implements JeuMasterMind {
     }
 
     /**
-     * ***************************************************************************************************************
-     *
      *  log des infos du jeu : le nombre de couleurs possibles, la combinaison secrete
-     *
      * @param couleursSecretes   combinaison secrete dans sa forme contenant les initiales des Couleurs
      * @param nombreDeCouleurs   le nombre de couleurs utilisées pour construire la combinaison secrete
-     *
-     * ***************************************************************************************************************
      */
     private void LogLaCombinaisonSecrete(CouleursMastermind[] couleursSecretes, int nombreDeCouleurs) {
 

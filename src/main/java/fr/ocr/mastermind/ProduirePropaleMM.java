@@ -58,17 +58,17 @@ public interface ProduirePropaleMM {
  *
  *      * la propositon Pprime est identique au secret S à chercher .
  *      *
- *      * les propales P<i>  déja scorées ont donné  un score : Score(P<i>,S) = SC<i> .
+ *      * les propales Pi  déja scorées ont donné  un score : Score(Pi,S) = SCi .
  *      *
  *      * Donc si Pprime est égal à S , alors pour toutes les propales déja scorées :
- *      *        Score (P<i>,Pprime)  doit être égal au score  Score(P<i>,S)
+ *      *        Score (Pi,Pprime)  doit être égal au score  Score(Pi,S)
  *      *
  *      * Sinon, Pprime n'est pas égale à S , donc ne pas retenir cette propostion Pprime.
  *      *
  *      * on passe à la suivante dans liste des possibles.
  *      *
  *      * sachant que la liste des possibles est complète, cette conditon est suffisante pour garantir
- *      * qu'il existe une Pprime tel que Score(Pprime, S> == SC(S,S)
+ *      * qu'il existe une Pprime tel que Score(Pprime, S) == SC(S,S)
  *
  * ***************************************************************************************************************
  */
@@ -302,7 +302,7 @@ class ProduirePropaleMMDefenseur implements ProduirePropaleMM {
         return Integer.valueOf(Integer.toString(Integer.parseInt(number, sBase), dBase));
     }
 
-    /**
+    /*
      * ***************************************************************************************************************
      *
      *  innerclase pour conserver la propositon X avec son score
@@ -403,3 +403,10 @@ class ProduirePropaleMMChallengeur implements ProduirePropaleMM {
         return propositionJoueur;
     }
 }
+/*
+ * ***************************************************************************************************************
+ *
+ *  the end
+ *
+ * ***************************************************************************************************************
+ */
