@@ -18,9 +18,20 @@ import static fr.ocr.utiles.Constantes.ConstLigneSimple.TITRE;
 import static fr.ocr.utiles.Logs.logger;
 import static java.lang.StrictMath.pow;
 
+/**
+ * ***************************************************************************************************************
+ *
+ * @author Laurent Cordier
+ * <p>
+ * <p>
+ * ***************************************************************************************************************
+ */
 
 /**
+ * ***************************************************************************************************************
  *
+ *
+ * ***************************************************************************************************************
  */
 public interface ProduirePropaleMM {
 
@@ -37,7 +48,10 @@ public interface ProduirePropaleMM {
 }
 
 /**
+ * ***************************************************************************************************************
  *
+ *
+ * ***************************************************************************************************************
  */
 class ProduirePropaleMMDefenseur implements ProduirePropaleMM {
     private Integer nombreDePositions = (Integer) getParam(NOMBRE_DE_POSITIONS);
@@ -233,7 +247,10 @@ class ProduirePropaleMMDefenseur implements ProduirePropaleMM {
     }
 
     /**
+     * ***************************************************************************************************************
      *
+     *
+     * ***************************************************************************************************************
      */
     class UnePropale {
 
@@ -247,13 +264,15 @@ class ProduirePropaleMMDefenseur implements ProduirePropaleMM {
             sonRang = rangdeLaPropale;
         }
     }
-    
+
 }
 
 /**
+ * ***************************************************************************************************************
  *
+ *
+ * ***************************************************************************************************************
  */
-
 class ProduirePropaleMMChallengeur implements ProduirePropaleMM {
 
     private LignePropaleMM[] lignesPropaleMM;
