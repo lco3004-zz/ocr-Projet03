@@ -7,22 +7,26 @@ import static fr.ocr.utiles.Constantes.ConstEvalPropale.NOIR_BIENPLACE;
 
 
 /**
- * ***************************************************************************************************************
- *
  * @author Laurent Cordier
  * <p>
  * <p>
- * ***************************************************************************************************************
  */
 
 /**
- * ***************************************************************************************************************
  * <p>
+ *     méthode apply de validation d'une proposition : valeur par défaut : validation par calcul
  * <p>
- * ***************************************************************************************************************
  */
 public interface ValiderPropositionMM {
 
+    /**
+     *
+     * @param proposition
+     * @param secret
+     * @param nombreDePositions
+     * @param zoneEvaluation
+     * @return
+     */
     default Boolean apply(ArrayList<Character> proposition,
 
                           ArrayList<Character> secret,
@@ -47,11 +51,21 @@ public interface ValiderPropositionMM {
         }
         return zoneEvaluation[NOIR_BIENPLACE] == nombreDePositions;
     }
-
 }
 
+/**
+ *
+ */
 class EvalPropaleParmiPossible implements ValiderPropositionMM {
 
+    /**
+     *
+     * @param propaleJoueur
+     * @param combinaisonSecrete
+     * @param nombreDePositions
+     * @param zoneEvaluation
+     * @return
+     */
     @Override
     public Boolean apply(ArrayList<Character> propaleJoueur,
                          ArrayList<Character> combinaisonSecrete,
@@ -62,20 +76,17 @@ class EvalPropaleParmiPossible implements ValiderPropositionMM {
     }
 }
 /**
- * ***************************************************************************************************************
- *
- *
- * ***************************************************************************************************************
  */
 class EvalPropaleChallengeur implements ValiderPropositionMM {
 
     /**
-     * ***************************************************************************************************************
      *
-     *
-     * ***************************************************************************************************************
+     * @param propaleJoueur
+     * @param combinaisonSecrete
+     * @param nombreDePositions
+     * @param zoneEvaluation
+     * @return
      */
-
     @Override
     public Boolean apply(ArrayList<Character> propaleJoueur,
                          ArrayList<Character> combinaisonSecrete,
@@ -86,12 +97,7 @@ class EvalPropaleChallengeur implements ValiderPropositionMM {
     }
 }
 
-
 /**
- * ***************************************************************************************************************
- *
- *
- * ***************************************************************************************************************
  */
 class EvalPropaleDefenseur implements ValiderPropositionMM {
 
@@ -102,13 +108,6 @@ class EvalPropaleDefenseur implements ValiderPropositionMM {
      * @param zoneEvaluation,    tableau entier de taille 2 qui contient le nombre de Blancs (mal placés) et le nombre de Noirs (bien placés)
      * @return si P est égal à S  , fin de partie donc la méthode répond true (false sinon)
      */
-    /**
-     * ***************************************************************************************************************
-     *
-     *
-     * ***************************************************************************************************************
-     */
-
     @Override
     public Boolean apply(ArrayList<Character> propaleJoueur,
                          ArrayList<Character> combinaisonSecrete,

@@ -19,41 +19,49 @@ import static fr.ocr.utiles.Logs.logger;
 import static java.lang.StrictMath.pow;
 
 /**
- * ***************************************************************************************************************
- *
  * @author Laurent Cordier
  * <p>
  *     construit une proposition soit par saisie, soit par algo
  * <p>
- * ***************************************************************************************************************
  */
 
 /**
- * ***************************************************************************************************************
  *<p>
  *     interface d'accès au deux modes principaux d'obtention d'une proposition (defenseur, challengeur)
  *     la méthode setScorePropale est utilisé en mode défenseur.
  *</p>
- *
- * ***************************************************************************************************************
  */
 public interface ProduirePropaleMM {
 
+    /**
+     *
+     * @return
+     */
     default ArrayList<Character> getPropaleDefenseur() {
         return null;
     }
 
+    /**
+     *
+     * @param scanner
+     * @param pattern
+     * @param escChar
+     * @return
+     */
     default ArrayList<Character> getPropaleChallengeur(Scanner scanner, String pattern, Character escChar) {
         return null;
     }
 
+    /**
+     *
+     * @param laPropaleScoree
+     * @param scorePropale
+     */
     default void setScorePropale(ArrayList<Character> laPropaleScoree, int[] scorePropale) {
     }
 }
 
 /**
- * ***************************************************************************************************************
- *
  *  Proposition en mode Defenseur : algo
  *
  *      * la propositon Pprime est identique au secret S à chercher .
@@ -70,7 +78,6 @@ public interface ProduirePropaleMM {
  *      * sachant que la liste des possibles est complète, cette conditon est suffisante pour garantir
  *      * qu'il existe une Pprime tel que Score(Pprime, S) == SC(S,S)
  *
- * ***************************************************************************************************************
  */
 class ProduirePropaleMMDefenseur implements ProduirePropaleMM {
 
@@ -86,9 +93,7 @@ class ProduirePropaleMMDefenseur implements ProduirePropaleMM {
     private ArrayList<ArrayList<Character>> lesCombinaisonsPossibles;
 
     /**
-     * ***************************************************************************************************************
      *   constructeur
-     * ***************************************************************************************************************
      */
     ProduirePropaleMMDefenseur() {
         lesCombinaisonsPossibles = produireListeDesPossibles();
@@ -96,13 +101,9 @@ class ProduirePropaleMMDefenseur implements ProduirePropaleMM {
     }
 
     /**
-     * ***************************************************************************************************************
      * memorise la propostion en cours et son score (creation objet laPropaleScoree)
-     *
      * @param laPropaleScoree  proposition avec son score obtenue après présentation au validateur
      * @param sc  scanner de saisie clavier
-     *
-     * ***************************************************************************************************************
      */
     @Override
     public void setScorePropale(ArrayList<Character> laPropaleScoree, int[] sc) {
@@ -113,10 +114,7 @@ class ProduirePropaleMMDefenseur implements ProduirePropaleMM {
     }
 
     /**
-     * ***************************************************************************************************************
      * détermine quelle proposition parmi les possibles, il faut soumettre à validation
-     *
-     *
      *      * la propositon Pprime est identique au secret S à chercher .
      *      *
      *      * les propales P<i>  déja scorées ont donné  un score : Score(P<i>,S) = SC<i> .
@@ -130,11 +128,8 @@ class ProduirePropaleMMDefenseur implements ProduirePropaleMM {
      *      *
      *      * sachant que la liste des possibles est complète, cette conditon est suffisante pour garantir
      *      * qu'il existe une Pprime tel que Score(Pprime, S> == SC(S,S)
-     *
      * @param laPropaleScoree dernière proposition présentée, avec son score obtenue après présentation au validateur
      * @return une nouvelle proposition à présenter au validateur
-     *
-     * ***************************************************************************************************************
      */
     private UnePropale chercheNouvellePropale(UnePropale laPropaleScoree) {
 
@@ -179,14 +174,9 @@ class ProduirePropaleMMDefenseur implements ProduirePropaleMM {
         return laNouvellePropale;
     }
 
-
     /**
-     * ***************************************************************************************************************
      * renvoie une propostion candidate
-     *
      * @return proposition sous forme de liste de caractères, qui sont les initiales des couleurs de la proposition
-     * ***************************************************************************************************************
-     *
      */
     @Override
     public ArrayList<Character> getPropaleDefenseur() {
@@ -206,18 +196,13 @@ class ProduirePropaleMMDefenseur implements ProduirePropaleMM {
     }
 
     /**
-     * ***************************************************************************************************************
      * Constuit la lsite des propositions possible pour ce jeu (paramétrage)
-     *
      * Methode : calculer en base B telque B = nombreDeCouleurs du jeu (paramétrage)
      * les propositons vont de la Proposition0 "[0,0,..,0]" où taille de Proposition0 == nombreDePositions
      * à la PropsiitonN "[nombreDeCouleurs,nombreDeCouleurs,...,nombreDeCouleurs]" où taille de Proposition0 == nombreDePositions
      * ie pour 4 positions et 6 couleurs
      * les possibles vont de [0,0,0,0] à [5,5,5,5]
-     *
      * @return liste des combinaisons possibles sous forme de liste de liste de character
-     *
-     * ***************************************************************************************************************
      */
     private ArrayList<ArrayList<Character>> produireListeDesPossibles() {
 
@@ -303,11 +288,7 @@ class ProduirePropaleMMDefenseur implements ProduirePropaleMM {
     }
 
     /*
-     * ***************************************************************************************************************
-     *
      *  innerclase pour conserver la propositon X avec son score
-     *
-     * ***************************************************************************************************************
      */
     class UnePropale {
 
@@ -316,13 +297,9 @@ class ProduirePropaleMMDefenseur implements ProduirePropaleMM {
         Integer sonRang;
 
         /**
-         * ***************************************************************************************************************
-         *
          * @param propale         propostion
          * @param sc              score de la propositon
          * @param rangdeLaPropale rang de la propositon dans la lsite des possibles
-         *                        <p>
-         *                        ***************************************************************************************************************
          */
         UnePropale(ArrayList<Character> propale, int[] sc, Integer rangdeLaPropale) {
             System.arraycopy(sc, 0, sonScore, 0, sc.length);
@@ -334,11 +311,7 @@ class ProduirePropaleMMDefenseur implements ProduirePropaleMM {
 }
 
 /**
- * ***************************************************************************************************************
- *
  *  Proposition en mode Challengeur : saisie clavier
- *
- * ***************************************************************************************************************
  */
 class ProduirePropaleMMChallengeur implements ProduirePropaleMM {
 
@@ -405,8 +378,6 @@ class ProduirePropaleMMChallengeur implements ProduirePropaleMM {
 }
 /*
  * ***************************************************************************************************************
- *
  *  the end
- *
  * ***************************************************************************************************************
  */

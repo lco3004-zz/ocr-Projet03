@@ -376,9 +376,7 @@ class LignePropaleMM extends LigneMM {
     }
 
     /**
-     * ***************************************************************************************************************
      * renseigne le champ  libelleLigne
-     * ***************************************************************************************************************
      */
     void setLibelleLigne() {
         super.setLibelleLigne(this.toString());

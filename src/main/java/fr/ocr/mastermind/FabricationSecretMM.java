@@ -14,7 +14,6 @@ import static fr.ocr.utiles.Messages.ErreurMessages.ERREUR_GENERIC;
 import static fr.ocr.utiles.Messages.InfosMessages.RANDOM_ECHOUE_COLPARDEF;
 
 /**
- * ***************************************************************************************************************
  * @author laurent Cordier
  * Création de la combinaison secrète de couleurs à découvrir
  * construite à partir  de la liste prédéfinie de couleurs "CouleursMastermind"
@@ -34,7 +33,6 @@ import static fr.ocr.utiles.Messages.InfosMessages.RANDOM_ECHOUE_COLPARDEF;
  * d'un nombre aléatoire unique (cas ou DOUBLON_AUTORISE est faux car il faut alors une couleur/chiffre unique dans la ligne secrète)
  * <p>
  * Classe utilisée lorsque le jeu se fait contre l'ordinateur
- * ***************************************************************************************************************
  */
 class FabricationSecretMM {
 
@@ -60,10 +58,8 @@ class FabricationSecretMM {
     }
 
     /**
-     * ***************************************************************************************************************
      * la table des chiffes secrets est à construire - cas où c'est l'odinateur qui propose la ligne secrete
      * cas où c'est le joueur qui doit deviner la ligne secrete, ou bien en mode duel
-     * ***************************************************************************************************************
      */
     FabricationSecretMM() {
 
@@ -120,13 +116,10 @@ class FabricationSecretMM {
     }
 
     /**
-     * ***************************************************************************************************************
      * renseigne la ligne secrete des couleurs (bijection couleurs / chiffres)
-     *
      * @param chiffresSec ArrayList  of  Integer  , combinaison secrete en chiffres
      * @param nbPos       Integer , nombre de positions par ligne de jeu
      * @return la ligne secrete sous forme de couleurs
-     * ***************************************************************************************************************
      */
     private Constantes.CouleursMastermind[] BijecterCouleurChiffres(ArrayList<Integer> chiffresSec, Integer nbPos) {
         Constantes.CouleursMastermind[] coulSec = new Constantes.CouleursMastermind[nbPos];
@@ -138,18 +131,16 @@ class FabricationSecretMM {
     }
 
     /**
-     * ***************************************************************************************************************
+     * renvoie la combinaison secrete sous sa forme Chiffres
      * @return ArrayList of Byte Tableau des chiffres de la combinaisons secrete
-     * ***************************************************************************************************************
      */
     ArrayList<Integer> getChiffresSecrets() {
         return chiffresSecrets;
     }
 
     /**
-     * ***************************************************************************************************************
+     * renvoie la combinaison secrete sous sa forme Couleur
      * @return CouleursMastermind[] Tableau des couleurs de la combinaison secrete
-     * ***************************************************************************************************************
      */
     Constantes.CouleursMastermind[] getCouleursSecretes() {
         return couleursSecretes;

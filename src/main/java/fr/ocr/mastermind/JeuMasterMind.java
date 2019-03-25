@@ -27,12 +27,29 @@ import static fr.ocr.utiles.Logs.logger;
  * Interface qui donne acc&egrave;s aux mode de jeu MasterMind.
  * <p>
  */
+/**
+ *<p>
+ *     interface d'accès au deux modes principaux du jeudefenseur, challengeur)
+ *</p>
+ */
 public interface JeuMasterMind {
 
+    /**
+     *
+     * @param modeJeu
+     * @param sc
+     * @return
+     */
     static JeuMMChallengeur CHALLENGEUR(LibellesMenuSecondaire modeJeu, Scanner sc) {
         return new JeuMMChallengeur(modeJeu, sc);
     }
 
+    /**
+     *
+     * @param modeJeu
+     * @param sc
+     * @return
+     */
     static JeuMMDefenseur DEFENSEUR(LibellesMenuSecondaire modeJeu, Scanner sc) {
         return new JeuMMDefenseur(modeJeu, sc);
     }
