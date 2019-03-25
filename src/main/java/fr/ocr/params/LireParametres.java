@@ -14,12 +14,16 @@ import static fr.ocr.utiles.Messages.ErreurMessages.*;
 import static fr.ocr.utiles.Messages.InfosMessages.CREATION_FICHIER_PARAMETRE;
 import static fr.ocr.utiles.Messages.InfosMessages.REMPLACEMENT_PAR_VALEUR_DEFAUT;
 
+
 /**
+ * <p>
+ * @author laurent cordier
  * Lecture /ecriture d'un fichier Property dont le nom est pass&eacute; en parametres du constructeur
  * Si le fichier n'existe pas, il est cr&eacute;&eacute; avec les valeurs par d&eacute;faut des parametres.
  * IOParams est abstraite car un fichier property se distingue par les properties
  * qu'il contient : l'impl&eacute;mentation de la m&eacute;thode getParamDefaut d&eacute;pend du jeu concern&eacute; (lesjeux ou jeu
  * plus/moins, mais aussi config des menus de l'applicaiton
+ * </p>
  */
 class IOParams {
 
@@ -99,39 +103,47 @@ class IOParams {
     }
 }
 
+/**
+ * lecture des properties (static final)
+ */
 public final class LireParametres {
 
-    static IOParams parametrageMasterMind = new IOParams(FICHIER_PARAM_MASTER_MIND.getNomFichier());
-    static Properties parametreMasterMindLu = parametrageMasterMind.lireParametre().getListeParams();
+    static private IOParams parametrageMasterMind = new IOParams(FICHIER_PARAM_MASTER_MIND.getNomFichier());
+    static private Properties parametreMasterMindLu = parametrageMasterMind.lireParametre().getListeParams();
 
     public static Object getParam(Parametres nomDuParamtreARecuperer) {
 
 
         Object retVal;
         Parametres parametres = Parametres.valueOf(nomDuParamtreARecuperer.toString());
+
         try {
+
             String leTypeIci = Integer.class.getSimpleName();
+            //lecture du parametre de type entier , de sa valeur min et max
             if (parametres.getTypeParam().equals(Integer.class.getSimpleName())) {
+
                 Integer valLue = Integer.valueOf(parametreMasterMindLu.getProperty(parametres.name()));
+
                 Integer borneMin = (Integer) parametres.getValeurMin();
+
                 Integer borneMax = (Integer) parametres.getValeurMax();
+                //si parmaetre hors plage , valeur par defaut prise
                 if (valLue >= borneMin && valLue <= borneMax) {
                     retVal = valLue;
                 } else if (valLue < borneMin) {
                     retVal = borneMin;
-                } else if (valLue > borneMax) {
-                    retVal = borneMax;
                 } else {
-                    throw new AppExceptions(VALEUR_PARAM_INCORRECT);
+                    retVal = borneMax;
                 }
+                //lecture du parametre de type boolean
             } else if (parametres.getTypeParam().equals(Boolean.class.getSimpleName())) {
                 String valLue = parametreMasterMindLu.getProperty(parametres.name());
-
-                //valLue = valLue.toUpperCase(Locale.forLanguageTag("fr")).trim();
 
                 String valeurVraie = String.format("%b", true).toUpperCase(Locale.forLanguageTag("fr"));
                 String valeurFausse = String.format("%b", false).toUpperCase(Locale.forLanguageTag("fr"));
 
+                //si valeur lue incorrecte, valeur par defaut attribuée
                 if (valLue.equalsIgnoreCase(valeurFausse) || valLue.equalsIgnoreCase(valeurVraie)) {
                     retVal = Boolean.valueOf(parametreMasterMindLu.getProperty(parametres.name()));
                 } else {
@@ -142,6 +154,7 @@ public final class LireParametres {
                 retVal = null;
             }
         } catch (Exception e) {
+            //le fichier n'existe pas , onl ecree avec lesa valeurs par default
             retVal = parametres.getValeurDefaut();
             if (parametres.getTypeParam().equals(Boolean.class.getSimpleName())) {
                 logger.error(REMPLACEMENT_PAR_VALEUR_DEFAUT.getMessageInfos() + ((Boolean) retVal).toString());
@@ -151,8 +164,11 @@ public final class LireParametres {
                 logger.error(REMPLACEMENT_PAR_VALEUR_DEFAUT.getMessageInfos() + VALEUR_PARAM_INCORRECT.getMessageErreur());
             }
         }
-
         return retVal;
     }
 }
-
+/*
+ * ***************************************************************************************************************
+ *  the end
+ * ***************************************************************************************************************
+ */

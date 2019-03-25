@@ -3,9 +3,19 @@ package fr.ocr.utiles;
 import static fr.ocr.params.LireParametres.getParam;
 import static fr.ocr.params.Parametres.NOMBRE_D_ESSAIS;
 
+/**
+ * <p>
+ *
+ * @author laurent cordier
+ * constantes du programme
+ * </p>
+ */
 public enum Constantes {
     ;
 
+    /**
+     * version de l'application
+     */
     public enum VersionPGM {
         VERSION_APPLICATION("V1.0.1");
         private String version;
@@ -19,6 +29,9 @@ public enum Constantes {
         }
     }
 
+    /**
+     * nom du fichier properties
+     */
     public enum NomFichiersParametres {
         FICHIER_PARAM_MASTER_MIND("target/params.properties");
 
@@ -33,6 +46,9 @@ public enum Constantes {
         }
     }
 
+    /**
+     * les couleurs du mastermind
+     */
     public enum CouleursMastermind {
         AUBERGINE(0, 'A'),
         JAUNE(1, 'J'),
@@ -76,6 +92,9 @@ public enum Constantes {
     public enum Libelles {
         ;
 
+        /**
+         * characters escape
+         */
         public enum CharactersEscape {
             X, //quitter
             K  //retour menu principal
@@ -124,6 +143,9 @@ public enum Constantes {
         }
     }
 
+    /**
+     * constantes pour validation/scoring d'une proposition
+     */
     public interface ConstEvalPropale {
         //pour résultat evaluation proposition : Noir == pion bien place,  blanc == pion mal placé
         int NOIR_BIENPLACE = 0;
@@ -133,15 +155,18 @@ public enum Constantes {
         char PIONS_MALPLACES = 'B';
     }
 
+    /**
+     * taille par default des StringBuilder
+     */
     public interface ConstTailleStringBuilder {
         int TAIILE_INITIALE = 2048;
     }
 
     /**
-     *
+     *pour table de jeu - les diffrents types de lignes de la table de jeu
      */
     public interface ConstTypeDeLigne {
-        //pour table de jeu - les diffrents types de lignes de la table de jeu
+
         int TITRE = 0;
         int LIGNE_STATUS = TITRE + 1;
         int LIGNE_SECRETE = LIGNE_STATUS + 1;
@@ -157,3 +182,8 @@ public enum Constantes {
 
     }
 }
+/*
+ * ***************************************************************************************************************
+ *  the end
+ * ***************************************************************************************************************
+ */

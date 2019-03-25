@@ -12,6 +12,9 @@ import static fr.ocr.utiles.Logs.logger;
 import static fr.ocr.utiles.Messages.ErreurMessages.ERREUR_GENERIC;
 
 /**
+ * <p>
+ * @author laurent cordier
+ * </p>
  * @param <T> : Enum  qui vaut soit LibellesMMenuPrincipal , soit LibellesMenuSecondaire
  * @author laurentCordier
  * <p>
@@ -257,3 +260,8 @@ class DisplayMenu<T extends Enum> implements EcrireSurEcran {
         }
     }
 }
+/*
+ * ***************************************************************************************************************
+ *  the end
+ * ***************************************************************************************************************
+ */

@@ -7,25 +7,20 @@ import static fr.ocr.utiles.Constantes.ConstEvalPropale.NOIR_BIENPLACE;
 
 
 /**
+ * <p>
  * @author Laurent Cordier
- * <p>
- * <p>
- */
-
-/**
- * <p>
  *     méthode apply de validation d'une proposition : valeur par défaut : validation par calcul
  * <p>
  */
 public interface ValiderPropositionMM {
 
     /**
-     *
-     * @param proposition
-     * @param secret
-     * @param nombreDePositions
-     * @param zoneEvaluation
-     * @return
+     * méthode par defaut de comparaison d'une proposition avec la combinaison secrete
+     * @param proposition liste de character , proposition à évaluer
+     * @param secret   liste de charactes, combinaison secrete
+     * @param nombreDePositions  , parametre nombre couleur par ligne (nombre de positions)
+     * @param zoneEvaluation  tablraude 2 int, nombre de noirs, nombre de blancs - noirs == couleur bien placée
+     * @return boolean, true si Proposition et combinaison secrete sont identiques
      */
     default Boolean apply(ArrayList<Character> proposition,
 
@@ -54,17 +49,17 @@ public interface ValiderPropositionMM {
 }
 
 /**
- *
+ *  evaluation d'une proposition à soumettre , parmi les propositons possibles , (algo du mode defenseur)
  */
 class EvalPropaleParmiPossible implements ValiderPropositionMM {
 
     /**
-     *
-     * @param propaleJoueur
-     * @param combinaisonSecrete
-     * @param nombreDePositions
-     * @param zoneEvaluation
-     * @return
+     * apply
+     * @param propaleJoueur      P, la proposition du joueur
+     * @param combinaisonSecrete S, la combinaison secrete à trouver
+     * @param nombreDePositions  , le nombre positions 'emplacement de pions) ur une ligne du jeu
+     * @param zoneEvaluation,    tableau entier de taille 2 qui contient le nombre de Blancs (mal placés) et le nombre de Noirs (bien placés)
+     * @return si P est égal à S  , fin de partie donc la méthode répond true (false sinon)
      */
     @Override
     public Boolean apply(ArrayList<Character> propaleJoueur,
@@ -76,16 +71,17 @@ class EvalPropaleParmiPossible implements ValiderPropositionMM {
     }
 }
 /**
+ * evaluation de la proposition soumise enmode Challenger
  */
 class EvalPropaleChallengeur implements ValiderPropositionMM {
 
     /**
-     *
-     * @param propaleJoueur
-     * @param combinaisonSecrete
-     * @param nombreDePositions
-     * @param zoneEvaluation
-     * @return
+     * apply
+     * @param propaleJoueur      P, la proposition du joueur
+     * @param combinaisonSecrete S, la combinaison secrete à trouver
+     * @param nombreDePositions  , le nombre positions 'emplacement de pions) ur une ligne du jeu
+     * @param zoneEvaluation,    tableau entier de taille 2 qui contient le nombre de Blancs (mal placés) et le nombre de Noirs (bien placés)
+     * @return si P est égal à S  , fin de partie donc la méthode répond true (false sinon)
      */
     @Override
     public Boolean apply(ArrayList<Character> propaleJoueur,
@@ -98,10 +94,12 @@ class EvalPropaleChallengeur implements ValiderPropositionMM {
 }
 
 /**
+ * evaluation de la proposition soumise en mode Defenseur
  */
 class EvalPropaleDefenseur implements ValiderPropositionMM {
 
     /**
+     * apply
      * @param propaleJoueur      P, la proposition du joueur
      * @param combinaisonSecrete S, la combinaison secrete à trouver
      * @param nombreDePositions  , le nombre positions 'emplacement de pions) ur une ligne du jeu
@@ -118,3 +116,8 @@ class EvalPropaleDefenseur implements ValiderPropositionMM {
     }
 }
 
+/*
+ * ***************************************************************************************************************
+ *  the end
+ * ***************************************************************************************************************
+ */

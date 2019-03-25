@@ -3,6 +3,13 @@ package fr.ocr.params;
 
 import fr.ocr.utiles.Constantes;
 
+/**
+ * <p>
+ *
+ * @author laurent cordier
+ * Enumeration, les parametres du jeu (properties)
+ * </p>
+ */
 public enum Parametres {
     NOMBRE_DE_POSITIONS(4, 4, 8),
     NOMBRE_DE_COULEURS(6, 6, Constantes.CouleursMastermind.values().length),
@@ -42,6 +49,11 @@ public enum Parametres {
     }
 }
 
+/**
+ * classe parametre
+ *
+ * @param <T> T parmi Integer ou Boolean
+ */
 class UnParam<T> {
 
     private T valeurDefaut;
@@ -79,3 +91,8 @@ class UnParam<T> {
         return valeurMin;
     }
 }
+/*
+ * ***************************************************************************************************************
+ *  the end
+ * ***************************************************************************************************************
+ */

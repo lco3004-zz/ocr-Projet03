@@ -11,12 +11,24 @@ import static fr.ocr.utiles.Logs.logger;
 import static fr.ocr.utiles.Messages.ErreurMessages.ERREUR_GENERIC;
 import static fr.ocr.utiles.Messages.InfosMessages.CTRL_C;
 
+
+/**
+ * <p>
+ * classe des io en mode terminal (console)
+ *
+ * @author laurent cordier
+ * </p>
+ */
 public class IOConsole {
 
-    /*
+    /**
      * saisie clavier avec pattern
-     *
-     * retourne le caractère qui correspond à la saisie utilisateur (filtré par pattern )
+     * @param pattern_Menu  le pattern de la regex du menu
+     * @param scanner  le scanner clavier
+     * @param ecrireSurEcran  varaible interface
+     * @param escapeChar le char escape pour soirtir du menu
+     * @return le caractère qui correspond à la saisie utilisateur (filtré par pattern )
+     * @throws AppExceptions  si erreur lors de la saisie
      */
     public static Character LectureClavier(String pattern_Menu,
                                            Scanner scanner,
@@ -32,6 +44,7 @@ public class IOConsole {
 
         ecrireSurEcran.Display();
 
+        // scanner en mode hasNext, next - avec pattern de carteres autorisés
         while (choix.equals("") && scanner.hasNext()) {
             cRet = escapeChar;
             try {
@@ -40,15 +53,19 @@ public class IOConsole {
                         choix = scanner.next(patternChoix);
                         cRet = choix.toUpperCase().charAt(0);
                     } catch (InputMismatchException e1) {
+                        //si le caracter saisi n'est pas dans la liste des car. acceptés
                         String tmp = scanner.next();
+                        //efface ecran et reaffiche le tout
                         ClearScreen.cls();
                         ecrireSurEcran.Display();
                     }
                 } catch (StringIndexOutOfBoundsException e1) {
+                    //est-ce ctrl-C ??
                     logger.info(CTRL_C);
                     choix = Character.toString(escapeChar);
                 }
             } catch (Exception e3) {
+                //réponse inconnue
                 logger.error(String.format("%s %s ", ERREUR_GENERIC, e3.getClass().getSimpleName()));
                 throw new AppExceptions(ERREUR_GENERIC);
             }
@@ -78,3 +95,8 @@ public class IOConsole {
         }
     }
 }
+/*
+ * ***************************************************************************************************************
+ *  the end
+ * ***************************************************************************************************************
+ */

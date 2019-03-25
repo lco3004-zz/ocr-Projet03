@@ -8,8 +8,11 @@ import static fr.ocr.utiles.Messages.ErreurMessages.ERREUR_GENERIC;
 import static fr.ocr.utiles.Messages.ErreurMessages.SORTIE_PGM_SUR_ERREURNONGEREE;
 
 /**
+ * <p>
+ * @author laurent cordier
  * selecteur d'exception de l'application
  * peut sortir de l'application sur ERREUR_GENERIC avec coderetour au systeme = à -1
+ * </p>
  */
 public class AppExceptions extends RuntimeException {
 

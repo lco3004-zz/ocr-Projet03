@@ -2,10 +2,12 @@ package fr.ocr.utiles;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 /**
+ * <p>
+ * @author laurent cordier
  * Singleton : pour tracer , il suffit d'écrire logger.{info|debug|erro} ( {chaine de caractère non null} ) ;
  * l'istance doit être créer dans la méthode principale
+ * </p>
  */
 public class Logs {
     public static Logger logger;
@@ -22,3 +24,8 @@ public class Logs {
     }
 
 }
+/*
+ * ***************************************************************************************************************
+ *  the end
+ * ***************************************************************************************************************
+ */

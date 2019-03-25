@@ -4,6 +4,13 @@ import java.util.Locale;
 
 import static fr.ocr.utiles.Constantes.ConstTailleStringBuilder.TAIILE_INITIALE;
 
+/**
+ * <p>
+ *
+ * @author laurent cordier
+ * </p>
+ */
+
 public final class FabPattSais {
 
     static private String ConstruitPatternSaisie(Constantes.CouleursMastermind[] colMM,
@@ -52,3 +59,8 @@ public final class FabPattSais {
         return ConstruitPatternSaisie(y, charactersEscape);
     }
 }
+/*
+ * ***************************************************************************************************************
+ *  the end
+ * ***************************************************************************************************************
+ */

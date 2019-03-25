@@ -13,9 +13,11 @@ import static fr.ocr.utiles.Messages.ErreurMessages.PARAM_INCONNU;
 import static fr.ocr.utiles.Messages.ErreurMessages.TYPE_PARAM_INCORRECT;
 
 /**
- * Menu secondaire de l'application - menu de Mastermind ou de PlusMoins
  * <p>
+ * @author laurent cordier
+ * Menu secondaire de l'application - menu de Mastermind ou de PlusMoins
  * hérite de la class Menu qui se charge du comportement d'un menu (afffichage, saisie)
+ * </p>
  */
 public class MenuSecondaire extends Menu<Constantes.Libelles.LibellesMenuSecondaire> {
 
@@ -109,3 +111,8 @@ public class MenuSecondaire extends Menu<Constantes.Libelles.LibellesMenuSeconda
     }
 
 }
+/*
+ * ***************************************************************************************************************
+ *  the end
+ * ***************************************************************************************************************
+ */

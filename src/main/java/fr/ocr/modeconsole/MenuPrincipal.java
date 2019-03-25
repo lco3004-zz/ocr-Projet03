@@ -11,9 +11,11 @@ import static fr.ocr.utiles.Logs.logger;
 import static fr.ocr.utiles.Messages.ErreurMessages.PARAM_INCONNU;
 
 /**
- * Menu principal de l'application - selection du jeux
  * <p>
+ * @author laurent cordier
+ * Menu principal de l'application - selection du jeux
  * hérite de la class Menu qui se charge du comportement d'un menu (afffichage, saisie)
+ * </p>
  */
 public class MenuPrincipal extends Menu<Constantes.Libelles.LibellesMenuPrincipal> {
 
@@ -69,3 +71,8 @@ public class MenuPrincipal extends Menu<Constantes.Libelles.LibellesMenuPrincipa
     }
 
 }
+/*
+ * ***************************************************************************************************************
+ *  the end
+ * ***************************************************************************************************************
+ */

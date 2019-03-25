@@ -9,7 +9,10 @@ import static fr.ocr.params.LireParametres.getParam;
 import static fr.ocr.params.Parametres.NOMBRE_DE_POSITIONS;
 
 /**
+ * <p>
+ * @author laurent cordier
  * MOOK saisie clavier combinaisonSecrete secret MM
+ * </p>
  */
 public class MenuSaisieSecret {
 
@@ -26,3 +29,8 @@ public class MenuSaisieSecret {
         return combinaisonSecrete;
     }
 }
+/*
+ * ***************************************************************************************************************
+ *  the end
+ * ***************************************************************************************************************
+ */
