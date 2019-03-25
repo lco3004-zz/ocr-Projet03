@@ -1,6 +1,5 @@
 package fr.ocr.mastermind;
 
-
 import fr.ocr.utiles.AppExceptions;
 import fr.ocr.utiles.Constantes;
 
@@ -10,10 +9,13 @@ import java.util.ArrayList;
 
 import static fr.ocr.params.LireParametres.getParam;
 import static fr.ocr.params.Parametres.*;
-import static fr.ocr.params.Parametres.NOMBRE_DE_POSITIONS;
+import static fr.ocr.utiles.Logs.logger;
 import static fr.ocr.utiles.Messages.ErreurMessages.ERREUR_GENERIC;
+import static fr.ocr.utiles.Messages.InfosMessages.RANDOM_ECHOUE_COLPARDEF;
 
 /**
+ * ***************************************************************************************************************
+ * @author laurent Cordier
  * Création de la combinaison secrète de couleurs à découvrir
  * construite à partir  de la liste prédéfinie de couleurs "CouleursMastermind"
  * <p>
@@ -32,22 +34,18 @@ import static fr.ocr.utiles.Messages.ErreurMessages.ERREUR_GENERIC;
  * d'un nombre aléatoire unique (cas ou DOUBLON_AUTORISE est faux car il faut alors une couleur/chiffre unique dans la ligne secrète)
  * <p>
  * Classe utilisée lorsque le jeu se fait contre l'ordinateur
+ * ***************************************************************************************************************
  */
 class FabricationSecretMM {
-    /*
-     *    tableau qui contient les chiffres tirés au hazard modulo le parametre NOMBRE_DE_POSITIONS
-     */
+
+    //tableau qui contient les chiffres tirés au hazard modulo le parametre NOMBRE_DE_POSITIONS
     private ArrayList<Integer> chiffresSecrets;
 
-    /*
-     * tableau qui contient les couleurs prises dans CouleursMastermind :
-     * couleursSecretes[ i ] =  CouleursMastermind[ chiffresSecret[ i ]]
-     */
+    // tableau qui contient les couleurs prises dans CouleursMastermind : couleursSecretes[ i ] =  CouleursMastermind[ chiffresSecret[ i ]]
     private Constantes.CouleursMastermind[] couleursSecretes;
 
     /**
-     * @param chiffresSecretsFournis la table des chiffes secrets est fourni par utilisateur
-     *                               cas où c'est l'ordinateur qui doit trouver la ligne secrete
+     * @param chiffresSecretsFournis la table des chiffes secrets est fourni par utilisateur cas où c'est l'ordinateur qui doit trouver la ligne secrete
      * @throws AppExceptions incohérence parametre ou tableau des chiffres passé en parametre
      */
     FabricationSecretMM(ArrayList<Integer> chiffresSecretsFournis) throws AppExceptions {
@@ -62,8 +60,10 @@ class FabricationSecretMM {
     }
 
     /**
+     * ***************************************************************************************************************
      * la table des chiffes secrets est à construire - cas où c'est l'odinateur qui propose la ligne secrete
      * cas où c'est le joueur qui doit deviner la ligne secrete, ou bien en mode duel
+     * ***************************************************************************************************************
      */
     FabricationSecretMM() {
 
@@ -76,20 +76,25 @@ class FabricationSecretMM {
         // "graine" pour le random.
         df.setRoundingMode(RoundingMode.HALF_UP);
 
+        //si pas d'unicité de chiffre dans la combinaison aléatoire, ré essai pour nombreDeBoucleMax -
         Integer nombreDebBoucleMax = (Integer) getParam(NOMBRE_MAXI_DE_BOUCLES_RANDOMIZE);
 
         int placeOccupee = 0, nbreDeBoucles = 0;
+
 
         while ((placeOccupee < (Integer) getParam(NOMBRE_DE_POSITIONS)) && (nbreDeBoucles < nombreDebBoucleMax)) {
             Integer nombreDeCouleurs = (Integer) getParam(NOMBRE_DE_COULEURS);
             valeurAleatoire = (Integer.parseInt(df.format(Math.random() * 100)) % nombreDeCouleurs);
 
             Boolean doublonAutorise = (Boolean) getParam(DOUBLON_AUTORISE);
+
+            //si les chiffres dans la proposition doivent être uniques (pas de doublons) , il faut vérifier unicité
             if (!doublonAutorise) {
                 if (!chiffresSecrets.contains(valeurAleatoire)) {
                     chiffresSecrets.add(valeurAleatoire);
                     placeOccupee++;
                 }
+                // si les doublons sont autorisés, pas de recherche d'unicité
             } else {
                 chiffresSecrets.add(valeurAleatoire);
                 placeOccupee++;
@@ -97,7 +102,10 @@ class FabricationSecretMM {
             nbreDeBoucles++;
         }
 
-        //pas assez de positions remplies - le random n'a pas marché
+        /*
+         * pas assez de positions remplies - le random n'a pas marché
+         * Dans ce cas , les premières couleurs de la liste des couleurs, sont prises par défaut.
+         */
         if (chiffresSecrets.size() < (Integer) getParam(NOMBRE_DE_POSITIONS)) {
 
             Constantes.CouleursMastermind[] couleursMastermind = Constantes.CouleursMastermind.values();
@@ -105,17 +113,20 @@ class FabricationSecretMM {
             for (int i = 0; i < (Integer) getParam(NOMBRE_DE_POSITIONS); i++) {
                 chiffresSecrets.add(couleursMastermind[i].getValeurFacialeDeLaCouleur());
             }
+            logger.info(RANDOM_ECHOUE_COLPARDEF);
         }
 
         couleursSecretes = BijecterCouleurChiffres(chiffresSecrets, (Integer) getParam(NOMBRE_DE_POSITIONS));
     }
 
     /**
+     * ***************************************************************************************************************
      * renseigne la ligne secrete des couleurs (bijection couleurs / chiffres)
      *
-     * @param chiffresSec ArrayList<Integer> , combinaison secrete en chiffres
+     * @param chiffresSec ArrayList  of  Integer  , combinaison secrete en chiffres
      * @param nbPos       Integer , nombre de positions par ligne de jeu
      * @return la ligne secrete sous forme de couleurs
+     * ***************************************************************************************************************
      */
     private Constantes.CouleursMastermind[] BijecterCouleurChiffres(ArrayList<Integer> chiffresSec, Integer nbPos) {
         Constantes.CouleursMastermind[] coulSec = new Constantes.CouleursMastermind[nbPos];
@@ -127,14 +138,18 @@ class FabricationSecretMM {
     }
 
     /**
-     * @return ArrayList<Byte> Tableau des chiffres de la combinaisons secrete
+     * ***************************************************************************************************************
+     * @return ArrayList of Byte Tableau des chiffres de la combinaisons secrete
+     * ***************************************************************************************************************
      */
     ArrayList<Integer> getChiffresSecrets() {
         return chiffresSecrets;
     }
 
     /**
+     * ***************************************************************************************************************
      * @return CouleursMastermind[] Tableau des couleurs de la combinaison secrete
+     * ***************************************************************************************************************
      */
     Constantes.CouleursMastermind[] getCouleursSecretes() {
         return couleursSecretes;

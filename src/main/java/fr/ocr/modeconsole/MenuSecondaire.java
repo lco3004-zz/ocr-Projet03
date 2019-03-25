@@ -24,7 +24,8 @@ public class MenuSecondaire extends Menu<Constantes.Libelles.LibellesMenuSeconda
      * le pattern de controle de saisie, la référence d'instance Enum LibellesMenuSecondaire qui
      * est la ligne qui sert de stausbar 'LIGNE_ETAT et le scanner pour la saisie clavier
      *
-     * @param sc scanner (lib java)
+     * @param titre   , titre du menu à afficher
+     * @param sc scanner (lib java) de saisie clavier
      */
     public MenuSecondaire(String titre, Scanner sc) {
 

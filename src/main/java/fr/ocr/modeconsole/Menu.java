@@ -15,7 +15,6 @@ import static fr.ocr.utiles.Messages.ErreurMessages.ERREUR_GENERIC;
  * @param <T> : Enum  qui vaut soit LibellesMMenuPrincipal , soit LibellesMenuSecondaire
  * @author laurentCordier
  * <p>
- * <p>
  * Un Menu contient un tableau d'instances de LigneMenu.
  * chaque ligne de menu qui correspond à une option possible a un selecteur non null
  * (i.e "R- retour" est une ligne option avec selecteur valant 'R)
@@ -117,7 +116,7 @@ public abstract class Menu<T extends Enum> {
     // pour retrouver la statusbar dans le tableau des lignes de ligneMenu
     private T clefStatusBar;
 
-    private DisplayMenu displayMenu;
+    private DisplayMenu<T> displayMenu;
 
     /**
      * Constructeur Menu
@@ -133,7 +132,7 @@ public abstract class Menu<T extends Enum> {
         enumsLibellesMenu = instancesLibelle;
         pattern_Menu = pattern;
         clefStatusBar = refStatusBar;
-        displayMenu = new DisplayMenu(lignesMenu);
+        displayMenu = new DisplayMenu<>(lignesMenu);
     }
 
     /**

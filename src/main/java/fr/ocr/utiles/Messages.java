@@ -45,7 +45,8 @@ public enum Messages {
         CREATION_FICHIER_PARAMETRE("Creation du fichier Parametres - "),
         FIN_NORMALE_GESTION_DES_PARAMETRES("Fin Normale LireParametres"),
         CTRL_C("interuption programme par CTRL-C"),
-        REMPLACEMENT_PAR_VALEUR_DEFAUT("Remplacement par la valeur par défaut =  ");
+        REMPLACEMENT_PAR_VALEUR_DEFAUT("Remplacement par la valeur par défaut =  "),
+        RANDOM_ECHOUE_COLPARDEF("Le Random a échoué, les premières couleurs de la liste sont retenues");
 
         private String messageInformation;
 

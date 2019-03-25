@@ -40,26 +40,26 @@ public interface ProduirePropaleMM {
  *
  */
 class ProduirePropaleMMDefenseur implements ProduirePropaleMM {
-    Integer nombreDePositions = (Integer) getParam(NOMBRE_DE_POSITIONS);
+    private Integer nombreDePositions = (Integer) getParam(NOMBRE_DE_POSITIONS);
 
 
-    int monCompteur = 0;
+    private int monCompteur = 0;
 
-    ArrayList<UnePropale> lesPropalesEvaluees;
-    
-    ArrayList<ArrayList<Character>> lesCombinaisonsPossibles;
+    private ArrayList<UnePropale> lesPropalesEvaluees;
+
+    private ArrayList<ArrayList<Character>> lesCombinaisonsPossibles;
 
     /**
      *
      */
-    public ProduirePropaleMMDefenseur() {
+    ProduirePropaleMMDefenseur() {
         lesCombinaisonsPossibles = produireListeDesPossibles();
         lesPropalesEvaluees = new ArrayList<>(4096);
     }
 
     /**
-     * @param laPropaleScoree
-     * @param sc
+     * @param laPropaleScoree  proposition avec son score obtenue après présentation au validateur
+     * @param sc  scanner de saisie clavier
      */
     @Override
     public void setScorePropale(ArrayList<Character> laPropaleScoree, int[] sc) {
@@ -71,6 +71,8 @@ class ProduirePropaleMMDefenseur implements ProduirePropaleMM {
 
     /**
      *
+     * @param laPropaleScoree dernière proposition présentée, avec son score obtenue après présentation au validateur
+     * @return une nouvelle proposition à présenter au validateur
      */
     private UnePropale chercheNouvellePropale(UnePropale laPropaleScoree) {
 
@@ -94,8 +96,6 @@ class ProduirePropaleMMDefenseur implements ProduirePropaleMM {
 
                     int[] scoreTmp = new int[2];
 
-                    scoreTmp[0] = scoreTmp[1] = 0;
-
                     laNouvellePropale = new UnePropale(nouvelleCombinaison, scoreTmp, lesCombinaisonsPossibles.indexOf(nouvelleCombinaison));
 
                     verifieScore.apply(nouvelleCombinaison, unePrecentePropale.saValeur, nombreDePositions, scoreTmp);
@@ -113,13 +113,14 @@ class ProduirePropaleMMDefenseur implements ProduirePropaleMM {
         return laNouvellePropale;
     }
 
+
     /**
      *
-     * @return
+     * @return proposition sous forme de liste de caractères, qui sont les initiales des couleurs de la proposition
      */
     @Override
     public ArrayList<Character> getPropaleDefenseur() {
-        UnePropale unePropale = null;
+        UnePropale unePropale;
 
         if (monCompteur == 0) {
             unePropale = chercheNouvellePropale(null);
@@ -133,7 +134,7 @@ class ProduirePropaleMMDefenseur implements ProduirePropaleMM {
 
     /**
      *
-     * @return
+     * @return liste des combinaisons possibles
      */
     private ArrayList<ArrayList<Character>> produireListeDesPossibles() {
         int nbCouleurs = (int) getParam(NOMBRE_DE_COULEURS);
@@ -207,22 +208,6 @@ class ProduirePropaleMMDefenseur implements ProduirePropaleMM {
     }
 
     /**
-     *
-     */
-    class UnePropale {
-
-        int[] sonScore = new int[2];
-        ArrayList<Character> saValeur;
-        Integer sonRang;
-
-        public UnePropale(ArrayList<Character> propale, int[] sc, Integer rangdeLaPropale) {
-            System.arraycopy(sc, 0, sonScore, 0, sc.length);
-            saValeur = propale;
-            sonRang = rangdeLaPropale;
-        }
-    }
-
-    /**
      * Sc(i,j)
      * I   J
      * 0 (0..nbPos)
@@ -232,7 +217,7 @@ class ProduirePropaleMMDefenseur implements ProduirePropaleMM {
      * 4 (0..nbPos-4) 0..0
      *
      * @param nbPos Integer , le nombre de positions dans une ligne du jeu MM
-     * @return List<Integer [ ]> les scores possibles qui peuvent être obtenus par une proposition
+     * @return List of arrays of Integer , les scores possibles qui peuvent être obtenus par une proposition
      */
     public List<Integer[]> CalculScoresPossibles(int nbPos) {
         List<Integer[]> scPossible = new ArrayList<>(256);
@@ -245,6 +230,22 @@ class ProduirePropaleMMDefenseur implements ProduirePropaleMM {
         scPossible.add(new Integer[]{nbPos - 1, 0});
         scPossible.add(new Integer[]{nbPos, 0});
         return scPossible;
+    }
+
+    /**
+     *
+     */
+    class UnePropale {
+
+        int[] sonScore = new int[2];
+        ArrayList<Character> saValeur;
+        Integer sonRang;
+
+        UnePropale(ArrayList<Character> propale, int[] sc, Integer rangdeLaPropale) {
+            System.arraycopy(sc, 0, sonScore, 0, sc.length);
+            saValeur = propale;
+            sonRang = rangdeLaPropale;
+        }
     }
     
 }

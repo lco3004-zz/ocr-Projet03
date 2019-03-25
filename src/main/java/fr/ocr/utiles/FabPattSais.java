@@ -4,8 +4,8 @@ import java.util.Locale;
 
 public final class FabPattSais {
 
-    static public String ConstruitPatternSaisie(Constantes.CouleursMastermind[] colMM,
-                                                Character escapeChar) {
+    static private String ConstruitPatternSaisie(Constantes.CouleursMastermind[] colMM,
+                                                 Character escapeChar) {
         StringBuilder patternSaisie = new StringBuilder(256);
         String s;
         patternSaisie.append('[');
@@ -42,4 +42,11 @@ public final class FabPattSais {
     }
 
 
+    public static String ConstruitPatternSaisie(Constantes.CouleursMastermind[] values, Integer nombreDeCouleurs, Character charactersEscape) {
+        Constantes.CouleursMastermind[] y = new Constantes.CouleursMastermind[nombreDeCouleurs];
+
+        System.arraycopy(values, 0, y, 0, nombreDeCouleurs);
+
+        return ConstruitPatternSaisie(y, charactersEscape);
+    }
 }
