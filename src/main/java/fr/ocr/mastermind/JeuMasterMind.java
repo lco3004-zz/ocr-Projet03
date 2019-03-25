@@ -2,10 +2,13 @@ package fr.ocr.mastermind;
 
 import fr.ocr.modeconsole.EcrireSurEcran;
 import fr.ocr.modeconsole.IOConsole;
+import fr.ocr.utiles.AppExceptions;
 import fr.ocr.utiles.Constantes;
 import fr.ocr.utiles.FabPattSais;
+import fr.ocr.utiles.Messages;
 
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Scanner;
 
 import static fr.ocr.params.LireParametres.getParam;
@@ -26,8 +29,6 @@ import static fr.ocr.utiles.Logs.logger;
  * <p>
  * Interface qui donne acc&egrave;s aux mode de jeu MasterMind.
  * <p>
- */
-/**
  *<p>
  *     interface d'accès au deux modes principaux du jeudefenseur, challengeur)
  *</p>
@@ -36,9 +37,9 @@ public interface JeuMasterMind {
 
     /**
      *
-     * @param modeJeu
-     * @param sc
-     * @return
+     * @param modeJeu  LibellesMenuSecondaire
+     * @param sc  scanner
+     * @return JeuMMChallengeur
      */
     static JeuMMChallengeur CHALLENGEUR(LibellesMenuSecondaire modeJeu, Scanner sc) {
         return new JeuMMChallengeur(modeJeu, sc);
@@ -46,9 +47,9 @@ public interface JeuMasterMind {
 
     /**
      *
-     * @param modeJeu
-     * @param sc
-     * @return
+     * @param modeJeu LibellesMenuSecondaire
+     * @param sc scanner
+     * @return JeuMMDefenseur
      */
     static JeuMMDefenseur DEFENSEUR(LibellesMenuSecondaire modeJeu, Scanner sc) {
         return new JeuMMDefenseur(modeJeu, sc);
@@ -69,21 +70,27 @@ class JeuMMDefenseur extends JeuMM {
     @Override
     public void runJeuMM() {
 
-        //MenuSaisieSecret menuSaisieSecret = new MenuSaisieSecret();
-        //FabricationSecretMM fabricationSecretMM = new FabricationSecretMM(menuSaisieSecret.saisirCombinaisonSecrete());
-
-        // DEBUT MOCK
+        //génération du secret sous forme de liste d'initiales des couleurs de la combinaison secrete
         FabricationSecretMM fabricationSecretMM = new FabricationSecretMM();
-        //FIN MOCK
 
-        //affectation de JeuMM.produirePropaleMM avec instance classe dans laquelle l'ordinateur génère une proposition
-        produirePropaleMM = new ProduirePropaleMMDefenseur();
+        //le parametre fabricationSecretMM permet de suggerer une combinaison secrete au Defenseur
+        ArrayList<Integer> combinaisonSecrete = super.RunSaisieSecretMM(fabricationSecretMM);
 
-        //affectation de JeuMM.produirePropaleMM avec instance classe dans laquelle le joueur valide la proposition de l'ordinateur
-        validerPropositionMM = new EvalPropaleDefenseur();
+        // suite du worklflow si Defenseur n'est pas sorti la saisie de  'EscapeChar'
+        //si c'est le cas la combinaison secerte est vide
+        if (combinaisonSecrete.size() == (int) getParam(NOMBRE_DE_POSITIONS)) {
+            //on fabrique le secret avec la combinaison saisie par le Defenseur
+            fabricationSecretMM = new FabricationSecretMM(combinaisonSecrete);
 
-        // lance le jeu en mode defenseur
-        super.RunJeuMMDefenseur(fabricationSecretMM);
+            //affectation de JeuMM.produirePropaleMM avec instance classe dans laquelle l'ordinateur génère une proposition
+            produirePropaleMM = new ProduirePropaleMMDefenseur();
+
+            //affectation de JeuMM.produirePropaleMM avec instance classe dans laquelle le joueur valide la proposition de l'ordinateur
+            validerPropositionMM = new EvalPropaleDefenseur();
+
+            // lance le jeu en mode defenseur
+            RunJeuMMDefenseur(fabricationSecretMM);
+        }
     }
 }
 
@@ -108,7 +115,7 @@ class JeuMMChallengeur extends JeuMM {
         produirePropaleMM = new ProduirePropaleMMChallengeur(lignesSimpleMM, lignesPropaleMM);
 
         // lance le jeu en mode challengeur
-        super.RunJeuMMChallengeur(fabricationSecretMM);
+        RunJeuMMChallengeur(fabricationSecretMM);
     }
 }
 
@@ -155,6 +162,8 @@ abstract class JeuMM implements JeuMasterMind {
     // paramètre du fichier properties - nombre de positions de couleurs disponibles pour construire une proposition et la combinaison secrete
     private Integer nombreDeCouleurs = (Integer) getParam(NOMBRE_DE_COULEURS);
 
+    private Boolean doublonAutorise = (Boolean) getParam(DOUBLON_AUTORISE);
+
     // paramètre du fichier properties - affiche (DEBUG=Vrai) ou pas la combinaison secrete
     private Boolean modeDebug = (Boolean) getParam(MODE_DEBUG);
 
@@ -191,11 +200,11 @@ abstract class JeuMM implements JeuMasterMind {
 
         /*
          * affectation des chaines de caractères aux lignes du menu à afficher
-         * chaque lign du tableau est repéré par son indice indiqué dans un Enum
+         * chaque ligne du tableau est repéré par son indice indiqué dans un Enum
          */
         lignesSimpleMM[TITRE] = new LigneMM(true, true, TITRE, TITRE, modeDeJeu.toString());
 
-        lignesSimpleMM[LIGNE_STATUS] = new LigneMM(true, true, LIGNE_STATUS, LIGNE_STATUS, String.format(" Mode debug = %s", getParam(MODE_DEBUG).toString()));
+        lignesSimpleMM[LIGNE_STATUS] = new LigneMM(true, true, LIGNE_STATUS, LIGNE_STATUS, String.format("Mode debug = %s", getParam(MODE_DEBUG).toString()));
 
         lignesSimpleMM[LIGNE_SECRETE] = new LigneMM(true, false, LIGNE_SECRETE, LIGNE_SECRETE, " -------SECRET--------");
 
@@ -217,6 +226,7 @@ abstract class JeuMM implements JeuMasterMind {
 
         // definti le libelle d'entete de la table  de jeu , dépend du nombre de positions paramétrées.
         champBlancNoir = String.format(" ## [%s ] %c %c", lesCroixEtVirgules.substring(0, lesCroixEtVirgules.length() - 1), PIONS_BIENPLACES, PIONS_MALPLACES);
+
         lignesSimpleMM[LIGNE_ENTETE] = new LigneMM(true, true, LIGNE_ENTETE, LIGNE_ENTETE, champBlancNoir);
 
         //lignes separatrices pour affichage uniquement
@@ -358,7 +368,7 @@ abstract class JeuMM implements JeuMasterMind {
 
     /**
      *lance le jeu en mode Defenseur
-     * @param fabricationSecretMM
+     * @param fabricationSecretMM FabricationSecretMM
      */
     void RunJeuMMDefenseur(FabricationSecretMM fabricationSecretMM) {
 
@@ -468,6 +478,121 @@ abstract class JeuMM implements JeuMasterMind {
 
         logger.info("Combinaison secrete = " + s.substring(0, s.lastIndexOf(",")));
 
+    }
+
+    /**
+     * affiche le menu qui permet de saisir une combinaison secrete
+     *
+     * @return list de characters qui est la combinaison secrete - vide si sortie par escape (vide mais pas null)
+     */
+    ArrayList<Integer> RunSaisieSecretMM(FabricationSecretMM fabricationSecretMM) throws AppExceptions {
+
+        boolean isEscape = false;
+
+
+        ArrayList<Integer> chiffresSecretsDuDefenseur = new ArrayList<>(256);
+
+        //secret sous forme initiale des Couleurs
+        ArrayList<Character> initialesSecretesDuDefenseur = new ArrayList<>(256);
+
+
+        //lignes de separaiton (presentation)
+        lignesSimpleMM[LIGNE_BLANCH01] = new LigneMM(true, true, LIGNE_BLANCH01, LIGNE_BLANCH01, " ");
+        lignesSimpleMM[LIGNE_BLANCH02] = new LigneMM(true, false, LIGNE_BLANCH02, LIGNE_BLANCH02, " ");
+
+        //titre du jeu
+        lignesSimpleMM[TITRE] = new LigneMM(true, true, TITRE, TITRE, modeJeu.toString());
+
+        lignesSimpleMM[LIGNE_ENTETE] = new LigneMM(true, false, LIGNE_ENTETE, LIGNE_ENTETE, "");
+
+        // ligne qui indique si mode debug
+        lignesSimpleMM[LIGNE_STATUS] = new LigneMM(true, true, LIGNE_STATUS, LIGNE_STATUS, String.format(" Mode debug = %s", getParam(MODE_DEBUG).toString()));
+
+
+        // presentation d'une combinsaison secrete suggeree
+        lignesSimpleMM[LIGNE_SECRETE] = new LigneMM(true, true, LIGNE_SECRETE, LIGNE_SECRETE, "");
+        lignesSimpleMM[LIGNE_SECRETE].setLibelleLigne(fabricationSecretMM.getCouleursSecretes(), nombreDeCouleurs, "Suggestion : ");
+
+        //affiche  les couleurs qui peuvent être choisie pour faire un secret  : fonction paramètre du jeu "nombre de couleur"
+        lignesSimpleMM[LIGNE_TOUTES_COULEURS] = new LigneMM(true, true, LIGNE_TOUTES_COULEURS, LIGNE_TOUTES_COULEURS, " ");
+        lignesSimpleMM[LIGNE_TOUTES_COULEURS].setLibelleLigne(CouleursMastermind.values(), nombreDeCouleurs);
+
+        //ligne de bas de table , habituelle 'i.e votre choix ?'
+        lignesSimpleMM[LIGNE_DE_SAISIE] = new LigneMM(true, true, LIGNE_DE_SAISIE, LIGNE_DE_SAISIE, String.format(" Votre choix (%c : Retour): ", charactersEscape));
+
+
+        // pattern destiné à l'objet scanner : les initiales des couleurs disponibles pour la combinaison secrete + 'escapechar'
+        String patternInitial = FabPattSais.ConstruitPatternSaisie(CouleursMastermind.values(), nombreDeCouleurs, charactersEscape);
+
+        IOConsole.ClearScreen.cls();
+
+        // boucle tant que joueur ne saisit pas escapeChar ou que la combinaison secrete n'est pâs complete
+        try {
+
+            Character saisieUneCouleur;
+            do {
+                saisieUneCouleur = IOConsole.LectureClavier(patternInitial, scanner, new EcrireSurEcran() {
+                    @Override
+                    public void Display() {
+                        for (int n = TITRE; n <= LIGNE_DE_SAISIE; n++) {
+                            if (lignesSimpleMM[n] != null && lignesSimpleMM[n].isEstVisible()) {
+                                if (n == LIGNE_DE_SAISIE) {
+                                    System.out.print(lignesSimpleMM[n].toString());
+                                } else {
+                                    System.out.println(lignesSimpleMM[n].toString());
+                                }
+                            }
+                        }
+                    }
+                }, charactersEscape);
+
+                // si le Defenseur ne souhaote pas sortir
+                if (saisieUneCouleur != charactersEscape) {
+                    //ajoute le caractere saisie à la lsite des intiiales saisies
+                    initialesSecretesDuDefenseur.add(saisieUneCouleur);
+                    //afiche la liste des caracteres deja saisis
+                    String infosSasiie = lignesSimpleMM[LIGNE_DE_SAISIE].getLibelleLigne() + saisieUneCouleur.toString() + " ";
+                    lignesSimpleMM[LIGNE_DE_SAISIE].setLibelleLigne(infosSasiie);
+                    //si le mode est sans doublon
+                    if (!doublonAutorise) {
+                        //retrait  du  caractere saisi de la liste des caracteres disponibles
+                        int posCol = patternInitial.indexOf(saisieUneCouleur);
+                        int taille = patternInitial.length();
+                        patternInitial = patternInitial.substring(0, posCol) + patternInitial.substring(posCol + 1, taille);
+                        taille = patternInitial.length();
+                        String pourLower = String.valueOf(saisieUneCouleur).toLowerCase(Locale.forLanguageTag("fr"));
+                        posCol = patternInitial.indexOf(pourLower.toCharArray()[0]);
+                        patternInitial = patternInitial.substring(0, posCol) + patternInitial.substring(posCol + 1, taille);
+                    }
+                    //choix escape
+                } else {
+                    initialesSecretesDuDefenseur.clear();
+                }
+            }
+            while ((saisieUneCouleur != charactersEscape) && (initialesSecretesDuDefenseur.size() < nombreDePositions));
+
+        } catch (AppExceptions appExceptions) {
+            appExceptions.printStackTrace();
+            initialesSecretesDuDefenseur.clear();
+            initialesSecretesDuDefenseur.add(charactersEscape);
+        }
+
+        //si escape a ete saisie, cette liste est vide donc pas de boucle
+        int valeurFaciale;
+        for (char c : initialesSecretesDuDefenseur) {
+            valeurFaciale = CouleursMastermind.getValeurParLettre(c);
+            if (valeurFaciale < 0) {
+                logger.error(Messages.ErreurMessages.ERREUR_GENERIC + " erreur conversion EnumCouleur - Lettre en Chiffre");
+                throw new AppExceptions(Messages.ErreurMessages.ERREUR_GENERIC);
+            }
+            chiffresSecretsDuDefenseur.add(valeurFaciale);
+        }
+        // netoyage du tableau des lignes- les new fait dans cette méthode,  partent au garbage
+        for (int n = 0; n < lignesSimpleMM.length; n++)
+            lignesSimpleMM[n] = null;
+
+        //sur un escape, le ArrayList<Integer> est vide
+        return chiffresSecretsDuDefenseur;
     }
 }
 /*

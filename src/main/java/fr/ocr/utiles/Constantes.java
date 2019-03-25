@@ -77,6 +77,18 @@ public enum Constantes {
             lettreInitiale = c;
         }
 
+        public static int getValeurParLettre(char lettre) {
+            int valret = -1;
+            for (CouleursMastermind couleursMastermind : CouleursMastermind.values()) {
+                char c = couleursMastermind.getLettreInitiale();
+                if (c == lettre) {
+                    valret = couleursMastermind.getValeurFacialeDeLaCouleur();
+                    break;
+                }
+            }
+            return valret;
+        }
+
         public int getValeurFacialeDeLaCouleur() {
             return valeurFacialeDeLaCouleur;
         }
