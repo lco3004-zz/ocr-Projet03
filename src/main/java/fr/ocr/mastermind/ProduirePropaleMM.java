@@ -192,7 +192,7 @@ class ProduirePropaleMMDefenseur implements ProduirePropaleMM {
             unePropale = chercheNouvellePropale(lesPropalesEvaluees.get(lesPropalesEvaluees.size() - 1));
         }
 
-        return unePropale.saValeur;
+        return (unePropale != null) ? unePropale.saValeur : null;
     }
 
     /**

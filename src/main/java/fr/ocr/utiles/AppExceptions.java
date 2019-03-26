@@ -16,6 +16,15 @@ import static fr.ocr.utiles.Messages.ErreurMessages.SORTIE_PGM_SUR_ERREURNONGERE
  */
 public class AppExceptions extends RuntimeException {
 
+
+    private Character characterSortie = ' ';
+
+    public AppExceptions(Messages.InfosMessages infosMessages, Character characterSortie) {
+        logger.info(infosMessages.getMessageInfos());
+        this.characterSortie = characterSortie;
+    }
+
+
     public AppExceptions(IOException e) {
         logger.error(e.getMessage());
     }
@@ -36,9 +45,8 @@ public class AppExceptions extends RuntimeException {
         System.exit(-1);
     }
 
-    public AppExceptions(Messages.InfosMessages infosMessages, Character characterSortie) {
-        logger.info(infosMessages.getMessageInfos());
-
+    public Character getCharacterSortie() {
+        return characterSortie;
     }
 
     public AppExceptions(FileNotFoundException e) {

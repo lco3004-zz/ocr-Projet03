@@ -54,7 +54,8 @@ public enum Messages {
         SORTIE_SUR_ESCAPECHAR("Sortie par escape char"),
         REMPLACEMENT_PAR_VALEUR_DEFAUT("Remplacement par la valeur par défaut =  "),
         RANDOM_ECHOUE_COLPARDEF("Le Random a échoué, les premières couleurs de la liste sont retenues"),
-        TENTAIVE_DE_TRICHE_DEFENSEUR("Incoherence score entre calcul et saisie  - Suspicion de fraude");
+        TENTAIVE_DE_TRICHE_DEFENSEUR("Incoherence score entre calcul et saisie  - Suspicion de fraude"),
+        SORTIE_ESCAPE_SAISIE_SCORE("Sortie sur escape saisie Score mode Defenseur, copie du score calculé");
 
         private String messageInformation;
 

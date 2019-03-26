@@ -19,6 +19,7 @@ import static fr.ocr.utiles.Constantes.CouleursMastermind;
 import static fr.ocr.utiles.Constantes.Libelles.LibellesMenuSecondaire;
 import static fr.ocr.utiles.Logs.logger;
 import static fr.ocr.utiles.Messages.ErreurMessages.ERREUR_GENERIC;
+import static fr.ocr.utiles.Messages.InfosMessages.SORTIE_ESCAPE_SAISIE_SCORE;
 import static fr.ocr.utiles.Messages.InfosMessages.SORTIE_SUR_ESCAPECHAR;
 
 /**
@@ -382,7 +383,10 @@ abstract class JeuMM implements JeuMasterMind {
         lignesSimpleMM[LIGNE_SECRETE].setEstVisible(true);
 
 
-        boolean isSecretTrouveSaisie = false, isSecretTrouveCalcul = false, isEscape = false;
+        boolean isSecretTrouveSaisie = false;
+        boolean isSecretTrouveCalcul = false;
+        boolean isEscape = false;
+        boolean isErreurScoring = false;
 
         Integer nbreEssaisConsommes = 0;
 
@@ -397,40 +401,71 @@ abstract class JeuMM implements JeuMasterMind {
         IOConsole.ClearScreen.cls();
 
         //tant que la proposition ne correspond à la combinaison secrete et que le nombre d'essais possibles n'est pas atteint
-        while (!isSecretTrouveSaisie && nbreEssaisConsommes < nombreDeEssaisMax) {
+        while (!isSecretTrouveSaisie && !isErreurScoring && nbreEssaisConsommes < nombreDeEssaisMax) {
 
             //ordinateur fournit une proposition
             propalOrdinateur = produirePropaleMM.getPropaleDefenseur();
+            if (propalOrdinateur != null) {
 
-            //via appel de EvalPropostion,  la propsotion est scorée - ce resultat est présenté pour conseil au Joueur
-            lignesPropaleMM[indexLignesProposition].setPropositionJoueur(propalOrdinateur).setZoneProposition().EvalProposition();
+                //via appel de EvalPropostion,  la propsotion est scorée - ce resultat est présenté pour conseil au Joueur
+                lignesPropaleMM[indexLignesProposition].setPropositionJoueur(propalOrdinateur).setZoneProposition().EvalProposition();
 
-            int[] suggestioNB = lignesPropaleMM[indexLignesProposition].getZoneEvaluation();
-            lignesSimpleMM[LIGNE_DE_SAISIE].setLibelleLigne(String.format(" Suggestion :  Noirs = %d , Blancs = %d", suggestioNB[NOIR_BIENPLACE], suggestioNB[BLANC_MALPLACE]));
+                int[] suggestioNB = lignesPropaleMM[indexLignesProposition].getZoneEvaluation();
+                lignesSimpleMM[LIGNE_DE_SAISIE].setLibelleLigne(String.format("( N=%d , B=%d )", suggestioNB[NOIR_BIENPLACE], suggestioNB[BLANC_MALPLACE]));
 
-            int[] zoneEvaluation = new int[2];
+                int[] zoneEvaluation = new int[2];
+                try {
+                    RunSaisirScore(zoneEvaluation);
 
-            isSecretTrouveSaisie = RunSaisirScore(zoneEvaluation);
-            lignesPropaleMM[indexLignesProposition].setZoneEvaluation(zoneEvaluation);
+                    //si fraude interdite, et si ecart entre score saisi et score calculé,
+                    if (!(boolean) getParam(FRAUDE_AUTORISEE)) {
+                        //recopie du bon score
+                        if ((suggestioNB[NOIR_BIENPLACE] != zoneEvaluation[NOIR_BIENPLACE]) ||
+                                (suggestioNB[BLANC_MALPLACE] != zoneEvaluation[BLANC_MALPLACE])) {
+                            System.arraycopy(suggestioNB, 0, zoneEvaluation, 0, suggestioNB.length);
+                        }
+                    }
 
-            //si propale est différent de secret, affiche la proposition
-            if (!isSecretTrouveSaisie) {
-                produirePropaleMM.setScorePropale(propalOrdinateur, lignesPropaleMM[indexLignesProposition].getZoneEvaluation());
+                } catch (AppExceptions e) {
+                    if (e.getCharacterSortie() == charactersEscape) {
+                        logger.info(SORTIE_ESCAPE_SAISIE_SCORE);
+                        System.arraycopy(suggestioNB, 0, zoneEvaluation, 0, suggestioNB.length);
+                    }
+                }
+
+                lignesPropaleMM[indexLignesProposition].setZoneEvaluation(zoneEvaluation);
+
+                isSecretTrouveSaisie = (zoneEvaluation[NOIR_BIENPLACE] == nombreDePositions);
+
+                //si propale est différent de secret, affiche la proposition
+                if (!isSecretTrouveSaisie) {
+                    produirePropaleMM.setScorePropale(propalOrdinateur, lignesPropaleMM[indexLignesProposition].getZoneEvaluation());
+                }
+
+                indexLignesProposition++;
+                nbreEssaisConsommes++;
+
+                //la propsosition ordinateur est null - scoring incorrect
+            } else {
+                isErreurScoring = true;
             }
-
-            indexLignesProposition++;
-            nbreEssaisConsommes++;
         }
 
         // affichage de fin
-        if (isSecretTrouveSaisie) {
-            lignesSimpleMM[LIGNE_SECRETE].setLibelleLigne("!! Ordinateur Gagne !!");
+        if (isErreurScoring) {
+
+            lignesSimpleMM[LIGNE_SECRETE].setLibelleLigne("!! Tricheur le Scoring est incorrect  !!");
 
         } else {
-            lignesSimpleMM[LIGNE_SECRETE].setLibelleLigne("!! Ordinateur Perd !!");
-        }
+            if (isSecretTrouveSaisie) {
+                lignesSimpleMM[LIGNE_SECRETE].setLibelleLigne("!! Ordinateur Gagne !!");
 
+            } else {
+                lignesSimpleMM[LIGNE_SECRETE].setLibelleLigne("!! Ordinateur Perd !!");
+            }
+        }
         lignesSimpleMM[LIGNE_DE_SAISIE].setLibelleLigne(lignesSimpleMM[LIGNE_DE_SAISIE].getLibelleLigneOriginal());
+
         //
         // pour confirmation sortie du jeu , par le defenseur (sinon - pas d'affichage et retour direct au menu superieur
         // seule saise possible 'escapeChar'
@@ -455,15 +490,29 @@ abstract class JeuMM implements JeuMasterMind {
      * Saise le score de la propositon donné par l'ordianteur (mode defenseur)
      */
 
-    public Boolean RunSaisirScore(int[] zoneEvaluation) throws AppExceptions {
+    public void RunSaisirScore(int[] zoneEvaluation) throws AppExceptions {
 
-        Boolean valRet = false;
         int index = 0;
-        String pattern = String.format("[0-%d] K k", nombreDePositions);
+        String pattern = String.format("[0-%d K k]", nombreDePositions);
+
+        String msgInfos;
+        String msgInfosOriginal = lignesSimpleMM[LIGNE_DE_SAISIE].getLibelleLigne();
+        String msgPourReset = lignesSimpleMM[LIGNE_DE_SAISIE].getLibelleLigne();
+        int nbNoirs = 0;
+        int nbBlancs = 0;
+
         try {
 
             Character saisieChar;
             do {
+                msgInfos = lignesSimpleMM[LIGNE_DE_SAISIE].getLibelleLigne();
+                if (index == 0) {
+                    msgInfos += " Nbre Noirs = ? ";
+                } else {
+                    msgInfos += " Nbre Blancs = ?";
+                }
+                lignesSimpleMM[LIGNE_DE_SAISIE].setLibelleLigne(msgInfos);
+
                 saisieChar = IOConsole.LectureClavierChar(pattern, scanner, new EcrireSurEcran() {
                     @Override
                     public void Display() {
@@ -482,23 +531,56 @@ abstract class JeuMM implements JeuMasterMind {
                 if (saisieChar != charactersEscape) {
                     if (index < zoneEvaluation.length) {
                         zoneEvaluation[index] = Integer.parseInt(String.valueOf(saisieChar));
-                        index++;
+                        msgInfos = lignesSimpleMM[LIGNE_DE_SAISIE].getLibelleLigne();
+                        String tmpMsgInfos;
+
+                        if (index == 0) {
+                            tmpMsgInfos = msgInfosOriginal + " Noirs= " + saisieChar;
+                            zoneEvaluation[NOIR_BIENPLACE] = Integer.parseInt(String.valueOf(saisieChar));
+                            msgInfosOriginal = tmpMsgInfos;
+                        } else {
+                            tmpMsgInfos = msgInfosOriginal + " Blancs= " + saisieChar;
+                            zoneEvaluation[BLANC_MALPLACE] = Integer.parseInt(String.valueOf(saisieChar));
+                            msgInfosOriginal = tmpMsgInfos;
+                        }
+                        lignesSimpleMM[LIGNE_DE_SAISIE].setLibelleLigne(tmpMsgInfos);
+
                     } else {
                         throw new AppExceptions(ERREUR_GENERIC);
                     }
                 } else {
                     throw new AppExceptions(SORTIE_SUR_ESCAPECHAR, charactersEscape);
                 }
-            }
-            while ((saisieChar != charactersEscape) && (index < zoneEvaluation.length));
-
-            if (zoneEvaluation[NOIR_BIENPLACE] == nombreDePositions)
-                valRet = true;
+                if (index == 0) {
+                    nbNoirs = Integer.parseInt(String.valueOf(saisieChar));
+                } else {
+                    nbBlancs = Integer.parseInt(String.valueOf(saisieChar));
+                }
+                //reset
+                if ((nbBlancs + nbNoirs) > nombreDePositions) {
+                    lignesSimpleMM[LIGNE_DE_SAISIE].setLibelleLigne(String.format("%s , Noirs+Blancs incorrect", msgPourReset));
+                    msgInfosOriginal = msgPourReset;
+                    zoneEvaluation[BLANC_MALPLACE] = 0;
+                    zoneEvaluation[NOIR_BIENPLACE] = 0;
+                    index = 0;
+                    continue;
+                }
+                index++;
+            } while ((saisieChar != charactersEscape) && (index < zoneEvaluation.length));
 
         } catch (Exception e) {
-            throw new AppExceptions(ERREUR_GENERIC);
+            if (e instanceof AppExceptions) {
+                char c = ((AppExceptions) e).getCharacterSortie();
+                if (c == charactersEscape) {
+                    //throw new AppExceptions(SORTIE_SUR_ESCAPECHAR, charactersEscape);
+                    throw e;
+                } else {
+                    throw new AppExceptions(ERREUR_GENERIC);
+                }
+            } else {
+                throw new AppExceptions(ERREUR_GENERIC);
+            }
         }
-        return valRet;
     }
 
 
