@@ -156,7 +156,7 @@ class ProduirePropaleMMDefenseur implements ProduirePropaleMM {
                     laNouvellePropale = new UnePropale(nouvelleCombinaison, scoreTmp, lesCombinaisonsPossibles.indexOf(nouvelleCombinaison));
 
                     // appel de la méthode de validation par calcul - c'est la méthode qui est aussi utilisé par le mode Challenger
-                    (new EvalPropaleParmiPossible()).apply(nouvelleCombinaison, unePrecedentePropale.saValeur, nombreDePositions, scoreTmp);
+                    (new ScorerProposition()).apply(nouvelleCombinaison, unePrecedentePropale.saValeur, nombreDePositions, scoreTmp);
 
                     //si le score ne correspond pas à celui obtenu lors de la validation de la propale "unePrecedentePropale"
                     //stop, on passe à la combinaison possible suivante
@@ -333,7 +333,7 @@ class ProduirePropaleMMChallengeur implements ProduirePropaleMM {
 
             Character saisieUneCouleur;
             do {
-                saisieUneCouleur = IOConsole.LectureClavier(pattern, scanner, new EcrireSurEcran() {
+                saisieUneCouleur = IOConsole.LectureClavierChar(pattern, scanner, new EcrireSurEcran() {
                     @Override
                     public void Display() {
                         for (int n = TITRE; n <= LIGNE_DE_SAISIE; n++) {
@@ -350,17 +350,7 @@ class ProduirePropaleMMChallengeur implements ProduirePropaleMM {
 
                 if (saisieUneCouleur != escChar) {
                     propositionJoueur.add(saisieUneCouleur);
-                    String infosSasiie = lignesSimpleMM[LIGNE_DE_SAISIE].getLibelleLigne() + saisieUneCouleur.toString() + " ";
-                    lignesSimpleMM[LIGNE_DE_SAISIE].setLibelleLigne(infosSasiie);
-                    if (!doublonAutorise) {
-                        int posCol = pattern.indexOf(saisieUneCouleur);
-                        int taille = pattern.length();
-                        pattern = pattern.substring(0, posCol) + pattern.substring(posCol + 1, taille);
-                        taille = pattern.length();
-                        String pourLower = String.valueOf(saisieUneCouleur).toLowerCase(Locale.forLanguageTag("fr"));
-                        posCol = pattern.indexOf(pourLower.toCharArray()[0]);
-                        pattern = pattern.substring(0, posCol) + pattern.substring(posCol + 1, taille);
-                    }
+                    pattern = ReduirePattern(pattern, doublonAutorise, saisieUneCouleur);
                 } else {
                     propositionJoueur.clear();
                     propositionJoueur.add(escChar);
@@ -374,6 +364,32 @@ class ProduirePropaleMMChallengeur implements ProduirePropaleMM {
             propositionJoueur.add(escChar);
         }
         return propositionJoueur;
+    }
+
+    /**
+     * retrait de la couleur qui vient d'être saisie (saisieUneCouleur) , du pattern qui controle la saisie
+     * cette fonction n'a de sens que pour le mode "doulon non autorisé"
+     *
+     * @param pattern          String , le pattern à re
+     * @param doublonAutorise  Boolean , doublon oui/no - paramétrage
+     * @param saisieUneCouleur Character , l'initiale de la couleur a retiré du pattern de saisie
+     * @return
+     */
+    String ReduirePattern(String pattern, Boolean doublonAutorise, Character saisieUneCouleur) {
+        String infosSaisie = lignesSimpleMM[LIGNE_DE_SAISIE].getLibelleLigne() + saisieUneCouleur.toString() + " ";
+        lignesSimpleMM[LIGNE_DE_SAISIE].setLibelleLigne(infosSaisie);
+        //si le mode est sans doublon
+        if (!doublonAutorise) {
+            //retrait  du  caractere saisi de la liste des caracteres disponibles
+            int posCol = pattern.indexOf(saisieUneCouleur);
+            int taille = pattern.length();
+            pattern = pattern.substring(0, posCol) + pattern.substring(posCol + 1, taille);
+            taille = pattern.length();
+            String pourLower = String.valueOf(saisieUneCouleur).toLowerCase(Locale.forLanguageTag("fr"));
+            posCol = pattern.indexOf(pourLower.toCharArray()[0]);
+            pattern = pattern.substring(0, posCol) + pattern.substring(posCol + 1, taille);
+        }
+        return pattern;
     }
 }
 /*

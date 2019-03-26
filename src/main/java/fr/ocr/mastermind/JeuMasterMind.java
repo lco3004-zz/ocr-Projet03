@@ -5,7 +5,6 @@ import fr.ocr.modeconsole.IOConsole;
 import fr.ocr.utiles.AppExceptions;
 import fr.ocr.utiles.Constantes;
 import fr.ocr.utiles.FabPattSais;
-import fr.ocr.utiles.Messages;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -13,13 +12,14 @@ import java.util.Scanner;
 
 import static fr.ocr.params.LireParametres.getParam;
 import static fr.ocr.params.Parametres.*;
-import static fr.ocr.utiles.Constantes.ConstEvalPropale.PIONS_BIENPLACES;
-import static fr.ocr.utiles.Constantes.ConstEvalPropale.PIONS_MALPLACES;
+import static fr.ocr.utiles.Constantes.ConstEvalPropale.*;
 import static fr.ocr.utiles.Constantes.ConstTailleStringBuilder.TAIILE_INITIALE;
 import static fr.ocr.utiles.Constantes.ConstTypeDeLigne.*;
 import static fr.ocr.utiles.Constantes.CouleursMastermind;
 import static fr.ocr.utiles.Constantes.Libelles.LibellesMenuSecondaire;
 import static fr.ocr.utiles.Logs.logger;
+import static fr.ocr.utiles.Messages.ErreurMessages.ERREUR_GENERIC;
+import static fr.ocr.utiles.Messages.InfosMessages.SORTIE_SUR_ESCAPECHAR;
 
 /**
  * @author Laurent Cordier
@@ -56,6 +56,8 @@ public interface JeuMasterMind {
     }
 
     void runJeuMM();
+
+
 }
 
 /**
@@ -86,7 +88,8 @@ class JeuMMDefenseur extends JeuMM {
             produirePropaleMM = new ProduirePropaleMMDefenseur();
 
             //affectation de JeuMM.produirePropaleMM avec instance classe dans laquelle le joueur valide la proposition de l'ordinateur
-            validerPropositionMM = new EvalPropaleDefenseur();
+
+            controleProposition = new ScorerProposition();
 
             // lance le jeu en mode defenseur
             RunJeuMMDefenseur(fabricationSecretMM);
@@ -109,7 +112,7 @@ class JeuMMChallengeur extends JeuMM {
         FabricationSecretMM fabricationSecretMM = new FabricationSecretMM();
 
         //affectation de JeuMM.produirePropaleMM avec instance classe dans laquelle l'ordinateur valide la proposition du Joueur
-        validerPropositionMM = new EvalPropaleChallengeur();
+        controleProposition = new ScorerProposition();
 
         //affectation de JeuMM.produirePropaleMM avec instance classe dans laquelle le Joueur saisie une proposition
         produirePropaleMM = new ProduirePropaleMMChallengeur(lignesSimpleMM, lignesPropaleMM);
@@ -148,7 +151,7 @@ abstract class JeuMM implements JeuMasterMind {
     LigneMM[] lignesSimpleMM = new LigneMM[NBRE_LIGNESTABLEMM];
 
     // variable d'interface qui polymorphise - la validation dépend du mode du jeu en cours
-    ValiderPropositionMM validerPropositionMM;
+    ControleProposition controleProposition;
 
     // variable d'interface qui polymorphise - la fabrication de la proposition dépend du mode du jeu en cours
     ProduirePropaleMM produirePropaleMM;
@@ -189,14 +192,11 @@ abstract class JeuMM implements JeuMasterMind {
      * création des objets  des lignes de la table du jeu Mastermind
      * affectation des données affichables, de la méthode de validation
      * @param modeDeJeu        : challengeur, defenseur, duel
-     * @param chiffresSecrets  combinaison secrete sous forme de chiffre {8,6,...)
+
      * @param couleursSecretes combinaison secrete sous forme de mots  i.e (VERT, BLEU,...}
-     *                         <p>
-     *                         * chiffresSecrets et couleursSecretes sont liés par bijection : l'enumeration des Couleurs est formé par
-     *                         i.e ...VERT(8,'V),... 8 est le chiffre , V l'initiale de la couleur Verte
+     *
      */
-    private void PreparationMenu(LibellesMenuSecondaire modeDeJeu, ArrayList<Integer> chiffresSecrets,
-                                 CouleursMastermind[] couleursSecretes) {
+    private void PreparationMenu(LibellesMenuSecondaire modeDeJeu, CouleursMastermind[] couleursSecretes) {
 
         /*
          * affectation des chaines de caractères aux lignes du menu à afficher
@@ -248,8 +248,8 @@ abstract class JeuMM implements JeuMasterMind {
              * infos à afficher - rien par défaut
              * méthode de validation de la proposition faite  par Ordinateur (Defenseur) ou par Joueur (Challengeur)
              */
-            lignesPropaleMM[k] = new LignePropaleMM(couleursSecretes, chiffresSecrets, true, true,
-                    k, LIGNE_PROPOSITION, "", validerPropositionMM);
+            lignesPropaleMM[k] = new LignePropaleMM(couleursSecretes, true, true,
+                    k, LIGNE_PROPOSITION, "", controleProposition);
 
             // efface contenu lignes et affiche le contenu par defaut
             lignesPropaleMM[k].Clear().setLibelleLigne();
@@ -270,7 +270,7 @@ abstract class JeuMM implements JeuMasterMind {
 
         LogLaCombinaisonSecrete(fabricationSecretMM.getCouleursSecretes(), nombreDeCouleurs);
 
-        PreparationMenu(modeJeu, fabricationSecretMM.getChiffresSecrets(), fabricationSecretMM.getCouleursSecretes());
+        PreparationMenu(modeJeu, fabricationSecretMM.getCouleursSecretes());
     }
 
     /**
@@ -284,7 +284,7 @@ abstract class JeuMM implements JeuMasterMind {
         Integer nbreEssaisConsommes = 0;
 
         // pattern destiné à l'objet scanner : les initiales des couleurs disponibles pour la proposition + 'escapechar'
-        String patternInitial = FabPattSais.ConstruitPatternSaisie(CouleursMastermind.values(), nombreDeCouleurs, charactersEscape);
+        String pattern = FabPattSais.ConstruitPatternSaisie(CouleursMastermind.values(), nombreDeCouleurs, charactersEscape);
 
         // la proposition du joueur
         ArrayList<Character> propaleChallengeur;
@@ -318,7 +318,7 @@ abstract class JeuMM implements JeuMasterMind {
                 lignesSimpleMM[LIGNE_DE_SAISIE].setLibelleLigne(lignesSimpleMM[LIGNE_DE_SAISIE].getLibelleLigneOriginal());
 
                 // saisie de la propsotion du joueur
-                propaleChallengeur = produirePropaleMM.getPropaleChallengeur(scanner, patternInitial, charactersEscape);
+                propaleChallengeur = produirePropaleMM.getPropaleChallengeur(scanner, pattern, charactersEscape);
 
                 //si le joueur a saisie escapechar, bye
                 if (propaleChallengeur.contains(charactersEscape)) {
@@ -327,7 +327,7 @@ abstract class JeuMM implements JeuMasterMind {
 
                 } else {
 
-                    //evaluation de la proposition du jour : la propostion est "scorée" en nombre de Blanc/Noir
+                    //evaluation de la proposition du joueur : la propostion est "scorée" en nombre de Blanc/Noir
 
                     SecretTrouve = lignesPropaleMM[indexLignesProposition++].setPropositionJoueur(propaleChallengeur).setZoneProposition().EvalProposition();
 
@@ -382,7 +382,7 @@ abstract class JeuMM implements JeuMasterMind {
         lignesSimpleMM[LIGNE_SECRETE].setEstVisible(true);
 
 
-        boolean SecretTrouve = false, isEscape = false;
+        boolean isSecretTrouveSaisie = false, isSecretTrouveCalcul = false, isEscape = false;
 
         Integer nbreEssaisConsommes = 0;
 
@@ -397,16 +397,24 @@ abstract class JeuMM implements JeuMasterMind {
         IOConsole.ClearScreen.cls();
 
         //tant que la proposition ne correspond à la combinaison secrete et que le nombre d'essais possibles n'est pas atteint
-        while (!SecretTrouve && nbreEssaisConsommes < nombreDeEssaisMax) {
+        while (!isSecretTrouveSaisie && nbreEssaisConsommes < nombreDeEssaisMax) {
 
             //ordinateur fournit une proposition
             propalOrdinateur = produirePropaleMM.getPropaleDefenseur();
 
-            //via appel de EvalPropostion, le joueur donne le score de cette propsotion
-            SecretTrouve = lignesPropaleMM[indexLignesProposition].setPropositionJoueur(propalOrdinateur).setZoneProposition().EvalProposition();
+            //via appel de EvalPropostion,  la propsotion est scorée - ce resultat est présenté pour conseil au Joueur
+            lignesPropaleMM[indexLignesProposition].setPropositionJoueur(propalOrdinateur).setZoneProposition().EvalProposition();
+
+            int[] suggestioNB = lignesPropaleMM[indexLignesProposition].getZoneEvaluation();
+            lignesSimpleMM[LIGNE_DE_SAISIE].setLibelleLigne(String.format(" Suggestion :  Noirs = %d , Blancs = %d", suggestioNB[NOIR_BIENPLACE], suggestioNB[BLANC_MALPLACE]));
+
+            int[] zoneEvaluation = new int[2];
+
+            isSecretTrouveSaisie = RunSaisirScore(zoneEvaluation);
+            lignesPropaleMM[indexLignesProposition].setZoneEvaluation(zoneEvaluation);
 
             //si propale est différent de secret, affiche la proposition
-            if (!SecretTrouve) {
+            if (!isSecretTrouveSaisie) {
                 produirePropaleMM.setScorePropale(propalOrdinateur, lignesPropaleMM[indexLignesProposition].getZoneEvaluation());
             }
 
@@ -415,7 +423,7 @@ abstract class JeuMM implements JeuMasterMind {
         }
 
         // affichage de fin
-        if (SecretTrouve) {
+        if (isSecretTrouveSaisie) {
             lignesSimpleMM[LIGNE_SECRETE].setLibelleLigne("!! Ordinateur Gagne !!");
 
         } else {
@@ -427,7 +435,7 @@ abstract class JeuMM implements JeuMasterMind {
         // pour confirmation sortie du jeu , par le defenseur (sinon - pas d'affichage et retour direct au menu superieur
         // seule saise possible 'escapeChar'
         //
-        IOConsole.LectureClavier(patternEscape, scanner, new EcrireSurEcran() {
+        IOConsole.LectureClavierChar(patternEscape, scanner, new EcrireSurEcran() {
             @Override
             public void Display() {
                 for (int n = TITRE; n <= LIGNE_DE_SAISIE; n++) {
@@ -442,6 +450,57 @@ abstract class JeuMM implements JeuMasterMind {
             }
         }, charactersEscape);
     }
+
+    /**
+     * Saise le score de la propositon donné par l'ordianteur (mode defenseur)
+     */
+
+    public Boolean RunSaisirScore(int[] zoneEvaluation) throws AppExceptions {
+
+        Boolean valRet = false;
+        int index = 0;
+        String pattern = String.format("[0-%d] K k", nombreDePositions);
+        try {
+
+            Character saisieChar;
+            do {
+                saisieChar = IOConsole.LectureClavierChar(pattern, scanner, new EcrireSurEcran() {
+                    @Override
+                    public void Display() {
+                        for (int n = TITRE; n <= LIGNE_DE_SAISIE; n++) {
+                            if (lignesSimpleMM[n].isEstVisible()) {
+                                if (n == LIGNE_DE_SAISIE) {
+                                    System.out.print(lignesSimpleMM[n].toString());
+                                } else {
+                                    System.out.println(lignesSimpleMM[n].toString());
+                                }
+                            }
+                        }
+                    }
+                }, charactersEscape);
+
+                if (saisieChar != charactersEscape) {
+                    if (index < zoneEvaluation.length) {
+                        zoneEvaluation[index] = Integer.parseInt(String.valueOf(saisieChar));
+                        index++;
+                    } else {
+                        throw new AppExceptions(ERREUR_GENERIC);
+                    }
+                } else {
+                    throw new AppExceptions(SORTIE_SUR_ESCAPECHAR, charactersEscape);
+                }
+            }
+            while ((saisieChar != charactersEscape) && (index < zoneEvaluation.length));
+
+            if (zoneEvaluation[NOIR_BIENPLACE] == nombreDePositions)
+                valRet = true;
+
+        } catch (Exception e) {
+            throw new AppExceptions(ERREUR_GENERIC);
+        }
+        return valRet;
+    }
+
 
     /**
      *  log des infos du jeu : le nombre de couleurs possibles, la combinaison secrete
@@ -522,7 +581,7 @@ abstract class JeuMM implements JeuMasterMind {
 
 
         // pattern destiné à l'objet scanner : les initiales des couleurs disponibles pour la combinaison secrete + 'escapechar'
-        String patternInitial = FabPattSais.ConstruitPatternSaisie(CouleursMastermind.values(), nombreDeCouleurs, charactersEscape);
+        String pattern = FabPattSais.ConstruitPatternSaisie(CouleursMastermind.values(), nombreDeCouleurs, charactersEscape);
 
         IOConsole.ClearScreen.cls();
 
@@ -531,7 +590,7 @@ abstract class JeuMM implements JeuMasterMind {
 
             Character saisieUneCouleur;
             do {
-                saisieUneCouleur = IOConsole.LectureClavier(patternInitial, scanner, new EcrireSurEcran() {
+                saisieUneCouleur = IOConsole.LectureClavierChar(pattern, scanner, new EcrireSurEcran() {
                     @Override
                     public void Display() {
                         for (int n = TITRE; n <= LIGNE_DE_SAISIE; n++) {
@@ -550,20 +609,7 @@ abstract class JeuMM implements JeuMasterMind {
                 if (saisieUneCouleur != charactersEscape) {
                     //ajoute le caractere saisie à la lsite des intiiales saisies
                     initialesSecretesDuDefenseur.add(saisieUneCouleur);
-                    //afiche la liste des caracteres deja saisis
-                    String infosSasiie = lignesSimpleMM[LIGNE_DE_SAISIE].getLibelleLigne() + saisieUneCouleur.toString() + " ";
-                    lignesSimpleMM[LIGNE_DE_SAISIE].setLibelleLigne(infosSasiie);
-                    //si le mode est sans doublon
-                    if (!doublonAutorise) {
-                        //retrait  du  caractere saisi de la liste des caracteres disponibles
-                        int posCol = patternInitial.indexOf(saisieUneCouleur);
-                        int taille = patternInitial.length();
-                        patternInitial = patternInitial.substring(0, posCol) + patternInitial.substring(posCol + 1, taille);
-                        taille = patternInitial.length();
-                        String pourLower = String.valueOf(saisieUneCouleur).toLowerCase(Locale.forLanguageTag("fr"));
-                        posCol = patternInitial.indexOf(pourLower.toCharArray()[0]);
-                        patternInitial = patternInitial.substring(0, posCol) + patternInitial.substring(posCol + 1, taille);
-                    }
+                    pattern = ReduirePattern(pattern, doublonAutorise, saisieUneCouleur);
                     //choix escape
                 } else {
                     initialesSecretesDuDefenseur.clear();
@@ -582,8 +628,8 @@ abstract class JeuMM implements JeuMasterMind {
         for (char c : initialesSecretesDuDefenseur) {
             valeurFaciale = CouleursMastermind.getValeurParLettre(c);
             if (valeurFaciale < 0) {
-                logger.error(Messages.ErreurMessages.ERREUR_GENERIC + " erreur conversion EnumCouleur - Lettre en Chiffre");
-                throw new AppExceptions(Messages.ErreurMessages.ERREUR_GENERIC);
+                logger.error(ERREUR_GENERIC + " erreur conversion EnumCouleur - Lettre en Chiffre");
+                throw new AppExceptions(ERREUR_GENERIC);
             }
             chiffresSecretsDuDefenseur.add(valeurFaciale);
         }
@@ -594,6 +640,34 @@ abstract class JeuMM implements JeuMasterMind {
         //sur un escape, le ArrayList<Integer> est vide
         return chiffresSecretsDuDefenseur;
     }
+
+    /**
+     * retrait de la couleur qui vient d'être saisie (saisieUneCouleur) , du pattern qui controle la saisie
+     * cette fonction n'a de sens que pour le mode "doulon non autorisé"
+     *
+     * @param pattern          String , le pattern à re
+     * @param doublonAutorise  Boolean , doublon oui/no - paramétrage
+     * @param saisieUneCouleur Character , l'initiale de la couleur a retiré du pattern de saisie
+     * @return
+     */
+
+    String ReduirePattern(String pattern, Boolean doublonAutorise, Character saisieUneCouleur) {
+        String infosSaisie = lignesSimpleMM[LIGNE_DE_SAISIE].getLibelleLigne() + saisieUneCouleur.toString() + " ";
+        lignesSimpleMM[LIGNE_DE_SAISIE].setLibelleLigne(infosSaisie);
+        //si le mode est sans doublon
+        if (!doublonAutorise) {
+            //retrait  du  caractere saisi de la liste des caracteres disponibles
+            int posCol = pattern.indexOf(saisieUneCouleur);
+            int taille = pattern.length();
+            pattern = pattern.substring(0, posCol) + pattern.substring(posCol + 1, taille);
+            taille = pattern.length();
+            String pourLower = String.valueOf(saisieUneCouleur).toLowerCase(Locale.forLanguageTag("fr"));
+            posCol = pattern.indexOf(pourLower.toCharArray()[0]);
+            pattern = pattern.substring(0, posCol) + pattern.substring(posCol + 1, taille);
+        }
+        return pattern;
+    }
+
 }
 /*
  * ***************************************************************************************************************

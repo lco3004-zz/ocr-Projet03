@@ -13,16 +13,11 @@ import static fr.ocr.params.Parametres.NOMBRE_DE_POSITIONS;
 import static fr.ocr.utiles.Constantes.ConstTailleStringBuilder.TAIILE_INITIALE;
 import static fr.ocr.utiles.Logs.logger;
 import static fr.ocr.utiles.Messages.ErreurMessages.ERREUR_GENERIC;
+
 /**
  * @author Laurent Cordier
  * <p>
  *     modele des lignes de la table de jeu Mastermind
- * <p>
- */
-
-
-/**
- * <p>
  *     Attribut et comportement généraux d'une ligne
  *     estDisponible : toujours vrai - reservé pour mise en place d'un rollback
  *     estVisible : est utilisé pour affichage oui/non de la ligne qui affiche (ou pas) la combinaison secrete
@@ -64,11 +59,11 @@ abstract class LignePlateauMM implements ConstTypeDeLigne, ConstEvalPropale {
         this.estDisponible = estDisponible;
     }
 
-    public boolean isEstVisible() {
+    boolean isEstVisible() {
         return estVisible;
     }
 
-    public void setEstVisible(boolean estVisible) {
+    void setEstVisible(boolean estVisible) {
         this.estVisible = estVisible;
     }
 
@@ -114,7 +109,7 @@ class LigneMM extends LignePlateauMM {
      * retourne l'attibut libelleLigne
      * @return String,  l'attribut libelleLigne
      */
-    public String getLibelleLigne() {
+    String getLibelleLigne() {
         return libelleLigne;
     }
 
@@ -123,7 +118,7 @@ class LigneMM extends LignePlateauMM {
      * @param infos  : String qui sera affichée, pour cette ligne
      * @return   :  LigneMM,  l'objet ligne (this)  ! utilie pour chainage de méthode
      */
-    public LigneMM setLibelleLigne(String infos) {
+    LigneMM setLibelleLigne(String infos) {
 
         libelleLigne = infos;
 
@@ -184,7 +179,7 @@ class LigneMM extends LignePlateauMM {
      * retourne l'attibut libelleLigneOriginal
      * @return String,  l'attribut libelleLigneOriginal
      */
-    public String getLibelleLigneOriginal() {
+    String getLibelleLigneOriginal() {
         return libelleLigneOriginal;
     }
 
@@ -223,13 +218,10 @@ class LignePropaleMM extends LigneMM {
     private int[] zoneEvaluation = new int[2];
 
     //méthode de validation de la proposition (methode fournit en parametre lors de la construction de la ligne
-    private ValiderPropositionMM fctValideProposition;
+    private ControleProposition fctValideProposition;
 
     //le secret auquel il faut comparer la proposition, sous forme char (initiale de la couleur . ie V , initiale de Vert)
     private ArrayList<Character> combinaisonInitialesSecretes;
-
-    //le secret sous forme de chiffre
-    private ArrayList<Integer> combinaisonChiffresSecrets;
 
     //nombre de positions dans la ligne : nombre de couleur par ligne de proposition
     private Integer nombreDePositions = (Integer) getParam(NOMBRE_DE_POSITIONS);
@@ -237,7 +229,6 @@ class LignePropaleMM extends LigneMM {
     /**
      * Constructeur
      * @param secretCouleurs   CouleursMastermind[] , combinaison secrete , dans sa forme Couleur (i.e VERT,JAUNE,...)
-     * @param secretChiffres   ArrayList d'Integer combinaison secrete dans sa forme en chiffre (i.e 1,8, 4..)
      * @param disponible       boolean true (reserve)
      * @param visible          boolean : true la ligne est affichable donc visible à l'écran
      * @param rang             int , rang de la ligne dans le tableau des lignes (ligneMM)  du jeu
@@ -245,12 +236,11 @@ class LignePropaleMM extends LigneMM {
      * @param infos             String, libelle par defaut de la ligne (sa valeur originale
      * @param fct               méthode de validaiton de la proposition
      */
-    LignePropaleMM(CouleursMastermind[] secretCouleurs, ArrayList<Integer> secretChiffres, boolean disponible,
-                   boolean visible, int rang, int typeligne, String infos, ValiderPropositionMM fct) {
+    LignePropaleMM(CouleursMastermind[] secretCouleurs, boolean disponible,
+                   boolean visible, int rang, int typeligne, String infos, ControleProposition fct) {
 
         super(disponible, visible, rang, typeligne, infos);
 
-        combinaisonChiffresSecrets = secretChiffres;
 
         combinaisonInitialesSecretes = new ArrayList<>(TAIILE_INITIALE);
 
@@ -267,7 +257,7 @@ class LignePropaleMM extends LigneMM {
      * @param propositionJoueur  ArrayList Character, proposition sous forme initiale de couleur (i.e J pour Jaune)
      * @return LignePropaleMM,  l'objet ligne (this)  ! utile pour chainage de méthode
      */
-    public LignePropaleMM setPropositionJoueur(ArrayList<Character> propositionJoueur) {
+    LignePropaleMM setPropositionJoueur(ArrayList<Character> propositionJoueur) {
         this.propositionJoueur = propositionJoueur;
         return this;
     }
@@ -307,7 +297,7 @@ class LignePropaleMM extends LigneMM {
      * construit la chaine de caractère qui sera affiché (attribut  zoneProposition)
      * @return LignePropaleMM,  l'objet ligne (this)  ! utile pour chainage de méthode
      */
-    public LignePropaleMM setZoneProposition() {
+    LignePropaleMM setZoneProposition() {
         zoneProposition.delete(0, zoneProposition.length());
         zoneProposition.append('[');
         zoneProposition.append(' ');
@@ -328,7 +318,7 @@ class LignePropaleMM extends LigneMM {
      *  (mode defenseur)
      * @return Boolean , true si proposition est égal à secret
      */
-    public Boolean EvalProposition() {
+    Boolean EvalProposition() {
         return fctValideProposition.apply(propositionJoueur,
                 combinaisonInitialesSecretes,
                 nombreDePositions,

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
-import static fr.ocr.modeconsole.IOConsole.LectureClavier;
+import static fr.ocr.modeconsole.IOConsole.LectureClavierChar;
 import static fr.ocr.utiles.Logs.logger;
 import static fr.ocr.utiles.Messages.ErreurMessages.ERREUR_GENERIC;
 
@@ -206,7 +206,7 @@ public abstract class Menu<T extends Enum> {
         Character escapeChar = Constantes.Libelles.CharactersEscape.X.toString().charAt(0);
 
         try {
-            enumActionChoisie = retrouveLigneMenu(LectureClavier(pattern_Menu, scanner, displayMenu, escapeChar));
+            enumActionChoisie = retrouveLigneMenu(LectureClavierChar(pattern_Menu, scanner, displayMenu, escapeChar));
         } catch (Exception e) {
             logger.error(String.format("%s %s ", ERREUR_GENERIC, e.getClass().getSimpleName()));
             throw new AppExceptions(ERREUR_GENERIC);

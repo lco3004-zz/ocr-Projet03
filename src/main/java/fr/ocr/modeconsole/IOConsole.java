@@ -22,7 +22,7 @@ import static fr.ocr.utiles.Messages.InfosMessages.CTRL_C;
 public class IOConsole {
 
     /**
-     * saisie clavier avec pattern
+     * saisie clavier d'un caractere avec pattern
      * @param pattern_Menu  le pattern de la regex du menu
      * @param scanner  le scanner clavier
      * @param ecrireSurEcran  varaible interface
@@ -30,10 +30,10 @@ public class IOConsole {
      * @return le caractère qui correspond à la saisie utilisateur (filtré par pattern )
      * @throws AppExceptions  si erreur lors de la saisie
      */
-    public static Character LectureClavier(String pattern_Menu,
-                                           Scanner scanner,
-                                           EcrireSurEcran ecrireSurEcran,
-                                           Character escapeChar) throws AppExceptions {
+    public static Character LectureClavierChar(String pattern_Menu,
+                                               Scanner scanner,
+                                               EcrireSurEcran ecrireSurEcran,
+                                               Character escapeChar) throws AppExceptions {
 
         Pattern patternChoix = Pattern.compile(pattern_Menu);
 
@@ -72,7 +72,6 @@ public class IOConsole {
         }
         return cRet;
     }
-
     /*
      * efface l'afficage console . Clear ou Cls sont appellés selon le système
      * sur lequel le programme est exécuté

@@ -51,8 +51,10 @@ public enum Messages {
         CREATION_FICHIER_PARAMETRE("Creation du fichier Parametres - "),
         FIN_NORMALE_GESTION_DES_PARAMETRES("Fin Normale LireParametres"),
         CTRL_C("interuption programme par CTRL-C"),
+        SORTIE_SUR_ESCAPECHAR("Sortie par escape char"),
         REMPLACEMENT_PAR_VALEUR_DEFAUT("Remplacement par la valeur par défaut =  "),
-        RANDOM_ECHOUE_COLPARDEF("Le Random a échoué, les premières couleurs de la liste sont retenues");
+        RANDOM_ECHOUE_COLPARDEF("Le Random a échoué, les premières couleurs de la liste sont retenues"),
+        TENTAIVE_DE_TRICHE_DEFENSEUR("Incoherence score entre calcul et saisie  - Suspicion de fraude");
 
         private String messageInformation;
 

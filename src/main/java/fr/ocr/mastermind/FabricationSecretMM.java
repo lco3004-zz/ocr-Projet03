@@ -131,14 +131,6 @@ class FabricationSecretMM {
     }
 
     /**
-     * renvoie la combinaison secrete sous sa forme Chiffres
-     * @return ArrayList of Byte Tableau des chiffres de la combinaisons secrete
-     */
-    ArrayList<Integer> getChiffresSecrets() {
-        return chiffresSecrets;
-    }
-
-    /**
      * renvoie la combinaison secrete sous sa forme Couleur
      * @return CouleursMastermind[] Tableau des couleurs de la combinaison secrete
      */

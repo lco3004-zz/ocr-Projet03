@@ -36,6 +36,11 @@ public class AppExceptions extends RuntimeException {
         System.exit(-1);
     }
 
+    public AppExceptions(Messages.InfosMessages infosMessages, Character characterSortie) {
+        logger.info(infosMessages.getMessageInfos());
+
+    }
+
     public AppExceptions(FileNotFoundException e) {
         logger.error(e.getMessage());
     }
