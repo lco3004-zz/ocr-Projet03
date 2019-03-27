@@ -6,11 +6,11 @@
     <node x="337.0" y="279.0">fr.ocr.modeconsole.IOConsole.ClearScreen</node>
     <node x="84.5" y="199.0">fr.ocr.modeconsole.EcrireSurEcran</node>
     <node x="0.0" y="376.0">fr.ocr.modeconsole.LigneMenu</node>
-    <node x="132.75" y="0.0">fr.ocr.modeconsole.Menu</node>
+    <node x="108.25" y="0.0">fr.ocr.modeconsole.Menu</node>
     <node x="0.0" y="279.0">fr.ocr.modeconsole.DisplayMenu</node>
     <node x="340.5" y="199.0">fr.ocr.modeconsole.IOConsole</node>
-    <node x="266.0" y="102.0">fr.ocr.modeconsole.MenuPrincipal</node>
-    <node x="0.0" y="102.0">fr.ocr.modeconsole.MenuSecondaire</node>
+    <node x="217.0" y="102.0">fr.ocr.modeconsole.MenuSecondaire</node>
+    <node x="0.0" y="102.0">fr.ocr.modeconsole.MenuPrincipal</node>
   </nodes>
   <notes />
   <edges>
@@ -20,22 +20,22 @@
     </edge>
     <edge source="fr.ocr.modeconsole.MenuPrincipal" target="fr.ocr.modeconsole.Menu">
       <point x="0.0" y="-26.0" />
-      <point x="364.5" y="77.0" />
-      <point x="299.25" y="77.0" />
-      <point x="55.5" y="26.0" />
+      <point x="98.5" y="77.0" />
+      <point x="163.75" y="77.0" />
+      <point x="-55.5" y="26.0" />
     </edge>
     <edge source="fr.ocr.modeconsole.MenuSecondaire" target="fr.ocr.modeconsole.Menu">
       <point x="0.0" y="-26.0" />
-      <point x="123.0" y="77.0" />
-      <point x="188.25" y="77.0" />
-      <point x="-55.5" y="26.0" />
+      <point x="340.0" y="77.0" />
+      <point x="274.75" y="77.0" />
+      <point x="55.5" y="26.0" />
     </edge>
     <edge source="fr.ocr.modeconsole.DisplayMenu" target="fr.ocr.modeconsole.EcrireSurEcran">
       <point x="0.0" y="-26.0" />
       <point x="0.0" y="15.0" />
     </edge>
   </edges>
-  <settings layout="Hierarchic Group" zoom="1.0" x="231.5" y="214.0" />
+  <settings layout="Hierarchic Group" zoom="1.0" x="426.00000000000006" y="403.0" />
   <SelectedNodes />
   <Categories>
     <Category>Constructors</Category>
