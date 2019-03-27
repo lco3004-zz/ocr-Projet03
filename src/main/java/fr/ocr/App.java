@@ -9,9 +9,13 @@ import fr.ocr.utiles.Constantes;
 import fr.ocr.utiles.Constantes.Libelles.LibellesMenuPrincipal;
 import fr.ocr.utiles.Constantes.Libelles.LibellesMenuSecondaire;
 import fr.ocr.utiles.Constantes.VersionPGM;
+import fr.ocr.utiles.MesOptions;
+import org.kohsuke.args4j.CmdLineException;
+import org.kohsuke.args4j.CmdLineParser;
 
 import java.util.Scanner;
 
+import static fr.ocr.params.LireParametres.OverrideParamModeDeveloppeur;
 import static fr.ocr.utiles.Constantes.Libelles.LibellesMenuPrincipal.CHOISIR_MASTERMIND;
 import static fr.ocr.utiles.Logs.getInstance;
 import static fr.ocr.utiles.Logs.logger;
@@ -28,7 +32,23 @@ import static fr.ocr.utiles.Messages.InfosMessages.LANCEMENT_APPLICATION;
 public class App {
 
     public static void main(String[] args) throws AppExceptions {
-        //Creation du Singleton qui gere les logsapplicatifs (log4j2)
+
+        MesOptions options = new MesOptions();
+
+        CmdLineParser parser = new CmdLineParser(options);
+
+        try {
+            parser.parseArgument(args);
+            if (options.isModeDebug()) {
+                OverrideParamModeDeveloppeur();
+            }
+
+        } catch (CmdLineException e) {
+
+            //parser.setUsageWidth(80);
+
+            parser.printUsage(System.out);
+        }
 
 
         //creation objet logger (singleton)
@@ -82,27 +102,24 @@ public class App {
                                 break; // idem ci-dessus, ch_Sec est une instance d'Enum ; permet d'éviter les warning
                             case MODE_CHALLENGER:
                                 if (ch_Sup.equals(CHOISIR_MASTERMIND)) {
-                                    //construction du jeu mode CHALLENGEUR
-                                    JeuMasterMind jeuMasterMind = JeuMasterMind.CHALLENGEUR(ch_Sec, scanner);
-                                    //execution du jeu
-                                    jeuMasterMind.runJeuMM();
+                                    JeuMasterMind.CHALLENGEUR(ch_Sec, scanner);
                                 } else {
                                     menu_secondaire.majLigneEtat(String.format("%s du jeu %s", ch_Sec.toString(), ch_Sup.toString()));
                                 }
                                 break;
                             case MODE_DEFENSEUR:
                                 if (ch_Sup.equals(CHOISIR_MASTERMIND)) {
-                                    //construction du jeu mode DEFENSEUR
-                                    JeuMasterMind jeuMasterMind = JeuMasterMind.DEFENSEUR(ch_Sec, scanner);
-                                    //execution du jeu
-                                    jeuMasterMind.runJeuMM();
+                                    JeuMasterMind.DEFENSEUR(ch_Sec, scanner);
                                 } else {
                                     menu_secondaire.majLigneEtat(String.format("%s du jeu %s", ch_Sec.toString(), ch_Sup.toString()));
                                 }
                                 break;
                             case MODE_DUEL:
-                                //TODO
-                                menu_secondaire.majLigneEtat(String.format("%s du jeu %s", ch_Sec.toString(), ch_Sup.toString()));
+                                if (ch_Sup.equals(CHOISIR_MASTERMIND)) {
+                                    JeuMasterMind.DUEL(ch_Sec, scanner);
+                                } else {
+                                    menu_secondaire.majLigneEtat(String.format("%s du jeu %s", ch_Sec.toString(), ch_Sup.toString()));
+                                }
                                 break;
                             case RETOUR:
                                 boucleSecondaire = false;

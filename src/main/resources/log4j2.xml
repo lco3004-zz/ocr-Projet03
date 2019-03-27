@@ -26,11 +26,11 @@
          
     </Appenders>
     <Loggers>
-        <Logger name="ocr_Projet03" level="debug" additivity="false">
+        <Logger name="ocr_Projet03" level="info" additivity="false">
             <AppenderRef ref="RollingFile-Appender" level="info"/>
             <AppenderRef ref="Console-Appender" level="info"/>
         </Logger>
-        <Root level="debug">
+        <Root level="info">
             <AppenderRef ref="RollingFile-Appender"/>
         </Root>
     </Loggers>

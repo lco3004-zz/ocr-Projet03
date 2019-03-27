@@ -22,10 +22,7 @@ import static java.lang.StrictMath.pow;
  * @author Laurent Cordier
  * <p>
  *     construit une proposition soit par saisie, soit par algo
- * <p>
- */
-
-/**
+ *</p>
  *<p>
  *     interface d'accès au deux modes principaux d'obtention d'une proposition (defenseur, challengeur)
  *     la méthode setScorePropale est utilisé en mode défenseur.
@@ -33,30 +30,14 @@ import static java.lang.StrictMath.pow;
  */
 public interface ProduirePropaleMM {
 
-    /**
-     *
-     * @return
-     */
     default ArrayList<Character> getPropaleDefenseur() {
         return null;
     }
 
-    /**
-     *
-     * @param scanner
-     * @param pattern
-     * @param escChar
-     * @return
-     */
     default ArrayList<Character> getPropaleChallengeur(Scanner scanner, String pattern, Character escChar) {
         return null;
     }
 
-    /**
-     *
-     * @param laPropaleScoree
-     * @param scorePropale
-     */
     default void setScorePropale(ArrayList<Character> laPropaleScoree, int[] scorePropale) {
     }
 }
@@ -373,9 +354,9 @@ class ProduirePropaleMMChallengeur implements ProduirePropaleMM {
      * @param pattern          String , le pattern à re
      * @param doublonAutorise  Boolean , doublon oui/no - paramétrage
      * @param saisieUneCouleur Character , l'initiale de la couleur a retiré du pattern de saisie
-     * @return
+     * @return String pattern  initial moins le caractere qui vient d'etre saisi donc n'est  plus dispo en mode sans doublon
      */
-    String ReduirePattern(String pattern, Boolean doublonAutorise, Character saisieUneCouleur) {
+    private String ReduirePattern(String pattern, Boolean doublonAutorise, Character saisieUneCouleur) {
         String infosSaisie = lignesSimpleMM[LIGNE_DE_SAISIE].getLibelleLigne() + saisieUneCouleur.toString() + " ";
         lignesSimpleMM[LIGNE_DE_SAISIE].setLibelleLigne(infosSaisie);
         //si le mode est sans doublon

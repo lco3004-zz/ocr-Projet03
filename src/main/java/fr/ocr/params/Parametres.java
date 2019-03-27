@@ -12,11 +12,11 @@ import fr.ocr.utiles.Constantes;
  */
 public enum Parametres {
     NOMBRE_DE_POSITIONS(4, 4, 8),
-    NOMBRE_DE_COULEURS(6, 6, Constantes.CouleursMastermind.values().length),
+    NOMBRE_DE_COULEURS(6, 4, Constantes.CouleursMastermind.values().length),
     NOMBRE_MAXI_DE_BOUCLES_RANDOMIZE(100, 10, 1000),
     NOMBRE_D_ESSAIS(12, 4, 30),
     DOUBLON_AUTORISE(false),
-    MODE_DEBUG(true),
+    MODE_DEVELOPPEUR(false),
     FRAUDE_AUTORISEE(true);
 
 
@@ -48,6 +48,7 @@ public enum Parametres {
     public <T> Object getValeurDefaut() {
         return unParam.getValeurDefaut();
     }
+
 }
 
 /**

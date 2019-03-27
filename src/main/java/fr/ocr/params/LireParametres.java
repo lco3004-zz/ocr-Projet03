@@ -107,9 +107,13 @@ class IOParams {
  * lecture des properties (static final)
  */
 public final class LireParametres {
-
+    private static boolean overrideModeDeveloppeur = false;
     static private IOParams parametrageMasterMind = new IOParams(FICHIER_PARAM_MASTER_MIND.getNomFichier());
     static private Properties parametreMasterMindLu = parametrageMasterMind.lireParametre().getListeParams();
+
+    public static void OverrideParamModeDeveloppeur() {
+        overrideModeDeveloppeur = true;
+    }
 
     public static Object getParam(Parametres nomDuParamtreARecuperer) {
 
@@ -163,6 +167,11 @@ public final class LireParametres {
             } else {
                 logger.error(REMPLACEMENT_PAR_VALEUR_DEFAUT.getMessageInfos() + VALEUR_PARAM_INCORRECT.getMessageErreur());
             }
+        }
+        // controle surchagr valeur suite option en ligne de commande
+        if (parametres.name().equals(Parametres.MODE_DEVELOPPEUR.toString())) {
+            if (overrideModeDeveloppeur)
+                retVal = true;
         }
         return retVal;
     }

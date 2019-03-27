@@ -51,6 +51,8 @@ abstract class LignePlateauMM implements ConstTypeDeLigne, ConstEvalPropale {
 
     public abstract String toString();
 
+    abstract LignePlateauMM setLibelleLigne(String infos);
+
     public boolean isEstDisponible() {
         return estDisponible;
     }
@@ -118,6 +120,7 @@ class LigneMM extends LignePlateauMM {
      * @param infos  : String qui sera affichée, pour cette ligne
      * @return   :  LigneMM,  l'objet ligne (this)  ! utilie pour chainage de méthode
      */
+    @Override
     LigneMM setLibelleLigne(String infos) {
 
         libelleLigne = infos;
@@ -225,6 +228,7 @@ class LignePropaleMM extends LigneMM {
 
     //nombre de positions dans la ligne : nombre de couleur par ligne de proposition
     private Integer nombreDePositions = (Integer) getParam(NOMBRE_DE_POSITIONS);
+    private String paddMsg = "";
 
     /**
      * Constructeur
@@ -266,7 +270,7 @@ class LignePropaleMM extends LigneMM {
      * renvoie la valeur de l'attribut zoneEvaluation, qui est le score de la proposition sous forme [NOIRS,BLANCS]
      * @return int [], score de la proposition , résultat de son evaluation par la méthode fctValideProposition
      */
-    public int[] getZoneEvaluation() {
+    int[] getZoneEvaluation() {
         return zoneEvaluation;
     }
 
@@ -275,7 +279,7 @@ class LignePropaleMM extends LigneMM {
      * @param zoneEval   : score obtneu par la proposition
      * @throws AppExceptions , leve exception si zoneEval et zoneEvaluation sont de taille différentes
      */
-    public void setZoneEvaluation(int[] zoneEval) throws AppExceptions {
+    void setZoneEvaluation(int[] zoneEval) throws AppExceptions {
         if (zoneEval.length != zoneEvaluation.length) {
             logger.error(ERREUR_GENERIC.getMessageErreur());
             throw new AppExceptions(ERREUR_GENERIC);
@@ -331,6 +335,7 @@ class LignePropaleMM extends LigneMM {
      */
     @Override
     public LignePropaleMM Clear() {
+        paddMsg = "";
         zoneProposition.delete(0, zoneProposition.length());
         zoneProposition.append('[');
         zoneProposition.append(' ');
@@ -362,15 +367,25 @@ class LignePropaleMM extends LigneMM {
                 ' ' +
                 getZoneEvaluation()[NOIR_BIENPLACE] +
                 ' ' +
-                getZoneEvaluation()[BLANC_MALPLACE];
+                getZoneEvaluation()[BLANC_MALPLACE] +
+                ' ' +
+                paddMsg;
     }
 
     /**
      * renseigne le champ  libelleLigne
      */
     void setLibelleLigne() {
+
         super.setLibelleLigne(this.toString());
     }
+
+
+    LignePropaleMM setTrailerLibelle(String tailerMsg) {
+        this.paddMsg = tailerMsg;
+        return this;
+    }
+
 }
 /*
  * ***************************************************************************************************************
