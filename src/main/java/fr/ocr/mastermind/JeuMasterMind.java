@@ -592,6 +592,7 @@ abstract class JeuMM implements JeuMasterMind {
         lignesSimpleMM[LIGNE_STATUS].setLibelleLigne(lignesSimpleMM[LIGNE_STATUS].getLibelleLigneOriginal());
 
     }
+
 /*
 TODO  JE SUIS ICI au NiVEAU COMMENTAIREs
  */
