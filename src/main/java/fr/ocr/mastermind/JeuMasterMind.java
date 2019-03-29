@@ -26,32 +26,44 @@ import static fr.ocr.utiles.Messages.InfosMessages.SORTIE_SUR_ESCAPECHAR;
  ********************************************************************************************************************
  */
 /**
+ *
  * @author Laurent Cordier
- * mode challenegeur  :  JeuMasterMind jeuMasterMind = JeuMasterMind.CHALLENGEUR(ch_Sec, scanner);
- * mode Defenseur :  JeuMasterMind jeuMasterMind = JeuMasterMind.DEFENSEUR(ch_Sec, scanner);
- * lancement du jeu (Challengeur ou Defenseur) jeuMasterMind.runJeuMM();
+ *
+ * mode CHALLENGEUR  :  JeuMasterMind jeuMasterMind = JeuMasterMind.CHALLENGEUR(ch_Sec, scanner);
+ * mode DEFENSEUR    :  JeuMasterMind jeuMasterMind = JeuMasterMind.DEFENSEUR(ch_Sec, scanner);
+ * mode DUEL         :  JeuMasterMind jeuMasterMind = JeuMasterMind.DUEL(ch_Sec, scanner);
+ *
+ * lancement du jeu (Challengeur ou Defenseur ou Duel)  : jeuMasterMind.runJeuMM();
+ *
  * <p>
  * Interface qui donne acc&egrave;s aux mode de jeu MasterMind.
- * <p>
+ * </p>
  *<p>
  *     interface d'accès au deux modes principaux du jeudefenseur, challengeur)
  *</p>
+ *
  */
 public interface JeuMasterMind {
 
     /**
      *
+     *  mode Jeu CHALLLENGEUR  - creation de la classe qui gère ce mode
+     *
      * @param modeJeu  LibellesMenuSecondaire
      * @param sc  scanner
-
+     *
      */
     static void CHALLENGEUR(LibellesMenuSecondaire modeJeu, Scanner sc) {
         (new JeuMMChallengeur(modeJeu, sc)).runJeuMM();
     }
 
     /**
+     *
+     *  mode Jeu DEFENSEUR  - creation de la classe qui gère ce mode
+     *
      * @param modeJeu LibellesMenuSecondaire
      * @param sc      scanner
+     *
      */
     static void DEFENSEUR(LibellesMenuSecondaire modeJeu, Scanner sc) {
         (new JeuMMDefenseur(modeJeu, sc)).runJeuMM();
@@ -59,13 +71,21 @@ public interface JeuMasterMind {
 
     /**
      *
+     *  mode Jeu DUEL  - creation de la classe qui gère ce mode
+     *
      * @param modeJeu LibellesMenuSecondaire
      * @param sc scanner
+     *
      */
     static void DUEL(LibellesMenuSecondaire modeJeu, Scanner sc) {
         (new JeuMMDuel(modeJeu, sc)).runJeuMM();
     }
 
+    /**
+     *
+     * Point d'entrée ( un "exit" disaient les ancêtres  qui travaillaient en carte perforée sur un IBM ou un un Bull)
+     *
+     */
     void runJeuMM();
 
 }
@@ -74,16 +94,19 @@ public interface JeuMasterMind {
  */
 
 /**
- * Classe du mode jeu Duel  - alternance code/decode pour Joueur et Ordinateur
+ *
+ * Classe du mode jeu Duel mastermind - alternance code/decode pour Joueur et Ordinateur
+ *
  */
 class JeuMMDuel extends JeuMM {
 
-
     /**
+     *
      * construteur
      *
      * @param modeJeu : challengeur, defenseur, duel
      * @param sc      scanner saisie clavier
+     *
      */
     JeuMMDuel(LibellesMenuSecondaire modeJeu, Scanner sc) {
         super(modeJeu, sc);
@@ -94,13 +117,15 @@ class JeuMMDuel extends JeuMM {
         //génération du secret sous forme de liste d'initiales des couleurs de la combinaison secrete
         FabricationSecretMM fabricationSecretMM = new FabricationSecretMM();
 
-        //l'ordinateur valide la proposition du Joueur
+        //l'ordinateur valide la proposition du Joueur : le Joueur est alternativement
+        //  -- une saisie clavier (physique ou simulée par JUnit)
+        //  -- une proposition calculée
         controleProposition = new ScorerProposition();
 
-        //l'ordinateur génère une proposition
+        // la variable interface "pointe" sur l'objet qui génère une proposition automatiquement (l'ordinateur joue)
         produirePropaleDefenseur = new ProduirePropaleMMDefenseur();
 
-        // le Joueur saisie une proposition
+        // la variable interface "pointe" sur l'objet qui sert à saisir au clavier une proposition (le Joueur joue)
         produirePropaleChallengeur = new ProduirePropaleMMChallengeur(lignesSimpleMM, lignesPropaleMM);
 
         // lance le jeu en mode duel
@@ -114,10 +139,11 @@ class JeuMMDuel extends JeuMM {
  */
 
 /**
- * Classe du mode de jeu Defenseur mastermind - Ordinateur décode propostion du joueur
+ *
+ * Classe du mode de jeu Defenseur mastermind - Ordinateur décode la propostion du joueur
+ *
  */
 class JeuMMDefenseur extends JeuMM {
-
 
     /**
      * construteur
@@ -138,15 +164,21 @@ class JeuMMDefenseur extends JeuMM {
         //le parametre fabricationSecretMM permet de suggerer une combinaison secrete au Defenseur
         ArrayList<Integer> combinaisonSecrete = super.RunSaisieSecretMM(fabricationSecretMM);
 
-        // suite du worklflow si Defenseur n'est pas sorti la saisie de  'EscapeChar'
-        //si c'est le cas la combinaison secerte est vide
+        // suite du worklflow si Defenseur n'est pas sorti la saisie par 'EscapeChar'
+        //si c'est le cas la combinaison secrete est vide
         if (combinaisonSecrete.size() == (int) getParam(NOMBRE_DE_POSITIONS)) {
             //on fabrique le secret avec la combinaison saisie par le Defenseur
+            //pourra être simplifié : le secret est composé d'une combinaison de couleurs et d'une
+            //combinaison de chiffres qui sont en bijection l'un avec l'autre.
+            //la combinaison de chiffre pourra etre supprimé dans une future release car n'est pas utilisée
+            // dans ce modèle du jeu
             fabricationSecretMM = new FabricationSecretMM(combinaisonSecrete);
 
-            //l'ordinateur génère une proposition
+            //la variable interface "pointe vers l'objet qui permet de génèrer une proposition automatiquement
             produirePropaleDefenseur = new ProduirePropaleMMDefenseur();
 
+            //la variable interface "pointe" vers l'objet qui permet de compparer la proposition du "joueur" vs combinaison secrete
+            //rappel le "joueur" est soit une saisie clavier (réelle ou simulée par junit) ou un calcul
             controleProposition = new ScorerProposition();
 
             // lance le jeu en mode defenseur
@@ -160,7 +192,7 @@ class JeuMMDefenseur extends JeuMM {
  */
 
 /**
- * classe du mode Challengeur - ordianteur fabrique un secret, le Joeur essaie de la découvrir
+ * classe du mode Challengeur mastermind - orinateur  fabrique un secret (combinaison de couleurs), le Joueur essaie de la découvrir
  */
 class JeuMMChallengeur extends JeuMM {
 
@@ -180,10 +212,11 @@ class JeuMMChallengeur extends JeuMM {
         //génération du secret sous forme de liste d'initiales des couleurs de la combinaison secrete
         FabricationSecretMM fabricationSecretMM = new FabricationSecretMM();
 
-        //a l'ordinateur valide la proposition du Joueur
+        //la variable interface "pointe" vers l'objet qui permet de compparer la proposition du "joueur" vs combinaison secrete
+        //rappel le "joueur" est soit une saisie clavier (réelle ou simulée par junit) ou un calcul
         controleProposition = new ScorerProposition();
 
-        // le Joueur saisie une proposition
+        //la variable interface "pointe vers l'objet qui permet de génèrer une proposition par saisie
         produirePropaleChallengeur = new ProduirePropaleMMChallengeur(lignesSimpleMM, lignesPropaleMM);
 
         // lance le jeu en mode challengeur
@@ -197,24 +230,30 @@ class JeuMMChallengeur extends JeuMM {
 
 /**
  * "Modele" du jeuMastermind
+ * <p>
  * Note :
  * * la combinaison secrete est
- * * * soit calculée par ordinateur en mode challeger
- * * * soit saisie par le joueur
- * *la fabrication de la composition secrete 'S' dépend de :
- * * * NOMBRE_DE_COULEURS : le nombre de couleurs disponibles  'N'
- * * * * limité à 18 max par construction, valeur min 6 couleurs qui est une valeur std)
- * * * NOMBRE_DE_POSITIONS : le nombre de couleurs 'P'  constituant la composition secrete S,
- * * * * 8 max par construction, min 4 qui est une valeur Std
- * * * DOUBLON_AUTORISE
+ * * * soit calculée par ordinateur en mode CHALLENGEUR ou mode DUEL
+ * * * soit saisie par le joueur  en mode DEFENSEUR
+ * </p>
+ * <li>
+ *     <p>
+ * * la fabrication de la composition secrete 'S' dépend de :
+ * * * * NOMBRE_DE_COULEURS : le nombre de couleurs disponibles  'N'
+ * * * * * limité à 18 max par construction, valeur min 6 couleurs qui est une valeur std)
+ * * * * NOMBRE_DE_POSITIONS : le nombre de couleurs 'P'  constituant la composition secrete S,
+ * * * * * 8 max par construction, min 4 qui est une valeur Std
+ * * * *  et DOUBLON_AUTORISE (mis à faux par défaut)
+ *     </p>
+ * </li>
  */
 abstract class JeuMM implements JeuMasterMind {
 
     /* tableau de lignes de type Proposition
      * chaque ligne Propostion contient la proposition soumise, le score de cette proposition, la méthode de calcul du score
-     * la méthode de calcul du socre est passé en paramétre à la ligne, la méthode n'étant pas cosntante selon le mode de jeu
-     * mode challengeur : méthode par calcul/comparaison proposition vs secret
-     * mode defenseur  : méthode par saisie clavier
+     * la méthode de calcul du socre est passée en paramétre à la ligne, la méthode n'étant pas constante selon le mode de jeu
+     * * mode challengeur ou duel : méthode par calcul/comparaison proposition vs secret
+     * * mode defenseur  : méthode par saisie clavier
      */
     LignePropaleMM[] lignesPropaleMM = new LignePropaleMM[(Integer) getParam(NOMBRE_D_ESSAIS)];
 
@@ -226,14 +265,18 @@ abstract class JeuMM implements JeuMasterMind {
     // variable d'interface qui polymorphise - la validation dépend du mode du jeu en cours
     ControleProposition controleProposition;
 
+    //
     // variable d'interface qui polymorphise - la fabrication de la proposition dépend du mode du jeu en cours
+    // dans cette architecture, il faut deux variables pour traiter le mode duel
+    // sans ce mode qui alterne Challengeur et Defenseur, une seule variable d'interface suffit (c'est même le principe de base)
+    //
     ProduirePropaleMM produirePropaleDefenseur;
     ProduirePropaleMM produirePropaleChallengeur;
 
     // nombre lignes de jeu de la table du MasterMind
     private Integer nombreDeEssaisMax = (Integer) getParam(NOMBRE_D_ESSAIS);
 
-    //le caractère de retour au menu superieur - choisit tel que  c !€ à ensemble des initiales des couleurs
+    //le caractère EscapeChar de retour au menu superieur - choisit tel que  EscapeChar  !€ à ensemble des initiales des couleurs
     private Character charactersEscape = Constantes.Libelles.CharactersEscape.K.toString().charAt(0);
 
     // paramètre du fichier properties - nombre de positions de pion par ligne de la table de jeu Mastermind
@@ -242,6 +285,8 @@ abstract class JeuMM implements JeuMasterMind {
     // paramètre du fichier properties - nombre de positions de couleurs disponibles pour construire une proposition et la combinaison secrete
     private Integer nombreDeCouleurs = (Integer) getParam(NOMBRE_DE_COULEURS);
 
+    // paramètre du fichier properties - choix O/N pour autorise(Oui) de 0 à n occurences d'une même couleur dans le secret ou la proposition
+    // ce choix influe sur le nombre de cas possibles -> le modele passe d'un calcul d'arrangement A(n,p) à un modele exposant puissance(n,p)
     private Boolean doublonAutorise = (Boolean) getParam(DOUBLON_AUTORISE);
 
     // paramètre du fichier properties - affiche (DEBUG=Vrai) ou pas la combinaison secrete
@@ -266,11 +311,14 @@ abstract class JeuMM implements JeuMasterMind {
     }
 
     /**
+     *
      * saisie d'un caractere controlé par Scanner avec pattern égal aux couleurs possibles +escapechar
-     * avec affichage des lignes du jeu, la dernière étant affiche ssanretour chariot
+     * avec affichage des lignes du jeu, la dernière ligne étant affichée sans retour chariot. pour que la saisie soit sur la meme ligne
+     * que son libelle ( i.e  "votre choix -> " 45   , le libelle "votre choix" s'affiche sur la meme ligne écran que la saisie , ici le chiffre 45 )
      *
      * @param pattern pattern de saisie pour classe Scanner
      * @return char , caractere saisie clavier
+     *
      */
     private char LitCharEtAfficheLignes(String pattern) {
         return IOConsole.LectureClavierChar(pattern, scanner, new EcrireSurEcran() {
@@ -290,10 +338,11 @@ abstract class JeuMM implements JeuMasterMind {
     }
 
     /**
-     * création des objets  des lignes de la table du jeu Mastermind
-     * affectation des données affichables, de la méthode de validation
+     * création des lignes de la table du jeu Mastermind : ligneMM et lignePropaleMM
+     * * affectation des données affichables pour ligneMM et lignePropaleMM
+     * * affectation de la méthode de validation de la proposition  uniquement pour lignePropaleMM
+     *
      * @param modeDeJeu        : challengeur, defenseur, duel
-
      * @param couleursSecretes combinaison secrete sous forme de mots  i.e (VERT, BLEU,...}
      *
      */
@@ -348,7 +397,7 @@ abstract class JeuMM implements JeuMasterMind {
              * la ligne est visible par défaut (toujours vrai)
              * type de ligne
              * infos à afficher - rien par défaut
-             * méthode de validation de la proposition faite  par Ordinateur (Defenseur) ou par Joueur (Challengeur)
+             * méthode de validation de la proposition faite  par Ordinateur (Defenseur,Duel) ou par Joueur (Challengeur,Duel)
              */
             lignesPropaleMM[k] = new LignePropaleMM(couleursSecretes, true, true,
                     k, LIGNE_PROPOSITION, "", controleProposition);
@@ -370,6 +419,8 @@ abstract class JeuMM implements JeuMasterMind {
      */
     private void PrepareRunJeuMM(FabricationSecretMM fabricationSecretMM) {
 
+        //trace la combinaison secrete calculée - en mode defenseur, il ya saisie de la combinaison secerte
+        // en mode Defenseur, celle qui est calculée est présentée pour info - on peut prendre cette suggestion ou faire un autre choix
         LogLaCombinaisonSecrete(fabricationSecretMM.getCouleursSecretes(), nombreDeCouleurs);
 
         PreparationMenu(modeJeu, fabricationSecretMM.getCouleursSecretes());
@@ -393,19 +444,19 @@ abstract class JeuMM implements JeuMasterMind {
      */
     void RunJeuMMDuel(FabricationSecretMM fabricationSecretMM) {
 
+        //sert à savoir qui a gagné pour présenter le message de félicitation adapté
         boolean isSecretTrouveJoueur = false;
         boolean isSecretTrouveOrdinateur = false;
 
+        // est-on sortie de la saisie par escapeChar ?
         boolean isEscapeCharSaisie = false;
-        boolean isErreurScoring = false;
 
+        //index qui doit rester < au nombre d'essais possible (définit par paramétrage)
         Integer nbreEssaisConsommes = 0;
 
-        String msgDuel;
-
+        //sert à afficher le nombre de coups jouer par chaque "joueur"
         Integer nbreEssaisOrdianteur = 0;
         Integer nbreEssaisJoueur = 0;
-
 
         // proposition de l'ordinateur
         ArrayList<Character> propalOrdinateur;
@@ -419,83 +470,116 @@ abstract class JeuMM implements JeuMasterMind {
         // creation des lignes du jeu
         PrepareRunJeuMM(fabricationSecretMM);
 
-        // pattern destiné à l'objet scanner : les initiales des couleurs disponibles pour la proposition + 'escapechar'
-
+        // pattern destiné à l'objet scanner : les initiales des couleurs disponibles pour la proposition + 'charactersEscape'
         String patternAvecCouleurs = FabPattSais.ConstruitPatternSaisie(CouleursMastermind.values(), nombreDeCouleurs, charactersEscape);
 
-        //affiche  les couleurs qui peuvent être choisie pour faire une propositon : fonction paramètre du jeu "nombre de couleur"
+        //affiche  les couleurs qui peuvent être choisies pour faire une propositon : fonction paramètre du jeu "nombre de couleurs"
         lignesSimpleMM[LIGNE_TOUTES_COULEURS].setLibelleLigne(CouleursMastermind.values(), nombreDeCouleurs);
 
+        //clear ou cls selon le système , de l'affichage de la console
+        //sinon , les affichages se suivent et c'est illissible
         IOConsole.ClearScreen.cls();
 
-        //tant que la proposition ne correspond à la combinaison secrete et que le nombre d'essais possibles n'est pas atteint
+        //tant que  le nombre d'essais possibles n'est pas atteint
         while (nbreEssaisConsommes < nombreDeEssaisMax) {
             /*
              * commence par faire jouer Ordinateur
              */
             //ordinateur fournit une proposition
             propalOrdinateur = produirePropaleDefenseur.getPropaleDefenseur();
+
             //erreur interne - car ce  cas impossible dans ce mode de jeu
             if (propalOrdinateur == null) {
                 throw new AppExceptions(ERREUR_GENERIC);
             }
-            //via appel de EvalPropostion,  la propsotion est scorée
+
+            //via appel de EvalPropostion,  la propsotion est scorée en nombre Blancs et de Noirs
             if (lignesPropaleMM[indexLignesProposition].setPropositionJoueur(propalOrdinateur).setZoneProposition().EvalProposition()) {
+                //ordinateur gagne
                 isSecretTrouveOrdinateur = true;
                 break;
             }
+
             //Secret pas trouve donc, prepare la recherche d'une nouvellle propisition
             produirePropaleDefenseur.setScorePropale(propalOrdinateur, lignesPropaleMM[indexLignesProposition].getZoneEvaluation());
 
+            //affichage du nombre d'essais consommés par l'ordinateur
             lignesPropaleMM[indexLignesProposition].setTrailerLibelle(String.format(" | Ordinateur : %02d", nbreEssaisOrdianteur));
 
             nbreEssaisOrdianteur++;
 
+            //passe à la ligne suivante pour que le Joueur Humain ou JUnit n'écrase pas la proposition de l'ordinateur
             indexLignesProposition++;
+
+            // un essai de consommé
             nbreEssaisConsommes++;
 
             /*
-             * autour du Joeur de jouer.
+             * c'est autour du joueur humain ou JuNit  de jouer.
              */
-            //affichage par defaut de la ligne en cours , destinée à recevoir la proposition du joueur
+            //affichage par defaut de la ligne de saisie , destinée à recevoir la proposition du joueur
             lignesSimpleMM[LIGNE_DE_SAISIE].setLibelleLigne(lignesSimpleMM[LIGNE_DE_SAISIE].getLibelleLigneOriginal());
 
-            // saisie de la propsotion du joueur
+            /*
+
+             TODO :   ce code est doublonné avec le mode challengeur, à nettoyer dans une future release
+
+             */
+
+            // saisie de la proposition du joueur
             propaleJoueur = produirePropaleChallengeur.getPropaleChallengeur(scanner, patternAvecCouleurs, charactersEscape);
 
             //si le joueur a saisie escapechar, bye
             if (propaleJoueur.contains(charactersEscape)) {
+                //abandon de cette partie
                 isEscapeCharSaisie = true;
                 break;
             }
 
+            /*
+            fin du code doublonné
+             */
+
             //evaluation de la proposition du joueur : la propostion est "scorée" en nombre de Blanc/Noir
             if (lignesPropaleMM[indexLignesProposition].setPropositionJoueur(propaleJoueur).setZoneProposition().EvalProposition()) {
+                // joueur humain  a gagné
                 isSecretTrouveJoueur = true;
                 break;
             }
+
+            //joueur humain n'a pas trouvé, donc le jeu continue
             lignesPropaleMM[indexLignesProposition].setTrailerLibelle(String.format(" | Joueur     : %02d", nbreEssaisJoueur));
+
+            //un essai de plus consommé par le joueur humain
             nbreEssaisJoueur++;
 
-            //personne n'a trouvé , on continue
+            //on continue  à jouer
             indexLignesProposition++;
             nbreEssaisConsommes++;
         }
 
+        // l'ordinateur a gagné  : affichage idoine
         if (isSecretTrouveOrdinateur) {
             lignesSimpleMM[LIGNE_TOUTES_COULEURS].setLibelleLigne("!!************* Ordinateur Gagne ************!!");
 
+        //le joueur a gagné : affichage idoine
         } else if (isSecretTrouveJoueur) {
             lignesSimpleMM[LIGNE_TOUTES_COULEURS].setLibelleLigne("!!************ Joeur Gagne ************!!");
+
+        // personne n'a trouvé (ce cas est impossible avec les paramètres standards : ordinateur trouve en - de 5 coups (lié au pseudo
+        // random qui ne mélange pas assez les combinaisons possibles (mais qui va vérifier ? nobody !!)
         } else if (nbreEssaisConsommes >= nombreDeEssaisMax) {
             lignesSimpleMM[LIGNE_TOUTES_COULEURS].setLibelleLigne("!!************ pas top tout le monde a perdu ************!!");
 
+        //abandon de cette partie apr saisie de escapeChar
         } else if (isEscapeCharSaisie) {
             return;
+        //pas normal , ne doit jamais arrivé ici
         } else {
             throw new AppExceptions(ERREUR_GENERIC);
         }
 
+        //remise en l'état initiale des qui ne sont pas nécessaires à l'affichage de fin (met en valeur l'infos utile : qui a gagné ?)
         lignesSimpleMM[LIGNE_DE_SAISIE].setLibelleLigne(lignesSimpleMM[LIGNE_DE_SAISIE].getLibelleLigneOriginal());
         lignesSimpleMM[LIGNE_SECRETE].setLibelleLigne("");
         lignesSimpleMM[LIGNE_STATUS].setLibelleLigne("");
@@ -503,10 +587,14 @@ abstract class JeuMM implements JeuMasterMind {
         //pour visualiser fin de partie (sauf si erreur ou escapeChar saisi
         LitCharEtAfficheLignes(FabPattSais.ConstruitPatternSaisie(charactersEscape));
 
+        //raz affichage - fin de partie
         lignesSimpleMM[LIGNE_TOUTES_COULEURS].setLibelleLigne("");
         lignesSimpleMM[LIGNE_STATUS].setLibelleLigne(lignesSimpleMM[LIGNE_STATUS].getLibelleLigneOriginal());
 
     }
+/*
+TODO  JE SUIS ICI au NiVEAU COMMENTAIREs
+ */
 
     /**
      * lance le jeu en mode challengeur

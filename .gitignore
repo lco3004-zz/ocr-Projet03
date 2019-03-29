@@ -3,4 +3,5 @@
 target/*
 .m2/*
 logProjet03/*
+javaDoc/*
 dependency-reduced-pom.xml
