@@ -30,7 +30,7 @@
             <AppenderRef ref="RollingFile-Appender" level="info"/>
             <AppenderRef ref="Console-Appender" level="info"/>
         </Logger>
-        <Root level="info">
+        <Root level="all">
             <AppenderRef ref="RollingFile-Appender"/>
         </Root>
     </Loggers>
