@@ -4,6 +4,7 @@ package fr.ocr;
 import fr.ocr.mastermind.JeuMasterMind;
 import fr.ocr.modeconsole.MenuPrincipal;
 import fr.ocr.modeconsole.MenuSecondaire;
+import fr.ocr.plusmoins.MonThread;
 import fr.ocr.utiles.AppExceptions;
 import fr.ocr.utiles.Constantes;
 import fr.ocr.utiles.Constantes.Libelles.LibellesMenuPrincipal;
@@ -105,6 +106,14 @@ public class App {
                                     JeuMasterMind.CHALLENGEUR(ch_Sec, scanner);
                                 } else {
                                     menu_secondaire.majLigneEtat(String.format("%s du jeu %s", ch_Sec.toString(), ch_Sup.toString()));
+
+                                    MonThread monThread= new MonThread("jeu PlusMoins");
+                                    try {
+                                        monThread.run();
+                                        monThread.join();
+                                    } catch (InterruptedException e) {
+                                        menu_secondaire.majLigneEtat(String.format("fin de %s du jeu %s", ch_Sec.toString(), ch_Sup.toString()));
+                                    }
                                 }
                                 break;
                             case MODE_DEFENSEUR:
