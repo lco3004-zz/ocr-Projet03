@@ -1,16 +1,14 @@
 package fr.ocr.modeconsole;
 
-import fr.ocr.params.Parametres;
+import fr.ocr.params.LireParametres;
 import fr.ocr.utiles.AppExceptions;
 import fr.ocr.utiles.Constantes;
 
 import java.util.Scanner;
 
-import static fr.ocr.params.LireParametres.getParam;
 import static fr.ocr.utiles.Constantes.Libelles.LibellesMenuSecondaire.*;
 import static fr.ocr.utiles.Logs.logger;
 import static fr.ocr.utiles.Messages.ErreurMessages.PARAM_INCONNU;
-import static fr.ocr.utiles.Messages.ErreurMessages.TYPE_PARAM_INCORRECT;
 
 /**
  * <p>
@@ -97,17 +95,7 @@ public class MenuSecondaire extends Menu<Constantes.Libelles.LibellesMenuSeconda
      * @throws AppExceptions en cas d'incoherence interne
      */
     public void logParamtreMM() throws AppExceptions {
-        Object tmpRetour;
-        for (Parametres x : Parametres.values()) {
-            tmpRetour = getParam(x);
-            if (tmpRetour instanceof Integer) {
-                logger.info(String.format("%s = %d", x.toString(), tmpRetour));
-            } else if (tmpRetour instanceof Boolean) {
-                logger.info(String.format("%s = %b", x.toString(), tmpRetour));
-            } else {
-                throw new AppExceptions(TYPE_PARAM_INCORRECT);
-            }
-        }
+        LireParametres.logAllProperties();
     }
 
 }

@@ -230,6 +230,8 @@ class LignePropaleMM extends LigneMM {
     private Integer nombreDePositions = (Integer) getParam(NOMBRE_DE_POSITIONS);
     private String paddMsg = "";
 
+    private Boolean isDoublonAutorise;
+
     /**
      * Constructeur
      * @param secretCouleurs   CouleursMastermind[] , combinaison secrete , dans sa forme Couleur (i.e VERT,JAUNE,...)
@@ -241,10 +243,11 @@ class LignePropaleMM extends LigneMM {
      * @param fct               méthode de validaiton de la proposition
      */
     LignePropaleMM(CouleursMastermind[] secretCouleurs, boolean disponible,
-                   boolean visible, int rang, int typeligne, String infos, ControleProposition fct) {
+                   boolean visible, int rang, int typeligne, String infos, ControleProposition fct, boolean isDoublonAutorise) {
 
         super(disponible, visible, rang, typeligne, infos);
 
+        this.isDoublonAutorise = isDoublonAutorise;
 
         combinaisonInitialesSecretes = new ArrayList<>(TAIILE_INITIALE);
 
@@ -326,7 +329,7 @@ class LignePropaleMM extends LigneMM {
         return fctValideProposition.apply(propositionJoueur,
                 combinaisonInitialesSecretes,
                 nombreDePositions,
-                zoneEvaluation);
+                zoneEvaluation, isDoublonAutorise);
     }
 
     /**

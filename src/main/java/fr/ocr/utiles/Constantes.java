@@ -60,14 +60,7 @@ public enum Constantes {
         MAUVE(7, 'M'),
         INDIGO(8, 'I'),
         CARMIN(9, 'C'),
-        DORIAN(10, 'D'),
-        EBENE(11, 'E'),
-        FUSHIA(12, 'F'),
-        GRIS(13, 'G'),
-        PRUNE(14, 'P'),
-        SAUMON(15, 'S'),
-        LAVANDE(16, 'L'),
-        NOIR(17, 'N');
+        DORIAN(10, 'D');
 
         private int valeurFacialeDeLaCouleur;
         private char lettreInitiale;
@@ -187,7 +180,8 @@ public enum Constantes {
         int LIGNE_PROPOSITION = LIGNE_ENTETE + 1;
         int LIGNE_BLANCH02 = LIGNE_PROPOSITION + (Integer) getParam(NOMBRE_D_ESSAIS);
         int LIGNE_TOUTES_COULEURS = LIGNE_BLANCH02 + 1;
-        int LIGNE_DE_SAISIE = LIGNE_TOUTES_COULEURS + 1;
+        int LIGNE_BLANCH03 = LIGNE_TOUTES_COULEURS + 1;
+        int LIGNE_DE_SAISIE = LIGNE_BLANCH03 + 1;
 
         //dimesion
         int NBRE_LIGNESTABLEMM = LIGNE_DE_SAISIE + 1;

@@ -111,12 +111,32 @@ public final class LireParametres {
     static private IOParams parametrageMasterMind = new IOParams(FICHIER_PARAM_MASTER_MIND.getNomFichier());
     static private Properties parametreMasterMindLu = parametrageMasterMind.lireParametre().getListeParams();
 
+    /*
+
+     */
     public static void OverrideParamModeDeveloppeur() {
+
         overrideModeDeveloppeur = true;
     }
 
-    public static Object getParam(Parametres nomDuParamtreARecuperer) {
+    /*
 
+     */
+    public static void getAllParams() {
+
+        for (Parametres p : Parametres.values()) {
+            getParam(p);
+        }
+        logAllProperties();
+
+        //TODO : controle coherence des paramètres
+        //TODO : ajouter une tablde paramètre et renommer getParam  getValeurParam pour ne lire que le contenu de cette table
+    }
+
+    /*
+
+     */
+    public static Object getParam(Parametres nomDuParamtreARecuperer) {
 
         Object retVal;
         Parametres parametres = Parametres.valueOf(nomDuParamtreARecuperer.toString());
@@ -174,6 +194,21 @@ public final class LireParametres {
                 retVal = true;
         }
         return retVal;
+    }
+
+    public static void logAllProperties() throws AppExceptions {
+
+        Object tmpRetour;
+        for (Parametres x : Parametres.values()) {
+            tmpRetour = getParam(x);
+            if (tmpRetour instanceof Integer) {
+                logger.info(String.format("%s = %d", x.toString(), tmpRetour));
+            } else if (tmpRetour instanceof Boolean) {
+                logger.info(String.format("%s = %b", x.toString(), tmpRetour));
+            } else {
+                throw new AppExceptions(TYPE_PARAM_INCORRECT);
+            }
+        }
     }
 }
 /*

@@ -26,9 +26,9 @@
          
     </Appenders>
     <Loggers>
-        <Logger name="ocr_Projet03" level="info" additivity="false">
-            <AppenderRef ref="RollingFile-Appender" level="info"/>
-            <AppenderRef ref="Console-Appender" level="info"/>
+        <Logger name="ocr_Projet03" level="all" additivity="false">
+            <AppenderRef ref="RollingFile-Appender" level="all"/>
+            <AppenderRef ref="Console-Appender" level="all"/>
         </Logger>
         <Root level="all">
             <AppenderRef ref="RollingFile-Appender"/>

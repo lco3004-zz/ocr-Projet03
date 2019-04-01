@@ -4,6 +4,7 @@ import fr.ocr.modeconsole.EcrireSurEcran;
 import fr.ocr.modeconsole.IOConsole;
 import fr.ocr.utiles.AppExceptions;
 import fr.ocr.utiles.Constantes.CouleursMastermind;
+import fr.ocr.utiles.Messages;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -114,6 +115,8 @@ class ProduirePropaleMMDefenseur implements ProduirePropaleMM {
      */
     private UnePropale chercheNouvellePropale(UnePropale laPropaleScoree) {
 
+        Boolean isDoublonAutorise = (Boolean) getParam(DOUBLON_AUTORISE);
+
         //premiere propale - donc celle de rang 0 des possibles
         if (laPropaleScoree == null) {
             int[] scinitial = {0, 0};
@@ -137,7 +140,7 @@ class ProduirePropaleMMDefenseur implements ProduirePropaleMM {
                     laNouvellePropale = new UnePropale(nouvelleCombinaison, scoreTmp, lesCombinaisonsPossibles.indexOf(nouvelleCombinaison));
 
                     // appel de la méthode de validation par calcul - c'est la méthode qui est aussi utilisé par le mode Challenger
-                    (new ScorerProposition()).apply(nouvelleCombinaison, unePrecedentePropale.saValeur, nombreDePositions, scoreTmp);
+                    (new ScorerProposition()).apply(nouvelleCombinaison, unePrecedentePropale.saValeur, nombreDePositions, scoreTmp, isDoublonAutorise);
 
                     //si le score ne correspond pas à celui obtenu lors de la validation de la propale "unePrecedentePropale"
                     //stop, on passe à la combinaison possible suivante
@@ -197,39 +200,33 @@ class ProduirePropaleMMDefenseur implements ProduirePropaleMM {
 
         ArrayList<ArrayList<Character>> lesPossibles = new ArrayList<>(TAIILE_INITIALE);
 
-        long X = 0;
-
-        double puisDix = 0.0;
-
         for (int i = 0; i < nbPositions; i++) {
-            nbreMax += (nbCouleurs - 1) * pow(10, i);
+            nbreMax += (nbCouleurs - 1) * pow(nbCouleurs, i);
         }
 
-        String paddingZero = String.format("%s%d%s", "%0", nbPositions, "d");
+        String StringFormat = String.format("%s%d%s", "%", nombreDePositions, "s");
 
-        for (int i = 0; baseConversion(String.valueOf(i), 10, nbCouleurs) <= nbreMax; i++) {
+        ArrayList<Character> tmpPossible;
+        ArrayList<Character> uneComposition;
 
-            String tmpString = String.format(paddingZero, baseConversion(Integer.toString(i), 10, nbCouleurs));
-
-
-            ArrayList<Character> tmpPossible;
+        for (int i = 0; i <= nbreMax; i++) {
 
             if (isDoublonAutorise) {
-                tmpPossible = String.format(paddingZero, baseConversion(Integer.toString(i), 10, nbCouleurs)).chars().mapToObj(c -> (char) c).collect(Collectors.toCollection(ArrayList::new));
-            } else {
-                tmpPossible = String.format(paddingZero, baseConversion(Integer.toString(i), 10, nbCouleurs)).chars().distinct().mapToObj(c -> (char) c).collect(Collectors.toCollection(ArrayList::new));
-            }
+                tmpPossible = String.format(StringFormat, baseConversion(String.valueOf(i), 10, nbCouleurs)).replace(' ', '0').chars().mapToObj(e -> (char) e).collect(Collectors.toCollection(ArrayList::new));
 
-            ArrayList<Character> uneComposition = new ArrayList<>(nbPositions + 1);
+            } else {
+                tmpPossible = String.format(StringFormat, baseConversion(String.valueOf(i), 10, nbCouleurs)).replace(' ', '0').chars().distinct().mapToObj(e -> (char) e).collect(Collectors.toCollection(ArrayList::new));
+            }
+            uneComposition = new ArrayList<>(nbPositions + 1);
 
             if (tmpPossible.size() == nbPositions) {
                 for (Character v : tmpPossible) {
-                    int locTmp = Integer.parseInt(v.toString());
+                    int locTmp = Integer.valueOf(baseConversion(String.valueOf(v), nbCouleurs, 10));
                     uneComposition.add(CouleursMastermind.values()[locTmp].getLettreInitiale());
                 }
-
                 lesPossibles.add(uneComposition);
             }
+
         }
         //
         logger.debug(String.format("Tableau des Possibles , Nombre = %02d , DoublonAutorise ? = %b", lesPossibles.size(), isDoublonAutorise));
@@ -243,7 +240,7 @@ class ProduirePropaleMMDefenseur implements ProduirePropaleMM {
 
             tmpLigneLog.append(String.format("-> %d : |", ++lignedansfichierlog));
 
-            for (int nbCombiParLigne = tailleTab; nbCombiParLigne < tailleTab + 10; nbCombiParLigne++) {
+            for (int nbCombiParLigne = tailleTab; nbCombiParLigne < lesPossibles.size() && nbCombiParLigne < tailleTab + 10; nbCombiParLigne++) {
 
                 tmpLigneLog.append(" ");
 
@@ -264,8 +261,16 @@ class ProduirePropaleMMDefenseur implements ProduirePropaleMM {
      * @param dBase  base de destination
      * @return chaine nombre en base dBase
      */
-    private Integer baseConversion(String number, int sBase, int dBase) {
-        return Integer.valueOf(Integer.toString(Integer.parseInt(number, sBase), dBase));
+    private String baseConversion(String number, int sBase, int dBase) {
+        String tmpVal;
+        try {
+            tmpVal = Integer.toString(Integer.parseInt(number, sBase), dBase);
+        } catch (NumberFormatException e) {
+            //incoherence dans le changement de base, stop programme. ne devraitpas se produire
+            logger.error(Messages.ErreurMessages.ERREUR_GENERIC);
+            throw new AppExceptions(Messages.ErreurMessages.ERREUR_GENERIC);
+        }
+        return tmpVal;
     }
 
     /*

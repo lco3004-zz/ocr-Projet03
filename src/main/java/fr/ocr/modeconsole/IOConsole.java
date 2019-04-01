@@ -4,6 +4,7 @@ import fr.ocr.utiles.AppExceptions;
 
 import java.io.IOException;
 import java.util.InputMismatchException;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
@@ -38,37 +39,57 @@ public class IOConsole {
         Pattern patternChoix = Pattern.compile(pattern_Menu);
 
         String choix = "";
-        Character cRet = escapeChar;
+        Character cRet = '?';
 
         ClearScreen.cls();
 
         ecrireSurEcran.Display();
 
         // scanner en mode hasNext, next - avec pattern de carteres autorisés
-        while (choix.equals("") && scanner.hasNext()) {
-            cRet = escapeChar;
-            try {
+        try {
+            while (choix.equals("") && scanner.hasNext()) {
+                cRet = escapeChar;
                 try {
                     try {
-                        choix = scanner.next(patternChoix);
-                        cRet = choix.toUpperCase().charAt(0);
-                    } catch (InputMismatchException e1) {
-                        //si le caracter saisi n'est pas dans la liste des car. acceptés
-                        String tmp = scanner.next();
-                        //efface ecran et reaffiche le tout
-                        ClearScreen.cls();
-                        ecrireSurEcran.Display();
+                        try {
+                            choix = scanner.next(patternChoix);
+                            cRet = choix.toUpperCase().charAt(0);
+
+                        } catch (InputMismatchException e1) {
+                            //si le caracter saisi n'est pas dans la liste des car. acceptés
+                            String tmp = scanner.next();
+                            //efface ecran et reaffiche le tout
+                            ClearScreen.cls();
+                            ecrireSurEcran.Display();
+                        } catch (NoSuchElementException e2) {
+                            //est-ce ctrl-C ??
+                            logger.info(CTRL_C);
+                            choix = Character.toString(escapeChar);
+                        }
+                    } catch (StringIndexOutOfBoundsException e1) {
+                        //est-ce ctrl-C ??
+                        logger.info(CTRL_C);
+                        choix = Character.toString(escapeChar);
                     }
-                } catch (StringIndexOutOfBoundsException e1) {
-                    //est-ce ctrl-C ??
-                    logger.info(CTRL_C);
-                    choix = Character.toString(escapeChar);
+                } catch (Exception e3) {
+                    //réponse inconnue
+                    logger.error(String.format("%s %s ", ERREUR_GENERIC, e3.getClass().getSimpleName()));
+                    throw new AppExceptions(ERREUR_GENERIC);
                 }
-            } catch (Exception e3) {
-                //réponse inconnue
-                logger.error(String.format("%s %s ", ERREUR_GENERIC, e3.getClass().getSimpleName()));
-                throw new AppExceptions(ERREUR_GENERIC);
             }
+        } catch (NoSuchElementException e2) {
+            //est-ce ctrl-C ??
+            logger.info(CTRL_C);
+
+        } catch (Exception e8) {
+            //réponse inconnue
+            logger.error(String.format("%s %s ", ERREUR_GENERIC, e8.getClass().getSimpleName()));
+            throw new AppExceptions(ERREUR_GENERIC);
+        }
+        //est-ce un ctr-c qui fait sortier de la saisie par la classe Scanner ??
+        if (cRet == '?') {
+            cRet = escapeChar;
+            logger.info(CTRL_C);
         }
         return cRet;
     }

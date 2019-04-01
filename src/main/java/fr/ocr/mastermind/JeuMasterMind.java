@@ -382,9 +382,10 @@ abstract class JeuMM implements JeuMasterMind {
         //lignes separatrices pour affichage uniquement
         lignesSimpleMM[LIGNE_BLANCH01] = new LigneMM(true, true, LIGNE_BLANCH01, LIGNE_BLANCH01, " ");
         lignesSimpleMM[LIGNE_BLANCH02] = new LigneMM(true, true, LIGNE_BLANCH02, LIGNE_BLANCH02, " ");
+        lignesSimpleMM[LIGNE_BLANCH03] = new LigneMM(true, true, LIGNE_BLANCH03, LIGNE_BLANCH03, " ");
 
         //ligne de bas de table , habituelle 'i.e votre choix ?'
-        lignesSimpleMM[LIGNE_DE_SAISIE] = new LigneMM(true, true, LIGNE_DE_SAISIE, LIGNE_DE_SAISIE, String.format(" Votre choix (%c : Retour): ", charactersEscape));
+        lignesSimpleMM[LIGNE_DE_SAISIE] = new LigneMM(true, true, LIGNE_DE_SAISIE, LIGNE_DE_SAISIE, String.format("Votre choix (%c : Retour): ", charactersEscape));
 
         int nombreDessai = (Integer) getParam(NOMBRE_D_ESSAIS);
         //affectation des lignes de type proposition
@@ -400,7 +401,7 @@ abstract class JeuMM implements JeuMasterMind {
              * méthode de validation de la proposition faite  par Ordinateur (Defenseur,Duel) ou par Joueur (Challengeur,Duel)
              */
             lignesPropaleMM[k] = new LignePropaleMM(couleursSecretes, true, true,
-                    k, LIGNE_PROPOSITION, "", controleProposition);
+                    k, LIGNE_PROPOSITION, "", controleProposition, doublonAutorise);
 
             // efface contenu lignes et affiche le contenu par defaut
             lignesPropaleMM[k].Clear().setLibelleLigne();
@@ -653,10 +654,10 @@ TODO  JE SUIS ICI au NiVEAU COMMENTAIREs
 
         // proposition match avc combinaisosn secrete
         if (isSecretTrouveJoueur) {
-            lignesSimpleMM[LIGNE_STATUS].setLibelleLigne(" ----   VICTOIRE !!---");
+            lignesSimpleMM[LIGNE_TOUTES_COULEURS].setLibelleLigne(" ----   VICTOIRE !!---");
 
         } else if (nbreEssaisConsommes >= nombreDeEssaisMax) {
-            lignesSimpleMM[LIGNE_STATUS].setLibelleLigne(String.format("-- Perdu. Soluce = %s", lignesSimpleMM[LIGNE_SECRETE].getLibelleLigne()));
+            lignesSimpleMM[LIGNE_TOUTES_COULEURS].setLibelleLigne(String.format("-- Perdu. Soluce = %s", lignesSimpleMM[LIGNE_SECRETE].getLibelleLigne()));
 
         } else if (isEscapeCharSaisie) {
             return;
@@ -668,6 +669,7 @@ TODO  JE SUIS ICI au NiVEAU COMMENTAIREs
         LitCharEtAfficheLignes(FabPattSais.ConstruitPatternSaisie(charactersEscape));
 
         lignesSimpleMM[LIGNE_STATUS].setLibelleLigne(lignesSimpleMM[LIGNE_STATUS].getLibelleLigneOriginal());
+        lignesSimpleMM[LIGNE_TOUTES_COULEURS].setLibelleLigne("");
     }
 
     /**
@@ -754,11 +756,11 @@ TODO  JE SUIS ICI au NiVEAU COMMENTAIREs
 
         // affichage de fin
         if (isErreurScoring) {
-            lignesSimpleMM[LIGNE_STATUS].setLibelleLigne("!! Tricheur le Scoring est incorrect  !!");
+            lignesSimpleMM[LIGNE_TOUTES_COULEURS].setLibelleLigne("!! Tricheur le Scoring est incorrect  !!");
         } else if (isSecretTrouveOrdinateur) {
-            lignesSimpleMM[LIGNE_STATUS].setLibelleLigne("!! Ordinateur Gagne !!");
+            lignesSimpleMM[LIGNE_TOUTES_COULEURS].setLibelleLigne("!! Ordinateur Gagne !!");
         } else if (nbreEssaisConsommes >= nombreDeEssaisMax) {
-            lignesSimpleMM[LIGNE_STATUS].setLibelleLigne("!! Ordinateur Perd !!");
+            lignesSimpleMM[LIGNE_TOUTES_COULEURS].setLibelleLigne("!! Ordinateur Perd !!");
         } else { //pb interne ne doit jamais arrivé jusqu'ici
             throw new AppExceptions(ERREUR_GENERIC);
         }
@@ -767,6 +769,7 @@ TODO  JE SUIS ICI au NiVEAU COMMENTAIREs
 
         lignesSimpleMM[LIGNE_STATUS].setLibelleLigne(lignesSimpleMM[LIGNE_STATUS].getLibelleLigneOriginal());
         lignesSimpleMM[LIGNE_SECRETE].setLibelleLigne(lignesSimpleMM[LIGNE_SECRETE].getLibelleLigneOriginal());
+        lignesSimpleMM[LIGNE_SECRETE].setLibelleLigne("");
     }
 
     /**
@@ -911,6 +914,7 @@ TODO  JE SUIS ICI au NiVEAU COMMENTAIREs
         //lignes de separaiton (presentation)
         lignesSimpleMM[LIGNE_BLANCH01] = new LigneMM(true, true, LIGNE_BLANCH01, LIGNE_BLANCH01, " ");
         lignesSimpleMM[LIGNE_BLANCH02] = new LigneMM(true, false, LIGNE_BLANCH02, LIGNE_BLANCH02, " ");
+        lignesSimpleMM[LIGNE_BLANCH03] = new LigneMM(true, false, LIGNE_BLANCH03, LIGNE_BLANCH03, " ");
 
         //titre du jeu
         lignesSimpleMM[TITRE] = new LigneMM(true, true, TITRE, TITRE, modeJeu.toString());
@@ -927,7 +931,7 @@ TODO  JE SUIS ICI au NiVEAU COMMENTAIREs
         lignesSimpleMM[LIGNE_TOUTES_COULEURS].setLibelleLigne(CouleursMastermind.values(), nombreDeCouleurs);
 
         //ligne de bas de table , habituelle 'i.e votre choix ?'
-        lignesSimpleMM[LIGNE_DE_SAISIE] = new LigneMM(true, true, LIGNE_DE_SAISIE, LIGNE_DE_SAISIE, String.format(" Saisir votre combinaison secrete  (%c : Retour): ", charactersEscape));
+        lignesSimpleMM[LIGNE_DE_SAISIE] = new LigneMM(true, true, LIGNE_DE_SAISIE, LIGNE_DE_SAISIE, String.format("Saisir votre combinaison secrete  (%c : Retour): ", charactersEscape));
 
 
         // pattern destiné à l'objet scanner : les initiales des couleurs disponibles pour la combinaison secrete + 'escapechar'
