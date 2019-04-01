@@ -579,7 +579,6 @@ abstract class JeuMM implements JeuMasterMind {
         } else {
             throw new AppExceptions(ERREUR_GENERIC);
         }
-        // pour push
 
         //remise en l'état initiale des qui ne sont pas nécessaires à l'affichage de fin (met en valeur l'infos utile : qui a gagné ?)
         lignesSimpleMM[LIGNE_DE_SAISIE].setLibelleLigne(lignesSimpleMM[LIGNE_DE_SAISIE].getLibelleLigneOriginal());

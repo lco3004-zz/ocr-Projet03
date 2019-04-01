@@ -127,10 +127,14 @@ public final class LireParametres {
         for (Parametres p : Parametres.values()) {
             getParam(p);
         }
-        logAllProperties();
 
-        //TODO : controle coherence des paramètres
-        //TODO : ajouter une tablde paramètre et renommer getParam  getValeurParam pour ne lire que le contenu de cette table
+        // controle si le nombre de positons n'est pas superieur au nombre de couleur
+        if ((Integer) getParam(Parametres.NOMBRE_DE_POSITIONS) > (Integer) getParam(Parametres.NOMBRE_DE_COULEURS)) {
+            Integer valDefPos = (Integer) Parametres.NOMBRE_DE_POSITIONS.getValeurDefaut();
+            parametreMasterMindLu.setProperty(Parametres.NOMBRE_DE_POSITIONS.toString(), valDefPos.toString());
+            logger.warn(TYPE_PARAM_INCORRECT);
+        }
+        logAllProperties();
     }
 
     /*
