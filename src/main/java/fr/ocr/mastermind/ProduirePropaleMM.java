@@ -120,7 +120,7 @@ class ProduirePropaleMMDefenseur implements ProduirePropaleMM {
         //premiere propale - donc celle de rang 0 des possibles
         if (laPropaleScoree == null) {
             int[] scinitial = {0, 0};
-            return new UnePropale(lesCombinaisonsPossibles.get(0), scinitial, 0);
+            return new UnePropale(lesCombinaisonsPossibles.get((lesCombinaisonsPossibles.size() / 3) * 2), scinitial, 0);
         }
 
         // à partir d'ici n'est plus la premiere propostion
