@@ -97,14 +97,22 @@ public class JeuPlusMoins {
     }
 
     /**
-     * retourne la table du jeu tableau à deux dimension en ligne les essais, en colonne le contenu et lke score d'un essai
+     * retourne la table du jeu tableau à deux dimension en ligne les essais, en colonne le contenu
+     * et le score d'un essai
      *
-     * @return int [][] , la table
+     * @return char [][] , la table
      */
     public char[][] getTablePM() {
         return tablePM;
     }
 
+    /**
+     * vérification que la caractère passé en paramétre correspond à un chiffre et s'il est dans la plage 1-9
+     *
+     * @param c caractere à évaluae : doit être dans le range 1-9
+     * @throws AppExceptions avec CharacterExceptionPM.A comme caractere de sortie (ce qui permet de gérer car c'est
+     *                       une exception qui n'est pas fatale - il faut refaire une saisie.
+     */
     private void ChiffreEstIlValide(char c) throws AppExceptions {
         int i;
         try {
@@ -116,4 +124,63 @@ public class JeuPlusMoins {
             throw new AppExceptions(Messages.InfosMessages.PM_CHIFFRE_HORS_PLAGE_TOLERANCE, Constantes.Libelles.CharacterExceptionPM.A.toString().charAt(0));
         }
     }
+
+    private void SaisieUnEssaiJoueur() {
+
+    }
+
+    private void SaisieUnEssaiOrdi() {
+
+    }
+
+    private boolean DonneScoreJoueur() {
+        return true;
+    }
+
+    private boolean DonneScoreOrdi() {
+        return true;
+    }
+
+    private void FaitUnSecretJoueur() {
+
+    }
+
+    private void FaitUnSecretOrdi() {
+
+    }
+
+    public void runModeChallengeur() {
+        FaitUnSecretOrdi();
+        for (int i = 0; i < nombreDessai; i++) {
+            SaisieUnEssaiJoueur();
+            if (DonneScoreOrdi()) {
+                break;
+            }
+        }
+    }
+
+    public void runModeDefenseur() {
+        FaitUnSecretJoueur();
+        for (int i = 0; i < nombreDessai; i++) {
+            SaisieUnEssaiOrdi();
+            if (DonneScoreJoueur()) {
+                break;
+            }
+        }
+    }
+
+    public void runModeDuel() {
+        FaitUnSecretOrdi();
+        for (int i = 0; i < nombreDessai; i++) {
+            SaisieUnEssaiOrdi();
+            if (DonneScoreJoueur()) {
+                break;
+            }
+            SaisieUnEssaiJoueur();
+            if (DonneScoreOrdi()) {
+                break;
+            }
+        }
+    }
+
 }
