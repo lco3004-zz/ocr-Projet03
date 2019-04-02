@@ -5,6 +5,7 @@ import fr.ocr.mastermind.JeuMasterMind;
 import fr.ocr.modeconsole.MenuPrincipal;
 import fr.ocr.modeconsole.MenuSecondaire;
 import fr.ocr.params.LireParametres;
+import fr.ocr.plusmoins.JeuPlusMoins;
 import fr.ocr.utiles.AppExceptions;
 import fr.ocr.utiles.Constantes;
 import fr.ocr.utiles.Constantes.Libelles.LibellesMenuPrincipal;
@@ -112,6 +113,13 @@ public class App {
                                     JeuMasterMind.CHALLENGEUR(ch_Sec, scanner);
                                 } else {
                                     menu_secondaire.majLigneEtat(String.format("%s du jeu %s", ch_Sec.toString(), ch_Sup.toString()));
+                                    JeuPlusMoins jeuPlusMoins = new JeuPlusMoins();
+                                    jeuPlusMoins.AjouterunEssai(2, new char[]{'1', '8', '2', '6'});
+                                    for (String s : jeuPlusMoins.toListeStrings()) {
+                                        System.out.println(s);
+                                    }
+
+                                    scanner.next();
                                 }
                                 break;
 

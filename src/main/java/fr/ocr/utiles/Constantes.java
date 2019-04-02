@@ -103,6 +103,11 @@ public enum Constantes {
         public enum CharactersEscape {
             X, //quitter
             K  //retour menu principal
+
+        }
+
+        public enum CharacterExceptionPM {
+            A // abandon operation sur chiffre hors plage de tolerance.
         }
 
         /**
