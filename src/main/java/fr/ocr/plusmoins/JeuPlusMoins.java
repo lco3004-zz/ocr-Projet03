@@ -383,7 +383,7 @@ public class JeuPlusMoins {
         strLibelleSaisie = ". Saisie du Score  -> (K : automatique)    ] ";
         char[] scoretmp = new char[nombreDePositions];
         CalculScore(essai, scoretmp, secret);
-        strLibelleInfos = "suggestion : " + String.valueOf(score);
+        strLibelleInfos = "suggestion : " + String.valueOf(scoretmp);
         try {
             SaisirDesChars(score, secret, tablePM, pattern_Menu, escapeChar);
         } catch (AppExceptions e) {
@@ -544,7 +544,7 @@ public class JeuPlusMoins {
                 //char[] essai, char[] score, char[] secret,
                 //                                      char[][] tablePM, String pattern_Menu,
                 //                                      Character escapeChar
-                isTrouve = DonneScoreDeLOrdi(essai, score, secret, tablePM, "[+ - = K k]", charactersEscape);
+                isTrouve = DonneScoreDeLOrdi(essai, score, secret, tablePM, "[+ \\- = K k]", charactersEscape);
 
                 strLibelleSaisie = ". Saisie -> (K : retour)    ] ";
                 AjouterUnEssai(i, essai, tablePM);
