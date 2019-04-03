@@ -8,7 +8,6 @@ import fr.ocr.utiles.Messages;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.InputMismatchException;
-import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
@@ -27,11 +26,31 @@ import static fr.ocr.utiles.Messages.InfosMessages.SORTIE_SUR_ESCAPECHAR;
 
 public class JeuPlusMoins {
 
-    final private String strLibelleStatus = "[     Status                ]";
-    final private String strLibelleInfos = "[     Informations          ] ";
-    final private String strLibelleSaisie = ". Saisie -> (K : retour)    ] ";
-    final private String strLibelleSecretHeader = "{ ";
-    final private String strLibelleSecretTrailer = " }";
+    private String strLibelleStatus;
+    private String strLibelleInfos;
+    private String strLibelleSaisie;
+    private String strLibelleSecretHeader;
+    private String strLibelleSecretTrailer;
+
+    private char[] score;
+    private char[] essai;
+    private char[] secret;
+    private char[][] tablePM;
+
+    /**
+     * Constructeur jeuPlusMoins
+     */
+    public JeuPlusMoins(LibellesMenuSecondaire modeJeu, Scanner sc) {
+
+        scanner = sc;
+        modeDeJeu = modeJeu;
+        initLibellesLignes();
+
+        score = new char[nombreDePositions];
+        essai = new char[nombreDePositions];
+        secret = new char[nombreDePositions];
+        tablePM = new char[nombreDeEssaisMax][2 * nombreDePositions];
+    }
 
     // les options du menu du jeu PlusMoins
     private LibellesMenuSecondaire modeDeJeu;
@@ -54,21 +73,22 @@ public class JeuPlusMoins {
     //nombre maxi de boucle a la recherche d'une combinaison secrete qui ne contiennent pas de zéro
     private int nombreMaxDeBoucles = (int) getParam(NOMBRE_MAXI_DE_BOUCLES_RANDOMIZE);
 
-
     /**
-     * Constructeur jeuPlusMoins
+     * chargement libelles des lignes du jeux
      */
-    public JeuPlusMoins(LibellesMenuSecondaire modeJeu, Scanner sc) {
-
-        scanner = sc;
-        modeDeJeu = modeJeu;
+    private void initLibellesLignes() {
+        strLibelleStatus = "[     Status                ]";
+        strLibelleInfos = "[     Informations          ] ";
+        strLibelleSaisie = ". Saisie -> (K : retour)    ] ";
+        strLibelleSecretHeader = "{ ";
+        strLibelleSecretTrailer = " }";
     }
 
     /**
      * @param rang  entier qui est égal au numéro de ligne du tableau tabelPM dans laquelle ilfaut ajouter l'essai
      * @param essai le tableau de char  dont les colonnes contiennent les valeurs de l'essai
      */
-    public void AjouterUnEssai(int rang, char[] essai, char[][] tablePM) {
+    private void AjouterUnEssai(int rang, char[] essai, char[][] tablePM) {
         try {
             for (char c : essai) {
                 //leve uen exception si valeur est <=0
@@ -89,7 +109,7 @@ public class JeuPlusMoins {
      * @param rang  entier qui est égal au numéro de ligne du tableau tabelPM dans laquelle ilfaut ajouter le score
      * @param score le tableau de char dont les colonnes contiennent les valeurs du score
      */
-    public void AjouterunScore(int rang, char[] score, char[][] tablePM) throws AppExceptions {
+    private void AjouterunScore(int rang, char[] score, char[][] tablePM) throws AppExceptions {
         try {
             for (char c : score) {
                 //leve uen esception si valeur est <=0
@@ -117,7 +137,7 @@ public class JeuPlusMoins {
      *
      * @return String[] , les lignes du tableau tablePm, sous forme affichable
      */
-    public StringBuilder[] getLignesJeu(char[] secret, char[][] tablePM) {
+    private StringBuilder[] getLignesJeu(char[] secret, char[][] tablePM) {
 
         //tableau de chaine de caractères pour affichage du jeu PlusMoins
         StringBuilder[] lignesJeu = new StringBuilder[256];
@@ -213,13 +233,11 @@ public class JeuPlusMoins {
         }
     }
 
-    private void SaisieUnEssaiJoueur(char[] nouvelEssai, char[] secret,
-                                     char[][] tablePM, String pattern_Menu,
-                                     Character escapeChar) throws AppExceptions {
-
+    private void SaisirDesChars(char[] lesCharsAFournir, char[] secret,
+                                char[][] tablePM, String pattern_Menu,
+                                Character escapeChar) throws AppExceptions {
         Pattern patternChoix = Pattern.compile(pattern_Menu);
 
-        String choix = "";
         Character cRet = '?';
 
         IOConsole.ClearScreen.cls();
@@ -228,54 +246,51 @@ public class JeuPlusMoins {
         // scanner en mode hasNext, next - avec pattern de carteres autorisés
         int localCount = 0;
 
-        while (cRet != escapeChar && localCount < nombreDePositions) {
-            try {
-                while (choix.equals("") && scanner.hasNext()) {
-                    cRet = escapeChar;
-                    try {
-                        try {
-                            try {
-                                choix = scanner.next(patternChoix);
-                                cRet = choix.toUpperCase().charAt(0);
-                                if (cRet != escapeChar)
-                                    nouvelEssai[localCount++] = cRet;
-                            } catch (InputMismatchException e1) {
-                                //si le caracter saisi n'est pas dans la liste des car. acceptés
-                                String tmp = scanner.next();
-                                //efface ecran et reaffiche le tout
-                                IOConsole.ClearScreen.cls();
-                                AfiicheJeuPM(secret, tablePM);
-                            } catch (NoSuchElementException e2) {
-                                //est-ce ctrl-C ??
-                                logger.info(CTRL_C);
-                                choix = Character.toString(escapeChar);
-                            }
-                        } catch (StringIndexOutOfBoundsException e1) {
-                            //est-ce ctrl-C ??
-                            logger.info(CTRL_C);
-                            choix = Character.toString(escapeChar);
-                        }
-                    } catch (Exception e3) {
-                        //réponse inconnue
-                        logger.error(String.format("%s %s ", ERREUR_GENERIC, e3.getClass().getSimpleName()));
-                        throw new AppExceptions(ERREUR_GENERIC);
-                    }
-                }
-            } catch (NoSuchElementException e2) {
-                //est-ce ctrl-C ??
-                logger.info(CTRL_C);
+        while (localCount < nombreDePositions && scanner.hasNext()) {
 
-            } catch (Exception e8) {
-                //réponse inconnue
-                logger.error(String.format("%s %s ", ERREUR_GENERIC, e8.getClass().getSimpleName()));
-                throw new AppExceptions(ERREUR_GENERIC);
-            }
-            //est-ce un ctrl-c qui fait sortir de la saisie par la classe Scanner ??
-            if (cRet == '?' || cRet == escapeChar) {
-                logger.info(CTRL_C.toString() + " ou escapechar");
-                throw new AppExceptions(SORTIE_SUR_ESCAPECHAR, charactersEscape);
+            try {
+                cRet = scanner.next(patternChoix).toUpperCase().charAt(0);
+                if (cRet != escapeChar) {
+                    lesCharsAFournir[localCount++] = cRet;
+                    strLibelleSaisie += " " + cRet;
+                    IOConsole.ClearScreen.cls();
+                    AfiicheJeuPM(secret, tablePM);
+                } else
+                    break;
+
+            } catch (InputMismatchException e1) {
+                //si le caracter saisi n'est pas dans la liste des car. acceptés
+                scanner.next();
+                //efface ecran et reaffiche le tout
+                IOConsole.ClearScreen.cls();
+                AfiicheJeuPM(secret, tablePM);
             }
         }
+        //est-ce un ctrl-c qui fait sortir de la saisie par la classe Scanner ??
+        if (cRet == '?' || cRet == escapeChar) {
+            logger.info(CTRL_C.toString() + " ou escapechar");
+            throw new AppExceptions(SORTIE_SUR_ESCAPECHAR, charactersEscape);
+        }
+
+
+    }
+
+    /**
+     * saisie d'un essai (acces clavier)
+     *
+     * @param nouvelEssai  char [] nouvel essai saisie
+     * @param secret       char [] secret pour affichage en mode debug
+     * @param tablePM      char [][] table des lignes d'essai et de score
+     * @param pattern_Menu String pour pattern saisi
+     * @param escapeChar   caractère escape
+     * @throws AppExceptions sur CTRL-C ou saisie EscapeChar
+     */
+    private void SaisieUnEssaiJoueur(char[] nouvelEssai, char[] secret,
+                                     char[][] tablePM, String pattern_Menu,
+                                     Character escapeChar) throws AppExceptions {
+
+        SaisirDesChars(nouvelEssai, secret, tablePM, pattern_Menu, escapeChar);
+
     }
 
     /**
@@ -285,7 +300,6 @@ public class JeuPlusMoins {
      * @param nouvelEssai char [] contient le nouvel essai calculé
      * @param score       char [] contient le score de l'essai en cours
      * @param tablePM     char [][] table du jeu
-     * @return
      */
     private void CalculUnNouvelEssaiOrdi(int rang, char[] nouvelEssai, char[] score, char[][] tablePM) {
         int defautMin = 0, defautMax = 9;
@@ -360,10 +374,33 @@ public class JeuPlusMoins {
         return CalculScore(essai, score, secret);
     }
 
-    private boolean DonneScoreDeLOrdi(char[] essai, char[] score, char[] secret) {
+    private boolean DonneScoreDeLOrdi(char[] essai, char[] score, char[] secret,
+                                      char[][] tablePM, String pattern_Menu,
+                                      Character escapeChar) throws AppExceptions {
+
         //saisir score et presente resultat de CalculScore(essai, score, secret);
         //validation par escapeChar
-        return CalculScore(essai, score, secret);
+        strLibelleSaisie = ". Saisie du Score  -> (K : automatique)    ] ";
+        char[] scoretmp = new char[nombreDePositions];
+        CalculScore(essai, scoretmp, secret);
+        strLibelleInfos = "suggestion : " + String.valueOf(score);
+        try {
+            SaisirDesChars(score, secret, tablePM, pattern_Menu, escapeChar);
+        } catch (AppExceptions e) {
+            if (e.getCharacterSortie() == charactersEscape) {
+                System.arraycopy(scoretmp, 0, score, 0, score.length);
+            } else {
+                logger.error(ERREUR_GENERIC + "sortie saisie score ordi anormale");
+                throw new AppExceptions(ERREUR_GENERIC);
+            }
+        }
+
+        int locaCount = 0;
+
+        for (char c : score) {
+            if (c == '=') locaCount++;
+        }
+        return locaCount == nombreDePositions;
     }
 
     /**
@@ -374,7 +411,7 @@ public class JeuPlusMoins {
      * @param score tableau de char vide mais qui doit être alloué (renseigné avec le scorre en sortie de méthode
      * @return boolean - vrai si secret trouvé , sinon faux
      */
-    public boolean CalculScore(char[] essai, char[] score, char[] secret) {
+    private boolean CalculScore(char[] essai, char[] score, char[] secret) {
         int compteEgal = 0;
         for (int i = 0; i < essai.length; i++) {
             score[i] = (essai[i] == secret[i]) ? '=' : ((essai[i] < secret[i]) ? '-' : '+');
@@ -387,8 +424,10 @@ public class JeuPlusMoins {
      * renseigne le secret avec le nombre à trouver, sous forme de caractères
      * saisie par le Joueur
      */
-    private void FaitUnSecretParLeJoueur(char[] secret) {
-
+    private void FaitUnSecretParLeJoueur(char[] secretaFaire, char[] secretvide,
+                                         char[][] tablePM, String pattern_Menu, Character escapeChar) throws AppExceptions {
+        strLibelleSaisie = ". Saisie du Scret -> (K : retour)    ] ";
+        SaisirDesChars(secretaFaire, secretvide, tablePM, pattern_Menu, escapeChar);
     }
 
     /**
@@ -416,6 +455,12 @@ public class JeuPlusMoins {
         }
     }
 
+    /**
+     * affichage des lignes du jeu
+     *
+     * @param secret  char [] , le secret qui est affiché en mode debug
+     * @param tablePM char [] [] tableau de lignes essai et score
+     */
     private void AfiicheJeuPM(char[] secret, char[][] tablePM) {
         IOConsole.ClearScreen.cls();
         for (StringBuilder s : getLignesJeu(secret, tablePM)) {
@@ -433,24 +478,32 @@ public class JeuPlusMoins {
      */
     public void runModeChallengeur() {
 
-        char[] score = new char[nombreDePositions];
-        char[] essai = new char[nombreDePositions];
-        char[] secret = new char[nombreDePositions];
-        char[][] tablePM = new char[nombreDeEssaisMax][2 * nombreDePositions];
+        boolean isTrouve;
+
+        //recharge les libelles - cas ou on enchaine les mode de jeu du jeu PM
+        initLibellesLignes();
 
         //creation du secret par calcul
         FaitUnSecretParLOrdi(nombreDePositions, nombreMaxDeBoucles, secret);
 
-        for (int i = 0; i < nombreDeEssaisMax; i++) {
+        for (int nbBoucle = 0; nbBoucle < nombreDeEssaisMax; nbBoucle++) {
             AfiicheJeuPM(secret, tablePM);
 
             try {
-                SaisieUnEssaiJoueur(essai, secret, tablePM, "[1-9 Kk ]", charactersEscape);
-                if (DonneScoreDuJoueur(essai, score, secret)) {
+                SaisieUnEssaiJoueur(essai, secret, tablePM, "[1-9 K k]", charactersEscape);
+                isTrouve = DonneScoreDuJoueur(essai, score, secret);
+
+                strLibelleSaisie = ". Saisie -> (K : retour)    ] ";
+                AjouterUnEssai(nbBoucle, essai, tablePM);
+                AjouterunScore(nbBoucle, score, tablePM);
+
+                if (isTrouve) {
+                    strLibelleInfos = "[     Vous avez Gagné       ] ";
+                    AfiicheJeuPM(secret, tablePM);
+                    scanner.hasNext();
+                    scanner.next();
                     break;
                 }
-                AjouterUnEssai(i, essai, tablePM);
-                AjouterunScore(i, score, tablePM);
 
             } catch (AppExceptions e) {
                 if (e.getCharacterSortie() == charactersEscape)
@@ -466,40 +519,68 @@ public class JeuPlusMoins {
      * joue en mode defenseur
      */
     public void runModeDefenseur() {
-        char[] score = new char[nombreDePositions];
-        char[] essai = new char[nombreDePositions];
-        char[] secret = new char[nombreDePositions];
-        char[][] tablePM = new char[nombreDeEssaisMax][2 * nombreDePositions];
 
-        FaitUnSecretParLeJoueur(secret);
+        boolean isTrouve;
 
-        for (int i = 0; i < nombreDeEssaisMax; i++) {
-            AfiicheJeuPM(secret, tablePM);
-            CalculUnNouvelEssaiOrdi(i, essai, score, tablePM);
-            if (DonneScoreDeLOrdi(essai, score, secret)) {
-                break;
-            }
-            AjouterUnEssai(i, essai, tablePM);
-            AjouterunScore(i, score, tablePM);
+        modeDebug = true;
+        //recharge les libelles - cas ou on enchaine les mode de jeu du jeu PM
+        initLibellesLignes();
+
+        try {
+            FaitUnSecretParLeJoueur(secret, secret, tablePM, "[1-9 K k]", charactersEscape);
+        } catch (AppExceptions e) {
+            if (e.getCharacterSortie() == charactersEscape)
+                return;
+            logger.error(ERREUR_GENERIC);
+            throw new AppExceptions(ERREUR_GENERIC);
         }
 
+        strLibelleSaisie = ". Saisie -> (K : retour)    ] ";
+        try {
+            for (int i = 0; i < nombreDeEssaisMax; i++) {
+                AfiicheJeuPM(secret, tablePM);
+
+                CalculUnNouvelEssaiOrdi(i, essai, score, tablePM);
+                //char[] essai, char[] score, char[] secret,
+                //                                      char[][] tablePM, String pattern_Menu,
+                //                                      Character escapeChar
+                isTrouve = DonneScoreDeLOrdi(essai, score, secret, tablePM, "[+ - = K k]", charactersEscape);
+
+                strLibelleSaisie = ". Saisie -> (K : retour)    ] ";
+                AjouterUnEssai(i, essai, tablePM);
+                AjouterunScore(i, score, tablePM);
+
+                if (isTrouve) {
+                    strLibelleInfos = "[    Ordinateur a  Gagné    ] ";
+                    AfiicheJeuPM(secret, tablePM);
+                    scanner.hasNext();
+                    scanner.next();
+                    break;
+                }
+            }
+
+        } catch (AppExceptions e) {
+            if (e.getCharacterSortie() == charactersEscape)
+                return;
+            logger.error(ERREUR_GENERIC);
+            throw new AppExceptions(ERREUR_GENERIC);
+        }
     }
 
     public void runModeDuel() {
-        char[] score = new char[nombreDePositions];
-        char[] essai = new char[nombreDePositions];
-        char[] secret = new char[nombreDePositions];
-        char[][] tablePM = new char[nombreDeEssaisMax][2 * nombreDePositions];
+
+        //recharge les libelles - cas ou on enchaine les mode de jeu du jeu PM
+        initLibellesLignes();
 
         //creation du secret par calcul
         FaitUnSecretParLOrdi(nombreDePositions, nombreMaxDeBoucles, secret);
 
         for (int i = 0; i < nombreDeEssaisMax; i++) {
             CalculUnNouvelEssaiOrdi(i, essai, score, tablePM);
-            if (DonneScoreDeLOrdi(essai, score, secret)) {
+            if (DonneScoreDeLOrdi(essai, score, secret, tablePM, "[+ - = K k]", charactersEscape)) {
                 break;
             }
-            SaisieUnEssaiJoueur(essai, secret, tablePM, "[1-9 Kk ]", charactersEscape);
+            SaisieUnEssaiJoueur(essai, secret, tablePM, "[1-9 K k]", charactersEscape);
             if (DonneScoreDuJoueur(essai, score, secret)) {
                 break;
             }
