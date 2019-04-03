@@ -56,7 +56,8 @@ public enum Messages {
         RANDOM_ECHOUE_COLPARDEF("Le Random a échoué, les premières couleurs de la liste sont retenues"),
         TENTAIVE_DE_TRICHE_DEFENSEUR("Incoherence score entre calcul et saisie  - Suspicion de fraude"),
         SORTIE_ESCAPE_SAISIE_SCORE("Sortie sur escape saisie Score mode Defenseur, copie du score calculé"),
-        PM_CHIFFRE_HORS_PLAGE_TOLERANCE("Le chiffre est négatif ou nul . hors plage de tolérance dans le jeu PlusMoins");
+        PM_CHIFFRE_HORS_PLAGE_TOLERANCE("Le chiffre est négatif ou nul . hors plage de tolérance dans le jeu PlusMoins"),
+        PM_CARSCORE_HORS_PLAGE_TOLERANCE("un caractere du score est hors plage de tolérance dans le jeu PlusMoins");
 
         private String messageInformation;
 

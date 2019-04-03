@@ -107,7 +107,8 @@ public enum Constantes {
         }
 
         public enum CharacterExceptionPM {
-            A // abandon operation sur chiffre hors plage de tolerance.
+            C, // abandon operation sur chiffre hors plage de tolerance.
+            S  // abandon operation sur caractere su score  hors plage de tolerance.
         }
 
         /**
