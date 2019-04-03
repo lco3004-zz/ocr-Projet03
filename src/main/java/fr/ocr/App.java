@@ -104,6 +104,8 @@ public class App {
                         ch_Sec = menu_secondaire.RunMenu();
                         logger.info(String.format("%s du jeu %s", ch_Sec.toString(), ch_Sup.toString()));
 
+                        JeuPlusMoins jeuPlusMoins = new JeuPlusMoins(ch_Sec, scanner);
+
                         switch (ch_Sec) {
                             case TITRE:
                                 break; // idem ci-dessus, ch_Sec est une instance d'Enum ; permet d'éviter les warning
@@ -112,8 +114,6 @@ public class App {
                                 if (ch_Sup.equals(CHOISIR_MASTERMIND)) {
                                     JeuMasterMind.CHALLENGEUR(ch_Sec, scanner);
                                 } else {
-                                    menu_secondaire.majLigneEtat(String.format("%s du jeu %s", ch_Sec.toString(), ch_Sup.toString()));
-                                    JeuPlusMoins jeuPlusMoins = new JeuPlusMoins(ch_Sec, scanner);
                                     jeuPlusMoins.runModeChallengeur();
                                 }
                                 break;
@@ -122,7 +122,7 @@ public class App {
                                 if (ch_Sup.equals(CHOISIR_MASTERMIND)) {
                                     JeuMasterMind.DEFENSEUR(ch_Sec, scanner);
                                 } else {
-                                    menu_secondaire.majLigneEtat(String.format("%s du jeu %s", ch_Sec.toString(), ch_Sup.toString()));
+                                    jeuPlusMoins.runModeDefenseur();
                                 }
                                 break;
 
@@ -130,7 +130,7 @@ public class App {
                                 if (ch_Sup.equals(CHOISIR_MASTERMIND)) {
                                     JeuMasterMind.DUEL(ch_Sec, scanner);
                                 } else {
-                                    menu_secondaire.majLigneEtat(String.format("%s du jeu %s", ch_Sec.toString(), ch_Sup.toString()));
+                                    jeuPlusMoins.runModeDuel();
                                 }
                                 break;
 

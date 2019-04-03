@@ -1,5 +1,6 @@
 package fr.ocr.plusmoins;
 
+import fr.ocr.modeconsole.IOConsole;
 import fr.ocr.utiles.AppExceptions;
 import fr.ocr.utiles.Constantes;
 import fr.ocr.utiles.Messages;
@@ -12,7 +13,6 @@ import static fr.ocr.params.LireParametres.getParam;
 import static fr.ocr.params.Parametres.*;
 import static fr.ocr.utiles.Constantes.Libelles.LibellesMenuSecondaire;
 import static fr.ocr.utiles.Logs.logger;
-
 
 
 /**
@@ -31,8 +31,8 @@ public class JeuPlusMoins {
     final private String strLibelleStatus = "[     Status                ]";
     final private String strLibelleInfos = "[     Informations          ] ";
     final private String strLibelleSaisie = ". Saisie -> (K : retour)    ] ";
-    final private String strLibelleSecretHeader = "[ Secret = ";
-    final private String strLibelleSecretTrailer = " ]";
+    final private String strLibelleSecretHeader = "{ ";
+    final private String strLibelleSecretTrailer = " }";
 
     // les options du menu du jeu PlusMoins
     private LibellesMenuSecondaire modeDeJeu;
@@ -52,8 +52,8 @@ public class JeuPlusMoins {
     // paramètre du fichier properties - affiche (DEBUG=Vrai) ou pas la combinaison secrete
     private Boolean modeDebug = (Boolean) getParam(MODE_DEVELOPPEUR);
 
-    //tableau de chaine de caractères pour affichage du jeu PlusMoins
-    private StringBuilder[] lignesJeu;
+    //nombre maxi de boucle a la recherche d'une combinaison secrete qui ne contiennent pas de zéro
+    private int nombreMaxDeBoucles = (int) getParam(NOMBRE_MAXI_DE_BOUCLES_RANDOMIZE);
 
 
     /**
@@ -64,17 +64,13 @@ public class JeuPlusMoins {
         scanner = sc;
         modeDeJeu = modeJeu;
 
-        lignesJeu = new StringBuilder[24];
-        //creation de chaque variable StringBuilder dans le tableau qui correspond aux lignes  affichablse, du jeu
-        for (int n = 0; n < lignesJeu.length; n++) {
-            lignesJeu[n] = new StringBuilder(48);
-        }
-
         //MOCK
+        int countCHar = 1;
         lesEssais = new char[nombreDeEssaisMax][nombreDePositions];
         for (int i = 0; i < nombreDeEssaisMax; i++)
-            for (int j = 0; j < nombreDePositions; j++)
-                lesEssais[j][i] = (char) (j + '0');
+            for (int j = 0; j < nombreDePositions; j++) {
+                lesEssais[i][j] = (char) (((j + countCHar++) % 10) + '0');
+            }
 
         //MOCK
     }
@@ -89,7 +85,10 @@ public class JeuPlusMoins {
                 //leve uen exception si valeur est <=0
                 ChiffreEstIlValide(c);
             }
-            System.arraycopy(essai, 0, tablePM[rang], 0, essai.length);
+
+            for (int n = 0; n < essai.length; n++) {
+                tablePM[rang][n] = essai[n];
+            }
 
         } catch (IndexOutOfBoundsException | ArrayStoreException | NullPointerException e) {
             logger.error(Messages.ErreurMessages.SORTIE_PGM_SUR_ERREURNONGEREE);
@@ -107,7 +106,10 @@ public class JeuPlusMoins {
                 //leve uen esception si valeur est <=0
                 ScoreEstIlValide(c);
             }
-            System.arraycopy(score, 0, tablePM[rang], nombreDePositions, score.length);
+            for (int n = 0; n < score.length; n++) {
+                tablePM[rang][nombreDePositions + n] = score[n];
+            }
+
         } catch (IndexOutOfBoundsException | ArrayStoreException | NullPointerException e) {
             logger.error(Messages.ErreurMessages.SORTIE_PGM_SUR_ERREURNONGEREE);
             throw new AppExceptions(Messages.ErreurMessages.ERREUR_GENERIC);
@@ -127,7 +129,13 @@ public class JeuPlusMoins {
      * @return String[] , les lignes du tableau tablePm, sous forme affichable
      */
     public StringBuilder[] getLignesJeu(char[] secret, char[][] tablePM) {
+        //tableau de chaine de caractères pour affichage du jeu PlusMoins
+        StringBuilder[] lignesJeu = new StringBuilder[256];
 
+        //creation de chaque variable StringBuilder dans le tableau qui correspond aux lignes  affichablse, du jeu
+        for (int n = 0; n < lignesJeu.length; n++) {
+            lignesJeu[n] = new StringBuilder(48);
+        }
         int rangLigne = 0;
         //titre
         lignesJeu[rangLigne++].append(modeDeJeu.toString());
@@ -138,7 +146,11 @@ public class JeuPlusMoins {
 
         //zone de status
         if (modeDebug) {
-            lignesJeu[rangLigne++].append(strLibelleSecretHeader).append(String.valueOf(secret)).append(strLibelleSecretTrailer);
+            StringBuilder stmp = new StringBuilder(16);
+            for (char c : secret) {
+                stmp.append(String.format(" %c ", c));
+            }
+            lignesJeu[rangLigne++].append(strLibelleSecretHeader).append(stmp.toString()).append(strLibelleSecretTrailer);
         } else {
             lignesJeu[rangLigne++].append(strLibelleStatus);
         }
@@ -223,54 +235,69 @@ public class JeuPlusMoins {
 
 
         for (int i = 0; i < nombreDePositions; i++) {
+
             //selon le score obtenu, le calcul est différent car il faut tenir compte du sens + ou -
             switch (score[i]) {
                 case '=': {
-                    //le chiffres est le bon don con reporte à l'identique
-                    nouvelEssai[i] = tablePM[rang][i];
+                    //le chiffres est le bon donc on reporte à l'identique
+                    nouvelEssai[i] = tablePM[rang - 1][i];
                 }
                 break;
+
                 case '-': {
                     //le chiffre est inférieur au secret
                     // essai[i] < nouvelEssai[i] < BorneSUPx
                     // BorneSupx = min(essai[y],score[y] == '+'
                     int borneSup = 9;
-                    for (int m = rang - 1; m > tablePM.length; m--) {
+
+                    for (int m = rang - 1; m >= 0; m--) {
                         if (tablePM[m][i + nombreDePositions] == '+') {
-                            borneSup = Math.min(borneSup, (int) tablePM[m][i]);
+                            int val2Tmp = tablePM[m][i] - '0';
+                            borneSup = StrictMath.min(borneSup, val2Tmp);
                         }
                     }
-                    if (borneSup <= tablePM[rang][i]) {
+
+                    if (borneSup < (tablePM[rang - 1][i] - '0')) {
                         logger.error(Messages.ErreurMessages.ERREUR_GENERIC.toString() + "calcul  borneSup erreur");
                         throw new AppExceptions(Messages.ErreurMessages.ERREUR_GENERIC);
                     }
+
                     // prend le milieu du segmznt essai[i] .. borneSup, valeur superieur car on "monte" vers la soluce
-                    nouvelEssai[i] = (char) (Math.ceil((borneSup - tablePM[rang][i]) / 2) + '0');
+                    nouvelEssai[i] = (char) ((int) StrictMath.ceil(((double) borneSup + (double) (tablePM[rang - 1][i] - '0')) / 2.0) + '0');
 
                 }
                 break;
+
                 case '+': {
                     //le chiffre est supérieur au secret
                     //  BorenInfx <  nouvelEssai[i] < essai[i]
                     // BorenInfx = max(essai[y],score[y] == '-'
                     int borneInf = 0;
-                    for (int m = rang - 1; m > tablePM.length; m--) {
+
+                    for (int m = rang - 1; m >= 0; m--) {
                         if (tablePM[m][i + nombreDePositions] == '-') {
-                            borneInf = Math.max(borneInf, (int) tablePM[m][i]);
+                            int valTmp = tablePM[m][i] - '0';
+                            borneInf = StrictMath.max(borneInf, valTmp);
                         }
                     }
-                    if (borneInf >= tablePM[rang][i]) {
+
+                    if (borneInf > (tablePM[rang - 1][i] - '0')) {
                         logger.error(Messages.ErreurMessages.ERREUR_GENERIC.toString() + "calcul  borneInf erreur");
                         throw new AppExceptions(Messages.ErreurMessages.ERREUR_GENERIC);
                     }
+
                     // prend le milieu du segmznt essai[i] .. borneSup, valeur inferieur car on "descend" vers la soluce
-                    nouvelEssai[i] = (char) (Math.floor((tablePM[rang][i] - borneInf) / 2) + '0');
+
+                    nouvelEssai[i] = (char) ((int) StrictMath.floor(((double) (tablePM[rang - 1][i] - '0') + (double) borneInf) / 2.0) + '0');
 
                 }
                 break;
-                default:
-                    logger.error(Messages.ErreurMessages.ERREUR_GENERIC.toString());
-                    throw new AppExceptions(Messages.ErreurMessages.ERREUR_GENERIC);
+
+                //section init car c'est le premier essai
+                default: {
+                    char[] essaiParDefaut = new char[nouvelEssai.length];
+                    nouvelEssai[i] = (char) ('0' + (16 * (i * 3 + 1)) % 9);
+                }
             }
         }
         return nouvelEssai;
@@ -283,7 +310,7 @@ public class JeuPlusMoins {
     private boolean DonneScoreDeLOrdi(char[] essai, char[] score, char[] secret) {
         //saisir score et presente resultat de CalculScore(essai, score, secret);
         //validation par escapeChar
-        return true;
+        return CalculScore(essai, score, secret);
     }
 
     /**
@@ -297,7 +324,7 @@ public class JeuPlusMoins {
     public boolean CalculScore(char[] essai, char[] score, char[] secret) {
         int compteEgal = 0;
         for (int i = 0; i < essai.length; i++) {
-            score[i] = (essai[i] == secret[i]) ? '=' : ((essai[i] < secret[i]) ? '+' : '-');
+            score[i] = (essai[i] == secret[i]) ? '=' : ((essai[i] < secret[i]) ? '-' : '+');
             compteEgal += (score[i] == '=' ? 1 : 0);
         }
         return compteEgal == nombreDePositions;
@@ -308,6 +335,10 @@ public class JeuPlusMoins {
      * saisie par le Joueur
      */
     private void FaitUnSecretParLeJoueur(char[] secret) {
+
+        //MOCK
+        System.arraycopy(lesEssais[MockesaisNb + 2], 0, secret, 0, secret.length);
+        //FIN MOCK
 
     }
 
@@ -323,14 +354,21 @@ public class JeuPlusMoins {
 
         int valTmp;
         for (int limite = 0, k = 0; k < nbPositions && limite < boucleMax; limite++) {
-            valTmp = ((Integer.parseInt(df.format(Math.random() * 100)) % 10));
+            valTmp = ((Integer.parseInt(df.format(StrictMath.random() * 100)) % 10));
             if (valTmp > 0) {
                 charsValRet[k++] = (char) (valTmp + '0');
             }
         }
+        //on passe par la "case" assignation par défaut car pas réussi à fabriquer un secret
+        if (charsValRet.length != nbPositions) {
+            logger.info(Messages.InfosMessages.REMPLACEMENT_PAR_VALEUR_DEFAUT.toString() + " pas réussi à générer un secret ");
+            for (int m = 0; m < nbPositions; m++)
+                charsValRet[m] = (char) (m + '0');
+        }
     }
 
     private void AfiicheJeuPM(char[] secret, char[][] tablePM) {
+        IOConsole.ClearScreen.cls();
         for (StringBuilder s : getLignesJeu(secret, tablePM)) {
             if (s.charAt(0) == '.') {
                 s.replace(0, 1, "[");
@@ -340,7 +378,6 @@ public class JeuPlusMoins {
             }
         }
         scanner.next();
-
     }
 
     /**
@@ -351,12 +388,13 @@ public class JeuPlusMoins {
         char[] score = new char[nombreDePositions];
         char[] essai = new char[nombreDePositions];
         char[] secret = new char[nombreDePositions];
-        char[][] tablePM = new char[nombreDeEssaisMax][nombreDePositions];
+        char[][] tablePM = new char[nombreDeEssaisMax][2 * nombreDePositions];
 
         //creation du secret par calcul
-        FaitUnSecretParLOrdi(nombreDePositions, (int) getParam(NOMBRE_MAXI_DE_BOUCLES_RANDOMIZE), secret);
+        FaitUnSecretParLOrdi(nombreDePositions, nombreMaxDeBoucles, secret);
 
         for (int i = 0; i < nombreDeEssaisMax; i++) {
+            AfiicheJeuPM(secret, tablePM);
             SaisieUnEssaiJoueur(essai);
             if (DonneScoreDuJoueur(essai, score, secret)) {
                 break;
@@ -366,35 +404,49 @@ public class JeuPlusMoins {
         }
     }
 
+    /**
+     * joue en mode defenseur
+     */
     public void runModeDefenseur() {
         char[] score = new char[nombreDePositions];
         char[] essai = new char[nombreDePositions];
         char[] secret = new char[nombreDePositions];
-        char[][] tablePM = new char[nombreDeEssaisMax][nombreDePositions];
-        int rangTablePm = 0;
+        char[][] tablePM = new char[nombreDeEssaisMax][2 * nombreDePositions];
 
         FaitUnSecretParLeJoueur(secret);
+
         for (int i = 0; i < nombreDeEssaisMax; i++) {
-            CalculUnNouvelEssaiOrdi(rangTablePm, essai, score, tablePM);
+            AfiicheJeuPM(secret, tablePM);
+            CalculUnNouvelEssaiOrdi(i, essai, score, tablePM);
             if (DonneScoreDeLOrdi(essai, score, secret)) {
                 break;
             }
+            AjouterUnEssai(i, essai, tablePM);
+            AjouterunScore(i, score, tablePM);
         }
 
     }
 
     public void runModeDuel() {
-        /*
-        FaitUnSecretParLOrdi();
+        char[] score = new char[nombreDePositions];
+        char[] essai = new char[nombreDePositions];
+        char[] secret = new char[nombreDePositions];
+        char[][] tablePM = new char[nombreDeEssaisMax][2 * nombreDePositions];
+
+        //creation du secret par calcul
+        FaitUnSecretParLOrdi(nombreDePositions, nombreMaxDeBoucles, secret);
+
         for (int i = 0; i < nombreDeEssaisMax; i++) {
-            CalculUnEssaiOrdi(0);
-            if (DonneScoreDeLOrdi()) {
+            CalculUnNouvelEssaiOrdi(i, essai, score, tablePM);
+            if (DonneScoreDeLOrdi(essai, score, secret)) {
                 break;
             }
-            SaisieUnEssaiJoueur();
-            if (DonneScoreDuJoueur()) {
+            SaisieUnEssaiJoueur(essai);
+            if (DonneScoreDuJoueur(essai, score, secret)) {
                 break;
             }
-        }*/
+            AjouterUnEssai(i, essai, tablePM);
+            AjouterunScore(i, score, tablePM);
+        }
     }
 }
