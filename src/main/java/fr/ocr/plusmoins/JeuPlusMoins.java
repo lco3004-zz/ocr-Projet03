@@ -7,12 +7,18 @@ import fr.ocr.utiles.Messages;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
+import java.util.InputMismatchException;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
+import java.util.regex.Pattern;
 
 import static fr.ocr.params.LireParametres.getParam;
 import static fr.ocr.params.Parametres.*;
 import static fr.ocr.utiles.Constantes.Libelles.LibellesMenuSecondaire;
 import static fr.ocr.utiles.Logs.logger;
+import static fr.ocr.utiles.Messages.ErreurMessages.ERREUR_GENERIC;
+import static fr.ocr.utiles.Messages.InfosMessages.CTRL_C;
+import static fr.ocr.utiles.Messages.InfosMessages.SORTIE_SUR_ESCAPECHAR;
 
 
 /**
@@ -20,13 +26,6 @@ import static fr.ocr.utiles.Logs.logger;
  */
 
 public class JeuPlusMoins {
-
-    //MOCK
-    int MockesaisNb = 0;
-    char[][] lesEssais;
-    //fin mock
-
-
 
     final private String strLibelleStatus = "[     Status                ]";
     final private String strLibelleInfos = "[     Informations          ] ";
@@ -63,16 +62,6 @@ public class JeuPlusMoins {
 
         scanner = sc;
         modeDeJeu = modeJeu;
-
-        //MOCK
-        int countCHar = 1;
-        lesEssais = new char[nombreDeEssaisMax][nombreDePositions];
-        for (int i = 0; i < nombreDeEssaisMax; i++)
-            for (int j = 0; j < nombreDePositions; j++) {
-                lesEssais[i][j] = (char) (((j + countCHar++) % 10) + '0');
-            }
-
-        //MOCK
     }
 
     /**
@@ -129,6 +118,7 @@ public class JeuPlusMoins {
      * @return String[] , les lignes du tableau tablePm, sous forme affichable
      */
     public StringBuilder[] getLignesJeu(char[] secret, char[][] tablePM) {
+
         //tableau de chaine de caractères pour affichage du jeu PlusMoins
         StringBuilder[] lignesJeu = new StringBuilder[256];
 
@@ -223,16 +213,82 @@ public class JeuPlusMoins {
         }
     }
 
-    private void SaisieUnEssaiJoueur(char[] nouvelEssai) {
+    private void SaisieUnEssaiJoueur(char[] nouvelEssai, char[] secret,
+                                     char[][] tablePM, String pattern_Menu,
+                                     Character escapeChar) throws AppExceptions {
 
-        System.arraycopy(lesEssais[MockesaisNb], 0, nouvelEssai, 0, nouvelEssai.length);
+        Pattern patternChoix = Pattern.compile(pattern_Menu);
 
-        MockesaisNb++;
+        String choix = "";
+        Character cRet = '?';
+
+        IOConsole.ClearScreen.cls();
+
+        AfiicheJeuPM(secret, tablePM);
+        // scanner en mode hasNext, next - avec pattern de carteres autorisés
+        int localCount = 0;
+
+        while (cRet != escapeChar && localCount < nombreDePositions) {
+            try {
+                while (choix.equals("") && scanner.hasNext()) {
+                    cRet = escapeChar;
+                    try {
+                        try {
+                            try {
+                                choix = scanner.next(patternChoix);
+                                cRet = choix.toUpperCase().charAt(0);
+                                if (cRet != escapeChar)
+                                    nouvelEssai[localCount++] = cRet;
+                            } catch (InputMismatchException e1) {
+                                //si le caracter saisi n'est pas dans la liste des car. acceptés
+                                String tmp = scanner.next();
+                                //efface ecran et reaffiche le tout
+                                IOConsole.ClearScreen.cls();
+                                AfiicheJeuPM(secret, tablePM);
+                            } catch (NoSuchElementException e2) {
+                                //est-ce ctrl-C ??
+                                logger.info(CTRL_C);
+                                choix = Character.toString(escapeChar);
+                            }
+                        } catch (StringIndexOutOfBoundsException e1) {
+                            //est-ce ctrl-C ??
+                            logger.info(CTRL_C);
+                            choix = Character.toString(escapeChar);
+                        }
+                    } catch (Exception e3) {
+                        //réponse inconnue
+                        logger.error(String.format("%s %s ", ERREUR_GENERIC, e3.getClass().getSimpleName()));
+                        throw new AppExceptions(ERREUR_GENERIC);
+                    }
+                }
+            } catch (NoSuchElementException e2) {
+                //est-ce ctrl-C ??
+                logger.info(CTRL_C);
+
+            } catch (Exception e8) {
+                //réponse inconnue
+                logger.error(String.format("%s %s ", ERREUR_GENERIC, e8.getClass().getSimpleName()));
+                throw new AppExceptions(ERREUR_GENERIC);
+            }
+            //est-ce un ctrl-c qui fait sortir de la saisie par la classe Scanner ??
+            if (cRet == '?' || cRet == escapeChar) {
+                logger.info(CTRL_C.toString() + " ou escapechar");
+                throw new AppExceptions(SORTIE_SUR_ESCAPECHAR, charactersEscape);
+            }
+        }
     }
 
-    private char[] CalculUnNouvelEssaiOrdi(int rang, char[] nouvelEssai, char[] score, char[][] tablePM) {
+    /**
+     * renvoie un nouvel essai calculé
+     *
+     * @param rang        int  rang courant dans tablePM
+     * @param nouvelEssai char [] contient le nouvel essai calculé
+     * @param score       char [] contient le score de l'essai en cours
+     * @param tablePM     char [][] table du jeu
+     * @return
+     */
+    private void CalculUnNouvelEssaiOrdi(int rang, char[] nouvelEssai, char[] score, char[][] tablePM) {
         int defautMin = 0, defautMax = 9;
-
 
         for (int i = 0; i < nombreDePositions; i++) {
 
@@ -287,9 +343,7 @@ public class JeuPlusMoins {
                     }
 
                     // prend le milieu du segmznt essai[i] .. borneSup, valeur inferieur car on "descend" vers la soluce
-
                     nouvelEssai[i] = (char) ((int) StrictMath.floor(((double) (tablePM[rang - 1][i] - '0') + (double) borneInf) / 2.0) + '0');
-
                 }
                 break;
 
@@ -300,7 +354,6 @@ public class JeuPlusMoins {
                 }
             }
         }
-        return nouvelEssai;
     }
 
     private boolean DonneScoreDuJoueur(char[] essai, char[] score, char[] secret) {
@@ -335,10 +388,6 @@ public class JeuPlusMoins {
      * saisie par le Joueur
      */
     private void FaitUnSecretParLeJoueur(char[] secret) {
-
-        //MOCK
-        System.arraycopy(lesEssais[MockesaisNb + 2], 0, secret, 0, secret.length);
-        //FIN MOCK
 
     }
 
@@ -377,7 +426,6 @@ public class JeuPlusMoins {
                 System.out.println(s);
             }
         }
-        scanner.next();
     }
 
     /**
@@ -395,12 +443,22 @@ public class JeuPlusMoins {
 
         for (int i = 0; i < nombreDeEssaisMax; i++) {
             AfiicheJeuPM(secret, tablePM);
-            SaisieUnEssaiJoueur(essai);
-            if (DonneScoreDuJoueur(essai, score, secret)) {
-                break;
+
+            try {
+                SaisieUnEssaiJoueur(essai, secret, tablePM, "[1-9 Kk ]", charactersEscape);
+                if (DonneScoreDuJoueur(essai, score, secret)) {
+                    break;
+                }
+                AjouterUnEssai(i, essai, tablePM);
+                AjouterunScore(i, score, tablePM);
+
+            } catch (AppExceptions e) {
+                if (e.getCharacterSortie() == charactersEscape)
+                    return;
+                logger.error(ERREUR_GENERIC);
+                throw new AppExceptions(ERREUR_GENERIC);
+
             }
-            AjouterUnEssai(i, essai, tablePM);
-            AjouterunScore(i, score, tablePM);
         }
     }
 
@@ -441,7 +499,7 @@ public class JeuPlusMoins {
             if (DonneScoreDeLOrdi(essai, score, secret)) {
                 break;
             }
-            SaisieUnEssaiJoueur(essai);
+            SaisieUnEssaiJoueur(essai, secret, tablePM, "[1-9 Kk ]", charactersEscape);
             if (DonneScoreDuJoueur(essai, score, secret)) {
                 break;
             }
