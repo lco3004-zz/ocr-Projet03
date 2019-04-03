@@ -114,28 +114,7 @@ public class App {
                                 } else {
                                     menu_secondaire.majLigneEtat(String.format("%s du jeu %s", ch_Sec.toString(), ch_Sup.toString()));
                                     JeuPlusMoins jeuPlusMoins = new JeuPlusMoins(ch_Sec, scanner);
-
-
-                                    jeuPlusMoins.FaitUnSecretOrdi();
-
-                                    jeuPlusMoins.AjouterunEssai(2, new char[]{'1', '8', '2', '6'});
-
-                                    byte[] tmpEssai = {1, 8, 2, 6};
-                                    char[] tmpScore = new char[4];
-                                    jeuPlusMoins.CalculScore(tmpEssai, tmpScore);
-
-                                    jeuPlusMoins.AjouterunScore(2, tmpScore);
-
-                                    for (StringBuilder s : jeuPlusMoins.getLignesJeu()) {
-                                        if (s.charAt(0) == '.') {
-                                            s.replace(0, 1, "[");
-                                            System.out.print(s);
-                                        } else {
-                                            System.out.println(s);
-                                        }
-                                    }
-
-                                    scanner.next();
+                                    jeuPlusMoins.runModeChallengeur();
                                 }
                                 break;
 
