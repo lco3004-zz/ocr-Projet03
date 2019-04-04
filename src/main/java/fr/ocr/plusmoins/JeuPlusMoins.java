@@ -21,6 +21,38 @@ import static fr.ocr.utiles.Messages.InfosMessages.CTRL_C;
 import static fr.ocr.utiles.Messages.InfosMessages.SORTIE_SUR_ESCAPECHAR;
 
 
+public interface JeuPlusMoins {
+    /**
+     * mode Jeu CHALLLENGEUR  - creation de la classe qui gère ce mode
+     *
+     * @param modeJeu LibellesMenuSecondaire
+     * @param sc      scanner
+     */
+    static void CHALLENGEUR(LibellesMenuSecondaire modeJeu, Scanner sc) {
+        (new ClasseJeuPlusMoins(modeJeu, sc)).runModeChallengeur();
+    }
+
+    /**
+     * mode Jeu DEFENSEUR  - creation de la classe qui gère ce mode
+     *
+     * @param modeJeu LibellesMenuSecondaire
+     * @param sc      scanner
+     */
+    static void DEFENSEUR(LibellesMenuSecondaire modeJeu, Scanner sc) {
+        (new ClasseJeuPlusMoins(modeJeu, sc)).runModeDefenseur();
+    }
+
+    /**
+     * mode Jeu DUEL  - creation de la classe qui gère ce mode
+     *
+     * @param modeJeu LibellesMenuSecondaire
+     * @param sc      scanner
+     */
+    static void DUEL(LibellesMenuSecondaire modeJeu, Scanner sc) {
+        (new ClasseJeuPlusMoins(modeJeu, sc)).runModeDuel();
+    }
+
+}
 /**
  * @author laurent
  * @implSpec Interface interne
@@ -45,7 +77,7 @@ interface InterfRunPM {
  * Classe du jeu Plus Moins
  */
 
-public class JeuPlusMoins {
+class ClasseJeuPlusMoins {
 
     private String strLibelleStatus;
     private String strLibelleInfos;
@@ -61,7 +93,7 @@ public class JeuPlusMoins {
     /**
      * Constructeur jeuPlusMoins
      */
-    public JeuPlusMoins(LibellesMenuSecondaire modeJeu, Scanner sc) {
+    ClasseJeuPlusMoins(LibellesMenuSecondaire modeJeu, Scanner sc) {
 
         scanner = sc;
 
@@ -375,6 +407,7 @@ public class JeuPlusMoins {
             throw new AppExceptions(ERREUR_GENERIC);
         }
     }
+
     /**
      * saisie d'un essai (acces clavier)
      *
@@ -680,7 +713,7 @@ public class JeuPlusMoins {
     /**
      * joue  en mode Challengeur
      */
-    public void runModeChallengeur() {
+    void runModeChallengeur() {
 
         runAllMode(new InterfRunPM() {
             @Override
@@ -691,19 +724,12 @@ public class JeuPlusMoins {
 
             @Override
             public void FaitMoiUnEssai(int nbBoucle) {
-                SaisieUnEssaiJoueur(essai, secret, tablePM, "[1-9 K k]", charactersEscape);
-                strLibelleSaisie = ". Saisie -> (K : retour)    ] ";
-                logger.debug(String.format("Mode Challenegeur FaitMoiUnEssai boucle = %d  essai = %s  secret = %s ", nbBoucle, String.valueOf(essai), String.valueOf(secret)));
-                AjouterUnEssai(nbBoucle, essai, tablePM);
-                AfiicheJeuPM(secret, tablePM);
+                SaisiEssaiJoueur(nbBoucle);
             }
 
             @Override
             public boolean FaitMoiUnScore(int nbBoucle) {
-                boolean isTrouve = DonneScoreDuJoueur(essai, score, secret);
-                AjouterunScore(nbBoucle, score, tablePM);
-                AfiicheJeuPM(secret, tablePM);
-                return isTrouve;
+                return DonneScoreDuJoueur(nbBoucle);
             }
 
             @Override
@@ -726,7 +752,7 @@ public class JeuPlusMoins {
     /**
      * joue en mode defenseur
      */
-    public void runModeDefenseur() {
+    void runModeDefenseur() {
 
         runAllMode(new InterfRunPM() {
 
@@ -750,23 +776,12 @@ public class JeuPlusMoins {
 
             @Override
             public void FaitMoiUnEssai(int nbBoucle) {
-                CalculUnNouvelEssaiOrdi(nbBoucle, essai, score, tablePM);
-                logger.debug(String.format("Mode Defenseur FaitMoiUnEssai boucle = %d  essai = %s  secret = %s ", nbBoucle, String.valueOf(essai), String.valueOf(secret)));
-                AjouterUnEssai(nbBoucle, essai, tablePM);
-                AfiicheJeuPM(secret, tablePM);
+                CalculEssaiOrdi(nbBoucle);
             }
 
             @Override
             public boolean FaitMoiUnScore(int nbBoucle) {
-                boolean isTrouve;
-                strLibelleSaisie = ". Saisie du Score  -> (K : automatique)    ] ";
-                logger.debug(String.format("Mode Defenseur FaitMoiUnScore boucle = %d  essai = %s  score = %s  secret = %s", nbBoucle, String.valueOf(essai), String.valueOf(score), String.valueOf(secret)));
-                isTrouve = DonneScoreDeLOrdi(essai, score, secret, tablePM, "[+ \\- = K k]", charactersEscape);
-                strLibelleSaisie = ". Saisie -> (K : retour)    ] ";
-                logger.debug(String.format("Mode Defenseur FaitMoiUnScore boucle = %d  essai = %s  score = %s  secret = %s ", nbBoucle, String.valueOf(essai), String.valueOf(score), String.valueOf(secret)));
-                AjouterunScore(nbBoucle, score, tablePM);
-                AfiicheJeuPM(secret, tablePM);
-                return isTrouve;
+                return EvalueScoreOrdi(nbBoucle);
             }
 
             @Override
@@ -786,37 +801,130 @@ public class JeuPlusMoins {
         });
     }
 
-
     /**
      * joue en mode duel
      */
-    public void runModeDuel() {
+    void runModeDuel() {
 
-        boolean isTrouve;
-
-        modeDebug = true;
+        boolean isTrouveOrdi = false;
+        boolean isTrouveJoueur = false;
 
         //recharge les libelles - cas ou on enchaine les mode de jeu du jeu PM
         initLibellesLignes();
 
         //creation du secret par calcul
-
         FaitUnSecretParLOrdi(nombreDePositions, nombreMaxDeBoucles, secret);
 
-        for (int i = 0; i < nombreDeEssaisMax; i++) {
-            CalculUnNouvelEssaiOrdi(i, essai, score, tablePM);
-            strLibelleSaisie = ". Saisie du Score  -> (K : automatique)    ] ";
-            if (DonneScoreDeLOrdi(essai, score, secret, tablePM, "[+ - = K k]", charactersEscape)) {
-                break;
-            }
-            strLibelleSaisie = ". Saisie -> (K : retour)    ] ";
+        for (int nbBoucle = 0; nbBoucle < nombreDeEssaisMax; nbBoucle++) {
 
-            SaisieUnEssaiJoueur(essai, secret, tablePM, "[1-9 K k]", charactersEscape);
-            if (DonneScoreDuJoueur(essai, score, secret)) {
-                break;
+            try {
+                //ordinateur Joue
+                CalculEssaiOrdi(nbBoucle);
+
+                //evalue score Ordinateur
+                isTrouveOrdi = EvalueScoreOrdi(nbBoucle);
+
+                if (isTrouveOrdi) {
+                    break;
+                }
+
+                //Joueur joue
+                SaisiEssaiJoueur(nbBoucle);
+
+                isTrouveJoueur = DonneScoreDuJoueur(nbBoucle);
+
+                if (isTrouveJoueur) {
+                    break;
+                }
+
+            } catch (Exception e) {
+                if (e instanceof AppExceptions) {
+                    if (((AppExceptions) e).getCharacterSortie() == charactersEscape)
+                        return;
+                }
+                logger.error(String.format("%s %s", ERREUR_GENERIC, e.getClass().getSimpleName()));
+                throw new AppExceptions(ERREUR_GENERIC);
+
             }
-            AjouterUnEssai(i, essai, tablePM);
-            AjouterunScore(i, score, tablePM);
         }
+        if (isTrouveOrdi) {
+            strLibelleInfos = "[    Ordinateur a  Gagné    ] ";
+        } else if (isTrouveJoueur) {
+            strLibelleInfos = "[     Vous avez Gagné       ] ";
+        } else {
+            strLibelleInfos = "[  Pas un.e pour rattraper l'autr.e ] ";
+        }
+        strLibelleSaisie = ".    Retour (->K)           ] ";
+
+        AfiicheJeuPM(secret, tablePM);
+
+        AttenteNettoyageUInput(charactersEscape);
     }
+
+    /**
+     * @param nbBoucle int
+     * @return boolean vrai si secret trouve
+     */
+    private boolean DonneScoreDuJoueur(int nbBoucle) {
+        boolean isTrouve = DonneScoreDuJoueur(essai, score, secret);
+        AjouterunScore(nbBoucle, score, tablePM);
+        AfiicheJeuPM(secret, tablePM);
+        return isTrouve;
+    }
+
+    /**
+     * @param nbBoucle int
+     */
+    private void SaisiEssaiJoueur(int nbBoucle) {
+        SaisieUnEssaiJoueur(essai, secret, tablePM, "[1-9 K k]", charactersEscape);
+        strLibelleSaisie = ". Saisie -> (K : retour)    ] ";
+        logger.debug(String.format("Mode Challenegeur FaitMoiUnEssai boucle = %d  essai = %s  secret = %s ", nbBoucle, String.valueOf(essai), String.valueOf(secret)));
+        AjouterUnEssai(nbBoucle, essai, tablePM);
+        AfiicheJeuPM(secret, tablePM);
+    }
+
+    /**
+     * actions pour calculer un essai de l'ordinateur
+     *
+     * @param nbBoucle int
+     */
+    private void CalculEssaiOrdi(int nbBoucle) {
+
+        CalculUnNouvelEssaiOrdi(nbBoucle, essai, score, tablePM);
+        logger.debug(String.format("Mode Defenseur FaitMoiUnEssai boucle = %d  essai = %s  secret = %s ", nbBoucle, String.valueOf(essai), String.valueOf(secret)));
+        AjouterUnEssai(nbBoucle, essai, tablePM);
+        AfiicheJeuPM(secret, tablePM);
+    }
+
+    /**
+     * actions pour scorer un essai de l'odinateur
+     *
+     * @param nbBoucle int  -
+     * @return boolean , vrai si secret trouvve
+     */
+    private boolean EvalueScoreOrdi(int nbBoucle) {
+        boolean isTrouve;
+
+        strLibelleSaisie = ". Saisie du Score  -> (K : automatique)    ] ";
+
+        logger.debug(String.format("Mode Defenseur FaitMoiUnScore boucle = %d  essai = %s  score = %s  secret = %s", nbBoucle, String.valueOf(essai), String.valueOf(score), String.valueOf(secret)));
+
+        isTrouve = DonneScoreDeLOrdi(essai, score, secret, tablePM, "[+ \\- = K k]", charactersEscape);
+
+        strLibelleSaisie = ". Saisie -> (K : retour)    ] ";
+
+        logger.debug(String.format("Mode Defenseur FaitMoiUnScore boucle = %d  essai = %s  score = %s  secret = %s ", nbBoucle, String.valueOf(essai), String.valueOf(score), String.valueOf(secret)));
+
+        AjouterunScore(nbBoucle, score, tablePM);
+
+        AfiicheJeuPM(secret, tablePM);
+
+        return isTrouve;
+    }
+
 }
+/*
+ *********************************************************************
+ * the end
+ * *******************************************************************
+ */

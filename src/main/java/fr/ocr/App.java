@@ -81,10 +81,7 @@ public class App {
 
 
                 switch (ch_Sup) {
-                    case TITRE:
-                        break; // necessaire car ch_Sup est une instance d'enum - evite warning
 
-                    //choix du jeu
                     case CHOISIR_MASTERMIND:
                     case CHOISIR_PLUS_MOINS:
                         boucleSecondaire = true;
@@ -102,47 +99,28 @@ public class App {
 
 
                             switch (ch_Sec) {
-                                case TITRE:
-                                    break; // idem ci-dessus, ch_Sec est une instance d'Enum ; permet d'éviter les warning
-
                                 case MODE_CHALLENGER:
                                     if (ch_Sup.equals(CHOISIR_MASTERMIND)) {
-
                                         JeuMasterMind.CHALLENGEUR(ch_Sec, scannerPrimaire);
-
                                     } else {
-
-                                        JeuPlusMoins jeuPlusMoins = new JeuPlusMoins(ch_Sec, scannerPrimaire);
-                                        jeuPlusMoins.runModeChallengeur();
-
+                                        JeuPlusMoins.CHALLENGEUR(ch_Sec, scannerPrimaire);
                                     }
                                     break;
 
                                 case MODE_DEFENSEUR:
                                     if (ch_Sup.equals(CHOISIR_MASTERMIND)) {
-
                                         JeuMasterMind.DEFENSEUR(ch_Sec, scannerPrimaire);
 
-
                                     } else {
-
-                                        JeuPlusMoins jeuPlusMoins = new JeuPlusMoins(ch_Sec, scannerPrimaire);
-                                        jeuPlusMoins.runModeDefenseur();
-
+                                        JeuPlusMoins.DEFENSEUR(ch_Sec, scannerPrimaire);
                                     }
                                     break;
 
                                 case MODE_DUEL:
-                                    if (ch_Sup.equals(CHOISIR_MASTERMIND)) {
-
+                                    if ((ch_Sup.equals(CHOISIR_MASTERMIND))) {
                                         JeuMasterMind.DUEL(ch_Sec, scannerPrimaire);
-
-
                                     } else {
-
-                                        JeuPlusMoins jeuPlusMoins = new JeuPlusMoins(ch_Sec, scannerPrimaire);
-                                        jeuPlusMoins.runModeDuel();
-
+                                        JeuPlusMoins.DUEL(ch_Sec, scannerPrimaire);
                                     }
                                     break;
 
@@ -151,7 +129,6 @@ public class App {
                                     break;
 
                                 case LOGGER_PARAMETRES:
-                                    //log les parametres du jeu dans le fichier géré par log4J
                                     if (ch_Sup.equals(CHOISIR_MASTERMIND)) {
                                         menu_secondaire.logParamtreMM();
                                     }
@@ -160,8 +137,11 @@ public class App {
                                     boucleSecondaire = false;
                                     bouclePrincipale = false;
                                     break;
+
+                                case TITRE:
                                 case LIGNE_ETAT:
                                     break;
+
                                 default:
                                     logger.error(PARAM_INCONNU);
                             }
@@ -173,6 +153,8 @@ public class App {
                         logger.info("QUITTER application");
                         bouclePrincipale = false;
                         break;
+                    case TITRE:
+                        break; // necessaire car ch_Sup est une instance d'enum - evite warning
                     default:
                         logger.error(PARAM_INCONNU);
                 }
