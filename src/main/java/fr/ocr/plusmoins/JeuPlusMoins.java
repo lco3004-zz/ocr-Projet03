@@ -44,13 +44,13 @@ public class JeuPlusMoins {
     public JeuPlusMoins(LibellesMenuSecondaire modeJeu, Scanner sc) {
 
         scanner = sc;
+
         modeDeJeu = modeJeu;
+
         initLibellesLignes();
 
-        score = new char[nombreDePositions];
-        essai = new char[nombreDePositions];
-        secret = new char[nombreDePositions];
-        tablePM = new char[nombreDeEssaisMax][2 * nombreDePositions];
+        initDesTables(nombreDePositions);
+
     }
 
     // les options du menu du jeu PlusMoins
@@ -74,6 +74,16 @@ public class JeuPlusMoins {
     //nombre maxi de boucle a la recherche d'une combinaison secrete qui ne contiennent pas de zéro
     private int nombreMaxDeBoucles = (int) getParam(NOMBRE_MAXI_DE_BOUCLES_RANDOMIZE);
 
+
+    private void initDesTables(int nbPos) {
+        //allocation en espérant que le garbage fait le job
+        score = new char[nombreDePositions];
+        essai = new char[nombreDePositions];
+        secret = new char[nombreDePositions];
+        tablePM = new char[nombreDeEssaisMax][2 * nbPos];
+
+    }
+
     /**
      * chargement libelles des lignes du jeux
      */
@@ -96,9 +106,7 @@ public class JeuPlusMoins {
                 ChiffreEstIlValide(c);
             }
 
-            for (int n = 0; n < essai.length; n++) {
-                tablePM[rang][n] = essai[n];
-            }
+            System.arraycopy(essai, 0, tablePM[rang], 0, essai.length);
 
         } catch (IndexOutOfBoundsException | ArrayStoreException | NullPointerException e) {
             logger.error(Messages.ErreurMessages.SORTIE_PGM_SUR_ERREURNONGEREE);
@@ -116,9 +124,7 @@ public class JeuPlusMoins {
                 //leve uen esception si valeur est <=0
                 ScoreEstIlValide(c);
             }
-            for (int n = 0; n < score.length; n++) {
-                tablePM[rang][nombreDePositions + n] = score[n];
-            }
+            System.arraycopy(score, 0, tablePM[rang], nombreDePositions, score.length);
 
         } catch (IndexOutOfBoundsException | ArrayStoreException | NullPointerException e) {
             logger.error(Messages.ErreurMessages.SORTIE_PGM_SUR_ERREURNONGEREE);
@@ -234,6 +240,25 @@ public class JeuPlusMoins {
         }
     }
 
+    /**
+     * Saisie clavier - supporte les méthodes de saisies suivantes
+     * Si x et y sont des valeurs acceptables (donc pattern == [x y K k] avec k étant escapeChar
+     * x return  y return   => donne x y
+     * x y return           => donne x y
+     * xyreturn             => donne x y
+     * x{n'importe quoi sauf escapeChar}y  => x y
+     * x{n'importe quoi sauf escapeChar}Ky => escapeChar donc break
+     * *  EscapeChar : soit retour au niveau d'appel soit saisie par défaut (i.e score suggéré est saisi par défaut
+     * et devient le score renvoyé)
+     *
+     * @param lesCharsAFournir char [] table de char renseigné par la saisie
+     * @param secret           char []  sert à l'affichage
+     * @param tablePM          char [][] sert à l'affichage
+     * @param pattern_Menu     String  , pattern de saisie utilisé par méthode Next de la classe Scanner
+     * @param escapeChar       : Character  - charactère qui s'il est présent dans la saisie, stop le process de saisie
+     * @throws AppExceptions : déclenché sur erreur non géré ou sur lecture de EscapeChar dans ce cas l'escape est transmis
+     *                       à l'exception et est récupérable par la méthode getCharacterSortie() de AppException
+     */
     private void SaisirDesChars(char[] lesCharsAFournir, char[] secret,
                                 char[][] tablePM, String pattern_Menu,
                                 Character escapeChar) throws AppExceptions {
@@ -292,10 +317,6 @@ public class JeuPlusMoins {
                         }
                     }
 
-                    IOConsole.ClearScreen.cls();
-
-                    AfiicheJeuPM(secret, tablePM);
-
                 } catch (NoSuchElementException e) {
                     // one devrait pas arrive la ou alors pas compris donc : on sort proprement
                     cRet = escapeChar;
@@ -309,6 +330,10 @@ public class JeuPlusMoins {
                 }
 
             }
+
+            IOConsole.ClearScreen.cls();
+
+            AfiicheJeuPM(secret, tablePM);
 
             //soirtie par escapeChar ou CTRL-C
             if (cRet == '?' || cRet == escapeChar) {
@@ -421,17 +446,38 @@ public class JeuPlusMoins {
         }
     }
 
+    /**
+     * calcul le score d'un essai proposé par le joueur
+     *
+     * @param essai  char [] essai à scorer
+     * @param score  char []  score de l'essai q- renseigné en sortie de méthode
+     * @param secret char [] pour calcul du score
+     * @return boolean , vrai si l'essai est identique au secret
+     */
     private boolean DonneScoreDuJoueur(char[] essai, char[] score, char[] secret) {
         return CalculScore(essai, score, secret);
     }
 
+    /**
+     * saisie le score de l'essai proposé par l'ordianteur
+     *
+     * @param essai        char [] essai à scorer
+     * @param score        char []  score de l'essai q- renseigné en sortie de méthode
+     * @param secret       char [] pour calcul du score
+     * @param tablePM      char [][] table du jeu PlusMoins
+     * @param pattern_Menu String , pattern de saisie pour la méthode Nexte de la classe Scanner
+     * @param escapeChar   Character : escapeChar si saisie, le score est celui calculé automatiquement
+     * @return boolean , vrai si l'essai est identique au secret
+     * @throws AppExceptions : déclenché sur erreur non géré ou sur lecture de EscapeChar dans ce cas l'escape est transmis
+     *                       à l'exception et est récupérable par la méthode getCharacterSortie() de AppException
+     */
     private boolean DonneScoreDeLOrdi(char[] essai, char[] score, char[] secret,
                                       char[][] tablePM, String pattern_Menu,
                                       Character escapeChar) throws AppExceptions {
 
         //saisir score et presente resultat de CalculScore(essai, score, secret);
         //validation par escapeChar
-        strLibelleSaisie = ". Saisie du Score  -> (K : automatique)    ] ";
+
         char[] scoretmp = new char[nombreDePositions];
         CalculScore(essai, scoretmp, secret);
         strLibelleInfos = "suggestion : " + String.valueOf(scoretmp);
@@ -455,7 +501,7 @@ public class JeuPlusMoins {
     }
 
     /**
-     * calcule le score de l'assai passé en parametre
+     * calcule le score de l'assai passé en parametre (sert dans tous les mode du jeu)
      * renvoi vrai si l'essai est égal au secret
      *
      * @param essai tableau de char qui contient l'essai - non modifié par la méthode
@@ -473,17 +519,28 @@ public class JeuPlusMoins {
 
     /**
      * renseigne le secret avec le nombre à trouver, sous forme de caractères
-     * saisie par le Joueur
+     * saisie par le Joueur     *
+     *
+     * @param secretaFaire char[] secret renseigné en sortie de méthode
+     * @param tablePM  char [][] table du jeu pour affichage
+     * @param pattern_Menu  String pattern de saisie pour la méthode Next de la classe Scanner
+     * @param escapeChar  Character , caractère escape - si saisie retour au niveau d'appel ou saisie par défaut
+     * @throws AppExceptions  : déclenché sur erreur non géré ou sur lecture de EscapeChar dans ce cas l'escape est transmis
+     * à l'exception et est récupérable par la méthode getCharacterSortie() de AppException
      */
-    private void FaitUnSecretParLeJoueur(char[] secretaFaire, char[] secretvide,
+    private void FaitUnSecretParLeJoueur(char[] secretaFaire,
                                          char[][] tablePM, String pattern_Menu, Character escapeChar) throws AppExceptions {
-        strLibelleSaisie = ". Saisie du Scret -> (K : retour)    ] ";
-        SaisirDesChars(secretaFaire, secretvide, tablePM, pattern_Menu, escapeChar);
+        char[] vide = new char[secretaFaire.length];
+        SaisirDesChars(secretaFaire, vide, tablePM, pattern_Menu, escapeChar);
     }
 
     /**
      * renseigne l'attibut secretJeuPM avec le nombre à trouver, sous forme de caractères
      * par calcul
+     *
+     * @param nbPositions  int nombre de chiffres dans la zone d'essai et dans la zone de score
+     * @param boucleMax   int , nombre de tentaives de random avant abandon et choix par defaut 1,2,3,...
+     * @param charsValRet   char []  tableau de chiffres tirés aléatoirement
      */
     private void FaitUnSecretParLOrdi(int nbPositions, int boucleMax, char[] charsValRet) {
 
@@ -578,15 +635,18 @@ public class JeuPlusMoins {
         initLibellesLignes();
 
         try {
-            FaitUnSecretParLeJoueur(secret, secret, tablePM, "[1-9 K k]", charactersEscape);
+            strLibelleSaisie = ". Saisie du Scret -> (K : retour)    ] ";
+
+            FaitUnSecretParLeJoueur(secret, tablePM, "[1-9 K k]", charactersEscape);
+
+            strLibelleSaisie = ". Saisie -> (K : retour)    ] ";
+
         } catch (AppExceptions e) {
             if (e.getCharacterSortie() == charactersEscape)
                 return;
             logger.error(ERREUR_GENERIC);
             throw new AppExceptions(ERREUR_GENERIC);
         }
-
-        strLibelleSaisie = ". Saisie -> (K : retour)    ] ";
         try {
             for (int i = 0; i < nombreDeEssaisMax; i++) {
                 AfiicheJeuPM(secret, tablePM);
@@ -595,6 +655,7 @@ public class JeuPlusMoins {
                 //char[] essai, char[] score, char[] secret,
                 //                                      char[][] tablePM, String pattern_Menu,
                 //                                      Character escapeChar
+                strLibelleSaisie = ". Saisie du Score  -> (K : automatique)    ] ";
                 isTrouve = DonneScoreDeLOrdi(essai, score, secret, tablePM, "[+ \\- = K k]", charactersEscape);
 
                 strLibelleSaisie = ". Saisie -> (K : retour)    ] ";
@@ -628,9 +689,12 @@ public class JeuPlusMoins {
 
         for (int i = 0; i < nombreDeEssaisMax; i++) {
             CalculUnNouvelEssaiOrdi(i, essai, score, tablePM);
+            strLibelleSaisie = ". Saisie du Score  -> (K : automatique)    ] ";
             if (DonneScoreDeLOrdi(essai, score, secret, tablePM, "[+ - = K k]", charactersEscape)) {
                 break;
             }
+            strLibelleSaisie = ". Saisie -> (K : retour)    ] ";
+
             SaisieUnEssaiJoueur(essai, secret, tablePM, "[1-9 K k]", charactersEscape);
             if (DonneScoreDuJoueur(essai, score, secret)) {
                 break;

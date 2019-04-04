@@ -57,10 +57,7 @@ public class App {
             parser.printUsage(System.out);
         }
 
-        //scanner sur console
-        Scanner scanner = new Scanner(System.in);
 
-        MenuPrincipal menu_principal = new MenuPrincipal(scanner);
 
         boolean bouclePrincipale = true;
 
@@ -70,103 +67,120 @@ public class App {
 
         MenuSecondaire menu_secondaire;
 
-        //boucle principale du programme
-        while (bouclePrincipale) {
+        try (Scanner scannerPrimaire = new Scanner(System.in)) {
 
-            boolean boucleSecondaire;
+            //boucle principale du programme
+            while (bouclePrincipale) {
 
-            //appel le menu principal du programme
-            ch_Sup = menu_principal.RunMenu();
+                boolean boucleSecondaire;
 
-            switch (ch_Sup) {
-                case TITRE:
-                    break; // necessaire car ch_Sup est une instance d'enum - evite warning
+                //scanner sur console
 
-                //choix du jeu
-                case CHOISIR_MASTERMIND:
-                case CHOISIR_PLUS_MOINS:
-                    boucleSecondaire = true;
 
-                    if (ch_Sup.equals(CHOISIR_MASTERMIND)) {
-                        logger.info(String.format("choix du jeux : %s", Constantes.Libelles.LibellesJeux.MASTERMIND.toString()));
+                ch_Sup = (new MenuPrincipal(scannerPrimaire)).RunMenu();
 
-                        //creation  du menu du mastermind
-                        menu_secondaire = new MenuSecondaire(Constantes.Libelles.LibellesJeux.MASTERMIND.toString(), scanner);
-                    } else {
-                        logger.info(String.format("choix du jeux : %s", Constantes.Libelles.LibellesJeux.PLUSMOINS.toString()));
 
-                        //creation  du menu du jeu plusmoins
-                        menu_secondaire = new MenuSecondaire(Constantes.Libelles.LibellesJeux.PLUSMOINS.toString(), scanner);
-                    }
+                switch (ch_Sup) {
+                    case TITRE:
+                        break; // necessaire car ch_Sup est une instance d'enum - evite warning
 
-                    while (boucleSecondaire) {
-                        //appel du menu secondaire (plusmoins ou mastermind)
-                        ch_Sec = menu_secondaire.RunMenu();
-                        logger.info(String.format("%s du jeu %s", ch_Sec.toString(), ch_Sup.toString()));
+                    //choix du jeu
+                    case CHOISIR_MASTERMIND:
+                    case CHOISIR_PLUS_MOINS:
+                        boucleSecondaire = true;
 
-                        JeuPlusMoins jeuPlusMoins = new JeuPlusMoins(ch_Sec, scanner);
+                        while (boucleSecondaire) {
 
-                        switch (ch_Sec) {
-                            case TITRE:
-                                break; // idem ci-dessus, ch_Sec est une instance d'Enum ; permet d'éviter les warning
+                            if (ch_Sup.equals(CHOISIR_MASTERMIND)) {
+                                //creation  du menu du mastermind
+                                menu_secondaire = new MenuSecondaire(Constantes.Libelles.LibellesJeux.MASTERMIND.toString(), scannerPrimaire);
+                            } else {
+                                //creation  du menu du jeu plusmoins
+                                menu_secondaire = new MenuSecondaire(Constantes.Libelles.LibellesJeux.PLUSMOINS.toString(), scannerPrimaire);
+                            }
+                            ch_Sec = menu_secondaire.RunMenu();
 
-                            case MODE_CHALLENGER:
-                                if (ch_Sup.equals(CHOISIR_MASTERMIND)) {
-                                    JeuMasterMind.CHALLENGEUR(ch_Sec, scanner);
-                                } else {
-                                    jeuPlusMoins.runModeChallengeur();
-                                }
-                                break;
 
-                            case MODE_DEFENSEUR:
-                                if (ch_Sup.equals(CHOISIR_MASTERMIND)) {
-                                    JeuMasterMind.DEFENSEUR(ch_Sec, scanner);
-                                } else {
-                                    jeuPlusMoins.runModeDefenseur();
-                                }
-                                break;
+                            switch (ch_Sec) {
+                                case TITRE:
+                                    break; // idem ci-dessus, ch_Sec est une instance d'Enum ; permet d'éviter les warning
 
-                            case MODE_DUEL:
-                                if (ch_Sup.equals(CHOISIR_MASTERMIND)) {
-                                    JeuMasterMind.DUEL(ch_Sec, scanner);
-                                } else {
-                                    jeuPlusMoins.runModeDuel();
-                                }
-                                break;
+                                case MODE_CHALLENGER:
+                                    if (ch_Sup.equals(CHOISIR_MASTERMIND)) {
 
-                            case RETOUR:
-                                boucleSecondaire = false;
-                                break;
+                                        JeuMasterMind.CHALLENGEUR(ch_Sec, scannerPrimaire);
 
-                            case LOGGER_PARAMETRES:
-                                //log les parametres du jeu dans le fichier géré par log4J
-                                menu_secondaire.majLigneEtat(String.format("%s du jeu %s", ch_Sec.toString(), ch_Sup.toString()));
-                                if (ch_Sup.equals(CHOISIR_MASTERMIND)) {
-                                    menu_secondaire.logParamtreMM();
-                                }
-                                break;
-                            case QUITTER:
-                                boucleSecondaire = false;
-                                bouclePrincipale = false;
-                                break;
-                            case LIGNE_ETAT:
-                                break;
-                            default:
-                                logger.error(PARAM_INCONNU);
+                                    } else {
+
+                                        JeuPlusMoins jeuPlusMoins = new JeuPlusMoins(ch_Sec, scannerPrimaire);
+                                        jeuPlusMoins.runModeChallengeur();
+
+                                    }
+                                    break;
+
+                                case MODE_DEFENSEUR:
+                                    if (ch_Sup.equals(CHOISIR_MASTERMIND)) {
+
+                                        JeuMasterMind.DEFENSEUR(ch_Sec, scannerPrimaire);
+
+
+                                    } else {
+
+                                        JeuPlusMoins jeuPlusMoins = new JeuPlusMoins(ch_Sec, scannerPrimaire);
+                                        jeuPlusMoins.runModeDefenseur();
+
+                                    }
+                                    break;
+
+                                case MODE_DUEL:
+                                    if (ch_Sup.equals(CHOISIR_MASTERMIND)) {
+
+                                        JeuMasterMind.DUEL(ch_Sec, scannerPrimaire);
+
+
+                                    } else {
+
+                                        JeuPlusMoins jeuPlusMoins = new JeuPlusMoins(ch_Sec, scannerPrimaire);
+                                        jeuPlusMoins.runModeDuel();
+
+                                    }
+                                    break;
+
+                                case RETOUR:
+                                    boucleSecondaire = false;
+                                    break;
+
+                                case LOGGER_PARAMETRES:
+                                    //log les parametres du jeu dans le fichier géré par log4J
+                                    if (ch_Sup.equals(CHOISIR_MASTERMIND)) {
+                                        menu_secondaire.logParamtreMM();
+                                    }
+                                    break;
+                                case QUITTER:
+                                    boucleSecondaire = false;
+                                    bouclePrincipale = false;
+                                    break;
+                                case LIGNE_ETAT:
+                                    break;
+                                default:
+                                    logger.error(PARAM_INCONNU);
+                            }
+
                         }
-                    }
-                    break;
+                        break;
 
-                case QUITTER:
-                    logger.info("QUITTER application");
-                    bouclePrincipale = false;
-                    break;
-                default:
-                    logger.error(PARAM_INCONNU);
+                    case QUITTER:
+                        logger.info("QUITTER application");
+                        bouclePrincipale = false;
+                        break;
+                    default:
+                        logger.error(PARAM_INCONNU);
+                }
             }
+            logger.info(FIN_NORMALE_APPLICATION.getMessageInfos());
+
+
         }
-        scanner.close();
-        logger.info(FIN_NORMALE_APPLICATION.getMessageInfos());
     }
 }
 /*
