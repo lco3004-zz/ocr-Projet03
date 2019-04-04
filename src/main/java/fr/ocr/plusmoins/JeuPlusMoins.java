@@ -21,18 +21,24 @@ import static fr.ocr.utiles.Messages.InfosMessages.CTRL_C;
 import static fr.ocr.utiles.Messages.InfosMessages.SORTIE_SUR_ESCAPECHAR;
 
 
+/**
+ * @author laurent
+ * @implSpec Interface interne
+ */
 interface InterfRunPM {
     void FaitMoiUneSecret();
 
-    void FaitMoiUnEssai(int nbBoucle, char[] secret, char[] essai, char[] score, char[][] tablePM, String s, Character characterEscape);
+    void FaitMoiUnEssai(int nbBoucle);
 
     //DonneScoreDuJoueur(essai, score, secret);
     // DonneScoreDeLOrdi(essai, score, secret, tablePM, "[+ \\- = K k]", charactersEscape);
-    boolean FaitMoiUnScore(char[] essai, char[] score, char[] secret, char[][] tablePM, String pattern, Character characterEscape);
+    boolean FaitMoiUnScore(int nbBoucle);
 
     String FaitMoiUnMessageDeVictoire();
 
     String FaitMoiUnMessageDeEchec();
+
+    boolean FaitMoiDebug();
 }
 
 /**
@@ -95,7 +101,6 @@ public class JeuPlusMoins {
         essai = new char[nombreDePositions];
         secret = new char[nombreDePositions];
         tablePM = new char[nombreDeEssaisMax][2 * nbPos];
-
     }
 
     /**
@@ -117,6 +122,7 @@ public class JeuPlusMoins {
         try {
             for (char c : essai) {
                 //leve uen exception si valeur est <=0
+                logger.debug(String.format("AjouterUnessai rang=%d , essai = %s, chaCourant = %c", rang, String.valueOf(essai), c));
                 ChiffreEstIlValide(c);
             }
 
@@ -124,6 +130,7 @@ public class JeuPlusMoins {
 
         } catch (IndexOutOfBoundsException | ArrayStoreException | NullPointerException e) {
             logger.error(Messages.ErreurMessages.SORTIE_PGM_SUR_ERREURNONGEREE);
+            logger.error(String.format("%s %s", ERREUR_GENERIC, e.getClass().getSimpleName()));
             throw new AppExceptions(Messages.ErreurMessages.ERREUR_GENERIC);
         }
     }
@@ -142,6 +149,7 @@ public class JeuPlusMoins {
 
         } catch (IndexOutOfBoundsException | ArrayStoreException | NullPointerException e) {
             logger.error(Messages.ErreurMessages.SORTIE_PGM_SUR_ERREURNONGEREE);
+            logger.error(String.format("%s %s", ERREUR_GENERIC, e.getClass().getSimpleName()));
             throw new AppExceptions(Messages.ErreurMessages.ERREUR_GENERIC);
         }
     }
@@ -230,14 +238,19 @@ public class JeuPlusMoins {
      *                       une exception qui n'est pas fatale - il faut refaire une saisie.
      */
     private void ChiffreEstIlValide(char c) throws AppExceptions {
+        logger.debug(String.format("ChiffreEstValide char = %c", c));
+
         int i;
         try {
             i = Integer.valueOf(String.valueOf(c));
+            logger.debug(String.format("ChiffreEstValide Conversion ENtier = i = %d ", i));
             if (i <= 0) {
+                logger.debug(String.format("ChiffreEstValide  i <=0  %d ", i));
                 throw new NumberFormatException();
             }
         } catch (NumberFormatException e) {
-            throw new AppExceptions(Messages.InfosMessages.PM_CHIFFRE_HORS_PLAGE_TOLERANCE, Constantes.Libelles.CharacterExceptionPM.C.toString().charAt(0));
+            logger.error(Messages.ErreurMessages.PM_CHIFFRE_HORS_PLAGE_TOLERANCE + " Car= " + c);
+            throw new AppExceptions(Messages.ErreurMessages.PM_CHIFFRE_HORS_PLAGE_TOLERANCE);
         }
     }
 
@@ -250,7 +263,8 @@ public class JeuPlusMoins {
      */
     private void ScoreEstIlValide(char c) {
         if (c != '=' && c != '-' && c != '+') {
-            throw new AppExceptions(Messages.InfosMessages.PM_CARSCORE_HORS_PLAGE_TOLERANCE, Constantes.Libelles.CharacterExceptionPM.S.toString().charAt(0));
+            logger.error(Messages.ErreurMessages.PM_CARSCORE_HORS_PLAGE_TOLERANCE + " Car= " + c);
+            throw new AppExceptions(Messages.ErreurMessages.PM_CARSCORE_HORS_PLAGE_TOLERANCE);
         }
     }
 
@@ -282,8 +296,6 @@ public class JeuPlusMoins {
         StringBuilder saisieParChaine = new StringBuilder(nombreDePositions);
 
         Character cRet = '?';
-
-        IOConsole.ClearScreen.cls();
 
         AfiicheJeuPM(secret, tablePM);
         // scanner en mode hasNext, next - avec pattern de carteres autorisés
@@ -344,8 +356,6 @@ public class JeuPlusMoins {
                 }
 
             }
-
-            IOConsole.ClearScreen.cls();
 
             AfiicheJeuPM(secret, tablePM);
 
@@ -432,7 +442,7 @@ public class JeuPlusMoins {
                     //le chiffre est supérieur au secret
                     //  BorenInfx <  nouvelEssai[i] < essai[i]
                     // BorenInfx = max(essai[y],score[y] == '-'
-                    int borneInf = 0;
+                    int borneInf = 1;
 
                     for (int m = rang - 1; m >= 0; m--) {
                         if (tablePM[m][i + nombreDePositions] == '-') {
@@ -453,7 +463,6 @@ public class JeuPlusMoins {
 
                 //section init car c'est le premier essai
                 default: {
-                    char[] essaiParDefaut = new char[nouvelEssai.length];
                     nouvelEssai[i] = (char) ('0' + (16 * (i * 3 + 1)) % 9);
                 }
             }
@@ -615,12 +624,19 @@ public class JeuPlusMoins {
             }
             locaCountGuard++;
         } while (locaCountGuard < 10);
-        scanner.close();
+
     }
 
+    /**
+     * regroupe les modes challengeur et defenseur
+     *
+     * @param interfRunPM interface interne
+     */
     private void runAllMode(InterfRunPM interfRunPM) {
 
-        boolean isTrouve;
+        boolean isTrouve = false;
+
+        modeDebug = interfRunPM.FaitMoiDebug();
 
         //recharge les libelles - cas ou on enchaine les mode de jeu du jeu PM
         initLibellesLignes();
@@ -628,34 +644,37 @@ public class JeuPlusMoins {
         interfRunPM.FaitMoiUneSecret();
 
         for (int nbBoucle = 0; nbBoucle < nombreDeEssaisMax; nbBoucle++) {
-            AfiicheJeuPM(secret, tablePM);
 
             try {
 
-                interfRunPM.FaitMoiUnEssai(nbBoucle, secret, essai, score, tablePM, "[1-9 K k]", charactersEscape);
+                interfRunPM.FaitMoiUnEssai(nbBoucle);
 
-                isTrouve = interfRunPM.FaitMoiUnScore(essai, score, secret, tablePM, "", charactersEscape);
-
-                strLibelleSaisie = ". Saisie -> (K : retour)    ] ";
-                AjouterUnEssai(nbBoucle, essai, tablePM);
-                AjouterunScore(nbBoucle, score, tablePM);
+                isTrouve = interfRunPM.FaitMoiUnScore(nbBoucle);
 
                 if (isTrouve) {
-                    strLibelleInfos = interfRunPM.FaitMoiUnMessageDeVictoire();
-                    strLibelleSaisie = ".    Retour (->K)           ] ";
-                    AfiicheJeuPM(secret, tablePM);
-                    AttenteNettoyageUInput(charactersEscape);
                     break;
                 }
 
-            } catch (AppExceptions e) {
-                if (e.getCharacterSortie() == charactersEscape)
-                    return;
-                logger.error(ERREUR_GENERIC);
+            } catch (Exception e) {
+                if (e instanceof AppExceptions) {
+                    if (((AppExceptions) e).getCharacterSortie() == charactersEscape)
+                        return;
+                }
+                logger.error(String.format("%s %s", ERREUR_GENERIC, e.getClass().getSimpleName()));
                 throw new AppExceptions(ERREUR_GENERIC);
 
             }
         }
+        if (isTrouve) {
+            strLibelleInfos = interfRunPM.FaitMoiUnMessageDeVictoire();
+        } else {
+            strLibelleInfos = interfRunPM.FaitMoiUnMessageDeEchec();
+        }
+        strLibelleSaisie = ".    Retour (->K)           ] ";
+
+        AfiicheJeuPM(secret, tablePM);
+
+        AttenteNettoyageUInput(charactersEscape);
     }
 
     /**
@@ -671,13 +690,20 @@ public class JeuPlusMoins {
             }
 
             @Override
-            public void FaitMoiUnEssai(int nbBoucle, char[] secret, char[] essai, char[] score, char[][] tablePM, String pattern, Character characterEscape) {
-                SaisieUnEssaiJoueur(essai, secret, tablePM, pattern, characterEscape);
+            public void FaitMoiUnEssai(int nbBoucle) {
+                SaisieUnEssaiJoueur(essai, secret, tablePM, "[1-9 K k]", charactersEscape);
+                strLibelleSaisie = ". Saisie -> (K : retour)    ] ";
+                logger.debug(String.format("Mode Challenegeur FaitMoiUnEssai boucle = %d  essai = %s  secret = %s ", nbBoucle, String.valueOf(essai), String.valueOf(secret)));
+                AjouterUnEssai(nbBoucle, essai, tablePM);
+                AfiicheJeuPM(secret, tablePM);
             }
 
             @Override
-            public boolean FaitMoiUnScore(char[] essai, char[] score, char[] secret, char[][] tablePM, String pattern, Character characterEscape) {
-                return DonneScoreDuJoueur(essai, score, secret);
+            public boolean FaitMoiUnScore(int nbBoucle) {
+                boolean isTrouve = DonneScoreDuJoueur(essai, score, secret);
+                AjouterunScore(nbBoucle, score, tablePM);
+                AfiicheJeuPM(secret, tablePM);
+                return isTrouve;
             }
 
             @Override
@@ -689,6 +715,11 @@ public class JeuPlusMoins {
             public String FaitMoiUnMessageDeEchec() {
                 return "[     Vous avez Perdu       ] ";
             }
+
+            @Override
+            public boolean FaitMoiDebug() {
+                return modeDebug;
+            }
         });
     }
 
@@ -697,57 +728,62 @@ public class JeuPlusMoins {
      */
     public void runModeDefenseur() {
 
-        boolean isTrouve;
+        runAllMode(new InterfRunPM() {
 
-        modeDebug = true;
-        //recharge les libelles - cas ou on enchaine les mode de jeu du jeu PM
-        initLibellesLignes();
-
-
-        try {
-            strLibelleSaisie = ". Saisie du Scret -> (K : retour)    ] ";
-
-            FaitUnSecretParLeJoueur(secret, tablePM, "[1-9 K k]", charactersEscape);
-
-            strLibelleSaisie = ". Saisie -> (K : retour)    ] ";
-
-        } catch (AppExceptions e) {
-            if (e.getCharacterSortie() == charactersEscape)
-                return;
-            logger.error(ERREUR_GENERIC);
-            throw new AppExceptions(ERREUR_GENERIC);
-        }
-        try {
-            for (int nbBoucle = 0; nbBoucle < nombreDeEssaisMax; nbBoucle++) {
-
-                CalculUnNouvelEssaiOrdi(nbBoucle, essai, score, tablePM);
-
-                AjouterUnEssai(nbBoucle, essai, tablePM);
-                AfiicheJeuPM(secret, tablePM);
-
-                strLibelleSaisie = ". Saisie du Score  -> (K : automatique)    ] ";
-                isTrouve = DonneScoreDeLOrdi(essai, score, secret, tablePM, "[+ \\- = K k]", charactersEscape);
-
-                strLibelleSaisie = ". Saisie -> (K : retour)    ] ";
-
-                AjouterunScore(nbBoucle, score, tablePM);
-                AfiicheJeuPM(secret, tablePM);
-
-                if (isTrouve) {
-                    strLibelleInfos = "[    Ordinateur a  Gagné    ] ";
-                    strLibelleSaisie = ".    Retour (->K)           ] ";
-                    AfiicheJeuPM(secret, tablePM);
-                    AttenteNettoyageUInput(charactersEscape);
-                    break;
+            @Override
+            public void FaitMoiUneSecret() {
+                modeDebug = true;
+                try {
+                    strLibelleSaisie = ". Saisie du Secret -> (K : retour)    ] ";
+                    FaitUnSecretParLeJoueur(secret, tablePM, "[1-9 K k]", charactersEscape);
+                    strLibelleSaisie = ". Saisie -> (K : retour)    ] ";
+                } catch (Exception e) {
+                    if (e instanceof AppExceptions) {
+                        if (((AppExceptions) e).getCharacterSortie() == charactersEscape)
+                            return;
+                    }
+                    logger.error(ERREUR_GENERIC);
+                    logger.error(String.format("%s %s", ERREUR_GENERIC, e.getClass().getSimpleName()));
+                    throw new AppExceptions(ERREUR_GENERIC);
                 }
             }
 
-        } catch (AppExceptions e) {
-            if (e.getCharacterSortie() == charactersEscape)
-                return;
-            logger.error(ERREUR_GENERIC);
-            throw new AppExceptions(ERREUR_GENERIC);
-        }
+            @Override
+            public void FaitMoiUnEssai(int nbBoucle) {
+                CalculUnNouvelEssaiOrdi(nbBoucle, essai, score, tablePM);
+                logger.debug(String.format("Mode Defenseur FaitMoiUnEssai boucle = %d  essai = %s  secret = %s ", nbBoucle, String.valueOf(essai), String.valueOf(secret)));
+                AjouterUnEssai(nbBoucle, essai, tablePM);
+                AfiicheJeuPM(secret, tablePM);
+            }
+
+            @Override
+            public boolean FaitMoiUnScore(int nbBoucle) {
+                boolean isTrouve;
+                strLibelleSaisie = ". Saisie du Score  -> (K : automatique)    ] ";
+                logger.debug(String.format("Mode Defenseur FaitMoiUnScore boucle = %d  essai = %s  score = %s  secret = %s", nbBoucle, String.valueOf(essai), String.valueOf(score), String.valueOf(secret)));
+                isTrouve = DonneScoreDeLOrdi(essai, score, secret, tablePM, "[+ \\- = K k]", charactersEscape);
+                strLibelleSaisie = ". Saisie -> (K : retour)    ] ";
+                logger.debug(String.format("Mode Defenseur FaitMoiUnScore boucle = %d  essai = %s  score = %s  secret = %s ", nbBoucle, String.valueOf(essai), String.valueOf(score), String.valueOf(secret)));
+                AjouterunScore(nbBoucle, score, tablePM);
+                AfiicheJeuPM(secret, tablePM);
+                return isTrouve;
+            }
+
+            @Override
+            public String FaitMoiUnMessageDeVictoire() {
+                return "[    Ordinateur a  Gagné    ] ";
+            }
+
+            @Override
+            public String FaitMoiUnMessageDeEchec() {
+                return "[    Ordinateur a  Perdu    ] ";
+            }
+
+            @Override
+            public boolean FaitMoiDebug() {
+                return true;
+            }
+        });
     }
 
 

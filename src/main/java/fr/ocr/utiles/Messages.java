@@ -31,6 +31,8 @@ public enum Messages {
         PARAMETRAGE_ILLISIBLE("Impossible de lire le fichier parametre (parametres par defaut) - "),
         ECRITURE_PARAMETRES_IMPOSSIBLE("Ecriture dans fichier Parametre impossible - "),
         SORTIE_PGM_SUR_ERREURNONGEREE("Exception inattendue - fin pgm"),
+        PM_CHIFFRE_HORS_PLAGE_TOLERANCE("Le chiffre est négatif ou nul . hors plage de tolérance dans le jeu PlusMoins"),
+        PM_CARSCORE_HORS_PLAGE_TOLERANCE("un caractere du score est hors plage de tolérance dans le jeu PlusMoins"),
         ERREUR_GENERIC("Ne doit pas etre utilisée!");
 
         private String messageErreur;
@@ -55,9 +57,7 @@ public enum Messages {
         REMPLACEMENT_PAR_VALEUR_DEFAUT("Remplacement par la valeur par défaut =  "),
         RANDOM_ECHOUE_COLPARDEF("Le Random a échoué, les premières couleurs de la liste sont retenues"),
         TENTAIVE_DE_TRICHE_DEFENSEUR("Incoherence score entre calcul et saisie  - Suspicion de fraude"),
-        SORTIE_ESCAPE_SAISIE_SCORE("Sortie sur escape saisie Score mode Defenseur, copie du score calculé"),
-        PM_CHIFFRE_HORS_PLAGE_TOLERANCE("Le chiffre est négatif ou nul . hors plage de tolérance dans le jeu PlusMoins"),
-        PM_CARSCORE_HORS_PLAGE_TOLERANCE("un caractere du score est hors plage de tolérance dans le jeu PlusMoins");
+        SORTIE_ESCAPE_SAISIE_SCORE("Sortie sur escape saisie Score mode Defenseur, copie du score calculé");
 
         private String messageInformation;
 
