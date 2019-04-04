@@ -815,14 +815,14 @@ class ClasseJeuPlusMoins {
         //creation du secret par calcul
         FaitUnSecretParLOrdi(nombreDePositions, nombreMaxDeBoucles, secret);
 
-        for (int nbBoucle = 0; nbBoucle < nombreDeEssaisMax; nbBoucle++) {
+        for (int nbBoucle = 0; nbBoucle < nombreDeEssaisMax; ) {
 
             try {
                 //ordinateur Joue
                 CalculEssaiOrdi(nbBoucle);
 
                 //evalue score Ordinateur
-                isTrouveOrdi = EvalueScoreOrdi(nbBoucle);
+                isTrouveOrdi = EvalueScoreOrdi(nbBoucle++);
 
                 if (isTrouveOrdi) {
                     break;
@@ -831,7 +831,7 @@ class ClasseJeuPlusMoins {
                 //Joueur joue
                 SaisiEssaiJoueur(nbBoucle);
 
-                isTrouveJoueur = DonneScoreDuJoueur(nbBoucle);
+                isTrouveJoueur = DonneScoreDuJoueur(nbBoucle++);
 
                 if (isTrouveJoueur) {
                     break;
@@ -876,6 +876,8 @@ class ClasseJeuPlusMoins {
      * @param nbBoucle int
      */
     private void SaisiEssaiJoueur(int nbBoucle) {
+        strLibelleInfos = "[     Informations          ] ";
+        strLibelleSaisie = ". Saisie -> (K : retour)    ] ";
         SaisieUnEssaiJoueur(essai, secret, tablePM, "[1-9 K k]", charactersEscape);
         strLibelleSaisie = ". Saisie -> (K : retour)    ] ";
         logger.debug(String.format("Mode Challenegeur FaitMoiUnEssai boucle = %d  essai = %s  secret = %s ", nbBoucle, String.valueOf(essai), String.valueOf(secret)));
