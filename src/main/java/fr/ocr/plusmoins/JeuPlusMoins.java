@@ -428,6 +428,9 @@ class ClasseJeuPlusMoins {
 
     /**
      * renvoie un nouvel essai calculé
+     * minmax:
+     * si l'essai est plus petit que le secret, recherche la plus petite borne supérieure
+     * si l'essai est plus gand que le secret , recherche la plus grande borne inférieure
      *
      * @param rang        int  rang courant dans tablePM
      * @param nouvelEssai char [] contient le nouvel essai calculé
@@ -657,7 +660,6 @@ class ClasseJeuPlusMoins {
             }
             locaCountGuard++;
         } while (locaCountGuard < 10);
-
     }
 
     /**
@@ -698,6 +700,7 @@ class ClasseJeuPlusMoins {
 
             }
         }
+        //fin de ce jeu
         if (isTrouve) {
             strLibelleInfos = interfRunPM.FaitMoiUnMessageDeVictoire();
         } else {
@@ -831,6 +834,7 @@ class ClasseJeuPlusMoins {
                 //Joueur joue
                 SaisiEssaiJoueur(nbBoucle);
 
+                //evalue score du joueur
                 isTrouveJoueur = DonneScoreDuJoueur(nbBoucle++);
 
                 if (isTrouveJoueur) {
@@ -847,6 +851,7 @@ class ClasseJeuPlusMoins {
 
             }
         }
+        //sortie de ce jeu
         if (isTrouveOrdi) {
             strLibelleInfos = "[    Ordinateur a  Gagné    ] ";
         } else if (isTrouveJoueur) {
@@ -862,6 +867,8 @@ class ClasseJeuPlusMoins {
     }
 
     /**
+     * actions pour scorer essai du joueur
+     *
      * @param nbBoucle int
      * @return boolean vrai si secret trouve
      */
@@ -873,6 +880,8 @@ class ClasseJeuPlusMoins {
     }
 
     /**
+     * actions pour saisir essai joueur
+     *
      * @param nbBoucle int
      */
     private void SaisiEssaiJoueur(int nbBoucle) {
@@ -923,7 +932,6 @@ class ClasseJeuPlusMoins {
 
         return isTrouve;
     }
-
 }
 /*
  *********************************************************************
