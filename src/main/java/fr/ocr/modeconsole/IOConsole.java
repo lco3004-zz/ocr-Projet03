@@ -70,6 +70,9 @@ public class IOConsole {
                         //est-ce ctrl-C ??
                         logger.info(CTRL_C);
                         choix = Character.toString(escapeChar);
+                    } catch (IllegalStateException e9) {
+                        logger.error(String.format("%s %s %s", ERREUR_GENERIC, e9.getClass().getSimpleName(), " scanner fermé"));
+                        throw new AppExceptions(ERREUR_GENERIC);
                     }
                 } catch (Exception e3) {
                     //réponse inconnue

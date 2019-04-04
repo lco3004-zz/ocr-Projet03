@@ -8,6 +8,7 @@ import fr.ocr.utiles.Messages;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.InputMismatchException;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
@@ -236,7 +237,10 @@ public class JeuPlusMoins {
     private void SaisirDesChars(char[] lesCharsAFournir, char[] secret,
                                 char[][] tablePM, String pattern_Menu,
                                 Character escapeChar) throws AppExceptions {
+
         Pattern patternChoix = Pattern.compile(pattern_Menu);
+
+        StringBuilder saisieParChaine = new StringBuilder(nombreDePositions);
 
         Character cRet = '?';
 
@@ -244,37 +248,84 @@ public class JeuPlusMoins {
 
         AfiicheJeuPM(secret, tablePM);
         // scanner en mode hasNext, next - avec pattern de carteres autorisés
+
         int localCount = 0;
 
-        while (localCount < nombreDePositions && scanner.hasNext()) {
+        try {
+            while (localCount < nombreDePositions && cRet != escapeChar && scanner.hasNext()) {
 
-            try {
-                cRet = scanner.next(patternChoix).toUpperCase().charAt(0);
-                if (cRet != escapeChar) {
-                    lesCharsAFournir[localCount++] = cRet;
-                    strLibelleSaisie += " " + cRet;
+                try {
+                    saisieParChaine.delete(0, saisieParChaine.length());
+
+                    for (char c : scanner.next().toCharArray()) {
+                        if (c != ' ')
+                            saisieParChaine.append(c).append(' ');
+                    }
+
+                    //on tente une lecture sur cette chaine ave cloture auto sur ce scanner
+                    try (Scanner monScan = new Scanner(saisieParChaine.toString())) {
+
+                        while (localCount < nombreDePositions && monScan.hasNext()) {
+
+                            try {
+                                cRet = monScan.next(patternChoix).toUpperCase().charAt(0);
+
+                                if (cRet != escapeChar) {
+
+                                    lesCharsAFournir[localCount++] = cRet;
+
+                                    strLibelleSaisie += " " + cRet;
+
+                                } else {
+                                    break;
+                                }
+
+                            } catch (InputMismatchException e) {
+
+                                monScan.next();
+                            } catch (NoSuchElementException e) {
+
+                                cRet = escapeChar; //Ctrl-C
+
+                                break;
+                            }
+                        }
+                    }
+
                     IOConsole.ClearScreen.cls();
+
                     AfiicheJeuPM(secret, tablePM);
-                } else
+
+                } catch (NoSuchElementException e) {
+                    // one devrait pas arrive la ou alors pas compris donc : on sort proprement
+                    cRet = escapeChar;
+
                     break;
+                } catch (IllegalStateException e) {
 
-            } catch (InputMismatchException e1) {
-                //si le caracter saisi n'est pas dans la liste des car. acceptés
-                scanner.next();
-                //efface ecran et reaffiche le tout
-                IOConsole.ClearScreen.cls();
-                AfiicheJeuPM(secret, tablePM);
+                    logger.error(String.format("%s %s %s", ERREUR_GENERIC, e.getClass().getSimpleName(), " scanner fermé"));
+
+                    throw new AppExceptions(ERREUR_GENERIC);
+                }
+
             }
-        }
-        //est-ce un ctrl-c qui fait sortir de la saisie par la classe Scanner ??
-        if (cRet == '?' || cRet == escapeChar) {
-            logger.info(CTRL_C.toString() + " ou escapechar");
-            throw new AppExceptions(SORTIE_SUR_ESCAPECHAR, charactersEscape);
-        }
 
+            //soirtie par escapeChar ou CTRL-C
+            if (cRet == '?' || cRet == escapeChar) {
 
+                logger.info(CTRL_C.toString() + " ou " + escapeChar.toString());
+
+                throw new AppExceptions(SORTIE_SUR_ESCAPECHAR, charactersEscape);
+
+            }
+
+        } catch (IllegalStateException e) {
+
+            logger.error(String.format("%s %s %s", ERREUR_GENERIC, e.getClass().getSimpleName(), " scanner fermé"));
+
+            throw new AppExceptions(ERREUR_GENERIC);
+        }
     }
-
     /**
      * saisie d'un essai (acces clavier)
      *
