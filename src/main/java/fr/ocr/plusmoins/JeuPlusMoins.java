@@ -21,6 +21,20 @@ import static fr.ocr.utiles.Messages.InfosMessages.CTRL_C;
 import static fr.ocr.utiles.Messages.InfosMessages.SORTIE_SUR_ESCAPECHAR;
 
 
+interface InterfRunPM {
+    void FaitMoiUneSecret();
+
+    void FaitMoiUnEssai(int nbBoucle, char[] secret, char[] essai, char[] score, char[][] tablePM, String s, Character characterEscape);
+
+    //DonneScoreDuJoueur(essai, score, secret);
+    // DonneScoreDeLOrdi(essai, score, secret, tablePM, "[+ \\- = K k]", charactersEscape);
+    boolean FaitMoiUnScore(char[] essai, char[] score, char[] secret, char[][] tablePM, String pattern, Character characterEscape);
+
+    String FaitMoiUnMessageDeVictoire();
+
+    String FaitMoiUnMessageDeEchec();
+}
+
 /**
  * Classe du jeu Plus Moins
  */
@@ -582,34 +596,55 @@ public class JeuPlusMoins {
     }
 
     /**
-     * joue  en mode Challengeur
+     * attente saisie escapeChar avant retour au menu superieur
+     * "vide" le'input (system.in )
+     *
+     * @param charactersEscape Character : escapechar
      */
-    public void runModeChallengeur() {
+    private void AttenteNettoyageUInput(Character charactersEscape) {
+        //tentaive de nettoyage du System.in
+        int locaCountGuard = 0;
+        do {
+            try {
+                if (scanner.hasNext()) {
+                    if (scanner.next().toUpperCase().contains(charactersEscape.toString()))
+                        break;
+                }
+            } catch (NoSuchElementException f) {
+                break;
+            }
+            locaCountGuard++;
+        } while (locaCountGuard < 10);
+        scanner.close();
+    }
+
+    private void runAllMode(InterfRunPM interfRunPM) {
 
         boolean isTrouve;
 
         //recharge les libelles - cas ou on enchaine les mode de jeu du jeu PM
         initLibellesLignes();
 
-        //creation du secret par calcul
-        FaitUnSecretParLOrdi(nombreDePositions, nombreMaxDeBoucles, secret);
+        interfRunPM.FaitMoiUneSecret();
 
         for (int nbBoucle = 0; nbBoucle < nombreDeEssaisMax; nbBoucle++) {
             AfiicheJeuPM(secret, tablePM);
 
             try {
-                SaisieUnEssaiJoueur(essai, secret, tablePM, "[1-9 K k]", charactersEscape);
-                isTrouve = DonneScoreDuJoueur(essai, score, secret);
+
+                interfRunPM.FaitMoiUnEssai(nbBoucle, secret, essai, score, tablePM, "[1-9 K k]", charactersEscape);
+
+                isTrouve = interfRunPM.FaitMoiUnScore(essai, score, secret, tablePM, "", charactersEscape);
 
                 strLibelleSaisie = ". Saisie -> (K : retour)    ] ";
                 AjouterUnEssai(nbBoucle, essai, tablePM);
                 AjouterunScore(nbBoucle, score, tablePM);
 
                 if (isTrouve) {
-                    strLibelleInfos = "[     Vous avez Gagné       ] ";
+                    strLibelleInfos = interfRunPM.FaitMoiUnMessageDeVictoire();
+                    strLibelleSaisie = ".    Retour (->K)           ] ";
                     AfiicheJeuPM(secret, tablePM);
-                    scanner.hasNext();
-                    scanner.next();
+                    AttenteNettoyageUInput(charactersEscape);
                     break;
                 }
 
@@ -624,6 +659,40 @@ public class JeuPlusMoins {
     }
 
     /**
+     * joue  en mode Challengeur
+     */
+    public void runModeChallengeur() {
+
+        runAllMode(new InterfRunPM() {
+            @Override
+            public void FaitMoiUneSecret() {
+                //creation du secret par calcul
+                FaitUnSecretParLOrdi(nombreDePositions, nombreMaxDeBoucles, secret);
+            }
+
+            @Override
+            public void FaitMoiUnEssai(int nbBoucle, char[] secret, char[] essai, char[] score, char[][] tablePM, String pattern, Character characterEscape) {
+                SaisieUnEssaiJoueur(essai, secret, tablePM, pattern, characterEscape);
+            }
+
+            @Override
+            public boolean FaitMoiUnScore(char[] essai, char[] score, char[] secret, char[][] tablePM, String pattern, Character characterEscape) {
+                return DonneScoreDuJoueur(essai, score, secret);
+            }
+
+            @Override
+            public String FaitMoiUnMessageDeVictoire() {
+                return "[     Vous avez Gagné       ] ";
+            }
+
+            @Override
+            public String FaitMoiUnMessageDeEchec() {
+                return "[     Vous avez Perdu       ] ";
+            }
+        });
+    }
+
+    /**
      * joue en mode defenseur
      */
     public void runModeDefenseur() {
@@ -633,6 +702,7 @@ public class JeuPlusMoins {
         modeDebug = true;
         //recharge les libelles - cas ou on enchaine les mode de jeu du jeu PM
         initLibellesLignes();
+
 
         try {
             strLibelleSaisie = ". Saisie du Scret -> (K : retour)    ] ";
@@ -648,25 +718,26 @@ public class JeuPlusMoins {
             throw new AppExceptions(ERREUR_GENERIC);
         }
         try {
-            for (int i = 0; i < nombreDeEssaisMax; i++) {
+            for (int nbBoucle = 0; nbBoucle < nombreDeEssaisMax; nbBoucle++) {
+
+                CalculUnNouvelEssaiOrdi(nbBoucle, essai, score, tablePM);
+
+                AjouterUnEssai(nbBoucle, essai, tablePM);
                 AfiicheJeuPM(secret, tablePM);
 
-                CalculUnNouvelEssaiOrdi(i, essai, score, tablePM);
-                //char[] essai, char[] score, char[] secret,
-                //                                      char[][] tablePM, String pattern_Menu,
-                //                                      Character escapeChar
                 strLibelleSaisie = ". Saisie du Score  -> (K : automatique)    ] ";
                 isTrouve = DonneScoreDeLOrdi(essai, score, secret, tablePM, "[+ \\- = K k]", charactersEscape);
 
                 strLibelleSaisie = ". Saisie -> (K : retour)    ] ";
-                AjouterUnEssai(i, essai, tablePM);
-                AjouterunScore(i, score, tablePM);
+
+                AjouterunScore(nbBoucle, score, tablePM);
+                AfiicheJeuPM(secret, tablePM);
 
                 if (isTrouve) {
                     strLibelleInfos = "[    Ordinateur a  Gagné    ] ";
+                    strLibelleSaisie = ".    Retour (->K)           ] ";
                     AfiicheJeuPM(secret, tablePM);
-                    scanner.hasNext();
-                    scanner.next();
+                    AttenteNettoyageUInput(charactersEscape);
                     break;
                 }
             }
@@ -679,12 +750,21 @@ public class JeuPlusMoins {
         }
     }
 
+
+    /**
+     * joue en mode duel
+     */
     public void runModeDuel() {
+
+        boolean isTrouve;
+
+        modeDebug = true;
 
         //recharge les libelles - cas ou on enchaine les mode de jeu du jeu PM
         initLibellesLignes();
 
         //creation du secret par calcul
+
         FaitUnSecretParLOrdi(nombreDePositions, nombreMaxDeBoucles, secret);
 
         for (int i = 0; i < nombreDeEssaisMax; i++) {
