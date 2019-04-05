@@ -516,8 +516,19 @@ class ClasseJeuPlusMoins {
             strLibelleSaisie = ". Saisie -> (K : retour)    ] ";
         } catch (Exception e) {
             if (e instanceof AppExceptions) {
-                if (((AppExceptions) e).getCharacterSortie() == charactersEscape)
+                if (((AppExceptions) e).getCharacterSortie() == charactersEscape) {
+                    int locaVal;
+                    for (int i = 0; i < secret.length; i++) {
+                        if (i == 0)
+                            locaVal = i + 1;
+                        else if (i > 9)
+                            locaVal = 9;
+                        else
+                            locaVal = (i < 9) ? i + 1 : 9;
+                        secret[i] = (char) (locaVal + '0');
+                    }
                     return;
+                }
             }
             logger.error(ERREUR_GENERIC);
             logger.error(String.format("%s %s", ERREUR_GENERIC, e.getClass().getSimpleName()));
