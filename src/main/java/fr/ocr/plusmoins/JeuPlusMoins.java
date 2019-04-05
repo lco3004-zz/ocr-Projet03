@@ -511,7 +511,7 @@ class ClasseJeuPlusMoins {
     private void ProduireSecretModeDefenseur() throws AppExceptions {
         modeDebug = true;
         try {
-            strLibelleSaisie = ". Saisie du Secret -> (K : retour)    ] ";
+            strLibelleSaisie = ". Saisie du Secret -> (K : par defaut)    ] ";
             SaisirDesChars(secret, new char[secret.length], tablePM, "[1-9 K k]", charactersEscape);
             strLibelleSaisie = ". Saisie -> (K : retour)    ] ";
         } catch (Exception e) {
