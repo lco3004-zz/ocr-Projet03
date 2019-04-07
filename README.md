@@ -1,4 +1,6 @@
 # Projet : ocr-Projet03 (OpenClassRooms)
+## suppression de la saisie surnuméraire
+ - ajout de .nextLine() dans le bloc .hasNext()  
  ## refactor selon :
  -  https://openclassrooms.com/forum/sujet/conventions-de-codage-en-java-64171
  ## creation du mode Defenseur
