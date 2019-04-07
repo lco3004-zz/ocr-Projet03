@@ -82,7 +82,6 @@ interface InterfRunPM {
  * modele de patron en gloups qui est deprécié de nos jour , à tort car aucun compétiteur ne maitrise le gloups
  * ce qui offre une transmission du savoir gloupsien uniquement par asymétrie coplanaire non genrée
  */
-
 class GloupseClasse {
     Consumer<Object> produireSecret;
     Function<Integer, Boolean> evaluerScore;
@@ -204,10 +203,14 @@ class ClasseJeuPlusMoins {
         do {
             try {
                 if (scanner.hasNext()) {
-                    if (scanner.next().toUpperCase().contains(charactersEscape.toString()))
+                    if (scanner.next().toUpperCase().contains(charactersEscape.toString())) {
+                        String sTmp = scanner.nextLine();
+                        logger.debug(String.format(" AttenteNettoyageUInput - Fin de ligne = %s", ((sTmp != null) ? sTmp : "vide ou null")));
+                    }
                         break;
                 }
             } catch (NoSuchElementException f) {
+                logger.debug(String.format(" AttenteNettoyageUInput - Exception de fin : %s)", f.getMessage()));
                 break;
             }
             locaCountGuard++;
@@ -438,6 +441,9 @@ class ClasseJeuPlusMoins {
                         if (c != ' ')
                             saisieParChaine.append(c).append(' ');
                     }
+                    //ne pas tenir compte de ce qui reste dans le buffer d'entrée
+                    String sTmp = scanner.nextLine();
+                    logger.debug(String.format(" AttenteNettoyageUInput - Fin de ligne = %s", ((sTmp != null) ? sTmp : "vide ou null")));
 
                     //on tente une lecture sur cette chaine ave cloture auto sur ce scanner
                     try (Scanner monScan = new Scanner(saisieParChaine.toString())) {
@@ -454,25 +460,28 @@ class ClasseJeuPlusMoins {
                                     strLibelleSaisie += " " + cRet;
 
                                 } else {
+
                                     break;
                                 }
 
                             } catch (InputMismatchException e) {
 
                                 monScan.next();
+
                             } catch (NoSuchElementException e) {
-
                                 cRet = escapeChar; //Ctrl-C
-
                                 break;
                             }
                         }
                     }
 
                 } catch (NoSuchElementException e) {
-                    // one devrait pas arrive la ou alors pas compris donc : on sort proprement
+                    // on devrait pas arrive la ou alors pas compris donc : on sort proprement
                     cRet = escapeChar;
-
+                    //TODO verifier bon fonctionnement en mettant un getlin ici
+                    //ne pas tenir compte de ce qui reste dans le buffer d'entrée
+                    //String sTmp= scanner.nextLine();
+                    //logger.debug(String.format(" AttenteNettoyageUInput - Fin de ligne = %s",((sTmp != null)? sTmp:"vide ou null")));
                     break;
                 } catch (IllegalStateException e) {
 
@@ -480,7 +489,6 @@ class ClasseJeuPlusMoins {
 
                     throw new AppExceptions(ERREUR_GENERIC);
                 }
-
             }
 
             AfiicheJeuPM(secret, tablePM);
