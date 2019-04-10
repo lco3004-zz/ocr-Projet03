@@ -1,10 +1,14 @@
-# Projet : ocr-Projet03 (OpenClassRooms)
+# Projet : ocr-Projet03 - JeuPlusMoins
 ## Revision du périmètre
-- Je pense avoir mieux cerné le fonctionnement du parcours en observant:
-  - la révision de la cible(suppression du problème NPComplet) : arrêt immédiat de la mise en oeuvre du framework fork/join,  
-  - l'évaluation du "comment ai-je pensé l'application" : inutile de tester autre que "je lance, ca marche".
- - Ce progrès m'offre un gain de temps significatif , il est superflux et hors périmètre de présenter des slides avec couverture fonctionnelle etc..
-## Livrable (full stop)
+- Je pense avoir mieux cerné le fonctionnement du parcours en observant le changement de périmètre du projet 3 (abandon Mastermind).
+- Le prochain projet sera, je me le souhaite,  mieux réalisé , promis. 
+   - lecture complète des sections avec évaluations de la pertinence des renvois vers d'autre cours.
+   - prévision du temps et annonce des cours à suivre => calendrier 
+   - évaluation de la pertinence du projet à réaliser au regard des cours proposé dans le parcours.
+   - choix d'autre cours en relation avec le projet si necessaire et abandon des cours du parcours sans lien avec le projet à réaliser
+   - si écart trop important entre cours proposés dans le parcours et cible du projet, discussion avec Mentor pour éviter la perte de temps vraiment gigantesque du projet  3
+   - Merci pour votre compréhension et soutien    
+## Livrable
 - Fichier de Configuration :
   - se trouve  sous ./target/classes : params.properties
 - Mode développeur: 
@@ -35,6 +39,23 @@
   - le jeu utilise les développements communs : accès au fichier paramètre, gestion exception, constantes du pgm
   - Le choix se fait par les menus commun aux deux jeux mastermind et Plus/Moins.
   - JUnit :   uniquement sur l'enchainement des menus 
+- Couverture technique et fonctionnelle
+  - mise en oeuvre de l'héritage, de l'interfacage, de l'abstraction, de lambda et methode de classe
+  - mise en oeuvre des classes fonctionnelles (function, provider)
+  - création de package par fonctionnalité
+  - utilisation simple de stream 
+  - Utilisation de méthode statique
+  - Utilisation de EnumSet (Enum)
+  - Utilisation de collection (ArrayList,...)
+  - utilisation de la portée (private, package private, protected, public).
+  - commentaires du code, camelcase, javadoc
+  - gestionnaire d'exception
+  - utilisation de la classe scanner.
+  - non utilisé : Bloc de code , NIO, Regex (très limité pour Scanner) , Concurrence, Event Handling etc...
+- Sources Documentaire:
+  - "Oracle , Java the complete reference eleventh edition , Herbert Schildt, Oracle Press"
+  - "Eyrolles , Apprenez à programmer en Java - 2ième et 3ieme éditions, OpenClassRooms / Site du zéro, Cyrille Herby - Eyrolles edition"
+  - "Dossier Informatique et Sciences du Numérique , APMEP no 503 Mastermind : Des preuves par ordinateur Bernard Langer(*)"
 
 
 
