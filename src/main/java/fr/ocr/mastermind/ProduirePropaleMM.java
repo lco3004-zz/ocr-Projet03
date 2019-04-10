@@ -319,9 +319,9 @@ class ProduirePropaleMMChallengeur implements ProduirePropaleMM {
 
             Character saisieUneCouleur;
             do {
-                saisieUneCouleur = IOConsole.LectureClavierChar(pattern, scanner, new EcrireSurEcran() {
+                saisieUneCouleur = IOConsole.lectureClavierChar(pattern, scanner, new EcrireSurEcran() {
                     @Override
-                    public void Display() {
+                    public void display() {
                         for (int n = TITRE; n <= LIGNE_DE_SAISIE; n++) {
                             if (lignesSimpleMM[n].isEstVisible()) {
                                 if (n == LIGNE_DE_SAISIE) {
@@ -336,7 +336,7 @@ class ProduirePropaleMMChallengeur implements ProduirePropaleMM {
 
                 if (saisieUneCouleur != escChar) {
                     propositionJoueur.add(saisieUneCouleur);
-                    pattern = ReduirePattern(pattern, doublonAutorise, saisieUneCouleur);
+                    pattern = reduirePattern(pattern, doublonAutorise, saisieUneCouleur);
                 } else {
                     propositionJoueur.clear();
                     propositionJoueur.add(escChar);
@@ -361,7 +361,7 @@ class ProduirePropaleMMChallengeur implements ProduirePropaleMM {
      * @param saisieUneCouleur Character , l'initiale de la couleur a retiré du pattern de saisie
      * @return String pattern  initial moins le caractere qui vient d'etre saisi donc n'est  plus dispo en mode sans doublon
      */
-    private String ReduirePattern(String pattern, Boolean doublonAutorise, Character saisieUneCouleur) {
+    private String reduirePattern(String pattern, Boolean doublonAutorise, Character saisieUneCouleur) {
         String infosSaisie = lignesSimpleMM[LIGNE_DE_SAISIE].getLibelleLigne() + saisieUneCouleur.toString() + " ";
         lignesSimpleMM[LIGNE_DE_SAISIE].setLibelleLigne(infosSaisie);
         //si le mode est sans doublon

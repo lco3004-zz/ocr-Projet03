@@ -31,7 +31,7 @@ public class IOConsole {
      * @return le caractère qui correspond à la saisie utilisateur (filtré par pattern )
      * @throws AppExceptions  si erreur lors de la saisie
      */
-    public static Character LectureClavierChar(String pattern_Menu,
+    public static Character lectureClavierChar(String pattern_Menu,
                                                Scanner scanner,
                                                EcrireSurEcran ecrireSurEcran,
                                                Character escapeChar) throws AppExceptions {
@@ -43,7 +43,7 @@ public class IOConsole {
 
         ClearScreen.cls();
 
-        ecrireSurEcran.Display();
+        ecrireSurEcran.display();
 
         // scanner en mode hasNext, next - avec pattern de carteres autorisés
         try {
@@ -60,7 +60,7 @@ public class IOConsole {
                             String tmp = scanner.next();
                             //efface ecran et reaffiche le tout
                             ClearScreen.cls();
-                            ecrireSurEcran.Display();
+                            ecrireSurEcran.display();
                         } catch (NoSuchElementException e2) {
                             //est-ce ctrl-C ??
                             logger.info(CTRL_C);
@@ -97,7 +97,7 @@ public class IOConsole {
         return cRet;
     }
     /*
-     * efface l'afficage console . Clear ou Cls sont appellés selon le système
+     * efface l'afficage console . clearLigne ou Cls sont appellés selon le système
      * sur lequel le programme est exécuté
      */
     public static class ClearScreen {
@@ -111,7 +111,7 @@ public class IOConsole {
                 if (os.contains("Windows"))
                     new ProcessBuilder("cmd", "/c", "cmd.exe /c cls").inheritIO().start().waitFor();
                 else
-                    Runtime.getRuntime().exec("clear");
+                    Runtime.getRuntime().exec("clearLigne");
             } catch (InterruptedException | IOException e) {
                 System.out.println(e.getMessage());
             }

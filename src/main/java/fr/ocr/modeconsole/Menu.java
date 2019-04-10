@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
-import static fr.ocr.modeconsole.IOConsole.LectureClavierChar;
+import static fr.ocr.modeconsole.IOConsole.lectureClavierChar;
 import static fr.ocr.utiles.Logs.logger;
 import static fr.ocr.utiles.Messages.ErreurMessages.ERREUR_GENERIC;
 
@@ -200,13 +200,13 @@ public abstract class Menu<T extends Enum> {
      * @return instance d'une classe d'un Enum (LibellesMenuSecondaire par exemple)
      * @throws AppExceptions sur erreur ou CTRL-C
      */
-    public T RunMenu() throws AppExceptions {
+    public T runMenu() throws AppExceptions {
         T enumActionChoisie;
 
         Character escapeChar = Constantes.Libelles.CharactersEscape.X.toString().charAt(0);
 
         try {
-            enumActionChoisie = retrouveLigneMenu(LectureClavierChar(pattern_Menu, scanner, displayMenu, escapeChar));
+            enumActionChoisie = retrouveLigneMenu(lectureClavierChar(pattern_Menu, scanner, displayMenu, escapeChar));
         } catch (Exception e) {
             logger.error(String.format("%s %s ", ERREUR_GENERIC, e.getClass().getSimpleName()));
             throw new AppExceptions(ERREUR_GENERIC);
@@ -222,7 +222,7 @@ public abstract class Menu<T extends Enum> {
     public void majLigneEtat(String s) {
         String modelStatusBar = "[-- " + s + " --]";
         statusBar.setLibelleLigne(modelStatusBar);
-        displayMenu.Display();
+        displayMenu.display();
     }
 }
 
@@ -246,7 +246,7 @@ class DisplayMenu<T extends Enum> implements EcrireSurEcran {
      * de saisie du choix
      */
     @Override
-    public void Display() {
+    public void display() {
         int j = 0;
 
         for (LigneMenu<T> ligneMenu : lignesMenu) {

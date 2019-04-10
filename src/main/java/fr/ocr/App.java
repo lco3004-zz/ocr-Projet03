@@ -77,7 +77,7 @@ public class App {
                 //scanner sur console
 
 
-                ch_Sup = (new MenuPrincipal(scannerPrimaire)).RunMenu();
+                ch_Sup = (new MenuPrincipal(scannerPrimaire)).runMenu();
 
 
                 switch (ch_Sup) {
@@ -95,7 +95,7 @@ public class App {
                                 //creation  du menu du jeu plusmoins
                                 menu_secondaire = new MenuSecondaire(Constantes.Libelles.LibellesJeux.PLUSMOINS.toString(), scannerPrimaire);
                             }
-                            ch_Sec = menu_secondaire.RunMenu();
+                            ch_Sec = menu_secondaire.runMenu();
 
 
                             switch (ch_Sec) {

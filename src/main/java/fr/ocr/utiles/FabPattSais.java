@@ -13,7 +13,7 @@ import static fr.ocr.utiles.Constantes.ConstTailleStringBuilder.TAIILE_INITIALE;
 
 public final class FabPattSais {
 
-    static private String ConstruitPatternSaisie(Constantes.CouleursMastermind[] colMM,
+    static private String construitPatternSaisie(Constantes.CouleursMastermind[] colMM,
                                                  Character escapeChar) {
         StringBuilder patternSaisie = new StringBuilder(TAIILE_INITIALE);
         String s;
@@ -37,7 +37,7 @@ public final class FabPattSais {
      * @param escapeChar le pattern de saisie ne contient que le caractère d'échappement
      * @return String listeInitialesColor (pattern de saisie
      */
-    static public String ConstruitPatternSaisie(Character escapeChar) {
+    static public String construitPatternSaisie(Character escapeChar) {
         StringBuilder patternSaisie = new StringBuilder(TAIILE_INITIALE);
         String s;
         patternSaisie.append('[');
@@ -51,12 +51,12 @@ public final class FabPattSais {
     }
 
 
-    public static String ConstruitPatternSaisie(Constantes.CouleursMastermind[] values, Integer nombreDeCouleurs, Character charactersEscape) {
+    public static String construitPatternSaisie(Constantes.CouleursMastermind[] values, Integer nombreDeCouleurs, Character charactersEscape) {
         Constantes.CouleursMastermind[] y = new Constantes.CouleursMastermind[nombreDeCouleurs];
 
         System.arraycopy(values, 0, y, 0, nombreDeCouleurs);
 
-        return ConstruitPatternSaisie(y, charactersEscape);
+        return construitPatternSaisie(y, charactersEscape);
     }
 }
 /*

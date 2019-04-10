@@ -54,7 +54,7 @@ class FabricationSecretMM {
 
         chiffresSecrets = chiffresSecretsFournis;
 
-        couleursSecretes = BijecterCouleurChiffres(chiffresSecrets, (Integer) getParam(NOMBRE_DE_POSITIONS));
+        couleursSecretes = bijecterCouleurChiffres(chiffresSecrets, (Integer) getParam(NOMBRE_DE_POSITIONS));
     }
 
     /**
@@ -112,7 +112,7 @@ class FabricationSecretMM {
             logger.info(RANDOM_ECHOUE_COLPARDEF);
         }
 
-        couleursSecretes = BijecterCouleurChiffres(chiffresSecrets, (Integer) getParam(NOMBRE_DE_POSITIONS));
+        couleursSecretes = bijecterCouleurChiffres(chiffresSecrets, (Integer) getParam(NOMBRE_DE_POSITIONS));
     }
 
     /**
@@ -121,7 +121,7 @@ class FabricationSecretMM {
      * @param nbPos       Integer , nombre de positions par ligne de jeu
      * @return la ligne secrete sous forme de couleurs
      */
-    private Constantes.CouleursMastermind[] BijecterCouleurChiffres(ArrayList<Integer> chiffresSec, Integer nbPos) {
+    private Constantes.CouleursMastermind[] bijecterCouleurChiffres(ArrayList<Integer> chiffresSec, Integer nbPos) {
         Constantes.CouleursMastermind[] coulSec = new Constantes.CouleursMastermind[nbPos];
         int i = 0;
         for (int v : chiffresSec) {

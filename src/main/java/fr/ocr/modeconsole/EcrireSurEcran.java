@@ -15,7 +15,7 @@ public interface EcrireSurEcran {
     /**
      * par default , display log une erreur
      */
-    default void Display() {
+    default void display() {
         logger.error(Messages.ErreurMessages.ERREUR_GENERIC);
     }
 }

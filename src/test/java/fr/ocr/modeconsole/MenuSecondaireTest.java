@@ -52,7 +52,7 @@ class MenuSecondaireTest {
 
         menu_secondaire = new MenuSecondaire(Constantes.Libelles.LibellesJeux.MASTERMIND.toString(), scanner);
 
-        ch_Sec = menu_secondaire.RunMenu();
+        ch_Sec = menu_secondaire.runMenu();
 
         assertEquals(ch_Sec, Constantes.Libelles.LibellesMenuSecondaire.MODE_CHALLENGER);
 
@@ -67,7 +67,7 @@ class MenuSecondaireTest {
 
         menu_secondaire = new MenuSecondaire(Constantes.Libelles.LibellesJeux.MASTERMIND.toString(), scanner);
 
-        ch_Sec = menu_secondaire.RunMenu();
+        ch_Sec = menu_secondaire.runMenu();
 
         assertEquals(ch_Sec, Constantes.Libelles.LibellesMenuSecondaire.MODE_DEFENSEUR);
 
@@ -82,7 +82,7 @@ class MenuSecondaireTest {
 
         menu_secondaire = new MenuSecondaire(Constantes.Libelles.LibellesJeux.MASTERMIND.toString(), scanner);
 
-        ch_Sec = menu_secondaire.RunMenu();
+        ch_Sec = menu_secondaire.runMenu();
 
         assertEquals(ch_Sec, Constantes.Libelles.LibellesMenuSecondaire.MODE_DUEL);
 
@@ -97,7 +97,7 @@ class MenuSecondaireTest {
 
         menu_secondaire = new MenuSecondaire(Constantes.Libelles.LibellesJeux.MASTERMIND.toString(), scanner);
 
-        ch_Sec = menu_secondaire.RunMenu();
+        ch_Sec = menu_secondaire.runMenu();
 
         assertEquals(ch_Sec, Constantes.Libelles.LibellesMenuSecondaire.RETOUR);
 
@@ -112,7 +112,7 @@ class MenuSecondaireTest {
 
         menu_secondaire = new MenuSecondaire(Constantes.Libelles.LibellesJeux.MASTERMIND.toString(), scanner);
 
-        ch_Sec = menu_secondaire.RunMenu();
+        ch_Sec = menu_secondaire.runMenu();
 
         assertEquals(ch_Sec, Constantes.Libelles.LibellesMenuSecondaire.QUITTER);
 
@@ -127,7 +127,7 @@ class MenuSecondaireTest {
 
         menu_secondaire = new MenuSecondaire(Constantes.Libelles.LibellesJeux.MASTERMIND.toString(), scanner);
 
-        ch_Sec = menu_secondaire.RunMenu();
+        ch_Sec = menu_secondaire.runMenu();
 
         assertEquals(ch_Sec, Constantes.Libelles.LibellesMenuSecondaire.LOGGER_PARAMETRES);
 
@@ -146,7 +146,7 @@ class MenuSecondaireTest {
 
         menu_secondaire = new MenuSecondaire(Constantes.Libelles.LibellesJeux.MASTERMIND.toString(), scanner);
 
-        Constantes.Libelles.LibellesMenuSecondaire ch_Sec = menu_secondaire.RunMenu();
+        Constantes.Libelles.LibellesMenuSecondaire ch_Sec = menu_secondaire.runMenu();
 
         String[] output = outContent.toString().replace("\r\n", "\n").split("\n");
 

@@ -56,7 +56,7 @@ class MenuPrincipalTest {
 
         menu_principal = new MenuPrincipal(scanner);
 
-        ch_Sup = menu_principal.RunMenu();
+        ch_Sup = menu_principal.runMenu();
 
         assertEquals(ch_Sup, Constantes.Libelles.LibellesMenuPrincipal.CHOISIR_MASTERMIND);
 
@@ -72,7 +72,7 @@ class MenuPrincipalTest {
 
         menu_principal = new MenuPrincipal(scanner);
 
-        ch_Sup = menu_principal.RunMenu();
+        ch_Sup = menu_principal.runMenu();
 
         assertEquals(ch_Sup, Constantes.Libelles.LibellesMenuPrincipal.CHOISIR_PLUS_MOINS);
 
@@ -87,7 +87,7 @@ class MenuPrincipalTest {
 
         menu_principal = new MenuPrincipal(scanner);
 
-        ch_Sup = menu_principal.RunMenu();
+        ch_Sup = menu_principal.runMenu();
 
         assertEquals(ch_Sup, Constantes.Libelles.LibellesMenuPrincipal.QUITTER);
 
@@ -106,7 +106,7 @@ class MenuPrincipalTest {
 
         menu_principal = new MenuPrincipal(scanner);
 
-        ch_Sup = menu_principal.RunMenu();
+        ch_Sup = menu_principal.runMenu();
 
         String[] output = outContent.toString().replace("\r\n", "\n").split("\n");
 

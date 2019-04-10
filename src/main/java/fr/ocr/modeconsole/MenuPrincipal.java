@@ -66,8 +66,8 @@ public class MenuPrincipal extends Menu<Constantes.Libelles.LibellesMenuPrincipa
      * @throws AppExceptions : sur erreur non gérée
      */
     @Override
-    public Constantes.Libelles.LibellesMenuPrincipal RunMenu() throws AppExceptions {
-        return super.RunMenu();
+    public Constantes.Libelles.LibellesMenuPrincipal runMenu() throws AppExceptions {
+        return super.runMenu();
     }
 
 }

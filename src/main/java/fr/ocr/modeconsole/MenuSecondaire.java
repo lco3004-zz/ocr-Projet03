@@ -87,8 +87,8 @@ public class MenuSecondaire extends Menu<Constantes.Libelles.LibellesMenuSeconda
      * @throws AppExceptions : sur erreur non gérée
      */
     @Override
-    public Constantes.Libelles.LibellesMenuSecondaire RunMenu() throws AppExceptions {
-        return super.RunMenu();
+    public Constantes.Libelles.LibellesMenuSecondaire runMenu() throws AppExceptions {
+        return super.runMenu();
     }
 
     /**

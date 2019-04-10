@@ -190,7 +190,7 @@ class LigneMM extends LignePlateauMM {
      *  efface la ligne courante en remettant son libelle par defaut
      *   @return LigneMM,  l'objet ligne (this)  ! utilie pour chainage de méthode
      */
-    public LigneMM Clear() {
+    public LigneMM clearLigne() {
         setLibelleLigne(libelleLigneOriginal);
         return this;
     }
@@ -325,7 +325,7 @@ class LignePropaleMM extends LigneMM {
      *  (mode defenseur)
      * @return Boolean , true si proposition est égal à secret
      */
-    Boolean EvalProposition() {
+    Boolean evalProposition() {
         return fctValideProposition.apply(propositionJoueur,
                 combinaisonInitialesSecretes,
                 nombreDePositions,
@@ -337,7 +337,7 @@ class LignePropaleMM extends LigneMM {
      * @return LignePropaleMM,  l'objet ligne (this)  ! utile pour chainage de méthode
      */
     @Override
-    public LignePropaleMM Clear() {
+    public LignePropaleMM clearLigne() {
         paddMsg = "";
         zoneProposition.delete(0, zoneProposition.length());
         zoneProposition.append('[');
