@@ -7,10 +7,10 @@ import static fr.ocr.utiles.Constantes.ConstEvalPropale.NOIR_BIENPLACE;
 
 
 /**
- * <p>
- * @author Laurent Cordier
- *     méthode apply de validation d'une proposition : valeur par défaut : validation par calcul
- * <p>
+ *@author Laurent Cordier
+ *
+ * méthode apply de validation d'une proposition : valeur par défaut : validation par calcul
+ *
  */
 public interface ControleProposition {
 
@@ -20,6 +20,7 @@ public interface ControleProposition {
      * @param p_secret   liste de charactes, combinaison secrete
      * @param nombreDePositions  , parametre nombre couleur par ligne (nombre de positions)
      * @param zoneEvaluation  tablraude 2 int, nombre de noirs, nombre de blancs - noirs == couleur bien placée
+     * @param isDoublon  boolean , vrai si les doublons sont autorises
      * @return boolean, true si Proposition et combinaison secrete sont identiques
      */
     default Boolean apply(ArrayList<Character> p_proposition,
