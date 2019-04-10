@@ -65,17 +65,17 @@ public interface JeuPlusMoins {
 interface InterfRunPM {
     void FaitMoiUneSecret() throws AppExceptions;
 
-    void FaitMoiUnEssai(int nbBoucle);
+    void faitMoiUnEssai(int nbBoucle);
 
     //DonneScoreDuJoueur(essai, score, secret);
     // DonneScoreDeLOrdi(essai, score, secret, tablePM, "[+ \\- = K k]", charactersEscape);
-    boolean FaitMoiUnScore(int nbBoucle);
+    boolean faitMoiUnScore(int nbBoucle);
 
-    String FaitMoiUnMessageDeVictoire();
+    String faitMoiUnMessageDeVictoire();
 
-    String FaitMoiUnMessageDeEchec();
+    String faitMoiUnMessageDeEchec();
 
-    boolean FaitMoiDebug();
+    boolean faitMoiDebug();
 }
 
 /**
@@ -177,7 +177,7 @@ class ClasseJeuPlusMoins {
      * @param secret  char [] , le secret qui est affiché en mode debug
      * @param tablePM char [] [] tableau de lignes essai et score
      */
-    private void AfiicheJeuPM(char[] secret, char[][] tablePM) {
+    private void afficheJeuPM(char[] secret, char[][] tablePM) {
         IOConsole.ClearScreen.cls();
         for (StringBuilder s : getLignesJeu(secret, tablePM)) {
             if (s.charAt(0) == '.') {
@@ -195,9 +195,9 @@ class ClasseJeuPlusMoins {
      *
      * @param charactersEscape Character : escapechar
      */
-    private void AttenteNettoyageUInput(Character charactersEscape) {
+    private void attenteNettoyageUInput(Character charactersEscape) {
         strLibelleSaisie = ".    Retour (->K)           ] ";
-        AfiicheJeuPM(secret, tablePM);
+        afficheJeuPM(secret, tablePM);
         //tentaive de nettoyage du System.in
         int locaCountGuard = 0;
         do {
@@ -205,12 +205,12 @@ class ClasseJeuPlusMoins {
                 if (scanner.hasNext()) {
                     if (scanner.next().toUpperCase().contains(charactersEscape.toString())) {
                         String sTmp = scanner.nextLine();
-                        logger.debug(String.format(" AttenteNettoyageUInput - Fin de ligne = %s", ((sTmp != null) ? sTmp : "vide ou null")));
+                        logger.debug(String.format(" attenteNettoyageUInput - Fin de ligne = %s", ((sTmp != null) ? sTmp : "vide ou null")));
                     }
                         break;
                 }
             } catch (NoSuchElementException f) {
-                logger.debug(String.format(" AttenteNettoyageUInput - Exception de fin : %s)", f.getMessage()));
+                logger.debug(String.format(" attenteNettoyageUInput - Exception de fin : %s)", f.getMessage()));
                 break;
             }
             locaCountGuard++;
@@ -232,12 +232,12 @@ class ClasseJeuPlusMoins {
      * @param rang  entier qui est égal au numéro de ligne du tableau tabelPM dans laquelle ilfaut ajouter l'essai
      * @param essai le tableau de char  dont les colonnes contiennent les valeurs de l'essai
      */
-    private void AjouterUnEssai(int rang, char[] essai, char[][] tablePM) {
+    private void ajouterUnEssai(int rang, char[] essai, char[][] tablePM) {
         try {
             for (char c : essai) {
                 //leve uen exception si valeur est <=0
                 logger.debug(String.format("AjouterUnessai rang=%d , essai = %s, chaCourant = %c", rang, String.valueOf(essai), c));
-                ChiffreEstIlValide(c);
+                chiffreEstIlValide(c);
             }
 
             System.arraycopy(essai, 0, tablePM[rang], 0, essai.length);
@@ -253,11 +253,11 @@ class ClasseJeuPlusMoins {
      * @param rang  entier qui est égal au numéro de ligne du tableau tabelPM dans laquelle ilfaut ajouter le score
      * @param score le tableau de char dont les colonnes contiennent les valeurs du score
      */
-    private void AjouterunScore(int rang, char[] score, char[][] tablePM) throws AppExceptions {
+    private void ajouterunScore(int rang, char[] score, char[][] tablePM) throws AppExceptions {
         try {
             for (char c : score) {
                 //leve uen esception si valeur est <=0
-                ScoreEstIlValide(c);
+                scoreEstIlValide(c);
             }
             System.arraycopy(score, 0, tablePM[rang], nombreDePositions, score.length);
 
@@ -351,7 +351,7 @@ class ClasseJeuPlusMoins {
      * @throws AppExceptions avec CharacterExceptionPM.A comme caractere de sortie (ce qui permet de gérer car c'est
      *                       une exception qui n'est pas fatale - il faut refaire une saisie.
      */
-    private void ChiffreEstIlValide(char c) throws AppExceptions {
+    private void chiffreEstIlValide(char c) throws AppExceptions {
         logger.debug(String.format("ChiffreEstValide char = %c", c));
 
         int i;
@@ -375,7 +375,7 @@ class ClasseJeuPlusMoins {
      * @throws AppExceptions avec CharacterExceptionPM.A comme caractere de sortie (ce qui permet de gérer car c'est
      *                       une exception qui n'est pas fatale - il faut refaire une saisie.
      */
-    private void ScoreEstIlValide(char c) {
+    private void scoreEstIlValide(char c) {
         if (c != '=' && c != '-' && c != '+') {
             logger.error(Messages.ErreurMessages.PM_CARSCORE_HORS_PLAGE_TOLERANCE + " Car= " + c);
             throw new AppExceptions(Messages.ErreurMessages.PM_CARSCORE_HORS_PLAGE_TOLERANCE);
@@ -390,7 +390,7 @@ class ClasseJeuPlusMoins {
      * @param score tableau de char vide mais qui doit être alloué (renseigné avec le scorre en sortie de méthode
      * @return boolean - vrai si secret trouvé , sinon faux
      */
-    private boolean CalculScore(char[] essai, char[] score, char[] secret) {
+    private boolean calculScore(char[] essai, char[] score, char[] secret) {
         int compteEgal = 0;
         for (int i = 0; i < essai.length; i++) {
             score[i] = (essai[i] == secret[i]) ? '=' : ((essai[i] < secret[i]) ? '-' : '+');
@@ -418,7 +418,7 @@ class ClasseJeuPlusMoins {
      * @throws AppExceptions : déclenché sur erreur non géré ou sur lecture de EscapeChar dans ce cas l'escape est transmis
      *                       à l'exception et est récupérable par la méthode getCharacterSortie() de AppException
      */
-    private void SaisirDesChars(char[] lesCharsAFournir, char[] secret, char[][] tablePM, String pattern_Menu, Character escapeChar) throws AppExceptions {
+    private void saisirDesChars(char[] lesCharsAFournir, char[] secret, char[][] tablePM, String pattern_Menu, Character escapeChar) throws AppExceptions {
 
         Pattern patternChoix = Pattern.compile(pattern_Menu);
 
@@ -426,7 +426,7 @@ class ClasseJeuPlusMoins {
 
         Character cRet = '?';
 
-        AfiicheJeuPM(secret, tablePM);
+        afficheJeuPM(secret, tablePM);
         // scanner en mode hasNext, next - avec pattern de carteres autorisés
 
         int localCount = 0;
@@ -443,7 +443,7 @@ class ClasseJeuPlusMoins {
                     }
                     //ne pas tenir compte de ce qui reste dans le buffer d'entrée
                     String sTmp = scanner.nextLine();
-                    logger.debug(String.format(" AttenteNettoyageUInput - Fin de ligne = %s", ((sTmp != null) ? sTmp : "vide ou null")));
+                    logger.debug(String.format(" attenteNettoyageUInput - Fin de ligne = %s", ((sTmp != null) ? sTmp : "vide ou null")));
 
                     //on tente une lecture sur cette chaine ave cloture auto sur ce scanner
                     try (Scanner monScan = new Scanner(saisieParChaine.toString())) {
@@ -481,7 +481,7 @@ class ClasseJeuPlusMoins {
                     //TODO verifier bon fonctionnement en mettant un getlin ici
                     //ne pas tenir compte de ce qui reste dans le buffer d'entrée
                     //String sTmp= scanner.nextLine();
-                    //logger.debug(String.format(" AttenteNettoyageUInput - Fin de ligne = %s",((sTmp != null)? sTmp:"vide ou null")));
+                    //logger.debug(String.format(" attenteNettoyageUInput - Fin de ligne = %s",((sTmp != null)? sTmp:"vide ou null")));
                     break;
                 } catch (IllegalStateException e) {
 
@@ -491,7 +491,7 @@ class ClasseJeuPlusMoins {
                 }
             }
 
-            AfiicheJeuPM(secret, tablePM);
+            afficheJeuPM(secret, tablePM);
 
             //soirtie par escapeChar ou CTRL-C
             if (cRet == '?' || cRet == escapeChar) {
@@ -516,11 +516,11 @@ class ClasseJeuPlusMoins {
      * @throws AppExceptions  : déclenché sur erreur non géré ou sur lecture de EscapeChar dans ce cas l'escape est transmis
      * à l'exception et est récupérable par la méthode getCharacterSortie() de AppException
      */
-    private void ProduireSecretModeDefenseur() throws AppExceptions {
+    private void produireSecretModeDefenseur() throws AppExceptions {
         modeDebug = true;
         try {
             strLibelleSaisie = ". Saisie du Secret -> (K : par defaut)    ] ";
-            SaisirDesChars(secret, new char[secret.length], tablePM, "[1-9 K k]", charactersEscape);
+            saisirDesChars(secret, new char[secret.length], tablePM, "[1-9 K k]", charactersEscape);
             strLibelleSaisie = ". Saisie -> (K : retour)    ] ";
         } catch (Exception e) {
             if (e instanceof AppExceptions) {
@@ -548,7 +548,7 @@ class ClasseJeuPlusMoins {
      * renseigne l'attibut secretJeuPM avec le nombre à trouver, sous forme de caractères
      * par calcul
      */
-    private void ProduireSecretModeChallengeur() {
+    private void produireSecretModeChallengeur() {
         DecimalFormat df = new DecimalFormat("#");
         // "graine" pour le random.
         df.setRoundingMode(RoundingMode.HALF_UP);
@@ -573,14 +573,14 @@ class ClasseJeuPlusMoins {
      *
      * @param nbBoucle int
      */
-    private void ProduireEssaiModeChallengeur(int nbBoucle) {
+    private void produireEssaiModeChallengeur(int nbBoucle) {
         strLibelleInfos = "[     Informations          ] ";
         strLibelleSaisie = ". Saisie -> (K : retour)    ] ";
-        SaisirDesChars(essai, secret, tablePM, "[1-9 K k]", charactersEscape);
+        saisirDesChars(essai, secret, tablePM, "[1-9 K k]", charactersEscape);
         strLibelleSaisie = ". Saisie -> (K : retour)    ] ";
-        logger.debug(String.format("Mode Challenegeur FaitMoiUnEssai boucle = %d  essai = %s  secret = %s ", nbBoucle, String.valueOf(essai), String.valueOf(secret)));
-        AjouterUnEssai(nbBoucle, essai, tablePM);
-        AfiicheJeuPM(secret, tablePM);
+        logger.debug(String.format("Mode Challenegeur faitMoiUnEssai boucle = %d  essai = %s  secret = %s ", nbBoucle, String.valueOf(essai), String.valueOf(secret)));
+        ajouterUnEssai(nbBoucle, essai, tablePM);
+        afficheJeuPM(secret, tablePM);
     }
 
     /**
@@ -592,7 +592,7 @@ class ClasseJeuPlusMoins {
      *
      * @param nbBoucle int
      */
-    private void ProduireEssaiModeDefenseur(int nbBoucle) {
+    private void produireEssaiModeDefenseur(int nbBoucle) {
 
         int defautMin = 0, defautMax = 9;
 
@@ -659,9 +659,9 @@ class ClasseJeuPlusMoins {
                 }
             }
         }
-        logger.debug(String.format("Mode Defenseur FaitMoiUnEssai boucle = %d  essai = %s  secret = %s ", nbBoucle, String.valueOf(essai), String.valueOf(secret)));
-        AjouterUnEssai(nbBoucle, essai, tablePM);
-        AfiicheJeuPM(secret, tablePM);
+        logger.debug(String.format("Mode Defenseur faitMoiUnEssai boucle = %d  essai = %s  secret = %s ", nbBoucle, String.valueOf(essai), String.valueOf(secret)));
+        ajouterUnEssai(nbBoucle, essai, tablePM);
+        afficheJeuPM(secret, tablePM);
     }
 
     /**
@@ -670,25 +670,25 @@ class ClasseJeuPlusMoins {
      * @param nbBoucle int  -
      * @return boolean , vrai si secret trouvve
      */
-    private boolean EvalueScoreModeDefenseur(int nbBoucle) {
+    private boolean evalueScoreModeDefenseur(int nbBoucle) {
 
         boolean isTrouve;
         int locaCount = 0;
 
         strLibelleSaisie = ". Saisie du Score  -> (K : automatique)    ] ";
 
-        logger.debug(String.format("Mode Defenseur FaitMoiUnScore boucle = %d  essai = %s  score = %s  secret = %s", nbBoucle, String.valueOf(essai), String.valueOf(score), String.valueOf(secret)));
+        logger.debug(String.format("Mode Defenseur faitMoiUnScore boucle = %d  essai = %s  score = %s  secret = %s", nbBoucle, String.valueOf(essai), String.valueOf(score), String.valueOf(secret)));
 
-        //saisir score et presente resultat de CalculScore(essai, score, secret); validation par escapeChar
+        //saisir score et presente resultat de calculScore(essai, score, secret); validation par escapeChar
 
         char[] scoretmp = new char[nombreDePositions];
 
-        CalculScore(essai, scoretmp, secret);
+        calculScore(essai, scoretmp, secret);
 
         strLibelleInfos = "suggestion : " + String.valueOf(scoretmp);
 
         try {
-            SaisirDesChars(score, secret, tablePM, "[+ \\- = K k]", charactersEscape);
+            saisirDesChars(score, secret, tablePM, "[+ \\- = K k]", charactersEscape);
         } catch (AppExceptions e) {
             if (e.getCharacterSortie() == charactersEscape) {
                 System.arraycopy(scoretmp, 0, score, 0, score.length);
@@ -706,11 +706,11 @@ class ClasseJeuPlusMoins {
 
         strLibelleSaisie = ". Saisie -> (K : retour)    ] ";
 
-        logger.debug(String.format("Mode Defenseur FaitMoiUnScore boucle = %d  essai = %s  score = %s  secret = %s ", nbBoucle, String.valueOf(essai), String.valueOf(score), String.valueOf(secret)));
+        logger.debug(String.format("Mode Defenseur faitMoiUnScore boucle = %d  essai = %s  score = %s  secret = %s ", nbBoucle, String.valueOf(essai), String.valueOf(score), String.valueOf(secret)));
 
-        AjouterunScore(nbBoucle, score, tablePM);
+        ajouterunScore(nbBoucle, score, tablePM);
 
-        AfiicheJeuPM(secret, tablePM);
+        afficheJeuPM(secret, tablePM);
 
         return isTrouve;
     }
@@ -721,10 +721,10 @@ class ClasseJeuPlusMoins {
      * @param nbBoucle int
      * @return boolean vrai si secret trouve
      */
-    private boolean EvaluerScoreModeChallengeur(int nbBoucle) {
-        boolean isTrouve = CalculScore(essai, score, secret);
-        AjouterunScore(nbBoucle, score, tablePM);
-        AfiicheJeuPM(secret, tablePM);
+    private boolean evaluerScoreModeChallengeur(int nbBoucle) {
+        boolean isTrouve = calculScore(essai, score, secret);
+        ajouterunScore(nbBoucle, score, tablePM);
+        afficheJeuPM(secret, tablePM);
         return isTrouve;
     }
 
@@ -770,7 +770,7 @@ class ClasseJeuPlusMoins {
             strLibelleInfos = gloupseClasse.informerDefaite.get();
         }
 
-        AttenteNettoyageUInput(charactersEscape);
+        attenteNettoyageUInput(charactersEscape);
     }
 
     /**
@@ -782,7 +782,7 @@ class ClasseJeuPlusMoins {
 
         boolean isTrouve = false;
 
-        modeDebug = interfRunPM.FaitMoiDebug();
+        modeDebug = interfRunPM.faitMoiDebug();
 
         //recharge les libelles - cas ou on enchaine les mode de jeu du jeu PM
         initLibellesLignes();
@@ -793,9 +793,9 @@ class ClasseJeuPlusMoins {
 
             try {
 
-                interfRunPM.FaitMoiUnEssai(nbBoucle);
+                interfRunPM.faitMoiUnEssai(nbBoucle);
 
-                isTrouve = interfRunPM.FaitMoiUnScore(nbBoucle);
+                isTrouve = interfRunPM.faitMoiUnScore(nbBoucle);
 
                 if (isTrouve) {
                     break;
@@ -813,12 +813,12 @@ class ClasseJeuPlusMoins {
         }
         //fin de ce jeu
         if (isTrouve) {
-            strLibelleInfos = interfRunPM.FaitMoiUnMessageDeVictoire();
+            strLibelleInfos = interfRunPM.faitMoiUnMessageDeVictoire();
         } else {
-            strLibelleInfos = interfRunPM.FaitMoiUnMessageDeEchec();
+            strLibelleInfos = interfRunPM.faitMoiUnMessageDeEchec();
         }
 
-        AttenteNettoyageUInput(charactersEscape);
+        attenteNettoyageUInput(charactersEscape);
     }
 
     /**
@@ -827,9 +827,9 @@ class ClasseJeuPlusMoins {
     void runModeChallengeur() {
 
         runAllModeFunctionnal(new GloupseClasse(
-                (x) -> ProduireSecretModeChallengeur(),
-                this::EvaluerScoreModeChallengeur,
-                this::ProduireEssaiModeChallengeur,
+                (x) -> produireSecretModeChallengeur(),
+                this::evaluerScoreModeChallengeur,
+                this::produireEssaiModeChallengeur,
                 () -> modeDebug,
                 () -> "[     Vous avez Gagné       ] ",
                 () -> "[     Vous avez Perdu       ] "));
@@ -838,31 +838,31 @@ class ClasseJeuPlusMoins {
             @Override
             public void FaitMoiUneSecret() {
                 //creation du secret par calcul
-                ProduireSecretModeChallengeur();
+                produireSecretModeChallengeur();
             }
 
             @Override
-            public void FaitMoiUnEssai(int nbBoucle) {
-                ProduireEssaiModeChallengeur(nbBoucle);
+            public void faitMoiUnEssai(int nbBoucle) {
+                produireEssaiModeChallengeur(nbBoucle);
             }
 
             @Override
-            public boolean FaitMoiUnScore(int nbBoucle) {
-                return EvaluerScoreModeChallengeur(nbBoucle);
+            public boolean faitMoiUnScore(int nbBoucle) {
+                return evaluerScoreModeChallengeur(nbBoucle);
             }
 
             @Override
-            public String FaitMoiUnMessageDeVictoire() {
+            public String faitMoiUnMessageDeVictoire() {
                 return "[     Vous avez Gagné       ] ";
             }
 
             @Override
-            public String FaitMoiUnMessageDeEchec() {
+            public String faitMoiUnMessageDeEchec() {
                 return "[     Vous avez Perdu       ] ";
             }
 
             @Override
-            public boolean FaitMoiDebug() {
+            public boolean faitMoiDebug() {
                 return modeDebug;
             }
         });
@@ -875,9 +875,9 @@ class ClasseJeuPlusMoins {
     void runModeDefenseur() {
 
         runAllModeFunctionnal(new GloupseClasse(
-                (x) -> ProduireSecretModeDefenseur(),
-                this::EvalueScoreModeDefenseur,
-                this::ProduireEssaiModeDefenseur,
+                (x) -> produireSecretModeDefenseur(),
+                this::evalueScoreModeDefenseur,
+                this::produireEssaiModeDefenseur,
                 () -> true,
                 () -> "[    Ordinateur a  Gagné    ] ",
                 () -> "[    Ordinateur a  Perdu    ] "));
@@ -886,31 +886,31 @@ class ClasseJeuPlusMoins {
 
             @Override
             public void FaitMoiUneSecret() throws AppExceptions{
-                ProduireSecretModeDefenseur();
+                produireSecretModeDefenseur();
             }
 
             @Override
-            public void FaitMoiUnEssai(int nbBoucle) {
-                ProduireEssaiModeDefenseur(nbBoucle);
+            public void faitMoiUnEssai(int nbBoucle) {
+                produireEssaiModeDefenseur(nbBoucle);
             }
 
             @Override
-            public boolean FaitMoiUnScore(int nbBoucle) {
-                return EvalueScoreModeDefenseur(nbBoucle);
+            public boolean faitMoiUnScore(int nbBoucle) {
+                return evalueScoreModeDefenseur(nbBoucle);
             }
 
             @Override
-            public String FaitMoiUnMessageDeVictoire() {
+            public String faitMoiUnMessageDeVictoire() {
                 return "[    Ordinateur a  Gagné    ] ";
             }
 
             @Override
-            public String FaitMoiUnMessageDeEchec() {
+            public String faitMoiUnMessageDeEchec() {
                 return "[    Ordinateur a  Perdu    ] ";
             }
 
             @Override
-            public boolean FaitMoiDebug() {
+            public boolean faitMoiDebug() {
                 return true;
             }
         });
@@ -930,26 +930,26 @@ class ClasseJeuPlusMoins {
         initLibellesLignes();
 
         //creation du secret par calcul
-        ProduireSecretModeChallengeur();
+        produireSecretModeChallengeur();
 
         for (int nbBoucle = 0; nbBoucle < nombreDeEssaisMax; ) {
 
             try {
                 //ordinateur Joue
-                ProduireEssaiModeDefenseur(nbBoucle);
+                produireEssaiModeDefenseur(nbBoucle);
 
                 //evalue score Ordinateur
-                isTrouveOrdi = EvalueScoreModeDefenseur(nbBoucle++);
+                isTrouveOrdi = evalueScoreModeDefenseur(nbBoucle++);
 
                 if (isTrouveOrdi) {
                     break;
                 }
 
                 //Joueur joue
-                ProduireEssaiModeChallengeur(nbBoucle);
+                produireEssaiModeChallengeur(nbBoucle);
 
                 //evalue score du joueur
-                isTrouveJoueur = EvaluerScoreModeChallengeur(nbBoucle++);
+                isTrouveJoueur = evaluerScoreModeChallengeur(nbBoucle++);
 
                 if (isTrouveJoueur) {
                     break;
@@ -974,7 +974,7 @@ class ClasseJeuPlusMoins {
             strLibelleInfos = "[  Pas un.e pour rattraper l'autr.e ] ";
         }
 
-        AttenteNettoyageUInput(charactersEscape);
+        attenteNettoyageUInput(charactersEscape);
     }
 }
 /*
