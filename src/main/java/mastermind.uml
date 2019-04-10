@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>fr.ocr.mastermind</OriginalElement>
+  <nodes>
+    <node x="428.5" y="658.0">fr.ocr.mastermind.JeuMasterMind</node>
+    <node x="26.0" y="440.0">fr.ocr.mastermind.ProduirePropaleMMDefenseur</node>
+    <node x="231.0" y="931.0">fr.ocr.mastermind.FabricationSecretMM</node>
+    <node x="0.0" y="245.0">fr.ocr.mastermind.LignePropaleMM</node>
+    <node x="167.0" y="0.0">fr.ocr.mastermind.LignePlateauMM</node>
+    <node x="0.0" y="931.0">fr.ocr.mastermind.ControleProposition</node>
+    <node x="349.0" y="836.0">fr.ocr.mastermind.JeuMMDuel</node>
+    <node x="666.0" y="836.0">fr.ocr.mastermind.JeuMMChallengeur</node>
+    <node x="169.0" y="145.0">fr.ocr.mastermind.LigneMM</node>
+    <node x="0.0" y="836.0">fr.ocr.mastermind.JeuMMDefenseur</node>
+    <node x="192.25" y="340.0">fr.ocr.mastermind.ProduirePropaleMM</node>
+    <node x="8.0" y="1009.0">fr.ocr.mastermind.ScorerProposition</node>
+    <node x="362.0" y="736.0">fr.ocr.mastermind.JeuMM</node>
+    <node x="0.0" y="563.0">fr.ocr.mastermind.ProduirePropaleMMDefenseur.UnePropale</node>
+    <node x="288.0" y="451.5">fr.ocr.mastermind.ProduirePropaleMMChallengeur</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="fr.ocr.mastermind.ProduirePropaleMMDefenseur.UnePropale" target="fr.ocr.mastermind.ProduirePropaleMMDefenseur">
+      <point x="0.0" y="-25.0" />
+      <point x="0.0" y="36.5" />
+    </edge>
+    <edge source="fr.ocr.mastermind.ScorerProposition" target="fr.ocr.mastermind.ControleProposition">
+      <point x="0.0" y="-14.0" />
+      <point x="0.0" y="14.0" />
+    </edge>
+    <edge source="fr.ocr.mastermind.ProduirePropaleMMDefenseur" target="fr.ocr.mastermind.ProduirePropaleMM">
+      <point x="2.8421709430404007E-14" y="-36.5" />
+      <point x="147.00000000000003" y="415.0" />
+      <point x="252.25" y="415.0" />
+      <point x="-60.0" y="25.0" />
+    </edge>
+    <edge source="fr.ocr.mastermind.JeuMMDuel" target="fr.ocr.mastermind.JeuMM">
+      <point x="0.0" y="-25.0" />
+      <point x="0.0" y="25.0" />
+    </edge>
+    <edge source="fr.ocr.mastermind.ProduirePropaleMMChallengeur" target="fr.ocr.mastermind.ProduirePropaleMM">
+      <point x="0.0" y="-25.0" />
+      <point x="477.5" y="415.0" />
+      <point x="372.25" y="415.0" />
+      <point x="60.0" y="25.0" />
+    </edge>
+    <edge source="fr.ocr.mastermind.LigneMM" target="fr.ocr.mastermind.LignePlateauMM">
+      <point x="0.0" y="-25.0" />
+      <point x="0.0" y="47.5" />
+    </edge>
+    <edge source="fr.ocr.mastermind.JeuMM" target="fr.ocr.mastermind.JeuMasterMind">
+      <point x="0.0" y="-25.0" />
+      <point x="0.0" y="14.0" />
+    </edge>
+    <edge source="fr.ocr.mastermind.LignePropaleMM" target="fr.ocr.mastermind.LigneMM">
+      <point x="0.0" y="-25.0" />
+      <point x="0.0" y="25.0" />
+    </edge>
+    <edge source="fr.ocr.mastermind.JeuMMDefenseur" target="fr.ocr.mastermind.JeuMM">
+      <point x="0.0" y="-25.0" />
+      <point x="164.5" y="811.0" />
+      <point x="407.1666666666667" y="811.0" />
+      <point x="-90.33333333333331" y="25.0" />
+    </edge>
+    <edge source="fr.ocr.mastermind.JeuMMChallengeur" target="fr.ocr.mastermind.JeuMM">
+      <point x="0.0" y="-25.0" />
+      <point x="835.5" y="811.0" />
+      <point x="587.8333333333333" y="811.0" />
+      <point x="90.33333333333326" y="25.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="0.6585701191567369" x="1081.0" y="463.0" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Constructors</Category>
+    <Category>Properties</Category>
+    <Category>Inner Classes</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>fr.ocr.plusmoins</OriginalElement>
+  <nodes>
+    <node x="406.0" y="95.0">fr.ocr.plusmoins.JeuPlusMoins</node>
+    <node x="0.0" y="95.0">fr.ocr.plusmoins.ClasseJeuPlusMoins</node>
+    <node x="591.0" y="95.0">fr.ocr.plusmoins.InterfRunPM</node>
+    <node x="0.0" y="0.0">fr.ocr.plusmoins.GloupseClasse</node>
+  </nodes>
+  <notes />
+  <edges />
+  <settings layout="Hierarchic Group" zoom="1.0" x="718.5" y="339.5" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Constructors</Category>
+    <Category>Properties</Category>
+    <Category>Inner Classes</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+
