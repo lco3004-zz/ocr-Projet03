@@ -80,7 +80,7 @@
       - il est préférable de rester en 4 positions, 8 couleurs en mode avec doublons sinon, temps de calcul trop long
       - Solution : framework fork/join
 ## Remarques :
--  en attente évaluation pour mis en application projets suivants   
+-  en attente évaluation pour mis en application projets suivants
 
 
 

@@ -59,24 +59,6 @@ public interface JeuPlusMoins {
     }
 
 }
-/**
- * l'interface permet de regrouper le code commun au mode Challengeur et au mode Defenseur
- */
-interface InterfRunPM {
-    void FaitMoiUneSecret() throws AppExceptions;
-
-    void faitMoiUnEssai(int nbBoucle);
-
-    //DonneScoreDuJoueur(essai, score, secret);
-    // DonneScoreDeLOrdi(essai, score, secret, tablePM, "[+ \\- = K k]", charactersEscape);
-    boolean faitMoiUnScore(int nbBoucle);
-
-    String faitMoiUnMessageDeVictoire();
-
-    String faitMoiUnMessageDeEchec();
-
-    boolean faitMoiDebug();
-}
 
 /**
  * modele de patron en gloups qui est deprécié de nos jour , à tort car aucun compétiteur ne maitrise le gloups
@@ -768,54 +750,6 @@ class ClasseJeuPlusMoins {
             strLibelleInfos = gloupseClasse.informerVictore.get();
         } else {
             strLibelleInfos = gloupseClasse.informerDefaite.get();
-        }
-
-        attenteNettoyageUInput(charactersEscape);
-    }
-
-    /**
-     * regroupe les modes challengeur et defenseur
-     *
-     * @param interfRunPM interface interne
-     */
-    private void runAllMode(InterfRunPM interfRunPM) {
-
-        boolean isTrouve = false;
-
-        modeDebug = interfRunPM.faitMoiDebug();
-
-        //recharge les libelles - cas ou on enchaine les mode de jeu du jeu PM
-        initLibellesLignes();
-
-        interfRunPM.FaitMoiUneSecret();
-
-        for (int nbBoucle = 0; nbBoucle < nombreDeEssaisMax; nbBoucle++) {
-
-            try {
-
-                interfRunPM.faitMoiUnEssai(nbBoucle);
-
-                isTrouve = interfRunPM.faitMoiUnScore(nbBoucle);
-
-                if (isTrouve) {
-                    break;
-                }
-
-            } catch (Exception e) {
-                if (e instanceof AppExceptions) {
-                    if (((AppExceptions) e).getCharacterSortie() == charactersEscape)
-                        return;
-                }
-                logger.error(String.format("%s %s", ERREUR_GENERIC, e.getClass().getSimpleName()));
-                throw new AppExceptions(ERREUR_GENERIC);
-
-            }
-        }
-        //fin de ce jeu
-        if (isTrouve) {
-            strLibelleInfos = interfRunPM.faitMoiUnMessageDeVictoire();
-        } else {
-            strLibelleInfos = interfRunPM.faitMoiUnMessageDeEchec();
         }
 
         attenteNettoyageUInput(charactersEscape);

@@ -3,19 +3,39 @@
   <ID>JAVA</ID>
   <OriginalElement>fr.ocr.plusmoins</OriginalElement>
   <nodes>
-    <node x="406.0" y="95.0">fr.ocr.plusmoins.JeuPlusMoins</node>
-    <node x="0.0" y="95.0">fr.ocr.plusmoins.ClasseJeuPlusMoins</node>
-    <node x="591.0" y="95.0">fr.ocr.plusmoins.InterfRunPM</node>
+    <node x="330.0" y="663.0">fr.ocr.plusmoins.JeuPlusMoins</node>
+    <node x="230.49999999999997" y="100.0">fr.ocr.plusmoins.ClasseJeuPlusMoins</node>
     <node x="0.0" y="0.0">fr.ocr.plusmoins.GloupseClasse</node>
   </nodes>
   <notes />
-  <edges />
-  <settings layout="Hierarchic Group" zoom="1.0" x="718.5" y="339.5" />
-  <SelectedNodes />
+  <edges>
+    <edge source="fr.ocr.plusmoins.JeuPlusMoins" target="fr.ocr.plusmoins.ClasseJeuPlusMoins">
+      <point x="0.0" y="-47.0" />
+      <point x="92.5" y="256.5" />
+    </edge>
+    <edge source="fr.ocr.plusmoins.ClasseJeuPlusMoins" target="fr.ocr.plusmoins.ClasseJeuPlusMoins">
+      <point x="-92.5" y="256.5" />
+      <point x="323.0" y="633.0" />
+      <point x="210.49999999999997" y="633.0" />
+      <point x="210.49999999999997" y="356.5" />
+      <point x="-185.0" y="-0.0" />
+    </edge>
+    <edge source="fr.ocr.plusmoins.ClasseJeuPlusMoins" target="fr.ocr.plusmoins.GloupseClasse">
+      <point x="92.5" y="-256.5" />
+      <point x="508.0" y="75.0" />
+      <point x="623.25" y="75.0" />
+      <point x="207.75" y="25.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="1.0" x="769.4999999999999" y="280.5" />
+  <SelectedNodes>
+    <node>fr.ocr.plusmoins.ClasseJeuPlusMoins</node>
+  </SelectedNodes>
   <Categories>
     <Category>Constructors</Category>
     <Category>Properties</Category>
     <Category>Inner Classes</Category>
+    <Category>Methods</Category>
   </Categories>
   <SCOPE>All</SCOPE>
   <VISIBILITY>private</VISIBILITY>
