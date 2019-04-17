@@ -768,39 +768,6 @@ class ClasseJeuPlusMoins {
                 () -> "[     Vous avez Gagné       ] ",
                 () -> "[     Vous avez Perdu       ] "));
 
-/*        runAllMode(new InterfRunPM() {
-            @Override
-            public void FaitMoiUneSecret() {
-                //creation du secret par calcul
-                produireSecretModeChallengeur();
-            }
-
-            @Override
-            public void faitMoiUnEssai(int nbBoucle) {
-                produireEssaiModeChallengeur(nbBoucle);
-            }
-
-            @Override
-            public boolean faitMoiUnScore(int nbBoucle) {
-                return evaluerScoreModeChallengeur(nbBoucle);
-            }
-
-            @Override
-            public String faitMoiUnMessageDeVictoire() {
-                return "[     Vous avez Gagné       ] ";
-            }
-
-            @Override
-            public String faitMoiUnMessageDeEchec() {
-                return "[     Vous avez Perdu       ] ";
-            }
-
-            @Override
-            public boolean faitMoiDebug() {
-                return modeDebug;
-            }
-        });
-  */
     }
 
     /**
@@ -815,40 +782,7 @@ class ClasseJeuPlusMoins {
                 () -> true,
                 () -> "[    Ordinateur a  Gagné    ] ",
                 () -> "[    Ordinateur a  Perdu    ] "));
-/*
-        runAllMode(new InterfRunPM() {
 
-            @Override
-            public void FaitMoiUneSecret() throws AppExceptions{
-                produireSecretModeDefenseur();
-            }
-
-            @Override
-            public void faitMoiUnEssai(int nbBoucle) {
-                produireEssaiModeDefenseur(nbBoucle);
-            }
-
-            @Override
-            public boolean faitMoiUnScore(int nbBoucle) {
-                return evalueScoreModeDefenseur(nbBoucle);
-            }
-
-            @Override
-            public String faitMoiUnMessageDeVictoire() {
-                return "[    Ordinateur a  Gagné    ] ";
-            }
-
-            @Override
-            public String faitMoiUnMessageDeEchec() {
-                return "[    Ordinateur a  Perdu    ] ";
-            }
-
-            @Override
-            public boolean faitMoiDebug() {
-                return true;
-            }
-        });
-*/
 
     }
 
